@@ -1,0 +1,48 @@
+{
+  "content": "{\n  \"content\": {\n    \"nodes\": [\n      {\n        \"content\": \"# code_architecture_stack\\nThis stack includes the following sources:\\n- code_architecture_1 (ID: code_architecture_1)\\n- code_architecture_2 (ID: code_architecture_2)\",\n        \"node_id\": \"1744708860.188_271621_node\",\n        \"position\": {\n          \"x\": 0.0,\n          \"y\": 0.0\n        },\n        \"relationships\": {\n          \"children\": [],\n          \"dependencies\": [],\n          \"parents\": []\n        }\n      }\n    ]\n  },\n  \"format_version\": \"1.0.0\",\n  \"meta\": {\n    \"ai_context\": {\n      \"is_active\": false,\n      \"is_stack\": true,\n      \"metaprompt\": false,\n      \"model_metadata\": {\n\n      },\n      \"stack_layout\": {\n        \"node_positions\": {\n          \"code_architecture_1__code_architecture_1_node_0\": {\n            \"x\": 40.0,\n            \"y\": 80.0\n          },\n          \"code_architecture_2__code_architecture_2_node_0\": {\n            \"x\": 920.0,\n            \"y\": 80.0\n          }\n        }\n      },\n      \"stack_sources\": [\n        {\n          \"id\": \"code_architecture_1\",\n          \"name\": \"code_architecture_1\",\n          \"path\": \"res://addons/syntree/docs/architecture.gd\"\n        },\n        {\n          \"id\": \"code_architecture_2\",\n          \"name\": \"code_architecture_2\",\n          \"path\": \"res://addons/syntree/docs/architecture_2.md\"\n        }\n      ]\n    },\n    \"author\": \"SynTree User\",\n    \"created\": \"2025-04-15T11:21:00\",\n    \"modified\": \"2025-04-15T11:21:00\",\n    \"name\": \"code_architecture_stack\",\n    \"path\": \"res://addons/syntree/content_source_lists/code_architecture_stack.json\",\n    \"source_id\": \"1744708860.188_271621\"\n  }\n}",
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "is_active": false,
+      "is_stack": true,
+      "metaprompt": false,
+      "model_metadata": {
+
+      },
+      "stack_layout": {
+        "node_positions": {
+          "code_architecture_1__code_architecture_1_node_0": {
+            "x": 40.0,
+            "y": 80.0
+          },
+          "code_architecture_1__node_1766609239.813": {
+            "x": 760.0,
+            "y": 100.0
+          },
+          "code_architecture_2__code_architecture_2_node_0": {
+            "x": 1240.0,
+            "y": 40.0
+          }
+        }
+      },
+      "stack_sources": [
+        {
+          "id": "code_architecture_1",
+          "name": "code_architecture_1",
+          "path": "res://addons/syntree/docs/architecture.gd"
+        },
+        {
+          "id": "code_architecture_2",
+          "name": "code_architecture_2",
+          "path": "res://addons/syntree/docs/architecture_2.md"
+        }
+      ]
+    },
+    "author": "SynTree User",
+    "created": "2025-04-15T11:21:00",
+    "modified": "2025-04-15T11:21:00",
+    "name": "code_architecture_stack",
+    "path": "res://addons/syntree/content_source_lists/code_architecture_stack.json",
+    "source_id": "1744708860.188_271621"
+  }
+}

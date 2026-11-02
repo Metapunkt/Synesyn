@@ -1,0 +1,111 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Synesyn"
+run/main_scene="uid://c0m0t7m4s2n8y"
+config/features=PackedStringArray("4.7", "Mobile")
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/image="uid://d2j6mcgoxl8xe"
+config/icon="uid://50dk5h0djktm"
+config/windows_native_icon="res://Synesyn_icons/synesyn_icon.ico"
+
+[audio]
+
+driver/enable_input=true
+
+[autoload]
+
+PluginManager="*res://addons/syntree/scripts/plugin_manager.gd"
+ContentBus="*res://addons/syntree/scripts/autoload/content_bus.gd"
+Global="*res://ScenSyn/scripts/Global.gd"
+ThemeManager="*res://addons/synesyn_core/scripts/theme_manager.gd"
+Network="*res://ScenSyn/scripts/networkscripts/Network.gd"
+StoryState="*res://ScenSyn/scripts/core/story_state_manager.gd"
+SceneTransition="*res://ScenSyn/scripts/core/SceneTransitionManager.gd"
+AICharacterAgent="*res://ScenSyn/scripts/agents/ai_character_agent.gd"
+DualWindowManager="*res://ScenSyn/scripts/core/DualWindowManager.gd"
+VoiceService="*uid://dgqwnnjfldlc7"
+WorkspaceBootstrapper="*res://scripts/workspace_bootstrapper.gd"
+MetapunktAppHost="*res://addons/metapunkt/Core/Ports/metapunkt_app_host_router.gd"
+ReadyMadeOrchestrator="*res://readymade/scripts/singletons/ReadyMadeOrchestrator.gd"
+ModeManager="*res://readymade/scripts/core/mode_manager.gd"
+TaskTemplateManager="*res://readymade/scripts/core/task_template_manager.gd"
+WorkflowManager="*res://readymade/scripts/core/workflow_manager.gd"
+DocumentSessionManager="*res://readymade/scripts/core/document_session_manager.gd"
+EditMetaprompts="*res://readymade/scripts/core/edit_metaprompts.gd"
+SynTreeDocumentProcessor="*res://readymade/scripts/core/syntree_document_processor.gd"
+
+[claude_ai]
+
+api_key=""
+model="claude-3-5-sonnet-20241022"
+system_prompt="You are Claude, an AI assistant created by Anthropic to be helpful, harmless, and honest."
+
+[debug]
+
+file_logging/enable_file_logging=true
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/synesyn_core/plugin.cfg", "res://addons/metapunkt/plugin.cfg", "res://addons/synaxes/plugin.cfg", "res://addons/synpunkt/plugin.cfg", "res://addons/syntree/plugin.cfg", "res://addons/syntree_voice/plugin.cfg", "res://addons/story_stage/plugin.cfg")
+
+[gdextension]
+
+#LimboAIprovidesBTTask/BTPlayer/BehaviorTree/Blackboardtypes#usedbyScenSyn,Metapunkt,andReadyMadebehavior-treescripts.limboai="res://addons/limboai/bin/limboai.gdextension"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[readymade]
+
+default_mode="creative_writing"
+default_workflow="brainstorm"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+
+[story_stage]
+
+default_host_script="res://ScenSyn/scripts/core/scensyn_stage_host.gd"
+
+[synesyn]
+
+session_data_dir=""
+
+[syntree]
+
+openai_api_key=""
+anthropic_api_key=""
+api_key=""
+model=""
+system_prompt="You are SynTree, an AI assistant evolved to be helpful, harmless, and honest."
+dev_agent/run_spec_ui_schema_path="res://ScenSyn/syntree_run_spec_ui_schema.json"
+
+[syntree_voice]
+
+enabled=true
+service_url="http://127.0.0.1:8000"
+provider_mode="hub"
+hub_url="http://127.0.0.1:17777"

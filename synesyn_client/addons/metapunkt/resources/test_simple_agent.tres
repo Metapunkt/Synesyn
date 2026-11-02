@@ -1,0 +1,5 @@
+[gd_resource type="Resource" format=3]
+
+[resource]
+agent_id = "test_agent"
+agent_name = "Test Agent" 

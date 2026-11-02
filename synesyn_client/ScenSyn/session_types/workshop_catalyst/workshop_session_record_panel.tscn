@@ -1,0 +1,216 @@
+[gd_scene format=3]
+
+[node name="WorkshopSessionRecordPanel" type="VBoxContainer"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="RecordHeader" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RecordTitle" type="Label" parent="RecordHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelHeader"
+text = "Facilitator-reviewed Session Record"
+
+[node name="CommitStateLabel" type="Label" parent="RecordHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Uncommitted draft"
+
+[node name="RecordContextLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Review AI proposals below. Nothing is committed automatically."
+autowrap_mode = 2
+
+[node name="DecisionsSection" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="DecisionsSection"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="DecisionsSection/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Decisions"
+
+[node name="AddDecisionButton" type="Button" parent="DecisionsSection/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="DecisionsItems" type="VBoxContainer" parent="DecisionsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DecisionDraftEditor" type="LineEdit" parent="DecisionsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Add a facilitator-authored decision"
+
+[node name="RisksSection" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="RisksSection"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="RisksSection/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Risks"
+
+[node name="AddRiskButton" type="Button" parent="RisksSection/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="RisksItems" type="VBoxContainer" parent="RisksSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RiskDraftEditor" type="LineEdit" parent="RisksSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Add a facilitator-authored risk"
+
+[node name="OpenQuestionsSection" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="OpenQuestionsSection"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="OpenQuestionsSection/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Open questions"
+
+[node name="AddOpenQuestionButton" type="Button" parent="OpenQuestionsSection/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="OpenQuestionsItems" type="VBoxContainer" parent="OpenQuestionsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="OpenQuestionDraftEditor" type="LineEdit" parent="OpenQuestionsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Add a facilitator-authored open question"
+
+[node name="OwnersSection" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="OwnersSection"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="OwnersSection/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Owners"
+
+[node name="AddOwnerButton" type="Button" parent="OwnersSection/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="OwnersItems" type="VBoxContainer" parent="OwnersSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="OwnerDraftEditor" type="LineEdit" parent="OwnersSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Add an accountable owner or role"
+
+[node name="NextStepsSection" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="NextStepsSection"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="NextStepsSection/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next steps"
+
+[node name="AddNextStepButton" type="Button" parent="NextStepsSection/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+[node name="NextStepsItems" type="VBoxContainer" parent="NextStepsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NextStepDraftEditor" type="LineEdit" parent="NextStepsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Add a facilitator-authored next step"
+
+[node name="ProposalSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="ProposalTitle" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "AI proposals — review each item"
+
+[node name="NoProposalsLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No pending proposals."
+
+[node name="ProposalItems" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ReviewActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProposeThemesButton" type="Button" parent="ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open SynAxes with this session preloaded and discover theme candidates (Dream Inbox)."
+text = "Propose themes"
+
+[node name="PreviewSummaryButton" type="Button" parent="ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preview"
+
+[node name="CommitSummaryButton" type="Button" parent="ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Commit New Version"
+
+[node name="RetryCommitButton" type="Button" parent="ReviewActions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Retry Commit"
+
+[node name="PreviewPanel" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PreviewTitle" type="Label" parent="PreviewPanel"]
+layout_mode = 2
+text = "Complete summary and semantic diff (preview only)"
+
+[node name="PreviewText" type="TextEdit" parent="PreviewPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+
+[node name="PersistenceStatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No committed Workshop summary version yet."
+autowrap_mode = 2

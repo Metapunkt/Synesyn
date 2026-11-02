@@ -1,0 +1,57 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://6ce4tjru37y5"]
+
+[ext_resource type="Texture2D" uid="uid://be8nhop16wt6p" path="res://ScenSyn/story_stage/sprites/_fallback/idle/0.png" id="7_oswsx"]
+[ext_resource type="Texture2D" uid="uid://e82stwowiau0" path="res://ScenSyn/story_stage/sprites/_fallback/idle/1.png" id="8_qfhar"]
+[ext_resource type="Texture2D" uid="uid://gxlm8clil2gr" path="res://ScenSyn/story_stage/sprites/_fallback/idle/2.png" id="9_h1etv"]
+[ext_resource type="Texture2D" uid="uid://ox6wtcoymr76" path="res://ScenSyn/story_stage/sprites/_fallback/idle/3.png" id="10_pcub3"]
+[ext_resource type="Texture2D" uid="uid://ddp0s1sulpfvq" path="res://ScenSyn/story_stage/sprites/_fallback/talking/0.png" id="29_8ux53"]
+[ext_resource type="Texture2D" uid="uid://cbcylp8iyifdr" path="res://ScenSyn/story_stage/sprites/_fallback/talking/1.png" id="30_mxv0m"]
+[ext_resource type="Texture2D" uid="uid://c6iqm6bpe6v38" path="res://ScenSyn/story_stage/sprites/_fallback/talking/2.png" id="31_mdtou"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_oswsx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_qfhar")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_h1etv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_pcub3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_oswsx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_qfhar")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_h1etv")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_8ux53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_mxv0m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_mdtou")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 3.5
+}]

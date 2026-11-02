@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Usage Examples": {
+			"id": "Usage Examples",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Usage Examples",
+			"path": "https://docs.example.com/usage",
+			"type": "url"
+		}
+	},
+	"root_nodes": [
+		"Usage Examples"
+	]
+}

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ThemeConfig" format=3 uid="uid://vp746wbqldt3"]
+
+[ext_resource type="Script" uid="uid://mcj815k0ooqp" path="res://addons/synesyn_core/scripts/theme_config.gd" id="1"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_light.tres" id="2"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="3"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_light.tres" id="4"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="5"]
+[ext_resource type="Theme" uid="uid://fdiwuwpsmra2" path="res://ScenSyn/themes/SynesynConsole_light.tres" id="6"]
+[ext_resource type="Theme" uid="uid://db3kfwt7iksgg" path="res://ScenSyn/themes/SynesynConsole_contemporary_dark.tres" id="7"]
+[ext_resource type="Theme" uid="uid://coqomkxh1jrey" path="res://ScenSyn/themes/SynesynTools_light.tres" id="8"]
+[ext_resource type="Theme" uid="uid://bgsts7k74otc1" path="res://ScenSyn/themes/SynesynTools_contemporary_dark.tres" id="9"]
+
+[resource]
+script = ExtResource("1")
+base_light = ExtResource("2")
+base_dark = ExtResource("3")
+utility_light = ExtResource("4")
+utility_dark = ExtResource("5")
+console_light = ExtResource("6")
+console_dark = ExtResource("7")
+tools_light = ExtResource("8")
+tools_dark = ExtResource("9")

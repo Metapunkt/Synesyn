@@ -1,0 +1,369 @@
+[gd_scene format=3 uid="uid://fb62t13u78qj"]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/gallery/scripts/visual_profile_gallery.gd" id="1_gallery"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/semantic_action_button.tscn" id="2_action"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/semantic_status_badge.tscn" id="3_badge"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/semantic_navigation_button.tscn" id="4_navigation"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/semantic_field.tscn" id="5_field"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/orientation_indicator.tscn" id="7_orientation"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/attention_loading_indicator.tscn" id="8_attention"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/keyboard_hint.tscn" id="9_hint"]
+
+[node name="VisualProfileGallery" type="Control" unique_id=1743251207 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gallery")
+metadata/theme_surface = "base"
+
+[node name="Background" type="ColorRect" parent="." unique_id=1971092859]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PageMargin" type="ScrollContainer" parent="." unique_id=1474804935]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="MainVBox" type="VBoxContainer" parent="PageMargin" unique_id=1159238948]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="HeaderRow" type="HBoxContainer" parent="PageMargin/MainVBox" unique_id=188191099]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="PageMargin/MainVBox/HeaderRow" unique_id=966984566]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Synesyn Visual Profile Gallery"
+
+[node name="LightButton" type="Button" parent="PageMargin/MainVBox/HeaderRow" unique_id=1872510290]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Light"
+
+[node name="DarkButton" type="Button" parent="PageMargin/MainVBox/HeaderRow" unique_id=90543506]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dark"
+
+[node name="ProjectorButton" type="Button" parent="PageMargin/MainVBox/HeaderRow" unique_id=1692742277]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Projector"
+
+[node name="HighContrastButton" type="Button" parent="PageMargin/MainVBox/HeaderRow" unique_id=177980896]
+unique_name_in_owner = true
+layout_mode = 2
+text = "High Contrast"
+
+[node name="ProfileLabel" type="Label" parent="PageMargin/MainVBox" unique_id=1657059431]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Profile"
+
+[node name="SurfaceSection" type="Control" parent="PageMargin/MainVBox" unique_id=1184635256]
+custom_minimum_size = Vector2(0, 680)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SurfacePanel" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection" unique_id=1408536789]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SectionMargin" type="MarginContainer" parent="PageMargin/MainVBox/SurfaceSection" unique_id=952881109]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="SectionVBox" type="VBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin" unique_id=776742751]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SemanticTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=572726385]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Semantic palette"
+
+[node name="SemanticGrid" type="GridContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=1578362676]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 6
+
+[node name="AccentSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1959504737 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "accent"
+
+[node name="AccentLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=508885473]
+layout_mode = 2
+text = "Accent"
+
+[node name="WarningSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1624541243 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "warning"
+
+[node name="WarningLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=477107039]
+layout_mode = 2
+text = "Warning"
+
+[node name="DangerSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=657848691 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "danger"
+
+[node name="DangerLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1459772584]
+layout_mode = 2
+text = "Danger"
+
+[node name="ProposedSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=625903953 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "proposed"
+
+[node name="ProposedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1485688807]
+layout_mode = 2
+text = "Proposed"
+
+[node name="ReviewedSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=602662893 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "reviewed"
+
+[node name="ReviewedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1805062408]
+layout_mode = 2
+text = "Reviewed"
+
+[node name="CommittedSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1455548559 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "committed"
+
+[node name="CommittedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=1154381881]
+layout_mode = 2
+text = "Committed"
+
+[node name="RejectedSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=812183529 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "rejected"
+
+[node name="RejectedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=617250335]
+layout_mode = 2
+text = "Rejected"
+
+[node name="DegradedSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=343948527 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "degraded"
+
+[node name="DegradedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=843820351]
+layout_mode = 2
+text = "Degraded"
+
+[node name="UnavailableSwatch" type="ColorRect" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=919044864 groups=["semantic_swatch"]]
+custom_minimum_size = Vector2(72, 28)
+layout_mode = 2
+metadata/semantic_role = "unavailable"
+
+[node name="UnavailableLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/SemanticGrid" unique_id=843475338]
+layout_mode = 2
+text = "Unavailable"
+
+[node name="BadgeTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=354266949]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Human-agency states"
+
+[node name="BadgeRow" type="HBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=788077147]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProposedBadge" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/BadgeRow" unique_id=1825018722 instance=ExtResource("3_badge")]
+layout_mode = 2
+theme_type_variation = &"SynesynBadgeProposed"
+metadata/synesyn_semantic_role = "proposed"
+
+[node name="ReviewedBadge" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/BadgeRow" unique_id=1415890806 instance=ExtResource("3_badge")]
+layout_mode = 2
+theme_type_variation = &"SynesynBadgeReviewed"
+semantic_role = "reviewed"
+metadata/synesyn_semantic_role = "reviewed"
+
+[node name="CommittedBadge" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/BadgeRow" unique_id=491518566 instance=ExtResource("3_badge")]
+layout_mode = 2
+theme_type_variation = &"SynesynBadgeCommitted"
+semantic_role = "committed"
+metadata/synesyn_semantic_role = "committed"
+
+[node name="RejectedBadge" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/BadgeRow" unique_id=1759125769 instance=ExtResource("3_badge")]
+layout_mode = 2
+theme_type_variation = &"SynesynBadgeRejected"
+semantic_role = "rejected"
+metadata/synesyn_semantic_role = "rejected"
+
+[node name="DegradedBadge" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/BadgeRow" unique_id=359647409 instance=ExtResource("3_badge")]
+layout_mode = 2
+theme_type_variation = &"SynesynBadgeDegraded"
+semantic_role = "degraded"
+metadata/synesyn_semantic_role = "degraded"
+
+[node name="NavigationTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Navigation states"
+
+[node name="NavigationRow" type="HBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=1423144400]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="OverviewNavigation" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/NavigationRow" unique_id=1206022288 instance=ExtResource("4_navigation")]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigationSelected"
+button_pressed = true
+text = "Overview"
+is_selected = true
+metadata/synesyn_navigation_selected = true
+
+[node name="MapNavigation" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/NavigationRow" unique_id=584208959 instance=ExtResource("4_navigation")]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+text = "Map"
+metadata/synesyn_navigation_selected = false
+
+[node name="RecordNavigation" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/NavigationRow" unique_id=1674250010 instance=ExtResource("4_navigation")]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+text = "Record"
+metadata/synesyn_navigation_selected = false
+
+[node name="FieldTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Fields and surfaces"
+
+[node name="FieldAndPanelRow" type="HBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=1205364586]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SemanticField" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/FieldAndPanelRow" unique_id=1515466765 instance=ExtResource("5_field")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SurfacePanelSample" type="PanelContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/FieldAndPanelRow" unique_id=1901099293]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+metadata/synesyn_semantic_role = "surface"
+
+[node name="SurfaceLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/FieldAndPanelRow/SurfacePanelSample"]
+layout_mode = 2
+text = "Surface"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RaisedPanelSample" type="PanelContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/FieldAndPanelRow" unique_id=1149777349]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+theme_type_variation = &"SynesynRaisedPanel"
+metadata/synesyn_semantic_role = "raised"
+
+[node name="RaisedLabel" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/FieldAndPanelRow/RaisedPanelSample"]
+layout_mode = 2
+text = "Raised"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UtilityTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Orientation, attention and keyboard"
+
+[node name="UtilityRow" type="HBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=1268423704]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OrientationIndicator" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/UtilityRow" unique_id=833043332 instance=ExtResource("7_orientation")]
+layout_mode = 2
+
+[node name="AttentionIndicator" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/UtilityRow" unique_id=1989327777 instance=ExtResource("8_attention")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynRaisedPanel"
+metadata/synesyn_semantic_role = "raised"
+
+[node name="KeyboardHint" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/UtilityRow" unique_id=712339826 instance=ExtResource("9_hint")]
+layout_mode = 2
+theme_type_variation = &"SynesynRaisedPanel"
+metadata/synesyn_semantic_role = "raised"
+
+[node name="ActionTitle" type="Label" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Action hierarchy"
+
+[node name="ActionRow" type="HBoxContainer" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox" unique_id=1100092161]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PrimaryAction" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/ActionRow" unique_id=489199855 instance=ExtResource("2_action")]
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+text = "Primary action"
+semantic_role = "primary"
+metadata/synesyn_semantic_role = "primary"
+
+[node name="SecondaryAction" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/ActionRow" unique_id=2017131086 instance=ExtResource("2_action")]
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Secondary action"
+metadata/synesyn_semantic_role = "secondary"
+
+[node name="QuietAction" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/ActionRow" unique_id=1946038673 instance=ExtResource("2_action")]
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Quiet action"
+semantic_role = "quiet"
+metadata/synesyn_semantic_role = "quiet"
+
+[node name="DestructiveAction" parent="PageMargin/MainVBox/SurfaceSection/SectionMargin/SectionVBox/ActionRow" unique_id=1011083416 instance=ExtResource("2_action")]
+layout_mode = 2
+theme_type_variation = &"SynesynDestructiveAction"
+text = "Destructive action"
+semantic_role = "destructive"
+metadata/synesyn_semantic_role = "destructive"

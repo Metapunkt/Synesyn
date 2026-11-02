@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AgentDefinition" load_steps=2 format=3 uid="uid://c5hp4b3c758pd"]
+
+[ext_resource type="Script" uid="uid://x2ch3es0s03c" path="res://addons/metapunkt/Core/AgentRegistry/AgentDefinition.gd" id="1_abcde"]
+
+[resource]
+script = ExtResource("1_abcde")
+logic_type = "limboai"
+logic_config = {}
+required_tools = Array[String]([])
+capabilities = {}
+description = "A generic agent using a LimboAI behavior tree."

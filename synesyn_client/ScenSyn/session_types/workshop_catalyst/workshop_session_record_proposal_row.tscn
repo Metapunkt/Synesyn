@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ScenSyn/session_types/workshop_catalyst/workshop_session_record_proposal_row.gd" id="1_proposal"]
+
+[node name="WorkshopSessionRecordProposalRow" type="VBoxContainer"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+script = ExtResource("1_proposal")
+
+[node name="ProposalCategoryLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Proposal"
+
+[node name="ProposalEditor" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Review or edit the suggested wording"
+
+[node name="Actions" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AcceptProposalButton" type="Button" parent="Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Accept"
+
+[node name="EditProposalButton" type="Button" parent="Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Accept Edited"
+
+[node name="RejectProposalButton" type="Button" parent="Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reject"
+
+[node name="DeferProposalButton" type="Button" parent="Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Defer"

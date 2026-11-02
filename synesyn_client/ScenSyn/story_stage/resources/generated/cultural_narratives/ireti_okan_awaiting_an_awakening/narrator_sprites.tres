@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/idle/0.png" id="1_uh5dv"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/idle/1.png" id="2_e3lq1"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/idle/2.png" id="3_c68m3"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/idle/3.png" id="4_kmtyx"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/talking/0.png" id="5_qt6e2"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/talking/1.png" id="6_agdgq"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/_fallback/talking/2.png" id="7_c17h0"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uh5dv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_e3lq1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_c68m3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_kmtyx")
+}],
+"loop": 2,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_qt6e2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_agdgq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_c17h0")
+}],
+"loop": 2,
+"name": &"talking",
+"speed": 5.0
+}]

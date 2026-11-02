@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[sub_resource type="GDScript" id="GDScript_panel"]
+script/source = "extends VBoxContainer
+
+## Demo Echo Panel — reference UI panel capability for Capability Packs.
+## This scene is self-contained (inline script) so it can be loaded from user://.
+
+@onready var _input_field: LineEdit = $HBoxContainer/InputField
+@onready var _send_btn: Button = $HBoxContainer/SendButton
+@onready var _output_field: TextEdit = $OutputField
+
+func _ready() -> void:
+	if _send_btn:
+		_send_btn.pressed.connect(_on_send_pressed)
+
+func _on_send_pressed() -> void:
+	if not _input_field or not _output_field:
+		return
+	var msg := _input_field.text.strip_edges()
+	if msg.is_empty():
+		_output_field.text = '(type a message first)'
+		return
+	# v0: local echo only (no tool call wiring yet).
+	# A real pack panel would call Metapunkt's ActionDispatcher via the SLOP API.
+	var ts := Time.get_datetime_string_from_system(false, true)
+	_output_field.text += '[%s] Echo: %s\\n' % [ts, msg]
+	_input_field.text = ''
+"
+
+[node name="DemoEchoPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_panel")
+
+[node name="HeaderLabel" type="Label" parent="."]
+text = "Demo Echo Panel (Capability Pack reference)"
+
+[node name="DescLabel" type="Label" parent="."]
+autowrap_mode = 3
+text = "Type a message and press Send. This is a minimal UI panel template for Capability Packs."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+
+[node name="InputField" type="LineEdit" parent="HBoxContainer"]
+size_flags_horizontal = 3
+placeholder_text = "Type a message..."
+
+[node name="SendButton" type="Button" parent="HBoxContainer"]
+text = "Send"
+
+[node name="OutputField" type="TextEdit" parent="."]
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 80)
+editable = false
+placeholder_text = "(output appears here)"

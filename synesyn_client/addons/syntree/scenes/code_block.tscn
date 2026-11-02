@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://6gxas3mfbnxy"]
+
+[ext_resource type="Theme" uid="uid://d382cd44vr6k" path="res://addons/synesyn_core/themes/SynesynBase_contemporary_dark.tres" id="1_bbqc0"]
+[ext_resource type="Script" uid="uid://dn4vtridwvlnt" path="res://addons/syntree/scripts/utils/code_block.gd" id="1_e56gv"]
+[ext_resource type="Script" uid="uid://dtwgh8n1chpb6" path="res://addons/syntree/scripts/utils/gdscript_highlighter.gd" id="2_mg3gi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qx7k"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.094, 0.082, 0.180, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.67, 0.59, 0.93, 0.42)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_7o54j"]
+script = ExtResource("2_mg3gi")
+
+[node name="VBoxContainer" type="VBoxContainer" unique_id=919813877 groups=["synesyn_themed"]]
+offset_right = 1149.0
+offset_bottom = 652.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_bbqc0")
+script = ExtResource("1_e56gv")
+
+metadata/theme_surface = "base"
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=549275381]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=112540899]
+layout_mode = 2
+
+[node name="CollapseButton" type="Button" parent="HBoxContainer" unique_id=185912364]
+unique_name_in_owner = true
+layout_mode = 2
+text = "^"
+
+[node name="CopyButton" type="Button" parent="HBoxContainer" unique_id=1328484358]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Copy"
+
+[node name="CodeEdit" type="CodeEdit" parent="." unique_id=1506602476]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/caret_color = Color(0.16, 0.14, 0.22, 1)
+theme_override_colors/selection_color = Color(0.79, 0.73, 0.97, 0.65)
+theme_override_colors/font_color = Color(0.16, 0.14, 0.22, 1)
+theme_override_colors/font_readonly_color = Color(0.16, 0.14, 0.22, 1)
+theme_override_colors/font_placeholder_color = Color(0.42, 0.39, 0.56, 0.72)
+theme_override_colors/background_color = Color(0.094, 0.082, 0.180, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8qx7k")
+theme_override_styles/focus = SubResource("StyleBoxFlat_8qx7k")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_8qx7k")
+theme_override_colors/line_number_color = Color(0.42, 0.39, 0.56, 0.72)
+editable = false
+wrap_mode = 1
+syntax_highlighter = SubResource("SyntaxHighlighter_7o54j")

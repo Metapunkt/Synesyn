@@ -1,0 +1,52 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/idle/0.png" id="1_0yy1p"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/idle/1.png" id="2_l5mri"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/idle/3.png" id="3_g3oft"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/idle/4.png" id="4_g3gad"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/idle/5.png" id="5_uj4ec"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/talking/0.png" id="6_rykmb"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/talking/1.png" id="7_1cguc"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/gogo/talking/2.png" id="8_5xrvg"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0yy1p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_l5mri")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_g3oft")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_g3gad")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uj4ec")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_rykmb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_1cguc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_5xrvg")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}]

@@ -1,0 +1,299 @@
+{
+    "_comment": "Option B three-lattice ontology for Stochastic Dreams. See docs_for_update_on_bindings_odu_matrix_refinement/uwp_ifa_coherence_design.md \u00a78.2. uwp_bindings ordering follows \u00a73.2 (CSV-derived). ifa_odu ordering follows \u00a73.3 (canonical Ifa). binding_x_odu holds sparse per-cell overrides; empty in v1.",
+
+    "uwp_bindings": [
+        {
+            "id": 1,
+            "binding_name": "Heaven & Earth",
+            "quadrant": "Fount",
+            "domain": "Idealism vs. Realism",
+            "tension": "Infinite potential vs. physical constraint",
+            "thesis": "Where vision meets ground, the possible becomes real.",
+            "tapestry_region_primary": "Foundries of Fount",
+            "province_or_site": "Origin Gate",
+            "world_domain_focus": "Philosophy"
+        },
+        {
+            "id": 2,
+            "binding_name": "Fire & Forge",
+            "quadrant": "Fount",
+            "domain": "STEM Innovation",
+            "tension": "Raw energy of discovery vs. disciplined method",
+            "thesis": "Where raw spark is shaped into tools that serve.",
+            "tapestry_region_primary": "Foundries of Fount",
+            "province_or_site": "Forge Terrace",
+            "world_domain_focus": "Technology"
+        },
+        {
+            "id": 3,
+            "binding_name": "Memory & Myth",
+            "quadrant": "Fount",
+            "domain": "Culture Production",
+            "tension": "The history we keep vs. the stories we create",
+            "thesis": "Where past wisdom meets future imagination.",
+            "tapestry_region_primary": "Foundries of Fount",
+            "province_or_site": "Root Archive",
+            "world_domain_focus": "Culture"
+        },
+        {
+            "id": 4,
+            "binding_name": "Self & Kin",
+            "quadrant": "Fount",
+            "domain": "Social Responsibility",
+            "tension": "Individual agency vs. collective duty",
+            "thesis": "Where personal choice flows into communal obligation.",
+            "tapestry_region_primary": "Foundries of Fount",
+            "province_or_site": "Feast Market",
+            "world_domain_focus": "Community"
+        },
+        {
+            "id": 5,
+            "binding_name": "Well & Water",
+            "quadrant": "Ethos",
+            "domain": "Resource Access",
+            "tension": "Infrastructure (access) vs. resource (flow)",
+            "thesis": "Where means of reach meets abundance for all.",
+            "tapestry_region_primary": "Commons of Ethos",
+            "province_or_site": "Reservoir Commons",
+            "world_domain_focus": "Infrastructure"
+        },
+        {
+            "id": 6,
+            "binding_name": "Hearth & Haven",
+            "quadrant": "Ethos",
+            "domain": "Poverty Elimination",
+            "tension": "Sustenance (income) vs. Shelter (housing)",
+            "thesis": "Where warmth and safety become birthright.",
+            "tapestry_region_primary": "Commons of Ethos",
+            "province_or_site": "Gate Quarter",
+            "world_domain_focus": "Welfare"
+        },
+        {
+            "id": 7,
+            "binding_name": "Law & Mercy",
+            "quadrant": "Ethos",
+            "domain": "Fair Justice",
+            "tension": "Rigid code vs. human context",
+            "thesis": "Where justice tempers itself with compassion.",
+            "tapestry_region_primary": "Commons of Ethos",
+            "province_or_site": "Charter Hall",
+            "world_domain_focus": "Justice"
+        },
+        {
+            "id": 8,
+            "binding_name": "Thread & Loom",
+            "quadrant": "Ethos",
+            "domain": "Equity Advocacy",
+            "tension": "Diverse identity vs. common structure",
+            "thesis": "Where each unique strand strengthens the whole.",
+            "tapestry_region_primary": "Commons of Ethos",
+            "province_or_site": "Loom Exchange",
+            "world_domain_focus": "Equity"
+        },
+        {
+            "id": 9,
+            "binding_name": "Leaf & Wire",
+            "quadrant": "Cycle",
+            "domain": "Nature & Tech Harmony",
+            "tension": "Biological intelligence vs. artificial connection",
+            "thesis": "Where living systems and technology speak the same language.",
+            "tapestry_region_primary": "Returning Ring of Cycle",
+            "province_or_site": "Signal Spire",
+            "world_domain_focus": "Ecology"
+        },
+        {
+            "id": 10,
+            "binding_name": "Seed & Spark",
+            "quadrant": "Cycle",
+            "domain": "Sustainable Innovation",
+            "tension": "Organic growth vs. catalytic energy",
+            "thesis": "Where slow becoming meets rapid ignition.",
+            "tapestry_region_primary": "Returning Ring of Cycle",
+            "province_or_site": "Seed Vault",
+            "world_domain_focus": "Sustainability"
+        },
+        {
+            "id": 11,
+            "binding_name": "Flow & Keep",
+            "quadrant": "Cycle",
+            "domain": "Resource Efficiency",
+            "tension": "Usage (spending) vs. Conservation (saving)",
+            "thesis": "Where taking and giving find their rhythm.",
+            "tapestry_region_primary": "Returning Ring of Cycle",
+            "province_or_site": "Fade District",
+            "world_domain_focus": "Economy"
+        },
+        {
+            "id": 12,
+            "binding_name": "Soot & Sap",
+            "quadrant": "Cycle",
+            "domain": "Low Eco-Impact",
+            "tension": "Industrial residue vs. regenerative lifeblood",
+            "thesis": "Where waste becomes fertile, and harm transforms to healing.",
+            "tapestry_region_primary": "Returning Ring of Cycle",
+            "province_or_site": "Rhythm Court",
+            "world_domain_focus": "Ecology"
+        },
+        {
+            "id": 13,
+            "binding_name": "Many & One",
+            "quadrant": "Will",
+            "domain": "Participatory Democracy",
+            "tension": "Plurality of voices vs. unity of decision",
+            "thesis": "Where every voice finds resonance in collective choice.",
+            "tapestry_region_primary": "High Seat of Will",
+            "province_or_site": "Glass Agora",
+            "world_domain_focus": "Democracy"
+        },
+        {
+            "id": 14,
+            "binding_name": "Center & Edge",
+            "quadrant": "Will",
+            "domain": "Decentralized Power",
+            "tension": "Coordination hub vs. autonomous local",
+            "thesis": "Where authority flows from periphery through center and back.",
+            "tapestry_region_primary": "High Seat of Will",
+            "province_or_site": "Lens Tower",
+            "world_domain_focus": "Governance"
+        },
+        {
+            "id": 15,
+            "binding_name": "Light & Glass",
+            "quadrant": "Will",
+            "domain": "Transparent Rule",
+            "tension": "Active revelation vs. passive clarity",
+            "thesis": "Where power is made visible and visible power loses its sting.",
+            "tapestry_region_primary": "High Seat of Will",
+            "province_or_site": "Mirror Court",
+            "world_domain_focus": "Governance"
+        },
+        {
+            "id": 16,
+            "binding_name": "Face & Mirror",
+            "quadrant": "Will",
+            "domain": "Inclusive Leadership",
+            "tension": "Authority vs. representation",
+            "thesis": "Where leaders see themselves reflected in all they serve.",
+            "tapestry_region_primary": "High Seat of Will",
+            "province_or_site": "Bond Archive",
+            "world_domain_focus": "Leadership"
+        }
+    ],
+
+    "ifa_odu": [
+        {
+            "odu_name": "EJI OGBE",
+            "odu_bits": "0000",
+            "canonical_index": 1,
+            "modal_essence": "pure beginnings",
+            "canonical_meaning": "Symbolizes pure light, expansion, and aligned new beginnings."
+        },
+        {
+            "odu_name": "OYEKU MEJI",
+            "odu_bits": "1111",
+            "canonical_index": 2,
+            "modal_essence": "transformative closure",
+            "canonical_meaning": "Represents darkness, endings, and transformative closure."
+        },
+        {
+            "odu_name": "IWORI MEJI",
+            "odu_bits": "1001",
+            "canonical_index": 3,
+            "modal_essence": "discerning clarity",
+            "canonical_meaning": "Emphasizes clarity, reflection, and discerning real opportunities."
+        },
+        {
+            "odu_name": "ODI MEJI",
+            "odu_bits": "0110",
+            "canonical_index": 4,
+            "modal_essence": "fertile sealing",
+            "canonical_meaning": "Signifies fertility, rebirth, and the sealing of manifestation."
+        },
+        {
+            "odu_name": "IROSUN MEJI",
+            "odu_bits": "0011",
+            "canonical_index": 5,
+            "modal_essence": "ancestral return",
+            "canonical_meaning": "Relates to protection, ancestral presence, and life cycles."
+        },
+        {
+            "odu_name": "OWONRIN MEJI",
+            "odu_bits": "1100",
+            "canonical_index": 6,
+            "modal_essence": "adaptive disorder",
+            "canonical_meaning": "Symbolizes movement, change, adaptability, and unpredictability."
+        },
+        {
+            "odu_name": "OBARA MEJI",
+            "odu_bits": "0111",
+            "canonical_index": 7,
+            "modal_essence": "restorative resolution",
+            "canonical_meaning": "Represents rest after trials, family bonds, and resolution."
+        },
+        {
+            "odu_name": "OKANRAN MEJI",
+            "odu_bits": "1110",
+            "canonical_index": 8,
+            "modal_essence": "disruptive justice",
+            "canonical_meaning": "Reflects upheaval, justice, and the opening of new paths."
+        },
+        {
+            "odu_name": "OGUNDA MEJI",
+            "odu_bits": "0001",
+            "canonical_index": 9,
+            "modal_essence": "decisive incision",
+            "canonical_meaning": "Stands for strength, iron resolve, and action that removes obstacles."
+        },
+        {
+            "odu_name": "OSA MEJI",
+            "odu_bits": "1000",
+            "canonical_index": 10,
+            "modal_essence": "transformative mystery",
+            "canonical_meaning": "Signifies mystery, feminine power, and transformative magic."
+        },
+        {
+            "odu_name": "IKA MEJI",
+            "odu_bits": "1101",
+            "canonical_index": 11,
+            "modal_essence": "hidden caution",
+            "canonical_meaning": "Represents complexity, hidden power, and cautious awareness."
+        },
+        {
+            "odu_name": "OTURUPON MEJI",
+            "odu_bits": "1011",
+            "canonical_index": 12,
+            "modal_essence": "enduring restoration",
+            "canonical_meaning": "Emphasizes instability, endurance, and restoring harmony."
+        },
+        {
+            "odu_name": "OTURA MEJI",
+            "odu_bits": "0100",
+            "canonical_index": 13,
+            "modal_essence": "disciplined growth",
+            "canonical_meaning": "Symbolizes spiritual growth, discipline, and inner peace."
+        },
+        {
+            "odu_name": "IRETE MEJI",
+            "odu_bits": "0010",
+            "canonical_index": 14,
+            "modal_essence": "resilient balance",
+            "canonical_meaning": "Represents love, duality, and resilient balance."
+        },
+        {
+            "odu_name": "OSE MEJI",
+            "odu_bits": "0101",
+            "canonical_index": 15,
+            "modal_essence": "sacrificial abundance",
+            "canonical_meaning": "Signifies sacrifice, abundance, and fertile blessing."
+        },
+        {
+            "odu_name": "OFUN MEJI",
+            "odu_bits": "1010",
+            "canonical_index": 16,
+            "modal_essence": "creative illumination",
+            "canonical_meaning": "Represents whiteness, illumination, and the creative source."
+        }
+    ],
+
+    "binding_x_odu": {}
+}

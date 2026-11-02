@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhbxp5q2hq2aq"]
+
+[ext_resource type="Script" path="res://readymade/test_phase_4_5_change_tracking.gd" id="1_0s4m5"]
+
+[node name="Phase45Test" type="Node"]
+script = ExtResource("1_0s4m5")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+text = "Phase 4.5 Change Tracking Test
+Press F8 to run all tests
+Press F9 to test session save/load only
+Check console for results"
+horizontal_alignment = 1
+vertical_alignment = 1 

@@ -1,0 +1,50 @@
+{
+  "_note": "Checks that Story Stage is never an empty backdrop, and times the model calls a turn costs. It mounts the stage before anything has been typed, so the first capture shows the stage as a participant first meets it: the opening narration is spoken by a voice with no sprite of its own, and until the stage kept a character standing between lines there was nobody there at all. Later captures follow one real turn through, past the point where the idle timer used to clear the stage: the cast once faded out with the dialogue box, and then the box retired on its own, leaving a character standing beside an empty panel as though they had said nothing. Reading the captures: presence-01 should show a character on the backdrop with the welcome in the dialogue box, presence-02..04 the reply being spoken, presence-05 that character still standing with their name and line still in the panel. The box only retires when nobody is on stage. The godot log's [budget] lines give the seconds each director, actor and fix call took, which is where a slow turn is accounted for. Costs one turn's worth of model calls, and needs a configured provider plus the optional Story Stage art pack, so it is run deliberately rather than in a suite.",
+  "harness_window_size": "1920x1080",
+  "harness_timeout_sec": 420,
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "ireti_okan_awaiting_an_awakening",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "mount_scene",
+      "scene_path": "res://ScenSyn/scenes/scensyn_story_stage.tscn"
+    },
+    { "type": "wait_seconds", "seconds": 18 },
+    { "type": "capture_screenshot", "name": "presence-01-opening" },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "What are we waiting for, and who decided we should wait here?",
+        "seconds": 150
+      }
+    },
+    { "type": "capture_screenshot", "name": "presence-02-reply" },
+    { "type": "wait_seconds", "seconds": 6 },
+    { "type": "capture_screenshot", "name": "presence-03-reply" },
+    { "type": "wait_seconds", "seconds": 6 },
+    { "type": "capture_screenshot", "name": "presence-04-reply" },
+    { "type": "wait_seconds", "seconds": 12 },
+    { "type": "capture_screenshot", "name": "presence-05-between-lines" }
+  ],
+  "wait_frames_after_post": 60,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "type": "scenario_contains",
+      "value": "ireti"
+    },
+    {
+      "type": "min_story_log",
+      "value": 3
+    }
+  ]
+}

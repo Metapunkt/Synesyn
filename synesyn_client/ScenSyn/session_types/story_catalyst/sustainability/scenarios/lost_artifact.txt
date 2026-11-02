@@ -1,0 +1,16 @@
+[SCENARIO]
+name: The Lost Artifact
+setting: A mysterious ancient temple hidden in a dense jungle
+objective: Retrieve the legendary Orb of Eternity before it falls into the wrong hands
+
+[CHARACTERS]
+Aria Moonwhisper | Elven Ranger | A keen-eyed archer with a deep connection to nature
+Zephyr Stormforge | Dwarven Warrior | A stout fighter with unmatched skill in close combat
+Luna Starweaver | Human Mage | A brilliant spellcaster specializing in arcane mysteries
+Orion Shadowblade | Half-Elf Rogue | A nimble thief with a knack for finding hidden treasures
+Nova Lightbringer | Aasimar Paladin | A holy warrior blessed with divine power
+Atlas Stoneheart | Goliath Barbarian | A towering brute with uncontrollable rage
+Cora Wildbloom | Halfling Druid | A nature-loving shapeshifter with healing abilities
+Finn Waverider | Triton Bard | A charismatic storyteller with water-based magical abilities
+Ivy Thornguard | Tiefling Warlock | A dark spellcaster with a mysterious otherworldly pact
+Kai Windrider | Human Monk | A disciplined martial artist with unparalleled speed and agility

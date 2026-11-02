@@ -1,0 +1,164 @@
+[gd_scene load_steps=2 format=3 uid="uid://drjupdyw6xi"]
+
+[ext_resource type="Script" path="res://ScenSyn/session_types/story_catalyst/sustainability/sustainability_meter.gd" id="1_m2vn1"]
+
+[node name="SustainabilityMeter" type="Control"]
+layout_direction = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 973.0
+offset_bottom = -494.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_m2vn1")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 179.0
+offset_bottom = 154.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2"]
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SustainabilityMeterPanel" type="Panel" parent="VBoxContainer2/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="SustainabilityMeterLabel" type="Label" parent="VBoxContainer2/VBoxContainer/SustainabilityMeterPanel"]
+visible = false
+layout_mode = 2
+offset_left = 27.0
+offset_top = 3.0
+offset_right = 172.0
+offset_bottom = 26.0
+theme_override_font_sizes/font_size = 14
+text = "Sustainability Meter"
+horizontal_alignment = 2
+
+[node name="EnergyBarContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnergyBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer/EnergyBarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="EnergyBarLabel" type="Label" parent="VBoxContainer2/VBoxContainer/EnergyBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Energy"
+
+[node name="CommunityBarContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="CommunityBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer/CommunityBarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="CommunityBarLabel" type="Label" parent="VBoxContainer2/VBoxContainer/CommunityBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Community"
+
+[node name="InnovationBarContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="InnovationBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer/InnovationBarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="InnovationBarLabel" type="Label" parent="VBoxContainer2/VBoxContainer/InnovationBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Innovation"
+
+[node name="EnvironmentBarContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnvironmentBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer/EnvironmentBarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="EnvironmentBarLabel" type="Label" parent="VBoxContainer2/VBoxContainer/EnvironmentBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Environment"
+
+[node name="EquityBarContainer" type="HBoxContainer" parent="VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="EquityBar" type="ProgressBar" parent="VBoxContainer2/VBoxContainer/EquityBarContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+
+[node name="EquityBarLabel" type="Label" parent="VBoxContainer2/VBoxContainer/EquityBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Equity"
+
+[node name="InfoButton" type="Button" parent="VBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Influence Info"
+
+[node name="DetailsContainer" type="VBoxContainer" parent="VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsPanel" type="Panel" parent="VBoxContainer2/DetailsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(175, 110)
+layout_mode = 2
+
+[node name="TipsLabel" type="RichTextLabel" parent="VBoxContainer2/DetailsContainer/DetailsPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_right = 179.0
+offset_bottom = 88.0
+theme_override_font_sizes/normal_font_size = 10
+text = "Sustainability Meter above gives an idea how well you're doing with staying on topic. 
+
+Use feedback sliders below to affect the gameplay and give feedback as often as you want / need.
+
+You may toggle both panels on or off."
+
+[node name="DetailsLabel" type="TextEdit" parent="VBoxContainer2/DetailsContainer/DetailsPanel"]
+unique_name_in_owner = true
+layout_direction = 2
+layout_mode = 0
+offset_right = 179.0
+offset_bottom = 88.0
+theme_override_font_sizes/font_size = 12
+text = "Details"
+editable = false
+selecting_enabled = false
+wrap_mode = 1
+
+[node name="CloseButton" type="Button" parent="VBoxContainer2/DetailsContainer/DetailsPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 129.0
+offset_top = 88.0
+offset_right = 179.0
+offset_bottom = 110.0
+theme_override_font_sizes/font_size = 10
+text = "Close"

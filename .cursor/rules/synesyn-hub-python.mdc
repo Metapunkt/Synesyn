@@ -1,0 +1,38 @@
+---
+description: Python coding standards for the Synesyn Hub FastAPI backend (services/synesyn_hub). Covers module boundaries, typing discipline, size limits, and test-before-report expectations.
+globs: services/synesyn_hub/**
+alwaysApply: false
+---
+
+# Synesyn Hub — Python Standards
+
+These apply to the FastAPI backend at `services/synesyn_hub`. Keep the hub coherent, typed, and testable.
+
+## Module boundaries (do not blur these)
+
+The hub is organized into focused packages under `app/`. Respect their responsibilities:
+
+- `stfx_core/` — shared kernel (CDCP, seeds, lexicons). Pure logic, no HTTP, no I/O side effects.
+- `stfx_store/` — file-backed canonical memory (ingest, indexes, retrieval traces, context packs).
+- `stfx_memory/` — deterministic seed-based retrieval. **No embeddings / vector models** — this is symbolic by design.
+- `closure/` — SynAxes closure algebra over `stfx_core`. Stateless operations (field/collapse/twin/neighbourhood).
+- `substrate/` — SQLite + file artifacts; the system-of-record.
+- `routes/` — thin HTTP layer only. Business logic belongs in the service modules, not in route handlers.
+- `app_adapters/` — the only place that bridges hub memory to Godot apps (ScenSyn continuity, vis_story). Cross-app payload shaping lives here.
+
+Do not import `routes` from service modules, and do not put persistence logic in `routes`.
+
+## Typing discipline
+
+- Add explicit return type hints on public functions and Pydantic models on all request/response bodies.
+- Never let a route return a bare `dict` where a response model exists — use the model.
+- Prefer `float(x)` / `int(x)` coercion at boundaries rather than trusting `dict.get()` return types.
+
+## Size & structure
+
+- Soft limit **900 lines**, hard limit **1200 lines** per file (mirrors `docs/developer-guide/architecture.md`, enforced by `utilities/checks/check_line_limits.py`). If a module approaches the soft limit, split by responsibility.
+- Do not hand-roll format conversions or embeddings. Use the `document-conversion` skill for files; keep `stfx_memory` embedding-free.
+
+## Test before reporting
+
+After changing hub code, run the relevant tests before reporting done — do not ask the user to test what you can verify. Use the `run-hub-tests` skill (runs `test_stfx_store` / `test_stfx_memory` via the hub `.venv`). If you touched the ScenSyn continuity mapping or adapters, also run the ScenSyn harness (`run-scensyn-harness` skill).

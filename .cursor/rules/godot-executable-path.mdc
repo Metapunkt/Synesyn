@@ -1,0 +1,24 @@
+﻿---
+description: Use the Godot executable configured by the Godot Tools extension
+alwaysApply: true
+---
+
+# Godot Executable Path
+
+When running Godot commands from the agent, do not call bare `godot` unless no configured editor path can be found.
+
+Before invoking Godot, resolve the executable from Cursor user settings:
+
+- Read `%APPDATA%\Cursor\User\settings.json`.
+- Use `godotTools.editorPath.godot4` as the Godot executable path.
+- Invoke it explicitly, quoted, for all Godot CLI/headless checks.
+
+Example PowerShell shape:
+
+```powershell
+$settings = Get-Content "$env:APPDATA\Cursor\User\settings.json" | ConvertFrom-Json
+$godot = $settings.'godotTools.editorPath.godot4'
+& $godot --headless --path "<project-path>" --script "res://some_check.gd"
+```
+
+If the setting is missing or the executable path does not exist, tell the user before falling back to `godot` on `PATH`.

@@ -1,0 +1,42 @@
+[gd_resource type="BehaviorTree" load_steps=16 format=3 uid="uid://dtejd5cprwu45"]
+
+[ext_resource type="Script" uid="uid://b8chu8m554ama" path="res://ScenSyn/scripts/limbo_tasks/check_event_task.gd" id="1_8yqn7"]
+[ext_resource type="Script" uid="uid://c4s5u0o6llf0v" path="res://ScenSyn/scripts/limbo_tasks/generate_catalyst_task.gd" id="1_n50d8"]
+[ext_resource type="Script" uid="uid://cpqupqvs3xhmk" path="res://ScenSyn/scripts/limbo_tasks/determine_narrator_intent_task.gd" id="2_52g3c"]
+[ext_resource type="Script" uid="uid://d0dbyekred3j0" path="res://ScenSyn/scripts/limbo_tasks/prompt_character_task.gd" id="3_l26uq"]
+[ext_resource type="Script" uid="uid://cn2n42ytnt4j1" path="res://ScenSyn/scripts/limbo_tasks/story_stall_task.gd" id="4_n50d8"]
+[ext_resource type="Script" uid="uid://crs80ktl1ku4t" path="res://ScenSyn/scripts/limbo_tasks/spotlight_decision_task.gd" id="5_l26uq"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_1htyk"]
+
+[sub_resource type="BTAction" id="BTAction_mqhru"]
+script = ExtResource("1_n50d8")
+situation_description = "We need to keep this conversation on track."
+
+[sub_resource type="BTAction" id="BTAction_aa6yv"]
+script = ExtResource("4_n50d8")
+stall_threshold = 3
+
+[sub_resource type="BTAction" id="BTAction_lwrtc"]
+
+[sub_resource type="BTAction" id="BTAction_wvspv"]
+script = ExtResource("3_l26uq")
+challenge = "What will you do next?"
+
+[sub_resource type="BTAction" id="BTAction_l8kiv"]
+script = ExtResource("5_l26uq")
+
+[sub_resource type="BTAction" id="BTAction_sd1dq"]
+script = ExtResource("1_8yqn7")
+event_id = ""
+narrator_intent = "EVENT_NARRATION"
+
+[sub_resource type="BTAction" id="BTAction_ibh7r"]
+script = ExtResource("2_52g3c")
+
+[sub_resource type="BTSequence" id="BTSequence_l8kiv"]
+children = [SubResource("BTAction_mqhru"), SubResource("BTAction_aa6yv"), SubResource("BTAction_lwrtc"), SubResource("BTAction_wvspv"), SubResource("BTAction_l8kiv"), SubResource("BTAction_sd1dq"), SubResource("BTAction_ibh7r")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_1htyk")
+root_task = SubResource("BTSequence_l8kiv")

@@ -1,0 +1,481 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpvk8qfx5qe2w"]
+
+[ext_resource type="Script" uid="uid://c7mamn7atq5d5" path="res://readymade/ui/task_dialog.gd" id="1_m8h7k"]
+
+[node name="TaskDialog" type="AcceptDialog"]
+title = "Task Manager"
+initial_position = 2
+size = Vector2i(800, 700)
+script = ExtResource("1_m8h7k")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TabContainer" type="TabContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="BasicInfo" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_name = "Basic Info"
+metadata/_tab_index = 0
+
+[node name="BasicInfoVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/TitleContainer"]
+layout_mode = 2
+text = "📝 Task Title:"
+
+[node name="TitleEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/TitleContainer"]
+layout_mode = 2
+placeholder_text = "Enter a descriptive title for this task..."
+
+[node name="CoreIdeaContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="CoreIdeaLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CoreIdeaContainer"]
+layout_mode = 2
+text = "💡 Core Idea:"
+
+[node name="CoreIdeaEdit" type="TextEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CoreIdeaContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+placeholder_text = "Enter the core concept or idea for this content..."
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="FormatsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="FormatsHeaderContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer"]
+layout_mode = 2
+
+[node name="FormatsLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsHeaderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "📹 Format(s) - Select all that apply:"
+
+[node name="FormatFilterToggle" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsHeaderContainer"]
+layout_mode = 2
+button_pressed = true
+text = "🎯 Mode Filter"
+
+[node name="FormatsGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="VideoCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Video"
+
+[node name="ArticleCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Article"
+
+[node name="CarouselCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Carousel"
+
+[node name="InfographicCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Infographic"
+
+[node name="PodcastCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Podcast"
+
+[node name="LiveStreamCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Live Stream"
+
+[node name="ShortTextCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Short Text"
+
+[node name="ImageCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatsGrid"]
+layout_mode = 2
+text = "Image(s)"
+
+[node name="FormatOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer"]
+layout_mode = 2
+
+[node name="FormatOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatOtherContainer"]
+layout_mode = 2
+text = "Other:"
+
+[node name="FormatOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatOtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Specify other format..."
+editable = false
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="ChannelsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="ChannelsHeaderContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer"]
+layout_mode = 2
+
+[node name="ChannelsLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsHeaderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "📱 Channel(s) - Select all that apply:"
+
+[node name="ChannelFilterToggle" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsHeaderContainer"]
+layout_mode = 2
+button_pressed = true
+text = "🎯 Mode Filter"
+
+[node name="ChannelsGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="YouTubeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "YouTube"
+
+[node name="InstagramCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "Instagram"
+
+[node name="TikTokCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "TikTok"
+
+[node name="FacebookCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "Facebook"
+
+[node name="TwitterCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "Twitter/X"
+
+[node name="LinkedInCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "LinkedIn"
+
+[node name="DiscordCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelsGrid"]
+layout_mode = 2
+text = "Discord"
+
+[node name="ChannelOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer"]
+layout_mode = 2
+
+[node name="ChannelOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelOtherContainer"]
+layout_mode = 2
+text = "Other:"
+
+[node name="ChannelOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelOtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Specify other channel..."
+editable = false
+
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="CosmicContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="CosmicLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+text = "🔭 Cosmic Instrument(s) - Select prompting techniques:"
+
+[node name="CosmicGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RolePlayCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "Role Play (Dimensional Shifter)"
+
+[node name="HypotheticalCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "Hypothetical Framings (Reality Benders)"
+
+[node name="IterativeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "Iterative Refinement (Gravitational Drift)"
+
+[node name="AbductiveCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "Abductive Hypothesis Generation (Quantum Reasoning)"
+
+[node name="CosmicOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+
+[node name="CosmicOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+text = "Other:"
+
+[node name="CosmicOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Specify other cosmic instrument..."
+editable = false
+
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="PriorityContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="PriorityLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/PriorityContainer"]
+layout_mode = 2
+text = "⚡ Priority:"
+
+[node name="PriorityOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/PriorityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator5" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="NotesContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="NotesLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/NotesContainer"]
+layout_mode = 2
+text = "📝 Notes:"
+
+[node name="NotesEdit" type="TextEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/NotesContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+placeholder_text = "Additional notes, context, or requirements..."
+
+[node name="Calendar" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_name = "Calendar"
+metadata/_tab_index = 1
+
+[node name="CalendarVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeadlineContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="DeadlineRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer"]
+layout_mode = 2
+
+[node name="DeadlineLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineRow"]
+layout_mode = 2
+text = "⏰ Deadline:"
+
+[node name="DeadlineEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="DeadlineButtons" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer"]
+layout_mode = 2
+
+[node name="DeadlineTodayBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons"]
+layout_mode = 2
+text = "Today"
+
+[node name="DeadlineWeekBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons"]
+layout_mode = 2
+text = "1 Week"
+
+[node name="DeadlineMonthBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons"]
+layout_mode = 2
+text = "1 Month"
+
+[node name="ScheduledContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="ScheduledRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer"]
+layout_mode = 2
+
+[node name="ScheduledLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
+layout_mode = 2
+text = "📅 Scheduled:"
+
+[node name="ScheduledEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="ScheduledButtons" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer"]
+layout_mode = 2
+
+[node name="ScheduledTodayBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons"]
+layout_mode = 2
+text = "Today"
+
+[node name="ScheduledTomorrowBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons"]
+layout_mode = 2
+text = "Tomorrow"
+
+[node name="ScheduledWeekBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons"]
+layout_mode = 2
+text = "1 Week"
+
+[node name="PublishContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="PublishRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+
+[node name="PublishLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow"]
+layout_mode = 2
+text = "🚀 Publish Date:"
+
+[node name="PublishEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="PublishButtons" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+
+[node name="PublishWeekBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishButtons"]
+layout_mode = 2
+text = "1 Week"
+
+[node name="PublishMonthBtn" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishButtons"]
+layout_mode = 2
+text = "1 Month"
+
+[node name="HSeparator6" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="RecurringContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="RecurringLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer"]
+layout_mode = 2
+text = "🔄 Recurring:"
+
+[node name="RecurringOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DurationContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="DurationLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DurationContainer"]
+layout_mode = 2
+text = "⏱️ Duration (min):"
+
+[node name="DurationSpin" type="SpinBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DurationContainer"]
+layout_mode = 2
+min_value = 5.0
+max_value = 480.0
+step = 5.0
+value = 60.0
+
+[node name="Strategy" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_name = "Strategy"
+metadata/_tab_index = 2
+
+[node name="StrategyVBox" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ModeStrategyContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="ModeStrategyLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/ModeStrategyContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "🎯 Mode-Specific Strategy"
+
+[node name="ModeGuidanceText" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/ModeStrategyContainer"]
+layout_mode = 2
+text = "Strategy guidance will appear here based on your current work mode."
+autowrap_mode = 3
+
+[node name="HSeparator_Strategy" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="CampaignContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="CampaignLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/CampaignContainer"]
+layout_mode = 2
+text = "🎯 Campaign Tag:"
+
+[node name="CampaignEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/CampaignContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Group related content..."
+
+[node name="ThemeContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="ThemeLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/ThemeContainer"]
+layout_mode = 2
+text = "🎨 Content Theme:"
+
+[node name="ThemeEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/ThemeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Strategic theme or topic..."
+
+[node name="AudienceContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="AudienceLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/AudienceContainer"]
+layout_mode = 2
+text = "👥 Target Audience:"
+
+[node name="AudienceEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/AudienceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Who is this content for?"
+
+[node name="HSeparator7" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="PerformanceContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox"]
+layout_mode = 2
+
+[node name="PerformanceLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/PerformanceContainer"]
+layout_mode = 2
+text = "📊 Performance Notes:"
+
+[node name="PerformanceEdit" type="TextEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/PerformanceContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+placeholder_text = "Track what works, engagement metrics, learnings..."
+
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/FormatsContainer/FormatOtherContainer/FormatOtherCheck" to="." method="_on_format_other_check_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ChannelsContainer/ChannelOtherContainer/ChannelOtherCheck" to="." method="_on_channel_other_check_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer/CosmicOtherCheck" to="." method="_on_cosmic_other_check_toggled"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons/DeadlineTodayBtn" to="." method="_on_deadline_today_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons/DeadlineWeekBtn" to="." method="_on_deadline_week_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineButtons/DeadlineMonthBtn" to="." method="_on_deadline_month_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons/ScheduledTodayBtn" to="." method="_on_scheduled_today_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons/ScheduledTomorrowBtn" to="." method="_on_scheduled_tomorrow_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledButtons/ScheduledWeekBtn" to="." method="_on_scheduled_week_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishButtons/PublishWeekBtn" to="." method="_on_publish_week_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishButtons/PublishMonthBtn" to="." method="_on_publish_month_pressed"]

@@ -1,0 +1,15 @@
+[gd_resource type="BehaviorTree" load_steps=5 format=3 uid="uid://bj8kh3m5n7rap"]
+
+[ext_resource type="Script" uid="uid://cpqupqvs3xhmk" path="res://ScenSyn/scripts/limbo_tasks/determine_narrator_intent_task.gd" id="1_ai_char"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_ai_char"]
+
+[sub_resource type="BTAction" id="BTAction_ai_response"]
+script = ExtResource("1_ai_char")
+
+[sub_resource type="BTSequence" id="BTSequence_ai_char"]
+children = [SubResource("BTAction_ai_response")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_ai_char")
+root_task = SubResource("BTSequence_ai_char")

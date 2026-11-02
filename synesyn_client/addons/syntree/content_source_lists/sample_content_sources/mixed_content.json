@@ -1,0 +1,98 @@
+{
+    "nodes": {
+        "456789_4567890123": {
+            "id": "456789_4567890123",
+            "name": "Project Resources",
+            "path": "res://project.godot",
+            "type": "container",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "from_port": 0,
+                            "node": "456790_4567890124",
+                            "to_port": 0,
+                            "type": "default"
+                        },
+                        {
+                            "from_port": 1,
+                            "node": "456791_4567890125",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ]
+                },
+                "graph_position": {
+                    "x": -400,
+                    "y": 200
+                }
+            }
+        },
+        "456790_4567890124": {
+            "id": "456790_4567890124",
+            "name": "Local Documentation",
+            "path": "res://docs/README.md",
+            "type": "hybrid",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 0,
+                            "node": "456789_4567890123",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "from_port": 0,
+                            "node": "456791_4567890125",
+                            "to_port": 1,
+                            "type": "default"
+                        }
+                    ]
+                },
+                "graph_position": {
+                    "x": 0,
+                    "y": 150
+                }
+            }
+        },
+        "456791_4567890125": {
+            "id": "456791_4567890125",
+            "name": "Online Resources",
+            "path": "https://api.example.com/docs",
+            "type": "leaf",
+            "is_metaprompt": true,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 1,
+                            "node": "456789_4567890123",
+                            "to_port": 0,
+                            "type": "default"
+                        },
+                        {
+                            "from_port": 0,
+                            "node": "456790_4567890124",
+                            "to_port": 1,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": []
+                },
+                "graph_position": {
+                    "x": 0,
+                    "y": 250
+                }
+            }
+        }
+    },
+    "root_nodes": [
+        "456789_4567890123"
+    ]
+} 

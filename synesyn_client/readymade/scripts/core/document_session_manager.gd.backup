@@ -1,0 +1,2884 @@
+extends Node
+
+## ReadyMade Document Session Manager - Handles document editing sessions
+## This singleton manages document contexts, multi-document sessions, and editing state
+
+signal document_loaded(document: DocumentContext)
+signal primary_document_changed(document: DocumentContext)
+signal document_removed(document_path: String)
+signal session_cleared()
+
+# Document context class to hold document metadata and content
+class DocumentContext:
+	var file_path: String = ""
+	var file_name: String = ""
+	var content: String = ""
+	var original_content: String = ""
+	var last_modified: int = 0
+	var word_count: int = 0
+	var is_primary: bool = false
+	var selection_start: int = -1
+	var selection_end: int = -1
+	var edit_history = []  # Array[Dictionary]
+	var syntree_analysis: Dictionary = {}
+	
+	# Enhanced change tracking
+	var change_statistics: Dictionary = {}
+	var edit_session_id: String = ""
+	var creation_time: int = 0
+	var last_auto_save: int = 0
+	var change_markers = []  # Array[Dictionary]
+	
+	# === PHASE 5.2: PERFORMANCE OPTIMIZATION ===
+	# Lazy loading properties
+	var is_content_loaded: bool = false
+	var file_size: int = 0
+	var is_large_document: bool = false
+	var content_preview: String = ""  # First 500 chars for previews
+	var lazy_load_threshold: int = 50000  # 50KB threshold for lazy loading
+	var content_chunks: Array = []  # For chunked loading
+	var metadata_only: bool = false  # If true, only metadata is loaded
+	
+	# Performance metrics
+	var load_time_ms: int = 0
+	var memory_usage_bytes: int = 0
+	var last_access_time: int = 0
+	
+	func _init(path: String = "", text: String = "", lazy_load: bool = false):
+		if not path.is_empty():
+			file_path = path
+			file_name = path.get_file()
+			_analyze_file_size()
+		
+		creation_time = Time.get_unix_time_from_system()
+		last_modified = creation_time
+		edit_session_id = _generate_session_id()
+		
+		if not text.is_empty():
+			# Direct text loading (for string-based documents)
+			content = text
+			original_content = text
+			is_content_loaded = true
+			_calculate_word_count()
+			_calculate_memory_usage()
+		elif not path.is_empty() and not lazy_load:
+			# Traditional immediate loading
+			_load_content_immediately()
+		elif not path.is_empty():
+			# Lazy loading - just load metadata and preview
+			_load_metadata_and_preview()
+		
+		_initialize_change_statistics()
+	
+	func _analyze_file_size():
+		"""Analyze file size to determine if lazy loading should be used"""
+		if FileAccess.file_exists(file_path):
+			var file = FileAccess.open(file_path, FileAccess.READ)
+			if file:
+				file_size = file.get_length()
+				file.close()
+				is_large_document = file_size > lazy_load_threshold
+				print("DocumentContext: File size: %d bytes, Large document: %s" % [file_size, is_large_document])
+	
+	func _load_metadata_and_preview():
+		"""Load only essential metadata and content preview for large documents"""
+		var start_time = Time.get_ticks_msec()
+		
+		if not FileAccess.file_exists(file_path):
+			return
+		
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		if not file:
+			return
+		
+		# Load preview (first 500 characters)
+		content_preview = file.get_buffer(min(500, file_size)).get_string_from_utf8()
+		
+		# Estimate word count from preview
+		var preview_words = content_preview.split(" ", false).size()
+		word_count = int((preview_words / 500.0) * file_size) if content_preview.length() == 500 else preview_words
+		
+		file.close()
+		metadata_only = true
+		load_time_ms = Time.get_ticks_msec() - start_time
+		last_access_time = Time.get_unix_time_from_system()
+		
+		print("DocumentContext: Loaded metadata and preview for %s (%d words estimated)" % [file_name, word_count])
+	
+	func _load_content_immediately():
+		"""Traditional immediate content loading"""
+		var start_time = Time.get_ticks_msec()
+		
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		if not file:
+			return
+		
+		content = file.get_as_text()
+		file.close()
+		
+		original_content = content
+		content_preview = content.substr(0, 500)
+		is_content_loaded = true
+		metadata_only = false
+		
+		_calculate_word_count()
+		_calculate_memory_usage()
+		
+		load_time_ms = Time.get_ticks_msec() - start_time
+		last_access_time = Time.get_unix_time_from_system()
+		
+		print("DocumentContext: Loaded content immediately for %s (%d ms)" % [file_name, load_time_ms])
+	
+	func ensure_content_loaded() -> bool:
+		"""Ensure full content is loaded, loading it if necessary"""
+		if is_content_loaded:
+			last_access_time = Time.get_unix_time_from_system()
+			return true
+		
+		if file_path.is_empty() or not FileAccess.file_exists(file_path):
+			return false
+		
+		print("DocumentContext: Lazy loading content for %s..." % file_name)
+		var start_time = Time.get_ticks_msec()
+		
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		if not file:
+			return false
+		
+		content = file.get_as_text()
+		file.close()
+		
+		original_content = content
+		is_content_loaded = true
+		metadata_only = false
+		
+		_calculate_word_count()
+		_calculate_memory_usage()
+		
+		var lazy_load_time = Time.get_ticks_msec() - start_time
+		print("DocumentContext: Lazy loaded content in %d ms" % lazy_load_time)
+		last_access_time = Time.get_unix_time_from_system()
+		
+		return true
+	
+	func get_content() -> String:
+		"""Get content, loading it if necessary"""
+		ensure_content_loaded()
+		return content
+	
+	func get_content_preview() -> String:
+		"""Get content preview (always available)"""
+		return content_preview
+	
+	func get_chunked_content(chunk_size: int = 4000, overlap: int = 200) -> Array:
+		"""Get content in chunks for AI processing with token limits"""
+		if not ensure_content_loaded():
+			return []
+		
+		if content_chunks.is_empty() or content_chunks[0].get("chunk_size", 0) != chunk_size:
+			_generate_content_chunks(chunk_size, overlap)
+		
+		return content_chunks
+	
+	func _generate_content_chunks(chunk_size: int, overlap: int):
+		"""Generate content chunks with overlapping for context"""
+		content_chunks.clear()
+		
+		if content.length() <= chunk_size:
+			content_chunks.append({
+				"content": content,
+				"start_pos": 0,
+				"end_pos": content.length(),
+				"chunk_index": 0,
+				"total_chunks": 1,
+				"chunk_size": chunk_size,
+				"has_overlap": false
+			})
+			return
+		
+		var total_chunks = ceil(float(content.length()) / (chunk_size - overlap))
+		var current_pos = 0
+		var chunk_index = 0
+		
+		while current_pos < content.length():
+			var end_pos = min(current_pos + chunk_size, content.length())
+			var chunk_content = content.substr(current_pos, end_pos - current_pos)
+			
+			content_chunks.append({
+				"content": chunk_content,
+				"start_pos": current_pos,
+				"end_pos": end_pos,
+				"chunk_index": chunk_index,
+				"total_chunks": total_chunks,
+				"chunk_size": chunk_size,
+				"has_overlap": chunk_index > 0
+			})
+			
+			current_pos += chunk_size - overlap
+			chunk_index += 1
+		
+		print("DocumentContext: Generated %d chunks for %s" % [content_chunks.size(), file_name])
+	
+	func _calculate_memory_usage():
+		"""Calculate approximate memory usage"""
+		memory_usage_bytes = content.length() * 4  # Approximate UTF-8 bytes
+		memory_usage_bytes += edit_history.size() * 200  # Estimate for edit history
+		memory_usage_bytes += change_markers.size() * 100  # Estimate for markers
+	
+	func get_performance_metrics() -> Dictionary:
+		"""Get document performance metrics"""
+		return {
+			"file_size_bytes": file_size,
+			"memory_usage_bytes": memory_usage_bytes,
+			"load_time_ms": load_time_ms,
+			"is_large_document": is_large_document,
+			"is_content_loaded": is_content_loaded,
+			"metadata_only": metadata_only,
+			"chunks_generated": content_chunks.size(),
+			"last_access_time": last_access_time,
+			"access_frequency": _calculate_access_frequency()
+		}
+	
+	func _calculate_access_frequency() -> float:
+		"""Calculate how frequently this document is accessed"""
+		var current_time = Time.get_unix_time_from_system()
+		var time_since_creation = current_time - creation_time
+		var time_since_access = current_time - last_access_time
+		
+		if time_since_creation <= 0:
+			return 1.0
+		
+		# Higher frequency for recently accessed documents
+		var recency_factor = max(0.1, 1.0 - (time_since_access / 3600.0))  # Decay over 1 hour
+		return recency_factor
+	
+	func can_unload_content() -> bool:
+		"""Check if content can be safely unloaded to save memory"""
+		if not is_content_loaded or file_path.is_empty():
+			return false
+		
+		# Don't unload if recently accessed (within 5 minutes)
+		var current_time = Time.get_unix_time_from_system()
+		if current_time - last_access_time < 300:
+			return false
+		
+		# Don't unload if there are unsaved changes
+		if has_unsaved_changes():
+			return false
+		
+		# Don't unload primary documents
+		if is_primary:
+			return false
+		
+		return true
+	
+	func unload_content():
+		"""Unload content to save memory while keeping metadata"""
+		if not can_unload_content():
+			return
+		
+		print("DocumentContext: Unloading content for %s to save memory" % file_name)
+		content = ""
+		original_content = ""
+		is_content_loaded = false
+		metadata_only = true
+		content_chunks.clear()
+		
+		# Keep essential data
+		# content_preview remains available
+		# word_count remains as estimate
+		
+		_calculate_memory_usage()
+	
+# Removed duplicate _init function - using the new performance-optimized version above
+	
+	func _generate_session_id() -> String:
+		"""Generate unique session ID for this document"""
+		var timestamp = Time.get_unix_time_from_system()
+		var random_suffix = randi() % 10000
+		return "session_%d_%04d" % [timestamp, random_suffix]
+	
+	func _initialize_change_statistics():
+		"""Initialize change tracking statistics"""
+		change_statistics = {
+			"total_edits": 0,
+			"words_added": 0,
+			"words_removed": 0,
+			"characters_added": 0,
+			"characters_removed": 0,
+			"edit_modes_used": [],
+			"time_spent_editing": 0,
+			"last_significant_change": 0,
+			"change_velocity": 0.0  # changes per minute
+		}
+	
+	func _calculate_word_count():
+		# Simple word count - split by whitespace and filter empty strings
+		var words = content.split(" ", false)
+		word_count = words.size()
+	
+	func update_content(new_content: String, edit_mode: String = "", change_source: String = "user"):
+		"""Update document content and track changes with enhanced tracking"""
+		if new_content != content:
+			var timestamp = Time.get_unix_time_from_system()
+			var old_word_count = word_count
+			var old_char_count = content.length()
+			
+			# Calculate detailed changes
+			var change_analysis = _analyze_content_changes(content, new_content)
+			
+			# Add to edit history with enhanced data
+			var edit_entry = {
+				"timestamp": timestamp,
+				"edit_id": _generate_edit_id(),
+				"old_content": content,
+				"new_content": new_content,
+				"change_description": change_analysis.description,
+				"change_type": change_analysis.change_type,
+				"edit_mode": edit_mode,
+				"change_source": change_source,
+				"words_delta": change_analysis.words_delta,
+				"chars_delta": change_analysis.chars_delta,
+				"significant_change": change_analysis.is_significant,
+				"affected_sections": change_analysis.affected_sections,
+				"selection_context": _get_selection_context_for_change()
+			}
+			edit_history.append(edit_entry)
+			
+			# Update change statistics
+			_update_change_statistics(change_analysis, edit_mode, timestamp)
+			
+			# Add change marker for visualization
+			_add_change_marker(change_analysis, timestamp)
+			
+			content = new_content
+			last_modified = timestamp
+			_calculate_word_count()
+			
+			# Check if significant change should trigger auto-save consideration
+			if change_analysis.is_significant:
+				change_statistics.last_significant_change = timestamp
+	
+	func _generate_edit_id() -> String:
+		"""Generate unique ID for this edit"""
+		var edit_count = edit_history.size()
+		return "edit_%s_%03d" % [edit_session_id, edit_count + 1]
+	
+	func _analyze_content_changes(old_content: String, new_content: String) -> Dictionary:
+		"""Perform detailed analysis of content changes"""
+		var old_words = old_content.split(" ", false)
+		var new_words = new_content.split(" ", false)
+		var old_chars = old_content.length()
+		var new_chars = new_content.length()
+		
+		var words_delta = new_words.size() - old_words.size()
+		var chars_delta = new_chars - old_chars
+		
+		# Determine change type
+		var change_type = ""
+		if words_delta > 0:
+			change_type = "addition"
+		elif words_delta < 0:
+			change_type = "deletion" 
+		elif chars_delta != 0:
+			change_type = "modification"
+		else:
+			change_type = "formatting"
+		
+		# Check if this is a significant change
+		var is_significant = abs(words_delta) > 5 or abs(chars_delta) > 50
+		
+		# Analyze affected sections (simplified)
+		var affected_sections = _identify_affected_sections(old_content, new_content)
+		
+		# Generate description
+		var description = _generate_detailed_change_description(words_delta, chars_delta, change_type)
+		
+		return {
+			"words_delta": words_delta,
+			"chars_delta": chars_delta,
+			"change_type": change_type,
+			"is_significant": is_significant,
+			"affected_sections": affected_sections,
+			"description": description
+		}
+	
+	func _update_change_statistics(change_analysis: Dictionary, edit_mode: String, timestamp: int):
+		"""Update document change statistics"""
+		change_statistics.total_edits += 1
+		
+		if change_analysis.words_delta > 0:
+			change_statistics.words_added += change_analysis.words_delta
+		else:
+			change_statistics.words_removed += abs(change_analysis.words_delta)
+		
+		if change_analysis.chars_delta > 0:
+			change_statistics.characters_added += change_analysis.chars_delta
+		else:
+			change_statistics.characters_removed += abs(change_analysis.chars_delta)
+		
+		# Track edit modes used
+		if not edit_mode.is_empty() and edit_mode not in change_statistics.edit_modes_used:
+			change_statistics.edit_modes_used.append(edit_mode)
+		
+		# Calculate editing velocity (changes per minute)
+		var time_since_creation = timestamp - creation_time
+		if time_since_creation > 0:
+			change_statistics.change_velocity = float(change_statistics.total_edits) / (time_since_creation / 60.0)
+	
+	func _add_change_marker(change_analysis: Dictionary, timestamp: int):
+		"""Add visual change marker for UI display"""
+		var marker = {
+			"timestamp": timestamp,
+			"change_type": change_analysis.change_type,
+			"description": change_analysis.description,
+			"significance": "major" if change_analysis.is_significant else "minor",
+			"position": selection_start if selection_start >= 0 else 0,
+			"length": abs(change_analysis.chars_delta)
+		}
+		
+		change_markers.append(marker)
+		
+		# Keep only recent markers (last 50 changes)
+		if change_markers.size() > 50:
+			change_markers = change_markers.slice(-50)
+	
+	func _identify_affected_sections(old_content: String, new_content: String) -> Array:
+		"""Identify which sections of the document were affected (simplified implementation)"""
+		var sections = []
+		
+		# Split content into paragraphs and compare
+		var old_paragraphs = old_content.split("\n\n", false)
+		var new_paragraphs = new_content.split("\n\n", false)
+		
+		# Find changed paragraphs (simplified diff)
+		for i in range(max(old_paragraphs.size(), new_paragraphs.size())):
+			var old_para = old_paragraphs[i] if i < old_paragraphs.size() else ""
+			var new_para = new_paragraphs[i] if i < new_paragraphs.size() else ""
+			
+			if old_para != new_para:
+				sections.append("Paragraph %d" % (i + 1))
+		
+		return sections
+	
+	func _generate_detailed_change_description(words_delta: int, chars_delta: int, change_type: String) -> String:
+		"""Generate detailed description of changes"""
+		var description = ""
+		
+		match change_type:
+			"addition":
+				description = "Added %d words (%d characters)" % [words_delta, chars_delta]
+			"deletion":
+				description = "Removed %d words (%d characters)" % [abs(words_delta), abs(chars_delta)]
+			"modification":
+				if words_delta == 0:
+					description = "Modified text (%d character change)" % chars_delta
+				else:
+					description = "Modified text (%d words, %d characters)" % [words_delta, chars_delta]
+			"formatting":
+				description = "Formatting changes"
+		
+		return description
+	
+	func _get_selection_context_for_change() -> Dictionary:
+		"""Get context information about current selection for change tracking"""
+		if selection_start >= 0 and selection_end >= 0:
+			return {
+				"start": selection_start,
+				"end": selection_end,
+				"length": selection_end - selection_start,
+				"selected_text": get_selected_text()
+			}
+		return {}
+	
+	func _get_change_description(old_text: String, new_text: String) -> String:
+		"""Generate a description of what changed"""
+		var old_words = old_text.split(" ", false).size()
+		var new_words = new_text.split(" ", false).size()
+		var word_diff = new_words - old_words
+		
+		if word_diff > 0:
+			return "Added %d words" % word_diff
+		elif word_diff < 0:
+			return "Removed %d words" % abs(word_diff)
+		else:
+			return "Content modified"
+	
+	func get_selected_text() -> String:
+		"""Get currently selected text"""
+		if selection_start >= 0 and selection_end >= 0 and selection_end > selection_start:
+			return content.substr(selection_start, selection_end - selection_start)
+		return ""
+	
+	func set_selection(start: int, end: int):
+		"""Set text selection range"""
+		selection_start = start
+		selection_end = end
+	
+	func has_unsaved_changes() -> bool:
+		"""Check if document has unsaved changes"""
+		return content != original_content
+	
+	func get_summary() -> Dictionary:
+		"""Get document summary for UI display"""
+		return {
+			"name": file_name,
+			"path": file_path,
+			"word_count": word_count,
+			"is_primary": is_primary,
+			"has_changes": has_unsaved_changes(),
+			"last_modified": last_modified,
+			"creation_time": creation_time,
+			"total_edits": change_statistics.total_edits,
+			"session_id": edit_session_id,
+			"change_velocity": change_statistics.change_velocity
+		}
+	
+	func get_change_history_summary() -> Dictionary:
+		"""Get summary of document change history"""
+		var recent_changes = []
+		var total_changes = edit_history.size()
+		
+		# Get last 10 changes for summary
+		var start_index = max(0, total_changes - 10)
+		for i in range(start_index, total_changes):
+			var change = edit_history[i]
+			recent_changes.append({
+				"timestamp": change.timestamp,
+				"description": change.change_description,
+				"type": change.change_type,
+				"significant": change.significant_change,
+				"edit_mode": change.edit_mode
+			})
+		
+		return {
+			"total_changes": total_changes,
+			"recent_changes": recent_changes,
+			"statistics": change_statistics.duplicate(),
+			"time_span": last_modified - creation_time,
+			"unsaved_changes": has_unsaved_changes()
+		}
+	
+	func get_change_markers_for_visualization() -> Array:
+		"""Get change markers for UI visualization"""
+		return change_markers.duplicate()
+	
+	func generate_change_summary() -> String:
+		"""Generate human-readable change summary"""
+		var summary = "Document Change Summary for '%s':\n\n" % file_name
+		
+		# Overall statistics
+		summary += "• Total edits: %d\n" % change_statistics.total_edits
+		summary += "• Words added: %d, removed: %d\n" % [change_statistics.words_added, change_statistics.words_removed]
+		summary += "• Characters added: %d, removed: %d\n" % [change_statistics.characters_added, change_statistics.characters_removed]
+		summary += "• Edit velocity: %.1f changes/minute\n" % change_statistics.change_velocity
+		
+		if change_statistics.edit_modes_used.size() > 0:
+			summary += "• Edit modes used: %s\n" % ", ".join(change_statistics.edit_modes_used)
+		
+		# Recent significant changes
+		var significant_changes = []
+		for change in edit_history:
+			if change.significant_change:
+				significant_changes.append(change)
+		
+		if significant_changes.size() > 0:
+			summary += "\nSignificant Changes:\n"
+			var recent_significant = significant_changes.slice(-5)  # Last 5 significant changes
+			for change in recent_significant:
+				var time_str = Time.get_datetime_string_from_unix_time(change.timestamp)
+				summary += "• %s - %s (%s)\n" % [time_str, change.change_description, change.edit_mode]
+		
+		return summary
+	
+	func export_change_history() -> Dictionary:
+		"""Export complete change history for session save/load"""
+		return {
+			"document_info": {
+				"file_path": file_path,
+				"file_name": file_name,
+				"session_id": edit_session_id,
+				"creation_time": creation_time
+			},
+			"content_info": {
+				"original_content": original_content,
+				"current_content": content,
+				"word_count": word_count
+			},
+			"change_tracking": {
+				"edit_history": edit_history.duplicate(),
+				"change_statistics": change_statistics.duplicate(),
+				"change_markers": change_markers.duplicate()
+			}
+		}
+	
+	func import_change_history(data: Dictionary) -> bool:
+		"""Import change history from session load"""
+		if not data.has_all(["document_info", "content_info", "change_tracking"]):
+			push_error("DocumentContext: Invalid change history data format")
+			return false
+		
+		# Restore document info
+		var doc_info = data.get("document_info", {})
+		if doc_info.is_empty():
+			push_error("DocumentContext: Missing document_info in change history data")
+			return false
+		
+		if not file_path.is_empty() and file_path != doc_info.get("file_path", ""):
+			push_warning("DocumentContext: File path mismatch during import")
+		
+		edit_session_id = doc_info.get("session_id", _generate_session_id())
+		creation_time = doc_info.get("creation_time", Time.get_unix_time_from_system())
+		
+		# Restore content info
+		var content_info = data.get("content_info", {})
+		if not content_info.is_empty():
+			original_content = content_info.get("original_content", "")
+			# Note: Don't restore current_content as it should reflect actual current state
+		
+		# Restore change tracking
+		var tracking = data.get("change_tracking", {})
+		if not tracking.is_empty():
+			edit_history = tracking.get("edit_history", [])
+			change_statistics = tracking.get("change_statistics", {})
+			change_markers = tracking.get("change_markers", [])
+		
+		# Ensure change statistics is properly initialized
+		if change_statistics.is_empty():
+			_initialize_change_statistics()
+		
+		print("DocumentContext: Successfully imported change history for '%s'" % file_name)
+		return true
+
+# Session management
+var active_documents = []  # Array[DocumentContext]
+var primary_document: DocumentContext = null
+var current_edit_mode: String = "developmental"
+var session_name: String = ""
+
+# Edit modes
+var edit_modes = [  # Array[String]
+	"developmental",
+	"structural", 
+	"content",
+	"line",
+	"copy",
+	"proofreading"
+]
+
+var edit_mode_display_names: Dictionary = {
+	"developmental": "Developmental Editing",
+	"structural": "Structural Editing",
+	"content": "Content Editing", 
+	"line": "Line Editing",
+	"copy": "Copy Editing",
+	"proofreading": "Proofreading"
+}
+
+func _ready():
+	print("DocumentSessionManager: Initializing...")
+	_load_session_preferences()
+	print("DocumentSessionManager: Ready")
+
+func _generate_session_id() -> String:
+	"""Generate unique session ID for the session manager"""
+	var timestamp = Time.get_unix_time_from_system()
+	var random_suffix = randi() % 10000
+	return "session_%d_%04d" % [timestamp, random_suffix]
+
+func get_available_edit_modes() -> Array:
+	"""Get list of available edit modes"""
+	return edit_modes.duplicate()
+
+func get_edit_mode_display_names() -> Dictionary:
+	"""Get edit mode display names"""
+	return edit_mode_display_names.duplicate()
+
+func set_edit_mode(mode: String):
+	"""Set current edit mode"""
+	if mode in edit_modes:
+		current_edit_mode = mode
+		print("DocumentSessionManager: Edit mode changed to: ", mode)
+	else:
+		push_error("DocumentSessionManager: Invalid edit mode: " + mode)
+
+func get_current_edit_mode() -> String:
+	"""Get current edit mode"""
+	return current_edit_mode
+
+func load_document(file_path: String, force_immediate: bool = false) -> DocumentContext:
+	"""Load a document from file path with performance optimizations"""
+	print("DocumentSessionManager: Loading document: ", file_path)
+	
+	if not FileAccess.file_exists(file_path):
+		push_error("DocumentSessionManager: File does not exist: " + file_path)
+		return null
+	
+	# Check if document is already loaded
+	for doc in active_documents:
+		if doc.file_path == file_path:
+			print("DocumentSessionManager: Document already loaded: ", file_path)
+			return doc
+	
+	# Determine loading strategy based on file size
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if not file:
+		push_error("DocumentSessionManager: Failed to open file: " + file_path)
+		return null
+	
+	var file_size = file.get_length()
+	file.close()
+	
+	var use_lazy_loading = not force_immediate and file_size > 50000  # 50KB threshold
+	
+	# Create document context with appropriate loading strategy
+	var document = DocumentContext.new(file_path, "", use_lazy_loading)
+	active_documents.append(document)
+	
+	# Set as primary if it's the first document
+	if active_documents.size() == 1:
+		set_primary_document(document)
+	
+	document_loaded.emit(document)
+	
+	if use_lazy_loading:
+		print("DocumentSessionManager: Document loaded with lazy loading: %s (%d bytes)" % [document.file_name, file_size])
+	else:
+		print("DocumentSessionManager: Document loaded immediately: %s" % document.file_name)
+	
+	return document
+
+func load_document_from_string(content: String, name: String = "Untitled") -> DocumentContext:
+	"""Load a document from string content"""
+	print("DocumentSessionManager: Loading document from string: ", name)
+	
+	var document = DocumentContext.new("", content)
+	document.file_name = name
+	active_documents.append(document)
+	
+	# Set as primary if it's the first document
+	if active_documents.size() == 1:
+		set_primary_document(document)
+	
+	document_loaded.emit(document)
+	print("DocumentSessionManager: Document from string loaded successfully: ", name)
+	
+	return document
+
+func set_primary_document(document: DocumentContext):
+	"""Set the primary document for editing"""
+	if document in active_documents:
+		# Clear previous primary
+		if primary_document:
+			primary_document.is_primary = false
+		
+		primary_document = document
+		document.is_primary = true
+		primary_document_changed.emit(document)
+		print("DocumentSessionManager: Primary document set to: ", document.file_name)
+	else:
+		push_error("DocumentSessionManager: Cannot set primary - document not in active session")
+
+func remove_document(document: DocumentContext):
+	"""Remove a document from the session"""
+	if document in active_documents:
+		var was_primary = document.is_primary
+		active_documents.erase(document)
+		
+		# If this was the primary document, set a new one
+		if was_primary and active_documents.size() > 0:
+			set_primary_document(active_documents[0])
+		elif was_primary:
+			primary_document = null
+		
+		document_removed.emit(document.file_path if not document.file_path.is_empty() else document.file_name)
+		print("DocumentSessionManager: Document removed: ", document.file_name)
+
+func clear_session():
+	"""Clear all documents from the session"""
+	active_documents.clear()
+	primary_document = null
+	session_cleared.emit()
+	print("DocumentSessionManager: Session cleared")
+
+func get_active_documents() -> Array:
+	"""Get list of active documents"""
+	return active_documents.duplicate()
+
+func get_primary_document() -> DocumentContext:
+	"""Get the primary document"""
+	return primary_document
+
+func get_document_by_path(file_path: String) -> DocumentContext:
+	"""Get document by file path"""
+	for doc in active_documents:
+		if doc.file_path == file_path:
+			return doc
+	return null
+
+func update_document_content(document: DocumentContext, new_content: String, change_source: String = "user"):
+	"""Update content of a document with change tracking"""
+	if document in active_documents:
+		document.update_content(new_content, current_edit_mode, change_source)
+		print("DocumentSessionManager: Document content updated: ", document.file_name)
+	else:
+		push_error("DocumentSessionManager: Cannot update document not in active session")
+
+func save_document(document: DocumentContext) -> bool:
+	"""Save document to file"""
+	if document.file_path.is_empty():
+		push_error("DocumentSessionManager: Cannot save - no file path set")
+		return false
+	
+	var file = FileAccess.open(document.file_path, FileAccess.WRITE)
+	if not file:
+		push_error("DocumentSessionManager: Failed to open file for writing: " + document.file_path)
+		return false
+	
+	file.store_string(document.content)
+	file.close()
+	
+	# Update original content to mark as saved
+	document.original_content = document.content
+	print("DocumentSessionManager: Document saved: ", document.file_name)
+	return true
+
+func save_document_as(document: DocumentContext, file_path: String) -> bool:
+	"""Save document to a new file path"""
+	var file = FileAccess.open(file_path, FileAccess.WRITE)
+	if not file:
+		push_error("DocumentSessionManager: Failed to open file for writing: " + file_path)
+		return false
+	
+	file.store_string(document.content)
+	file.close()
+	
+	# Update document paths
+	document.file_path = file_path
+	document.file_name = file_path.get_file()
+	document.original_content = document.content
+	
+	print("DocumentSessionManager: Document saved as: ", file_path)
+	return true
+
+func get_session_summary() -> Dictionary:
+	"""Get summary of current session"""
+	var total_words = 0
+	var documents_with_changes = 0
+	
+	for doc in active_documents:
+		total_words += doc.word_count
+		if doc.has_unsaved_changes():
+			documents_with_changes += 1
+	
+	return {
+		"document_count": active_documents.size(),
+		"total_words": total_words,
+		"primary_document": primary_document.file_name if primary_document else "None",
+		"unsaved_changes": documents_with_changes,
+		"edit_mode": current_edit_mode
+	}
+
+func get_multi_document_context() -> Dictionary:
+	"""Get comprehensive context for multi-document sessions"""
+	var context = {
+		"session_summary": get_session_summary(),
+		"primary_document": null,
+		"additional_documents": [],
+		"relationships": [],
+		"cross_references": []
+	}
+	
+	if primary_document:
+		context.primary_document = {
+			"name": primary_document.file_name,
+			"word_count": primary_document.word_count,
+			"preview": _get_document_preview(primary_document),
+			"last_modified": primary_document.last_modified,
+			"has_changes": primary_document.has_unsaved_changes()
+		}
+	
+	# Add additional documents
+	for doc in active_documents:
+		if doc != primary_document:
+			context.additional_documents.append({
+				"name": doc.file_name,
+				"word_count": doc.word_count,
+				"preview": _get_document_preview(doc),
+				"last_modified": doc.last_modified,
+				"has_changes": doc.has_unsaved_changes()
+			})
+	
+	# Analyze relationships between documents
+	context.relationships = _analyze_document_relationships()
+	
+	return context
+
+func _get_document_preview(document: DocumentContext, lines: int = 3) -> String:
+	"""Get a preview of document content"""
+	var preview_lines = document.content.split("\n", false, lines + 1)
+	var preview = ""
+	
+	for i in range(min(lines, preview_lines.size())):
+		preview += preview_lines[i] + "\n"
+	
+	if preview_lines.size() > lines:
+		preview += "..."
+	
+	return preview.strip_edges()
+
+func _analyze_document_relationships() -> Array:
+	"""Analyze relationships between documents in the session"""
+	var relationships = []
+	
+	if active_documents.size() < 2:
+		return relationships
+	
+	# Simple relationship analysis - could be enhanced with more sophisticated NLP
+	for i in range(active_documents.size()):
+		for j in range(i + 1, active_documents.size()):
+			var doc1 = active_documents[i]
+			var doc2 = active_documents[j]
+			
+			var relationship = _compare_documents(doc1, doc2)
+			if relationship.similarity > 0.1:  # Threshold for considering documents related
+				relationships.append(relationship)
+	
+	return relationships
+
+func _compare_documents(doc1: DocumentContext, doc2: DocumentContext) -> Dictionary:
+	"""Compare two documents for similarities and relationships"""
+	var words1 = _extract_keywords(doc1.content)
+	var words2 = _extract_keywords(doc2.content)
+	
+	var common_words = []
+	var total_unique_words = 0
+	
+	for word in words1:
+		if word in words2:
+			common_words.append(word)
+	
+	total_unique_words = len(words1) + len(words2) - len(common_words)
+	var similarity = float(len(common_words)) / max(1, total_unique_words)
+	
+	return {
+		"doc1_name": doc1.file_name,
+		"doc2_name": doc2.file_name,
+		"similarity": similarity,
+		"common_keywords": common_words.slice(0, 10),  # Top 10 common words
+		"relationship_type": _classify_relationship(similarity)
+	}
+
+func _extract_keywords(content: String) -> Array:
+	"""Extract keywords from document content (simplified implementation)"""
+	var words = content.to_lower().split(" ", false)
+	var filtered_words = []
+	
+	# Simple stop words (could be expanded)
+	var stop_words = ["the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by", "is", "are", "was", "were", "be", "been", "have", "has", "had", "do", "does", "did", "will", "would", "should", "could", "may", "might", "must", "can", "this", "that", "these", "those", "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them"]
+	
+	for word in words:
+		# Remove punctuation and filter short words and stop words
+		word = _remove_punctuation(word).strip_edges()
+		if word.length() > 3 and word not in stop_words:
+			filtered_words.append(word)
+	
+	return filtered_words
+
+func _classify_relationship(similarity: float) -> String:
+	"""Classify the relationship between documents based on similarity"""
+	if similarity > 0.7:
+		return "highly_related"
+	elif similarity > 0.4:
+		return "moderately_related"
+	elif similarity > 0.1:
+		return "somewhat_related"
+	else:
+		return "unrelated"
+
+func get_document_context_for_llm(include_all_documents: bool = false) -> Dictionary:
+	"""Get formatted document context for LLM prompts"""
+	var context = {
+		"session_info": get_session_summary(),
+		"primary_document": null,
+		"supporting_documents": [],
+		"context_type": "single_document"
+	}
+	
+	if not primary_document:
+		return context
+	
+	# Always include primary document
+	context.primary_document = {
+		"name": primary_document.file_name,
+		"content_preview": _get_document_preview(primary_document, 5),
+		"word_count": primary_document.word_count,
+		"edit_mode": current_edit_mode
+	}
+	
+	# Include additional documents if requested
+	if include_all_documents and active_documents.size() > 1:
+		context.context_type = "multi_document"
+		
+		for doc in active_documents:
+			if doc != primary_document:
+				context.supporting_documents.append({
+					"name": doc.file_name,
+					"content_preview": _get_document_preview(doc, 3),
+					"word_count": doc.word_count,
+					"relationship_to_primary": _get_relationship_to_primary(doc)
+				})
+	
+	return context
+
+func _get_relationship_to_primary(document: DocumentContext) -> String:
+	"""Get the relationship of a document to the primary document"""
+	if not primary_document:
+		return "no_primary"
+	
+	var comparison = _compare_documents(primary_document, document)
+	return comparison.relationship_type
+
+func switch_primary_document(new_primary: DocumentContext):
+	"""Switch primary document with enhanced context preservation"""
+	if new_primary not in active_documents:
+		push_error("DocumentSessionManager: Cannot switch to document not in session")
+		return
+	
+	var old_primary = primary_document
+	set_primary_document(new_primary)
+	
+	# Log the context switch
+	print("DocumentSessionManager: Switched primary document from '%s' to '%s'" % [
+		old_primary.file_name if old_primary else "None",
+		new_primary.file_name
+	])
+
+func get_documents_by_type() -> Dictionary:
+	"""Categorize documents by their apparent type/purpose"""
+	var categorized = {
+		"primary": [],
+		"drafts": [],
+		"research": [],
+		"notes": [],
+		"references": [],
+		"other": []
+	}
+	
+	for doc in active_documents:
+		var category = _categorize_document(doc)
+		if category in categorized:
+			categorized[category].append(doc)
+		else:
+			categorized.other.append(doc)
+	
+	return categorized
+
+func _categorize_document(document: DocumentContext) -> String:
+	"""Categorize a document based on its name and content"""
+	var name_lower = document.file_name.to_lower()
+	
+	# Simple categorization based on filename patterns
+	if "draft" in name_lower or "version" in name_lower:
+		return "drafts"
+	elif "research" in name_lower or "source" in name_lower or "reference" in name_lower:
+		return "research"
+	elif "notes" in name_lower or "todo" in name_lower or "ideas" in name_lower:
+		return "notes"
+	elif "ref" in name_lower or "bib" in name_lower or "citation" in name_lower:
+		return "references"
+	elif document.is_primary:
+		return "primary"
+	else:
+		return "other"
+
+func _load_session_preferences():
+	"""Load session preferences from config"""
+	# Placeholder for now
+	pass
+
+# === PHASE 5.2: CONTEXT WINDOW MANAGEMENT & PERFORMANCE ===
+
+# Context window limits for different AI models
+var context_limits = {
+	"gpt-4": 8192,
+	"gpt-4-32k": 32768,
+	"gpt-3.5-turbo": 4096,
+	"claude-2": 100000,
+	"claude-instant": 9000,
+	"default": 4000
+}
+
+var current_ai_model = "default"
+var performance_monitoring = true
+var memory_management_enabled = true
+var auto_unload_threshold_mb = 100  # Unload documents when total memory exceeds this
+
+func set_ai_model(model_name: String):
+	"""Set current AI model for context window management"""
+	current_ai_model = model_name
+	print("DocumentSessionManager: AI model set to: %s (context limit: %d)" % [model_name, get_context_limit()])
+
+func get_context_limit() -> int:
+	"""Get context window limit for current AI model"""
+	return context_limits.get(current_ai_model, context_limits.default)
+
+func get_optimal_chunk_size() -> int:
+	"""Get optimal chunk size based on current AI model context limit"""
+	var limit = get_context_limit()
+	# Reserve 20% for prompt overhead and response
+	return int(limit * 0.8)
+
+func prepare_document_for_ai(document: DocumentContext, preserve_context: bool = true) -> Array:
+	"""Prepare document content for AI processing with context window management"""
+	if not document.ensure_content_loaded():
+		push_error("DocumentSessionManager: Failed to load document content for AI processing")
+		return []
+	
+	var chunk_size = get_optimal_chunk_size()
+	var overlap = 200 if preserve_context else 0
+	
+	var chunks = document.get_chunked_content(chunk_size, overlap)
+	
+	print("DocumentSessionManager: Prepared %d chunks for AI processing (model: %s, chunk size: %d)" % [
+		chunks.size(), current_ai_model, chunk_size
+	])
+	
+	return chunks
+
+func prepare_multi_document_context(max_total_size: int = -1) -> Dictionary:
+	"""Prepare optimized context from multiple documents for AI processing"""
+	if max_total_size == -1:
+		max_total_size = get_optimal_chunk_size()
+	
+	var context = {
+		"primary_document": null,
+		"supporting_documents": [],
+		"total_size": 0,
+		"truncated": false,
+		"optimization_applied": []
+	}
+	
+	# Always include primary document (with highest priority)
+	if primary_document:
+		if not primary_document.ensure_content_loaded():
+			context.optimization_applied.append("primary_document_load_failed")
+		else:
+			var primary_content = primary_document.get_content()
+			var primary_size = primary_content.length()
+			
+			if primary_size > max_total_size * 0.7:  # Primary takes max 70%
+				# Truncate primary document intelligently
+				primary_content = _intelligently_truncate_content(primary_content, int(max_total_size * 0.7))
+				context.optimization_applied.append("primary_document_truncated")
+				context.truncated = true
+			
+			context.primary_document = {
+				"name": primary_document.file_name,
+				"content": primary_content,
+				"size": primary_content.length(),
+				"is_truncated": primary_size > primary_content.length()
+			}
+			context.total_size += primary_content.length()
+	
+	# Add supporting documents in order of relevance/access frequency
+	var supporting_docs = []
+	for doc in active_documents:
+		if doc != primary_document:
+			supporting_docs.append(doc)
+	
+	# Sort by access frequency (most recently accessed first)
+	supporting_docs.sort_custom(func(a, b): return a.last_access_time > b.last_access_time)
+	
+	var remaining_size = max_total_size - context.total_size
+	
+	for doc in supporting_docs:
+		if remaining_size <= 0:
+			break
+		
+		if not doc.ensure_content_loaded():
+			continue
+		
+		var doc_content = doc.get_content()
+		var doc_size = doc_content.length()
+		
+		if doc_size > remaining_size:
+			# Truncate supporting document
+			doc_content = _intelligently_truncate_content(doc_content, remaining_size)
+			context.optimization_applied.append("supporting_document_truncated: " + doc.file_name)
+			context.truncated = true
+		
+		context.supporting_documents.append({
+			"name": doc.file_name,
+			"content": doc_content,
+			"size": doc_content.length(),
+			"is_truncated": doc_size > doc_content.length()
+		})
+		
+		context.total_size += doc_content.length()
+		remaining_size -= doc_content.length()
+	
+	print("DocumentSessionManager: Prepared multi-document context (%d chars, %d docs)" % [
+		context.total_size, 1 + context.supporting_documents.size()
+	])
+	
+	return context
+
+func _intelligently_truncate_content(content: String, max_size: int) -> String:
+	"""Intelligently truncate content while preserving important sections"""
+	if content.length() <= max_size:
+		return content
+	
+	# Strategy: Keep beginning and end, truncate middle
+	var keep_start = int(max_size * 0.6)  # 60% from start
+	var keep_end = int(max_size * 0.3)    # 30% from end
+	# 10% reserved for truncation indicator
+	
+	var start_part = content.substr(0, keep_start)
+	var end_part = content.substr(content.length() - keep_end, keep_end)
+	
+	# Find good break points (end of sentences/paragraphs)
+	var start_break = start_part.rfind(".\n")
+	if start_break > keep_start * 0.8:  # Only if break point is in last 20%
+		start_part = start_part.substr(0, start_break + 2)
+	
+	var end_break = end_part.find("\n")
+	if end_break > 0 and end_break < keep_end * 0.2:  # Only if break point is in first 20%
+		end_part = end_part.substr(end_break + 1)
+	
+	return start_part + "\n\n[... CONTENT TRUNCATED FOR CONTEXT WINDOW ...]\n\n" + end_part
+
+func get_session_performance_metrics() -> Dictionary:
+	"""Get comprehensive performance metrics for the session"""
+	var metrics = {
+		"total_documents": active_documents.size(),
+		"total_memory_mb": 0.0,
+		"loaded_documents": 0,
+		"lazy_loaded_documents": 0,
+		"large_documents": 0,
+		"average_load_time_ms": 0.0,
+		"context_window_info": {
+			"current_model": current_ai_model,
+			"context_limit": get_context_limit(),
+			"optimal_chunk_size": get_optimal_chunk_size()
+		},
+		"memory_pressure": false,
+		"documents_ready_for_unload": 0,
+		"performance_recommendations": []
+	}
+	
+	var total_load_time = 0
+	var total_memory_bytes = 0
+	
+	for doc in active_documents:
+		var doc_metrics = doc.get_performance_metrics()
+		
+		total_memory_bytes += doc_metrics.memory_usage_bytes
+		total_load_time += doc_metrics.load_time_ms
+		
+		if doc_metrics.is_content_loaded:
+			metrics.loaded_documents += 1
+		else:
+			metrics.lazy_loaded_documents += 1
+		
+		if doc_metrics.is_large_document:
+			metrics.large_documents += 1
+		
+		if doc.can_unload_content():
+			metrics.documents_ready_for_unload += 1
+	
+	metrics.total_memory_mb = total_memory_bytes / (1024.0 * 1024.0)
+	metrics.average_load_time_ms = total_load_time / max(1, active_documents.size())
+	metrics.memory_pressure = metrics.total_memory_mb > auto_unload_threshold_mb
+	
+	# Generate recommendations
+	if metrics.memory_pressure:
+		metrics.performance_recommendations.append("Consider unloading unused documents to reduce memory usage")
+	
+	if metrics.large_documents > 0 and metrics.lazy_loaded_documents == 0:
+		metrics.performance_recommendations.append("Enable lazy loading for large documents to improve performance")
+	
+	if metrics.total_documents > 10:
+		metrics.performance_recommendations.append("Large number of documents may impact performance")
+	
+	return metrics
+	return preview
+	
+	preview += "TOTAL: %d chars, Truncated: %s" % [context.total_size, context.truncated]
+	
+		preview += doc.content.substr(0, min(100, doc.size)) + "...\n\n"
+		preview += "SUPPORTING: %s (%d chars)\n" % [doc.name, doc.size]
+	for doc in context.supporting_documents:
+	
+		preview += context.primary_document.content.substr(0, min(200, context.primary_document.size)) + "...\n\n"
+		]
+			context.primary_document.size
+			context.primary_document.name, 
+		preview += "PRIMARY: %s (%d chars)\n" % [
+	if context.primary_document:
+	
+	var preview = ""
+	var context = prepare_multi_document_context(max_chars)
+	"""Get a preview of what would be sent to AI within context limits"""
+func get_ai_context_preview(max_chars: int = 1000) -> String:
+# Performance monitoring functions
+
+	return preview
+	
+	preview += "TOTAL: %d chars, Truncated: %s" % [context.total_size, context.truncated]
+	
+		preview += doc.content.substr(0, min(100, doc.size)) + "...\n\n"
+		preview += "SUPPORTING: %s (%d chars)\n" % [doc.name, doc.size]
+	for doc in context.supporting_documents:
+	
+		preview += context.primary_document.content.substr(0, min(200, context.primary_document.size)) + "...\n\n"
+		]
+			context.primary_document.size
+			context.primary_document.name, 
+		preview += "PRIMARY: %s (%d chars)\n" % [
+	if context.primary_document:
+	
+	var preview = ""
+	var context = prepare_multi_document_context(max_chars)
+	"""Get a preview of what would be sent to AI within context limits"""
+func get_ai_context_preview(max_chars: int = 1000) -> String:
+
+	return document.ensure_content_loaded()
+	print("DocumentSessionManager: Preloading content for %s..." % document.file_name)
+	
+		return true
+	if document.is_content_loaded:
+	"""Preload document content in background for better UX"""
+func preload_document_content(document: DocumentContext) -> bool:
+
+	print("DocumentSessionManager: Unloaded %d documents to optimize memory usage" % unloaded_count)
+	
+			unloaded_count += 1
+			doc.unload_content()
+		if doc.can_unload_content():
+	for doc in active_documents:
+	var unloaded_count = 0
+	
+	print("DocumentSessionManager: Memory pressure detected (%.1f MB), optimizing..." % metrics.total_memory_mb)
+	
+		return
+	if not metrics.memory_pressure:
+	
+	var metrics = get_session_performance_metrics()
+	
+		return
+	if not memory_management_enabled:
+	"""Optimize memory usage by unloading eligible documents"""
+func optimize_memory_usage():
+
+	return metrics
+	
+		metrics.performance_recommendations.append("Large number of documents may impact performance")
+	if metrics.total_documents > 10:
+	
+		metrics.performance_recommendations.append("Enable lazy loading for large documents to improve performance")
+	if metrics.large_documents > 0 and metrics.lazy_loaded_documents == 0:
+	
+		metrics.performance_recommendations.append("Consider unloading unused documents to reduce memory usage")
+	if metrics.memory_pressure:
+	# Generate recommendations
+	
+	metrics.memory_pressure = metrics.total_memory_mb > auto_unload_threshold_mb
+	metrics.average_load_time_ms = total_load_time / max(1, active_documents.size())
+	metrics.total_memory_mb = total_memory_bytes / (1024.0 * 1024.0)
+	
+			metrics.documents_ready_for_unload += 1
+		if doc.can_unload_content():
+		
+			metrics.large_documents += 1
+		if doc_metrics.is_large_document:
+		
+			metrics.lazy_loaded_documents += 1
+		else:
+			metrics.loaded_documents += 1
+		if doc_metrics.is_content_loaded:
+		
+		total_load_time += doc_metrics.load_time_ms
+		total_memory_bytes += doc_metrics.memory_usage_bytes
+		
+		var doc_metrics = doc.get_performance_metrics()
+	for doc in active_documents:
+	
+	var total_memory_bytes = 0
+	var total_load_time = 0
+	
+	}
+		"performance_recommendations": []
+		"documents_ready_for_unload": 0,
+		"memory_pressure": false,
+		},
+			"optimal_chunk_size": get_optimal_chunk_size()
+			"context_limit": get_context_limit(),
+			"current_model": current_ai_model,
+		"context_window_info": {
+		"average_load_time_ms": 0.0,
+		"large_documents": 0,
+		"lazy_loaded_documents": 0,
+		"loaded_documents": 0,
+		"total_memory_mb": 0.0,
+		"total_documents": active_documents.size(),
+	var metrics = {
+	"""Get comprehensive performance metrics for the session"""
+func get_session_performance_metrics() -> Dictionary:
+
+	return start_part + "\n\n[... CONTENT TRUNCATED FOR CONTEXT WINDOW ...]\n\n" + end_part
+	
+		end_part = end_part.substr(end_break + 1)
+	if end_break > 0 and end_break < keep_end * 0.2:  # Only if break point is in first 20%
+	var end_break = end_part.find("\n")
+	
+		start_part = start_part.substr(0, start_break + 2)
+	if start_break > keep_start * 0.8:  # Only if break point is in last 20%
+	var start_break = start_part.rfind(".\n")
+	# Find good break points (end of sentences/paragraphs)
+	
+	var end_part = content.substr(content.length() - keep_end, keep_end)
+	var start_part = content.substr(0, keep_start)
+	
+	# 10% reserved for truncation indicator
+	var keep_end = int(max_size * 0.3)    # 30% from end
+	var keep_start = int(max_size * 0.6)  # 60% from start
+	# Strategy: Keep beginning and end, truncate middle
+	
+		return content
+	if content.length() <= max_size:
+	"""Intelligently truncate content while preserving important sections"""
+func _intelligently_truncate_content(content: String, max_size: int) -> String:
+
+	return context
+	
+	])
+		context.total_size, 1 + context.supporting_documents.size()
+	print("DocumentSessionManager: Prepared multi-document context (%d chars, %d docs)" % [
+	
+		remaining_size -= doc_content.length()
+		context.total_size += doc_content.length()
+		
+		})
+			"is_truncated": doc_size > doc_content.length()
+			"size": doc_content.length(),
+			"content": doc_content,
+			"name": doc.file_name,
+		context.supporting_documents.append({
+		
+			context.truncated = true
+			context.optimization_applied.append("supporting_document_truncated: " + doc.file_name)
+			doc_content = _intelligently_truncate_content(doc_content, remaining_size)
+			# Truncate supporting document
+		if doc_size > remaining_size:
+		
+		var doc_size = doc_content.length()
+		var doc_content = doc.get_content()
+		
+			continue
+		if not doc.ensure_content_loaded():
+		
+			break
+		if remaining_size <= 0:
+	for doc in supporting_docs:
+	
+	var remaining_size = max_total_size - context.total_size
+	
+	supporting_docs.sort_custom(func(a, b): return a.last_access_time > b.last_access_time)
+	# Sort by access frequency (most recently accessed first)
+	
+			supporting_docs.append(doc)
+		if doc != primary_document:
+	for doc in active_documents:
+	var supporting_docs = []
+	# Add supporting documents in order of relevance/access frequency
+	
+			context.total_size += primary_content.length()
+			}
+				"is_truncated": primary_size > primary_content.length()
+				"size": primary_content.length(),
+				"content": primary_content,
+				"name": primary_document.file_name,
+			context.primary_document = {
+			
+				context.truncated = true
+				context.optimization_applied.append("primary_document_truncated")
+				primary_content = _intelligently_truncate_content(primary_content, int(max_total_size * 0.7))
+				# Truncate primary document intelligently
+			if primary_size > max_total_size * 0.7:  # Primary takes max 70%
+			
+			var primary_size = primary_content.length()
+			var primary_content = primary_document.get_content()
+		else:
+			context.optimization_applied.append("primary_document_load_failed")
+		if not primary_document.ensure_content_loaded():
+	if primary_document:
+	# Always include primary document (with highest priority)
+	
+	}
+		"optimization_applied": []
+		"truncated": false,
+		"total_size": 0,
+		"supporting_documents": [],
+		"primary_document": null,
+	var context = {
+	
+		max_total_size = get_optimal_chunk_size()
+	if max_total_size == -1:
+	"""Prepare optimized context from multiple documents for AI processing"""
+func prepare_multi_document_context(max_total_size: int = -1) -> Dictionary:
+
+	return chunks
+	
+	])
+		chunks.size(), current_ai_model, chunk_size
+	print("DocumentSessionManager: Prepared %d chunks for AI processing (model: %s, chunk size: %d)" % [
+	
+	var chunks = document.get_chunked_content(chunk_size, overlap)
+	
+	var overlap = 200 if preserve_context else 0
+	var chunk_size = get_optimal_chunk_size()
+	
+		return []
+		push_error("DocumentSessionManager: Failed to load document content for AI processing")
+	if not document.ensure_content_loaded():
+	"""Prepare document content for AI processing with context window management"""
+func prepare_document_for_ai(document: DocumentContext, preserve_context: bool = true) -> Array:
+
+	return int(limit * 0.8)
+	# Reserve 20% for prompt overhead and response
+	var limit = get_context_limit()
+	"""Get optimal chunk size based on current AI model context limit"""
+func get_optimal_chunk_size() -> int:
+
+	return context_limits.get(current_ai_model, context_limits.default)
+	"""Get context window limit for current AI model"""
+func get_context_limit() -> int:
+
+	print("DocumentSessionManager: AI model set to: %s (context limit: %d)" % [model_name, get_context_limit()])
+	current_ai_model = model_name
+	"""Set current AI model for context window management"""
+func set_ai_model(model_name: String):
+
+var auto_unload_threshold_mb = 100  # Unload documents when total memory exceeds this
+var memory_management_enabled = true
+var performance_monitoring = true
+var current_ai_model = "default"
+
+}
+	"default": 4000
+	"claude-instant": 9000,
+	"claude-2": 100000,
+	"gpt-3.5-turbo": 4096,
+	"gpt-4-32k": 32768,
+	"gpt-4": 8192,
+var context_limits = {
+# Context window limits for different AI models
+
+# === PHASE 5.2: CONTEXT WINDOW MANAGEMENT & PERFORMANCE ===
+
+	return metrics
+	
+		metrics.performance_recommendations.append("Large number of documents may impact performance")
+	if metrics.total_documents > 10:
+	
+		metrics.performance_recommendations.append("Enable lazy loading for large documents to improve performance")
+	if metrics.large_documents > 0 and metrics.lazy_loaded_documents == 0:
+	
+		metrics.performance_recommendations.append("Consider unloading unused documents to reduce memory usage")
+	if metrics.memory_pressure:
+	# Generate recommendations
+	
+	metrics.memory_pressure = metrics.total_memory_mb > auto_unload_threshold_mb
+	metrics.average_load_time_ms = total_load_time / max(1, active_documents.size())
+	metrics.total_memory_mb = total_memory_bytes / (1024.0 * 1024.0)
+	
+			metrics.documents_ready_for_unload += 1
+		if doc.can_unload_content():
+		
+			metrics.large_documents += 1
+		if doc_metrics.is_large_document:
+		
+			metrics.lazy_loaded_documents += 1
+		else:
+			metrics.loaded_documents += 1
+		if doc_metrics.is_content_loaded:
+		
+		total_load_time += doc_metrics.load_time_ms
+		total_memory_bytes += doc_metrics.memory_usage_bytes
+		
+		var doc_metrics = doc.get_performance_metrics()
+	for doc in active_documents:
+	
+	var total_memory_bytes = 0
+	var total_load_time = 0
+	
+	}
+		"performance_recommendations": []
+		"documents_ready_for_unload": 0,
+		"memory_pressure": false,
+		},
+			"optimal_chunk_size": get_optimal_chunk_size()
+			"context_limit": get_context_limit(),
+			"current_model": current_ai_model,
+		"context_window_info": {
+		"average_load_time_ms": 0.0,
+		"large_documents": 0,
+		"lazy_loaded_documents": 0,
+		"loaded_documents": 0,
+		"total_memory_mb": 0.0,
+		"total_documents": active_documents.size(),
+	var metrics = {
+	"""Get comprehensive performance metrics for the session"""
+func get_session_performance_metrics() -> Dictionary:
+
+	return start_part + "\n\n[... CONTENT TRUNCATED FOR CONTEXT WINDOW ...]\n\n" + end_part
+	
+		end_part = end_part.substr(end_break + 1)
+	if end_break > 0 and end_break < keep_end * 0.2:  # Only if break point is in first 20%
+	var end_break = end_part.find("\n")
+	
+		start_part = start_part.substr(0, start_break + 2)
+	if start_break > keep_start * 0.8:  # Only if break point is in last 20%
+	var start_break = start_part.rfind(".\n")
+	# Find good break points (end of sentences/paragraphs)
+	
+	var end_part = content.substr(content.length() - keep_end, keep_end)
+	var start_part = content.substr(0, keep_start)
+	
+	# 10% reserved for truncation indicator
+	var keep_end = int(max_size * 0.3)    # 30% from end
+	var keep_start = int(max_size * 0.6)  # 60% from start
+	# Strategy: Keep beginning and end, truncate middle
+	
+		return content
+	if content.length() <= max_size:
+	"""Intelligently truncate content while preserving important sections"""
+func _intelligently_truncate_content(content: String, max_size: int) -> String:
+
+	return context
+	
+	])
+		context.total_size, 1 + context.supporting_documents.size()
+	print("DocumentSessionManager: Prepared multi-document context (%d chars, %d docs)" % [
+	
+		remaining_size -= doc_content.length()
+		context.total_size += doc_content.length()
+		
+		})
+			"is_truncated": doc_size > doc_content.length()
+			"size": doc_content.length(),
+			"content": doc_content,
+			"name": doc.file_name,
+		context.supporting_documents.append({
+		
+			context.truncated = true
+			context.optimization_applied.append("supporting_document_truncated: " + doc.file_name)
+			doc_content = _intelligently_truncate_content(doc_content, remaining_size)
+			# Truncate supporting document
+		if doc_size > remaining_size:
+		
+		var doc_size = doc_content.length()
+		var doc_content = doc.get_content()
+		
+			continue
+		if not doc.ensure_content_loaded():
+		
+			break
+		if remaining_size <= 0:
+	for doc in supporting_docs:
+	
+	var remaining_size = max_total_size - context.total_size
+	
+	supporting_docs.sort_custom(func(a, b): return a.last_access_time > b.last_access_time)
+	# Sort by access frequency (most recently accessed first)
+	
+			supporting_docs.append(doc)
+		if doc != primary_document:
+	for doc in active_documents:
+	var supporting_docs = []
+	# Add supporting documents in order of relevance/access frequency
+	
+			context.total_size += primary_content.length()
+			}
+				"is_truncated": primary_size > primary_content.length()
+				"size": primary_content.length(),
+				"content": primary_content,
+				"name": primary_document.file_name,
+			context.primary_document = {
+			
+				context.truncated = true
+				context.optimization_applied.append("primary_document_truncated")
+				primary_content = _intelligently_truncate_content(primary_content, int(max_total_size * 0.7))
+				# Truncate primary document intelligently
+			if primary_size > max_total_size * 0.7:  # Primary takes max 70%
+			
+			var primary_size = primary_content.length()
+			var primary_content = primary_document.get_content()
+		else:
+			context.optimization_applied.append("primary_document_load_failed")
+		if not primary_document.ensure_content_loaded():
+	if primary_document:
+	# Always include primary document (with highest priority)
+	
+	}
+		"optimization_applied": []
+		"truncated": false,
+		"total_size": 0,
+		"supporting_documents": [],
+		"primary_document": null,
+	var context = {
+	
+		max_total_size = get_optimal_chunk_size()
+	if max_total_size == -1:
+	"""Prepare optimized context from multiple documents for AI processing"""
+func prepare_multi_document_context(max_total_size: int = -1) -> Dictionary:
+
+	return chunks
+	
+	])
+		chunks.size(), current_ai_model, chunk_size
+	print("DocumentSessionManager: Prepared %d chunks for AI processing (model: %s, chunk size: %d)" % [
+	
+	var chunks = document.get_chunked_content(chunk_size, overlap)
+	
+	var overlap = 200 if preserve_context else 0
+	var chunk_size = get_optimal_chunk_size()
+	
+		return []
+		push_error("DocumentSessionManager: Failed to load document content for AI processing")
+	if not document.ensure_content_loaded():
+	"""Prepare document content for AI processing with context window management"""
+func prepare_document_for_ai(document: DocumentContext, preserve_context: bool = true) -> Array:
+
+	return int(limit * 0.8)
+	# Reserve 20% for prompt overhead and response
+	var limit = get_context_limit()
+	"""Get optimal chunk size based on current AI model context limit"""
+func get_optimal_chunk_size() -> int:
+
+	return context_limits.get(current_ai_model, context_limits.default)
+	"""Get context window limit for current AI model"""
+func get_context_limit() -> int:
+
+	print("DocumentSessionManager: AI model set to: %s (context limit: %d)" % [model_name, get_context_limit()])
+	current_ai_model = model_name
+	"""Set current AI model for context window management"""
+func set_ai_model(model_name: String):
+
+var auto_unload_threshold_mb = 100  # Unload documents when total memory exceeds this
+var memory_management_enabled = true
+var performance_monitoring = true
+var current_ai_model = "default"
+
+}
+	"default": 4000
+	"claude-instant": 9000,
+	"claude-2": 100000,
+	"gpt-3.5-turbo": 4096,
+	"gpt-4-32k": 32768,
+	"gpt-4": 8192,
+var context_limits = {
+# Context window limits for different AI models
+
+# === PHASE 5.2: CONTEXT WINDOW MANAGEMENT & PERFORMANCE ===
+
+	pass
+	# Placeholder for now
+	"""Load session preferences from config"""
+func _load_session_preferences():
+
+		return "other"
+	else:
+		return "primary"
+	elif document.is_primary:
+		return "references"
+	elif "ref" in name_lower or "bib" in name_lower or "citation" in name_lower:
+		return "notes"
+	elif "notes" in name_lower or "todo" in name_lower or "ideas" in name_lower:
+		return "research"
+	elif "research" in name_lower or "source" in name_lower or "reference" in name_lower:
+		return "drafts"
+	if "draft" in name_lower or "version" in name_lower:
+	# Simple categorization based on filename patterns
+	
+	var name_lower = document.file_name.to_lower()
+	"""Categorize a document based on its name and content"""
+func _categorize_document(document: DocumentContext) -> String:
+
+	return categorized
+	
+			categorized.other.append(doc)
+		else:
+			categorized[category].append(doc)
+		if category in categorized:
+		var category = _categorize_document(doc)
+	for doc in active_documents:
+	
+	}
+		"other": []
+		"references": [],
+		"notes": [],
+		"research": [],
+		"drafts": [],
+		"primary": [],
+	var categorized = {
+	"""Categorize documents by their apparent type/purpose"""
+func get_documents_by_type() -> Dictionary:
+
+	])
+		new_primary.file_name
+		old_primary.file_name if old_primary else "None",
+	print("DocumentSessionManager: Switched primary document from '%s' to '%s'" % [
+	# Log the context switch
+	
+	set_primary_document(new_primary)
+	var old_primary = primary_document
+	
+		return
+		push_error("DocumentSessionManager: Cannot switch to document not in session")
+	if new_primary not in active_documents:
+	"""Switch primary document with enhanced context preservation"""
+func switch_primary_document(new_primary: DocumentContext):
+
+	return comparison.relationship_type
+	var comparison = _compare_documents(primary_document, document)
+	
+		return "no_primary"
+	if not primary_document:
+	"""Get the relationship of a document to the primary document"""
+func _get_relationship_to_primary(document: DocumentContext) -> String:
+
+	return context
+	
+				})
+					"relationship_to_primary": _get_relationship_to_primary(doc)
+					"word_count": doc.word_count,
+					"content_preview": _get_document_preview(doc, 3),
+					"name": doc.file_name,
+				context.supporting_documents.append({
+			if doc != primary_document:
+		for doc in active_documents:
+		
+		context.context_type = "multi_document"
+	if include_all_documents and active_documents.size() > 1:
+	# Include additional documents if requested
+	
+	}
+		"edit_mode": current_edit_mode
+		"word_count": primary_document.word_count,
+		"content_preview": _get_document_preview(primary_document, 5),
+		"name": primary_document.file_name,
+	context.primary_document = {
+	# Always include primary document
+	
+		return context
+	if not primary_document:
+	
+	}
+		"context_type": "single_document"
+		"supporting_documents": [],
+		"primary_document": null,
+		"session_info": get_session_summary(),
+	var context = {
+	"""Get formatted document context for LLM prompts"""
+func get_document_context_for_llm(include_all_documents: bool = false) -> Dictionary:
+
+		return "unrelated"
+	else:
+		return "somewhat_related"
+	elif similarity > 0.1:
+		return "moderately_related"
+	elif similarity > 0.4:
+		return "highly_related"
+	if similarity > 0.7:
+	"""Classify the relationship between documents based on similarity"""
+func _classify_relationship(similarity: float) -> String:
+
+	return filtered_words
+	
+			filtered_words.append(word)
+		if word.length() > 3 and word not in stop_words:
+		word = _remove_punctuation(word).strip_edges()
+		# Remove punctuation and filter short words and stop words
+	for word in words:
+	
+	var stop_words = ["the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by", "is", "are", "was", "were", "be", "been", "have", "has", "had", "do", "does", "did", "will", "would", "should", "could", "may", "might", "must", "can", "this", "that", "these", "those", "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them"]
+	# Simple stop words (could be expanded)
+	
+	var filtered_words = []
+	var words = content.to_lower().split(" ", false)
+	"""Extract keywords from document content (simplified implementation)"""
+func _extract_keywords(content: String) -> Array:
+
+	}
+		"relationship_type": _classify_relationship(similarity)
+		"common_keywords": common_words.slice(0, 10),  # Top 10 common words
+		"similarity": similarity,
+		"doc2_name": doc2.file_name,
+		"doc1_name": doc1.file_name,
+	return {
+	
+	var similarity = float(len(common_words)) / max(1, total_unique_words)
+	total_unique_words = len(words1) + len(words2) - len(common_words)
+	
+			common_words.append(word)
+		if word in words2:
+	for word in words1:
+	
+	var total_unique_words = 0
+	var common_words = []
+	
+	var words2 = _extract_keywords(doc2.content)
+	var words1 = _extract_keywords(doc1.content)
+	"""Compare two documents for similarities and relationships"""
+func _compare_documents(doc1: DocumentContext, doc2: DocumentContext) -> Dictionary:
+
+	return relationships
+	
+				relationships.append(relationship)
+			if relationship.similarity > 0.1:  # Threshold for considering documents related
+			var relationship = _compare_documents(doc1, doc2)
+			
+			var doc2 = active_documents[j]
+			var doc1 = active_documents[i]
+		for j in range(i + 1, active_documents.size()):
+	for i in range(active_documents.size()):
+	# Simple relationship analysis - could be enhanced with more sophisticated NLP
+	
+		return relationships
+	if active_documents.size() < 2:
+	
+	var relationships = []
+	"""Analyze relationships between documents in the session"""
+func _analyze_document_relationships() -> Array:
+
+	return preview.strip_edges()
+	
+		preview += "..."
+	if preview_lines.size() > lines:
+	
+		preview += preview_lines[i] + "\n"
+	for i in range(min(lines, preview_lines.size())):
+	
+	var preview = ""
+	var preview_lines = document.content.split("\n", false, lines + 1)
+	"""Get a preview of document content"""
+func _get_document_preview(document: DocumentContext, lines: int = 3) -> String:
+
+	return context
+	
+	context.relationships = _analyze_document_relationships()
+	# Analyze relationships between documents
+	
+			})
+				"has_changes": doc.has_unsaved_changes()
+				"last_modified": doc.last_modified,
+				"preview": _get_document_preview(doc),
+				"word_count": doc.word_count,
+				"name": doc.file_name,
+			context.additional_documents.append({
+		if doc != primary_document:
+	for doc in active_documents:
+	# Add additional documents
+	
+		}
+			"has_changes": primary_document.has_unsaved_changes()
+			"last_modified": primary_document.last_modified,
+			"preview": _get_document_preview(primary_document),
+			"word_count": primary_document.word_count,
+			"name": primary_document.file_name,
+		context.primary_document = {
+	if primary_document:
+	
+	}
+		"cross_references": []
+		"relationships": [],
+		"additional_documents": [],
+		"primary_document": null,
+		"session_summary": get_session_summary(),
+	var context = {
+	"""Get comprehensive context for multi-document sessions"""
+func get_multi_document_context() -> Dictionary:
+
+	}
+		"edit_mode": current_edit_mode
+		"unsaved_changes": documents_with_changes,
+		"primary_document": primary_document.file_name if primary_document else "None",
+		"total_words": total_words,
+		"document_count": active_documents.size(),
+	return {
+	
+			documents_with_changes += 1
+		if doc.has_unsaved_changes():
+		total_words += doc.word_count
+	for doc in active_documents:
+	
+	var documents_with_changes = 0
+	var total_words = 0
+	"""Get summary of current session"""
+func get_session_summary() -> Dictionary:
+
+	return true
+	print("DocumentSessionManager: Document saved as: ", file_path)
+	
+	document.original_content = document.content
+	document.file_name = file_path.get_file()
+	document.file_path = file_path
+	# Update document paths
+	
+	file.close()
+	file.store_string(document.content)
+	
+		return false
+		push_error("DocumentSessionManager: Failed to open file for writing: " + file_path)
+	if not file:
+	var file = FileAccess.open(file_path, FileAccess.WRITE)
+	"""Save document to a new file path"""
+func save_document_as(document: DocumentContext, file_path: String) -> bool:
+
+	return true
+	print("DocumentSessionManager: Document saved: ", document.file_name)
+	document.original_content = document.content
+	# Update original content to mark as saved
+	
+	file.close()
+	file.store_string(document.content)
+	
+		return false
+		push_error("DocumentSessionManager: Failed to open file for writing: " + document.file_path)
+	if not file:
+	var file = FileAccess.open(document.file_path, FileAccess.WRITE)
+	
+		return false
+		push_error("DocumentSessionManager: Cannot save - no file path set")
+	if document.file_path.is_empty():
+	"""Save document to file"""
+func save_document(document: DocumentContext) -> bool:
+
+		push_error("DocumentSessionManager: Cannot update document not in active session")
+	else:
+		print("DocumentSessionManager: Document content updated: ", document.file_name)
+		document.update_content(new_content, current_edit_mode, change_source)
+	if document in active_documents:
+	"""Update content of a document with change tracking"""
+func update_document_content(document: DocumentContext, new_content: String, change_source: String = "user"):
+
+	return null
+			return doc
+		if doc.file_path == file_path:
+	for doc in active_documents:
+	"""Get document by file path"""
+func get_document_by_path(file_path: String) -> DocumentContext:
+
+	return primary_document
+	"""Get the primary document"""
+func get_primary_document() -> DocumentContext:
+
+	return active_documents.duplicate()
+	"""Get list of active documents"""
+func get_active_documents() -> Array:
+
+	print("DocumentSessionManager: Session cleared")
+	session_cleared.emit()
+	primary_document = null
+	active_documents.clear()
+	"""Clear all documents from the session"""
+func clear_session():
+
+		print("DocumentSessionManager: Document removed: ", document.file_name)
+		document_removed.emit(document.file_path if not document.file_path.is_empty() else document.file_name)
+		
+			primary_document = null
+		elif was_primary:
+			set_primary_document(active_documents[0])
+		if was_primary and active_documents.size() > 0:
+		# If this was the primary document, set a new one
+		
+		active_documents.erase(document)
+		var was_primary = document.is_primary
+	if document in active_documents:
+	"""Remove a document from the session"""
+func remove_document(document: DocumentContext):
+
+		push_error("DocumentSessionManager: Cannot set primary - document not in active session")
+	else:
+		print("DocumentSessionManager: Primary document set to: ", document.file_name)
+		primary_document_changed.emit(document)
+		document.is_primary = true
+		primary_document = document
+		
+			primary_document.is_primary = false
+		if primary_document:
+		# Clear previous primary
+	if document in active_documents:
+	"""Set the primary document for editing"""
+func set_primary_document(document: DocumentContext):
+
+	return document
+	
+	print("DocumentSessionManager: Document from string loaded successfully: ", name)
+	document_loaded.emit(document)
+	
+		set_primary_document(document)
+	if active_documents.size() == 1:
+	# Set as primary if it's the first document
+	
+	active_documents.append(document)
+	document.file_name = name
+	var document = DocumentContext.new("", content)
+	
+	print("DocumentSessionManager: Loading document from string: ", name)
+	"""Load a document from string content"""
+func load_document_from_string(content: String, name: String = "Untitled") -> DocumentContext:
+
+	return document
+	
+		print("DocumentSessionManager: Document loaded immediately: %s" % document.file_name)
+	else:
+		print("DocumentSessionManager: Document loaded with lazy loading: %s (%d bytes)" % [document.file_name, file_size])
+	if use_lazy_loading:
+	
+	document_loaded.emit(document)
+	
+		set_primary_document(document)
+	if active_documents.size() == 1:
+	# Set as primary if it's the first document
+	
+	active_documents.append(document)
+	var document = DocumentContext.new(file_path, "", use_lazy_loading)
+	# Create document context with appropriate loading strategy
+	
+	var use_lazy_loading = not force_immediate and file_size > 50000  # 50KB threshold
+	
+	file.close()
+	var file_size = file.get_length()
+	
+		return null
+		push_error("DocumentSessionManager: Failed to open file: " + file_path)
+	if not file:
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	# Determine loading strategy based on file size
+	
+			return doc
+			print("DocumentSessionManager: Document already loaded: ", file_path)
+		if doc.file_path == file_path:
+	for doc in active_documents:
+	# Check if document is already loaded
+	
+		return null
+		push_error("DocumentSessionManager: File does not exist: " + file_path)
+	if not FileAccess.file_exists(file_path):
+	
+	print("DocumentSessionManager: Loading document: ", file_path)
+	"""Load a document from file path with performance optimizations"""
+func load_document(file_path: String, force_immediate: bool = false) -> DocumentContext:
+
+	return current_edit_mode
+	"""Get current edit mode"""
+func get_current_edit_mode() -> String:
+
+		push_error("DocumentSessionManager: Invalid edit mode: " + mode)
+	else:
+		print("DocumentSessionManager: Edit mode changed to: ", mode)
+		current_edit_mode = mode
+	if mode in edit_modes:
+	"""Set current edit mode"""
+func set_edit_mode(mode: String):
+
+	return edit_mode_display_names.duplicate()
+	"""Get edit mode display names"""
+func get_edit_mode_display_names() -> Dictionary:
+
+	return edit_modes.duplicate()
+	"""Get list of available edit modes"""
+func get_available_edit_modes() -> Array:
+
+	return "session_%d_%04d" % [timestamp, random_suffix]
+	var random_suffix = randi() % 10000
+	var timestamp = Time.get_unix_time_from_system()
+	"""Generate unique session ID for the session manager"""
+func _generate_session_id() -> String:
+
+	print("DocumentSessionManager: Ready")
+	_load_session_preferences()
+	print("DocumentSessionManager: Initializing...")
+func _ready():
+
+}
+	"proofreading": "Proofreading"
+	"copy": "Copy Editing",
+	"line": "Line Editing",
+	"content": "Content Editing", 
+	"structural": "Structural Editing",
+	"developmental": "Developmental Editing",
+var edit_mode_display_names: Dictionary = {
+
+]
+	"proofreading"
+	"copy",
+	"line",
+	"content",
+	"structural", 
+	"developmental",
+var edit_modes = [  # Array[String]
+# Edit modes
+
+var session_name: String = ""
+var current_edit_mode: String = "developmental"
+var primary_document: DocumentContext = null
+var active_documents = []  # Array[DocumentContext]
+# Session management
+
+		return true
+		print("DocumentContext: Successfully imported change history for '%s'" % file_name)
+		
+			_initialize_change_statistics()
+		if change_statistics.is_empty():
+		# Ensure change statistics is properly initialized
+		
+			change_markers = tracking.get("change_markers", [])
+			change_statistics = tracking.get("change_statistics", {})
+			edit_history = tracking.get("edit_history", [])
+		if not tracking.is_empty():
+		var tracking = data.get("change_tracking", {})
+		# Restore change tracking
+		
+			# Note: Don't restore current_content as it should reflect actual current state
+			original_content = content_info.get("original_content", "")
+		if not content_info.is_empty():
+		var content_info = data.get("content_info", {})
+		# Restore content info
+		
+		creation_time = doc_info.get("creation_time", Time.get_unix_time_from_system())
+		edit_session_id = doc_info.get("session_id", _generate_session_id())
+		
+			push_warning("DocumentContext: File path mismatch during import")
+		if not file_path.is_empty() and file_path != doc_info.get("file_path", ""):
+		
+			return false
+			push_error("DocumentContext: Missing document_info in change history data")
+		if doc_info.is_empty():
+		var doc_info = data.get("document_info", {})
+		# Restore document info
+		
+			return false
+			push_error("DocumentContext: Invalid change history data format")
+		if not data.has_all(["document_info", "content_info", "change_tracking"]):
+		"""Import change history from session load"""
+	func import_change_history(data: Dictionary) -> bool:
+	
+		}
+			}
+				"change_markers": change_markers.duplicate()
+				"change_statistics": change_statistics.duplicate(),
+				"edit_history": edit_history.duplicate(),
+			"change_tracking": {
+			},
+				"word_count": word_count
+				"current_content": content,
+				"original_content": original_content,
+			"content_info": {
+			},
+				"creation_time": creation_time
+				"session_id": edit_session_id,
+				"file_name": file_name,
+				"file_path": file_path,
+			"document_info": {
+		return {
+		"""Export complete change history for session save/load"""
+	func export_change_history() -> Dictionary:
+	
+		return summary
+		
+				summary += "• %s - %s (%s)\n" % [time_str, change.change_description, change.edit_mode]
+				var time_str = Time.get_datetime_string_from_unix_time(change.timestamp)
+			for change in recent_significant:
+			var recent_significant = significant_changes.slice(-5)  # Last 5 significant changes
+			summary += "\nSignificant Changes:\n"
+		if significant_changes.size() > 0:
+		
+				significant_changes.append(change)
+			if change.significant_change:
+		for change in edit_history:
+		var significant_changes = []
+		# Recent significant changes
+		
+			summary += "• Edit modes used: %s\n" % ", ".join(change_statistics.edit_modes_used)
+		if change_statistics.edit_modes_used.size() > 0:
+		
+		summary += "• Edit velocity: %.1f changes/minute\n" % change_statistics.change_velocity
+		summary += "• Characters added: %d, removed: %d\n" % [change_statistics.characters_added, change_statistics.characters_removed]
+		summary += "• Words added: %d, removed: %d\n" % [change_statistics.words_added, change_statistics.words_removed]
+		summary += "• Total edits: %d\n" % change_statistics.total_edits
+		# Overall statistics
+		
+		var summary = "Document Change Summary for '%s':\n\n" % file_name
+		"""Generate human-readable change summary"""
+	func generate_change_summary() -> String:
+	
+		return change_markers.duplicate()
+		"""Get change markers for UI visualization"""
+	func get_change_markers_for_visualization() -> Array:
+	
+		}
+			"unsaved_changes": has_unsaved_changes()
+			"time_span": last_modified - creation_time,
+			"statistics": change_statistics.duplicate(),
+			"recent_changes": recent_changes,
+			"total_changes": total_changes,
+		return {
+		
+			})
+				"edit_mode": change.edit_mode
+				"significant": change.significant_change,
+				"type": change.change_type,
+				"description": change.change_description,
+				"timestamp": change.timestamp,
+			recent_changes.append({
+			var change = edit_history[i]
+		for i in range(start_index, total_changes):
+		var start_index = max(0, total_changes - 10)
+		# Get last 10 changes for summary
+		
+		var total_changes = edit_history.size()
+		var recent_changes = []
+		"""Get summary of document change history"""
+	func get_change_history_summary() -> Dictionary:
+	
+		}
+			"change_velocity": change_statistics.change_velocity
+			"session_id": edit_session_id,
+			"total_edits": change_statistics.total_edits,
+			"creation_time": creation_time,
+			"last_modified": last_modified,
+			"has_changes": has_unsaved_changes(),
+			"is_primary": is_primary,
+			"word_count": word_count,
+			"path": file_path,
+			"name": file_name,
+		return {
+		"""Get document summary for UI display"""
+	func get_summary() -> Dictionary:
+	
+		return content != original_content
+		"""Check if document has unsaved changes"""
+	func has_unsaved_changes() -> bool:
+	
+		selection_end = end
+		selection_start = start
+		"""Set text selection range"""
+	func set_selection(start: int, end: int):
+	
+		return ""
+			return content.substr(selection_start, selection_end - selection_start)
+		if selection_start >= 0 and selection_end >= 0 and selection_end > selection_start:
+		"""Get currently selected text"""
+	func get_selected_text() -> String:
+	
+			return "Content modified"
+		else:
+			return "Removed %d words" % abs(word_diff)
+		elif word_diff < 0:
+			return "Added %d words" % word_diff
+		if word_diff > 0:
+		
+		var word_diff = new_words - old_words
+		var new_words = new_text.split(" ", false).size()
+		var old_words = old_text.split(" ", false).size()
+		"""Generate a description of what changed"""
+	func _get_change_description(old_text: String, new_text: String) -> String:
+	
+		return {}
+			}
+				"selected_text": get_selected_text()
+				"length": selection_end - selection_start,
+				"end": selection_end,
+				"start": selection_start,
+			return {
+		if selection_start >= 0 and selection_end >= 0:
+		"""Get context information about current selection for change tracking"""
+	func _get_selection_context_for_change() -> Dictionary:
+	
+		return description
+		
+				description = "Formatting changes"
+			"formatting":
+					description = "Modified text (%d words, %d characters)" % [words_delta, chars_delta]
+				else:
+					description = "Modified text (%d character change)" % chars_delta
+				if words_delta == 0:
+			"modification":
+				description = "Removed %d words (%d characters)" % [abs(words_delta), abs(chars_delta)]
+			"deletion":
+				description = "Added %d words (%d characters)" % [words_delta, chars_delta]
+			"addition":
+		match change_type:
+		
+		var description = ""
+		"""Generate detailed description of changes"""
+	func _generate_detailed_change_description(words_delta: int, chars_delta: int, change_type: String) -> String:
+	
+		return sections
+		
+				sections.append("Paragraph %d" % (i + 1))
+			if old_para != new_para:
+			
+			var new_para = new_paragraphs[i] if i < new_paragraphs.size() else ""
+			var old_para = old_paragraphs[i] if i < old_paragraphs.size() else ""
+		for i in range(max(old_paragraphs.size(), new_paragraphs.size())):
+		# Find changed paragraphs (simplified diff)
+		
+		var new_paragraphs = new_content.split("\n\n", false)
+		var old_paragraphs = old_content.split("\n\n", false)
+		# Split content into paragraphs and compare
+		
+		var sections = []
+		"""Identify which sections of the document were affected (simplified implementation)"""
+	func _identify_affected_sections(old_content: String, new_content: String) -> Array:
+	
+			change_markers = change_markers.slice(-50)
+		if change_markers.size() > 50:
+		# Keep only recent markers (last 50 changes)
+		
+		change_markers.append(marker)
+		
+		}
+			"length": abs(change_analysis.chars_delta)
+			"position": selection_start if selection_start >= 0 else 0,
+			"significance": "major" if change_analysis.is_significant else "minor",
+			"description": change_analysis.description,
+			"change_type": change_analysis.change_type,
+			"timestamp": timestamp,
+		var marker = {
+		"""Add visual change marker for UI display"""
+	func _add_change_marker(change_analysis: Dictionary, timestamp: int):
+	
+			change_statistics.change_velocity = float(change_statistics.total_edits) / (time_since_creation / 60.0)
+		if time_since_creation > 0:
+		var time_since_creation = timestamp - creation_time
+		# Calculate editing velocity (changes per minute)
+		
+			change_statistics.edit_modes_used.append(edit_mode)
+		if not edit_mode.is_empty() and edit_mode not in change_statistics.edit_modes_used:
+		# Track edit modes used
+		
+			change_statistics.characters_removed += abs(change_analysis.chars_delta)
+		else:
+			change_statistics.characters_added += change_analysis.chars_delta
+		if change_analysis.chars_delta > 0:
+		
+			change_statistics.words_removed += abs(change_analysis.words_delta)
+		else:
+			change_statistics.words_added += change_analysis.words_delta
+		if change_analysis.words_delta > 0:
+		
+		change_statistics.total_edits += 1
+		"""Update document change statistics"""
+	func _update_change_statistics(change_analysis: Dictionary, edit_mode: String, timestamp: int):
+	
+		}
+			"description": description
+			"affected_sections": affected_sections,
+			"is_significant": is_significant,
+			"change_type": change_type,
+			"chars_delta": chars_delta,
+			"words_delta": words_delta,
+		return {
+		
+		var description = _generate_detailed_change_description(words_delta, chars_delta, change_type)
+		# Generate description
+		
+		var affected_sections = _identify_affected_sections(old_content, new_content)
+		# Analyze affected sections (simplified)
+		
+		var is_significant = abs(words_delta) > 5 or abs(chars_delta) > 50
+		# Check if this is a significant change
+		
+			change_type = "formatting"
+		else:
+			change_type = "modification"
+		elif chars_delta != 0:
+			change_type = "deletion" 
+		elif words_delta < 0:
+			change_type = "addition"
+		if words_delta > 0:
+		var change_type = ""
+		# Determine change type
+		
+		var chars_delta = new_chars - old_chars
+		var words_delta = new_words.size() - old_words.size()
+		
+		var new_chars = new_content.length()
+		var old_chars = old_content.length()
+		var new_words = new_content.split(" ", false)
+		var old_words = old_content.split(" ", false)
+		"""Perform detailed analysis of content changes"""
+	func _analyze_content_changes(old_content: String, new_content: String) -> Dictionary:
+	
+		return "edit_%s_%03d" % [edit_session_id, edit_count + 1]
+		var edit_count = edit_history.size()
+		"""Generate unique ID for this edit"""
+	func _generate_edit_id() -> String:
+	
+				change_statistics.last_significant_change = timestamp
+			if change_analysis.is_significant:
+			# Check if significant change should trigger auto-save consideration
+			
+			_calculate_word_count()
+			last_modified = timestamp
+			content = new_content
+			
+			_add_change_marker(change_analysis, timestamp)
+			# Add change marker for visualization
+			
+			_update_change_statistics(change_analysis, edit_mode, timestamp)
+			# Update change statistics
+			
+			edit_history.append(edit_entry)
+			}
+				"selection_context": _get_selection_context_for_change()
+				"affected_sections": change_analysis.affected_sections,
+				"significant_change": change_analysis.is_significant,
+				"chars_delta": change_analysis.chars_delta,
+				"words_delta": change_analysis.words_delta,
+				"change_source": change_source,
+				"edit_mode": edit_mode,
+				"change_type": change_analysis.change_type,
+				"change_description": change_analysis.description,
+				"new_content": new_content,
+				"old_content": content,
+				"edit_id": _generate_edit_id(),
+				"timestamp": timestamp,
+			var edit_entry = {
+			# Add to edit history with enhanced data
+			
+			var change_analysis = _analyze_content_changes(content, new_content)
+			# Calculate detailed changes
+			
+			var old_char_count = content.length()
+			var old_word_count = word_count
+			var timestamp = Time.get_unix_time_from_system()
+		if new_content != content:
+		"""Update document content and track changes with enhanced tracking"""
+	func update_content(new_content: String, edit_mode: String = "", change_source: String = "user"):
+	
+		word_count = words.size()
+		var words = content.split(" ", false)
+		# Simple word count - split by whitespace and filter empty strings
+	func _calculate_word_count():
+	
+		}
+			"change_velocity": 0.0  # changes per minute
+			"last_significant_change": 0,
+			"time_spent_editing": 0,
+			"edit_modes_used": [],
+			"characters_removed": 0,
+			"characters_added": 0,
+			"words_removed": 0,
+			"words_added": 0,
+			"total_edits": 0,
+		change_statistics = {
+		"""Initialize change tracking statistics"""
+	func _initialize_change_statistics():
+	
+		return "session_%d_%04d" % [timestamp, random_suffix]
+		var random_suffix = randi() % 10000
+		var timestamp = Time.get_unix_time_from_system()
+		"""Generate unique session ID for this document"""
+	func _generate_session_id() -> String:
+	
+# Removed duplicate _init function - using the new performance-optimized version above
+	
+		_calculate_memory_usage()
+		
+		# word_count remains as estimate
+		# content_preview remains available
+		# Keep essential data
+		
+		content_chunks.clear()
+		metadata_only = true
+		is_content_loaded = false
+		original_content = ""
+		content = ""
+		print("DocumentContext: Unloading content for %s to save memory" % file_name)
+		
+			return
+		if not can_unload_content():
+		"""Unload content to save memory while keeping metadata"""
+	func unload_content():
+	
+		return true
+		
+			return false
+		if is_primary:
+		# Don't unload primary documents
+		
+			return false
+		if has_unsaved_changes():
+		# Don't unload if there are unsaved changes
+		
+			return false
+		if current_time - last_access_time < 300:
+		var current_time = Time.get_unix_time_from_system()
+		# Don't unload if recently accessed (within 5 minutes)
+		
+			return false
+		if not is_content_loaded or file_path.is_empty():
+		"""Check if content can be safely unloaded to save memory"""
+	func can_unload_content() -> bool:
+	
+		return recency_factor
+		var recency_factor = max(0.1, 1.0 - (time_since_access / 3600.0))  # Decay over 1 hour
+		# Higher frequency for recently accessed documents
+		
+			return 1.0
+		if time_since_creation <= 0:
+		
+		var time_since_access = current_time - last_access_time
+		var time_since_creation = current_time - creation_time
+		var current_time = Time.get_unix_time_from_system()
+		"""Calculate how frequently this document is accessed"""
+	func _calculate_access_frequency() -> float:
+	
+		}
+			"access_frequency": _calculate_access_frequency()
+			"last_access_time": last_access_time,
+			"chunks_generated": content_chunks.size(),
+			"metadata_only": metadata_only,
+			"is_content_loaded": is_content_loaded,
+			"is_large_document": is_large_document,
+			"load_time_ms": load_time_ms,
+			"memory_usage_bytes": memory_usage_bytes,
+			"file_size_bytes": file_size,
+		return {
+		"""Get document performance metrics"""
+	func get_performance_metrics() -> Dictionary:
+	
+		memory_usage_bytes += change_markers.size() * 100  # Estimate for markers
+		memory_usage_bytes += edit_history.size() * 200  # Estimate for edit history
+		memory_usage_bytes = content.length() * 4  # Approximate UTF-8 bytes
+		"""Calculate approximate memory usage"""
+	func _calculate_memory_usage():
+	
+		print("DocumentContext: Generated %d chunks for %s" % [content_chunks.size(), file_name])
+		
+			chunk_index += 1
+			current_pos += chunk_size - overlap
+			
+			})
+				"has_overlap": chunk_index > 0
+				"chunk_size": chunk_size,
+				"total_chunks": total_chunks,
+				"chunk_index": chunk_index,
+				"end_pos": end_pos,
+				"start_pos": current_pos,
+				"content": chunk_content,
+			content_chunks.append({
+			
+			var chunk_content = content.substr(current_pos, end_pos - current_pos)
+			var end_pos = min(current_pos + chunk_size, content.length())
+		while current_pos < content.length():
+		
+		var chunk_index = 0
+		var current_pos = 0
+		var total_chunks = ceil(float(content.length()) / (chunk_size - overlap))
+		
+			return
+			})
+				"has_overlap": false
+				"chunk_size": chunk_size,
+				"total_chunks": 1,
+				"chunk_index": 0,
+				"end_pos": content.length(),
+				"start_pos": 0,
+				"content": content,
+			content_chunks.append({
+		if content.length() <= chunk_size:
+		
+		content_chunks.clear()
+		"""Generate content chunks with overlapping for context"""
+	func _generate_content_chunks(chunk_size: int, overlap: int):
+	
+		return content_chunks
+		
+			_generate_content_chunks(chunk_size, overlap)
+		if content_chunks.is_empty() or content_chunks[0].get("chunk_size", 0) != chunk_size:
+		
+			return []
+		if not ensure_content_loaded():
+		"""Get content in chunks for AI processing with token limits"""
+	func get_chunked_content(chunk_size: int = 4000, overlap: int = 200) -> Array:
+	
+		return content_preview
+		"""Get content preview (always available)"""
+	func get_content_preview() -> String:
+	
+		return content
+		ensure_content_loaded()
+		"""Get content, loading it if necessary"""
+	func get_content() -> String:
+	
+		return true
+		
+		last_access_time = Time.get_unix_time_from_system()
+		print("DocumentContext: Lazy loaded content in %d ms" % lazy_load_time)
+		var lazy_load_time = Time.get_ticks_msec() - start_time
+		
+		_calculate_memory_usage()
+		_calculate_word_count()
+		
+		metadata_only = false
+		is_content_loaded = true
+		original_content = content
+		
+		file.close()
+		content = file.get_as_text()
+		
+			return false
+		if not file:
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		
+		var start_time = Time.get_ticks_msec()
+		print("DocumentContext: Lazy loading content for %s..." % file_name)
+		
+			return false
+		if file_path.is_empty() or not FileAccess.file_exists(file_path):
+		
+			return true
+			last_access_time = Time.get_unix_time_from_system()
+		if is_content_loaded:
+		"""Ensure full content is loaded, loading it if necessary"""
+	func ensure_content_loaded() -> bool:
+	
+		print("DocumentContext: Loaded content immediately for %s (%d ms)" % [file_name, load_time_ms])
+		
+		last_access_time = Time.get_unix_time_from_system()
+		load_time_ms = Time.get_ticks_msec() - start_time
+		
+		_calculate_memory_usage()
+		_calculate_word_count()
+		
+		metadata_only = false
+		is_content_loaded = true
+		content_preview = content.substr(0, 500)
+		original_content = content
+		
+		file.close()
+		content = file.get_as_text()
+		
+			return
+		if not file:
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		
+		var start_time = Time.get_ticks_msec()
+		"""Traditional immediate content loading"""
+	func _load_content_immediately():
+	
+		print("DocumentContext: Loaded metadata and preview for %s (%d words estimated)" % [file_name, word_count])
+		
+		last_access_time = Time.get_unix_time_from_system()
+		load_time_ms = Time.get_ticks_msec() - start_time
+		metadata_only = true
+		file.close()
+		
+		word_count = int((preview_words / 500.0) * file_size) if content_preview.length() == 500 else preview_words
+		var preview_words = content_preview.split(" ", false).size()
+		# Estimate word count from preview
+		
+		content_preview = file.get_buffer(min(500, file_size)).get_string_from_utf8()
+		# Load preview (first 500 characters)
+		
+			return
+		if not file:
+		var file = FileAccess.open(file_path, FileAccess.READ)
+		
+			return
+		if not FileAccess.file_exists(file_path):
+		
+		var start_time = Time.get_ticks_msec()
+		"""Load only essential metadata and content preview for large documents"""
+	func _load_metadata_and_preview():
+	
+				print("DocumentContext: File size: %d bytes, Large document: %s" % [file_size, is_large_document])
+				is_large_document = file_size > lazy_load_threshold
+				file.close()
+				file_size = file.get_length()
+			if file:
+			var file = FileAccess.open(file_path, FileAccess.READ)
+		if FileAccess.file_exists(file_path):
+		"""Analyze file size to determine if lazy loading should be used"""
+	func _analyze_file_size():
+	
+		_initialize_change_statistics()
+		
+			_load_metadata_and_preview()
+			# Lazy loading - just load metadata and preview
+		elif not path.is_empty():
+			_load_content_immediately()
+			# Traditional immediate loading
+		elif not path.is_empty() and not lazy_load:
+			_calculate_memory_usage()
+			_calculate_word_count()
+			is_content_loaded = true
+			original_content = text
+			content = text
+			# Direct text loading (for string-based documents)
+		if not text.is_empty():
+		
+		edit_session_id = _generate_session_id()
+		last_modified = creation_time
+		creation_time = Time.get_unix_time_from_system()
+		
+			_analyze_file_size()
+			file_name = path.get_file()
+			file_path = path
+		if not path.is_empty():
+	func _init(path: String = "", text: String = "", lazy_load: bool = false):
+	
+	var last_access_time: int = 0
+	var memory_usage_bytes: int = 0
+	var load_time_ms: int = 0
+	# Performance metrics
+	
+	var metadata_only: bool = false  # If true, only metadata is loaded
+	var content_chunks: Array = []  # For chunked loading
+	var lazy_load_threshold: int = 50000  # 50KB threshold for lazy loading
+	var content_preview: String = ""  # First 500 chars for previews
+	var is_large_document: bool = false
+	var file_size: int = 0
+	var is_content_loaded: bool = false
+	# Lazy loading properties
+	# === PHASE 5.2: PERFORMANCE OPTIMIZATION ===
+	
+	var change_markers = []  # Array[Dictionary]
+	var last_auto_save: int = 0
+	var creation_time: int = 0
+	var edit_session_id: String = ""
+	var change_statistics: Dictionary = {}
+	# Enhanced change tracking
+	
+	var syntree_analysis: Dictionary = {}
+	var edit_history = []  # Array[Dictionary]
+	var selection_end: int = -1
+	var selection_start: int = -1
+	var is_primary: bool = false
+	var word_count: int = 0
+	var last_modified: int = 0
+	var original_content: String = ""
+	var content: String = ""
+	var file_name: String = ""
+	var file_path: String = ""
+class DocumentContext:
+# Document context class to hold document metadata and content
+
+signal session_cleared()
+signal document_removed(document_path: String)
+signal primary_document_changed(document: DocumentContext)
+signal document_loaded(document: DocumentContext)
+
+## This singleton manages document contexts, multi-document sessions, and editing state
+## ReadyMade Document Session Manager - Handles document editing sessions
+
+extends Node
+	return preview

@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://ccm6055l1y83r"]
+
+[ext_resource type="Script" uid="uid://n2rxt3v167d2" path="res://ScenSyn/scripts/character_selection.gd" id="1_b4u8b"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="2_k8x03"]
+[ext_resource type="Texture2D" uid="uid://cd8r7xqt5fjnt" path="res://ScenSyn/profile_images/profile_04.jpeg" id="3_nvjc6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p23vp"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="CharacterSelection" type="Control" unique_id=1975793372 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_k8x03")
+script = ExtResource("1_b4u8b")
+metadata/theme_surface = "base"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=243361563]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1254949280]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1636843571]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CharactersLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=488774324]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Pick a character / role to play:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CharacterList" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1998683201]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=810602628]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Profile_Sprite" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=172977552]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_nvjc6")
+expand_mode = 3
+
+[node name="CharacterDescription" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1263945925]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_p23vp")
+bbcode_enabled = true
+text = "Character Description"
+
+[node name="ConfirmButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2101969390]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Confirm Selection"

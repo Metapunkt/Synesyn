@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb8xlhnj6xomp"]
+
+[ext_resource type="Script" path="res://readymade/test_phase_5_2_performance.gd" id="1_j8k2v"]
+
+[node name="Phase52TestSuite" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_j8k2v")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="HeaderLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Phase 5.2: Performance Optimization Test Suite"
+horizontal_alignment = 1
+
+[node name="TestControlsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RunAllTestsButton" type="Button" parent="VBoxContainer/TestControlsContainer"]
+layout_mode = 2
+text = "Run All Tests (F10)"
+size_flags_horizontal = 3
+
+[node name="LazyLoadingTestButton" type="Button" parent="VBoxContainer/TestControlsContainer"]
+layout_mode = 2
+text = "Lazy Loading Tests"
+size_flags_horizontal = 3
+
+[node name="ContextWindowTestButton" type="Button" parent="VBoxContainer/TestControlsContainer"]
+layout_mode = 2
+text = "Context Window Tests"
+size_flags_horizontal = 3
+
+[node name="MemoryTestButton" type="Button" parent="VBoxContainer/TestControlsContainer"]
+layout_mode = 2
+text = "Memory Tests"
+size_flags_horizontal = 3
+
+[node name="UIOptimizationTestButton" type="Button" parent="VBoxContainer/TestControlsContainer"]
+layout_mode = 2
+text = "UI Optimization Tests"
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TestOutputScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TestOutputText" type="RichTextLabel" parent="VBoxContainer/TestOutputScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_active = true
+text = "[b]Phase 5.2 Performance Test Output[/b]
+
+Press F10 or 'Run All Tests' to begin comprehensive performance testing.
+
+[color=gray]Test Categories:[/color]
+• Lazy Loading: Document chunking and on-demand loading
+• Context Window Management: LLM token limit optimization  
+• Memory Management: Usage tracking and optimization
+• UI Optimization: Component pooling and caching
+• Large Document Handling: Performance with 500KB+ documents
+• Performance Benchmarks: Overall system performance metrics
+
+[color=yellow]Performance Benchmarks:[/color]
+• Max Load Time: 1.0 seconds
+• Max Memory Usage: 50 MB
+• Max Context Generation: 0.5 seconds
+• Max UI Component Creation: 0.1 seconds
+• Min Memory Efficiency: 60%
+
+Ready to test..."
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TestStatusContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TestProgressLabel" type="Label" parent="VBoxContainer/TestStatusContainer"]
+layout_mode = 2
+text = "Ready"
+size_flags_horizontal = 3
+
+[node name="TestCountLabel" type="Label" parent="VBoxContainer/TestStatusContainer"]
+layout_mode = 2
+text = "0/0 Tests"
+horizontal_alignment = 2 

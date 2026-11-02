@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2t4c7n1c0c2s"]
+
+[ext_resource type="Script" path="res://ScenSyn/scripts/story_stage_shell.gd" id="1_shell"]
+[ext_resource type="PackedScene" path="res://ScenSyn/scenes/scensyn_story_stage.tscn" id="2_story"]
+
+[node name="StoryStageShell" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_shell")
+
+[node name="StoryStage" parent="." instance=ExtResource("2_story")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+
+[node name="BackButton" type="Button" parent="Overlay"]
+unique_name_in_owner = true
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 112.0
+offset_bottom = 44.0
+text = "Back"
+
+

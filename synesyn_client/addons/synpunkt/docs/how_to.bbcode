@@ -1,0 +1,51 @@
+[b]SynPunkt — How To[/b]
+
+SynPunkt is a workspace tool for turning [b]Closures[/b] (read-only run snapshots) into editable [b]SynDocs[/b] (documents you can refine, present, and export).
+
+[b]1) Connect to the Hub[/b]
+- The Hub URL at the top should point to your running Synesyn Hub (default: [url]http://127.0.0.1:17777[/url]).
+- [b]If you are hosting[/b] a shared session: go to the [b]Settings[/b] tab → Host section, pick the network IP others can reach, copy the URL, and share it with participants.
+- [b]If you are joining[/b] a session: go to [b]Settings[/b] → Join, paste the URL given to you by the host, and press [b]Test[/b] to verify, then [b]Save[/b].
+- To use Hub authentication: enable "Use Hub auth" in the Join section and paste your Bearer token.
+
+[b]2) Closures → SynDocs[/b]
+- Go to the [b]Closures[/b] tab (left). A [b]Closure[/b] is a read-only snapshot of a completed ScenSyn session — it captures everything said and synthesised in that run.
+- Select a Closure and press [b]Load[/b] to view it.
+- Press [b]Generate[/b] to create a new editable SynDoc draft from that Closure.
+
+[b]3) Editing a SynDoc[/b]
+- Go to the [b]SynDocs[/b] tab (left) and press [b]Load[/b] on a selected SynDoc.
+- In [b]Design → SynDoc[/b]:
+  - Edit the title and blocks inside frames
+  - Press [b]Validate[/b] to check structure — the status bar turns green on pass, red on error
+  - Press [b]Save SynDoc to Hub[/b] to persist — the status bar confirms the saved artifact id
+
+[b]4) Edgeless Layout (frames as cards)[/b]
+- [b]What is edgeless?[/b] An "edgeless" layout is a spatial, node-graph-style overview of your document's frames — each frame becomes a draggable card. There are no connecting edges; spatial proximity and cluster colouring carry the meaning.
+- Press [b]Build Edgeless Layout[/b] to create the card map from the current SynDoc.
+- Use [b]Fit to Layout[/b] to reveal everything if you get lost.
+- Use [b]Reset View[/b] to return to the initial camera captured when the doc was loaded.
+- Use [b]Avoid overlap[/b] to auto-separate cards on drop.
+- [b]Cards[/b] view = readable text cards per frame; [b]Dots[/b] view = dense overview for large documents.
+
+[b]5) Clusters[/b]
+- [b]What are clusters?[/b] When a SynAxes clustering result is linked via the [b]Cluster result[/b] advanced ref, clusters appear as colour-coded regions overlaid on the edgeless map. Each cluster groups semantically related frames. The [b]Cluster ◀ ▶[/b] buttons in the Present tab let you step through clusters one by one during a live presentation.
+- Without a cluster result ref, the edgeless view still shows frames as cards — clusters are just not highlighted.
+
+[b]6) Advanced refs (optional)[/b]
+Under [b]Advanced ▸[/b] in the Design tab you'll find optional reference fields:
+- [b]Prompt Chain[/b] — links to a prompt chain asset (for provenance / toolchain traceability).
+- [b]Projection[/b] — links to a SynAxes projection artifact; if present, frame positions are derived from semantic coordinates instead of an auto-grid.
+- [b]Cluster result[/b] — links to a SynAxes cluster_result artifact; if present, cluster overlays appear in the edgeless view.
+These are not required for basic use. Leave them blank unless you have upstream SynAxes artifacts to reference.
+
+[b]7) Render tab[/b]
+- Connect to a local [b]ComfyUI[/b] instance (default [url]http://127.0.0.1:8188[/url]) and submit image generation jobs.
+- Paste or load a ComfyUI API-format workflow JSON, optionally add patch overrides, and press [b]Submit[/b].
+- Results appear in the Render results list below. Double-click an image to open it; use [b]Insert to frame[/b] to embed it into the current SynDoc frame.
+- Use [b]Route: hub/comfyui[/b] to submit via the Hub (for shared render queues); [b]direct/comfyui[/b] to go straight from this client.
+
+[b]Troubleshooting[/b]
+- If lists are empty: confirm Hub is running and the URL is correct (Settings → Join).
+- If "Hub query failed": check Hub URL, firewall, and that the Hub process is running, then retry.
+- Status bar colours: [color=#44d26f]green = success[/color], [color=#ed7a4b]amber = warning[/color], [color=#f97070]red = error[/color].

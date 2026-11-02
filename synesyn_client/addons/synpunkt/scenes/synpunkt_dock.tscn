@@ -1,0 +1,1816 @@
+[gd_scene format=3 uid="uid://dew2kikqlale5"]
+
+[ext_resource type="Script" uid="uid://2y5duwvoj3yo" path="res://addons/synpunkt/scripts/synpunkt_dock.gd" id="1_dock"]
+[ext_resource type="Script" uid="uid://llajed242ism" path="res://addons/synpunkt/scripts/edgeless_preview.gd" id="2_preview"]
+[ext_resource type="Texture2D" uid="uid://br1m2onoa8i8r" path="res://addons/synpunkt/icons/SynPunkt_logo.svg" id="3_kfdd0"]
+[ext_resource type="Texture2D" uid="uid://bopaqb37edl3j" path="res://addons/synpunkt/icons/SynPunkt_logo_white.svg" id="3_logo_white"]
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="3_synpunkt_theme"]
+[ext_resource type="Theme" uid="uid://d382cd44vr6k" path="res://addons/synesyn_core/themes/SynesynBase_contemporary_dark.tres" id="4_2xemk"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_refresh"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_upload_arrow.svg" id="icon_load"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="icon_delete"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_plus.svg" id="icon_new"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_sparkle_ai.svg" id="icon_generate"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_reset_view_frame.svg" id="icon_reset"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_fit_expand.svg" id="icon_fit"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="icon_left"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_right.svg" id="icon_right"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_up.svg" id="icon_up"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_down.svg" id="icon_down"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="icon_apply"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="icon_settings"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_bookmark.svg" id="i_bookmark"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="i_playtriangle"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_start_play_circle.svg" id="i_startplaycircl"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="i_externallink"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_copy.svg" id="i_copy"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="i_exportdownload"]
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_2xemk"]
+color = Color(0.69, 0.61, 0.94, 0.7)
+grow_begin = 0.0
+grow_end = 0.0
+vertical = true
+
+[node name="SynPunkt" type="Control" unique_id=1867718342 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_synpunkt_theme")
+script = ExtResource("1_dock")
+
+metadata/theme_surface = "utility"
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="DeleteConfirmDialog" type="ConfirmationDialog" parent="." unique_id=1940680747]
+unique_name_in_owner = true
+title = "Confirm delete"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1701780261]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=531966762]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="Root" type="VBoxContainer" parent="ScrollContainer/MarginContainer" unique_id=780289979]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Header" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root" unique_id=1142187856]
+layout_mode = 2
+
+[node name="HeaderLine_1" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Header" unique_id=2074567609]
+layout_mode = 2
+clip_contents = false
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="SynpunktLogo_TextureRect" type="TextureRect" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=1262440640]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(189, 90)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("3_kfdd0")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=463511146]
+visible = false
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=744109938]
+custom_minimum_size = Vector2(10, 28)
+layout_mode = 2
+size_flags_vertical = 4
+clip_text = false
+text = "Closures -> SynDocs -> Render -> Present"
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=1747200424]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_2xemk")
+
+[node name="StatusLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=1563306848]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_vertical = 4
+clip_text = false
+text = "Status:"
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_1" unique_id=991034654]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+clip_text = true
+text = "Found 0 syndocs."
+autowrap_mode = 0
+text_overrun_behavior = 3
+vertical_alignment = 1
+
+[node name="HeaderLine_2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Header" unique_id=442585364]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ToggleArtifacts" type="Button" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_2" unique_id=1512364638]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ButtonThemeToggle"
+toggle_mode = true
+button_pressed = true
+text = "Artifacts"
+
+icon = ExtResource("icon_settings")
+
+[node name="HubUrlLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_2" unique_id=125159758]
+layout_mode = 2
+text = "Hub:"
+
+[node name="HubUrl" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_2" unique_id=616627720]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "http://127.0.0.1:17777"
+
+[node name="ApplyHubUrl" type="Button" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_2" unique_id=1769285462]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"
+
+icon = ExtResource("icon_apply")
+
+[node name="ThemeToggle" type="Button" parent="ScrollContainer/MarginContainer/Root/Header/HeaderLine_2" unique_id=1664095128]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"ButtonThemeToggle"
+text = "Theme: Light"
+
+icon = ExtResource("icon_settings")
+
+[node name="Body" type="HSplitContainer" parent="ScrollContainer/MarginContainer/Root" unique_id=1752072470]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(220)
+split_offset = 220
+
+[node name="Left" type="TabContainer" parent="ScrollContainer/MarginContainer/Root/Body" unique_id=363907082]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 1
+
+[node name="Closures" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Left" unique_id=719474462]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="LeftButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures" unique_id=151426216]
+layout_mode = 2
+
+[node name="RefreshClosures" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons" unique_id=427590366]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Refresh the closures list (closures are read-only run snapshots)."
+text = "Refresh"
+
+icon = ExtResource("icon_refresh")
+
+[node name="LoadClosure" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons" unique_id=767106307]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Load the selected Closure (read-only) into the right panel for viewing and SynDoc generation."
+text = "Load"
+
+icon = ExtResource("icon_load")
+
+[node name="RefreshStoreClosures" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Refresh canonical STFX Store closure records."
+text = "Store Closures"
+icon = ExtResource("icon_refresh")
+
+[node name="RefreshStoreContextPacks" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Refresh STFX Store context packs."
+text = "Context Packs"
+icon = ExtResource("icon_refresh")
+
+[node name="DeleteClosure" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons" unique_id=1451331542]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Delete checked Closures (or the selected Closure if none are checked). Destructive."
+text = "Delete"
+
+icon = ExtResource("icon_delete")
+
+[node name="CreateDemoClosure" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures/LeftButtons" unique_id=1717780501]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Create a demo Closure artifact (read-only) so you can try the workflow without upstream discovery."
+text = "Create demo"
+
+icon = ExtResource("icon_new")
+
+[node name="ClosuresList" type="Tree" parent="ScrollContainer/MarginContainer/Root/Body/Left/Closures" unique_id=1845311904]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+hide_root = true
+
+[node name="SynDocs" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Left" unique_id=1993712110]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="SynDocButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs" unique_id=2109479762]
+layout_mode = 2
+
+[node name="RefreshSynDocs" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs/SynDocButtons" unique_id=1577217838]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Refresh the SynDocs list (SynDocs are editable documents)."
+text = "Refresh"
+
+icon = ExtResource("icon_refresh")
+
+[node name="LoadSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs/SynDocButtons" unique_id=956468017]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Load the selected SynDoc (editable) into the right panel for editing/presenting."
+text = "Load"
+
+icon = ExtResource("icon_load")
+
+[node name="DeleteSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs/SynDocButtons" unique_id=1619920974]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Delete checked SynDocs (or the selected SynDoc if none are checked). Destructive."
+text = "Delete"
+
+icon = ExtResource("icon_delete")
+
+[node name="NewEmptySynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs/SynDocButtons" unique_id=178816809]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Create a new empty SynDoc (editable)."
+text = "New"
+
+icon = ExtResource("icon_new")
+
+[node name="SynDocsList" type="Tree" parent="ScrollContainer/MarginContainer/Root/Body/Left/SynDocs" unique_id=1712238739]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+hide_root = true
+
+[node name="Right" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body" unique_id=234335980]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ModeTabs" type="TabContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right" unique_id=2136714135]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 1
+
+[node name="Design" type="TabContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs" unique_id=1141456060]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 1
+metadata/_tab_index = 0
+
+[node name="Closure" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design" unique_id=334612817]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ClosureInfo" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/Closure" unique_id=1415401241]
+layout_mode = 2
+text = "Selected closure JSON (read-only):"
+
+[node name="ClosureJson" type="TextEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/Closure" unique_id=1476040114]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="SynDoc" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design" unique_id=92846633]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="SynDocHeader" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=731407819]
+layout_mode = 2
+
+[node name="SynDocTitleLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocHeader" unique_id=2001808379]
+layout_mode = 2
+text = "SynDoc title:"
+
+[node name="SynDocTitle" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocHeader" unique_id=129417418]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Name this SynDoc (editable). Saved into the SynDoc JSON and shown in the UI."
+placeholder_text = "e.g. Closure performance draft"
+
+[node name="GenerateSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocHeader" unique_id=350866907]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Generate a new editable SynDoc draft from the currently loaded Closure (closure stays read-only)."
+text = "Generate"
+
+icon = ExtResource("icon_generate")
+
+[node name="RefsSplit" type="VSplitContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=241742204]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RefsTop" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit" unique_id=277332958]
+layout_mode = 2
+
+[node name="ClosureRefRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=1969012776]
+layout_mode = 2
+
+[node name="ClosureRefLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ClosureRefRow" unique_id=1909048761]
+layout_mode = 2
+text = "Closure:"
+
+[node name="ClosureRef" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ClosureRefRow" unique_id=1100151349]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The Closure this SynDoc is associated with (read-only)."
+placeholder_text = "(closure artifact id)"
+editable = false
+
+[node name="ContextGraphRefRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=1393951182]
+layout_mode = 2
+
+[node name="ContextGraphRefLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ContextGraphRefRow" unique_id=671587880]
+layout_mode = 2
+text = "Context graph:"
+
+[node name="ContextGraphRef" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ContextGraphRefRow" unique_id=2128110536]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional reference to a ui.context_graph artifact (advanced linkage for downstream tools)."
+placeholder_text = "(optional context graph artifact id)"
+editable = false
+
+[node name="AdvancedRefsToggleRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=1898143414]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ToggleAdvancedRefs" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/AdvancedRefsToggleRow" unique_id=1406372372]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Show/hide advanced reference fields (prompt chain, projection, cluster result)."
+toggle_mode = true
+text = "Advanced >"
+[node name="PromptChainRefRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=115815025]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PromptChainRefLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/PromptChainRefRow" unique_id=209387739]
+layout_mode = 2
+text = "Prompt chain:"
+
+[node name="PromptChainRef" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/PromptChainRefRow" unique_id=841296983]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional reference to a Prompt Chain asset (advanced provenance/tooling)."
+placeholder_text = "(optional prompt chain asset id)"
+
+[node name="ProjectionRefRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=1904042330]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ProjectionRefLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ProjectionRefRow" unique_id=1915218132]
+layout_mode = 2
+text = "Projection:"
+
+[node name="ProjectionRef" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ProjectionRefRow" unique_id=1419308297]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional. If present, used to build a semantic edgeless layout from projection coordinates."
+placeholder_text = "(optional projection artifact id)"
+
+[node name="ClusterRefRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=161109167]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ClusterRefLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ClusterRefRow" unique_id=1319201242]
+layout_mode = 2
+text = "Cluster result:"
+
+[node name="ClusterRef" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/ClusterRefRow" unique_id=1396688163]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional. If present, overlays clusters onto the edgeless layout (centroids + membership)."
+placeholder_text = "(optional cluster_result artifact id)"
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=801223155]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LayoutButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop" unique_id=814627692]
+layout_mode = 2
+
+[node name="BuildEdgelessLayout" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/LayoutButtons" unique_id=338075879]
+icon = ExtResource("icon_generate")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Build edgeless layout. Uses ProjectionRef if available; otherwise falls back to an auto-grid layout by frames."
+text = "Build Edgeless Layout from Projection"
+
+[node name="RebuildEdgelessKeepEdits" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/LayoutButtons" unique_id=1970873019]
+icon = ExtResource("icon_refresh")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Rebuild edgeless layout and preserve manual positions/labels where possible (projection if available; else frame-grid)."
+text = "Rebuild (keep edits)"
+
+[node name="ResetEdgelessView" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/LayoutButtons" unique_id=1705455560]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset View"
+
+icon = ExtResource("icon_reset")
+
+[node name="FitEdgelessToLayout" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/RefsTop/LayoutButtons" unique_id=158159805]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Recenter and zoom to fit the current edgeless layout."
+text = "Fit to Layout"
+
+icon = ExtResource("icon_fit")
+
+[node name="EdgelessPanel" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit" unique_id=1014680946]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EdgelessPreviewLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel" unique_id=450712002]
+layout_mode = 2
+text = "Edgeless Layout (frames as nodes):"
+
+[node name="EdgelessPreview" type="Control" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel" unique_id=492676484]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+script = ExtResource("2_preview")
+
+[node name="EdgelessResizeHandle" type="Panel" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel" unique_id=984973537]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+tooltip_text = "Drag to resize the edgeless canvas vertically."
+mouse_default_cursor_shape = 11
+
+[node name="EdgelessBottom" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel" unique_id=748724549]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+
+[node name="EdgelessControlsRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom" unique_id=934904493]
+layout_mode = 2
+
+[node name="ShowEdgelessLabels" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=205718226]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show labels"
+
+[node name="EditEdgelessLayout" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=835944858]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Edit layout"
+
+[node name="SnapToGrid" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=286346333]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap"
+
+[node name="AvoidOverlap" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=638386880]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When moving frame cards, auto-push them apart on drop to reduce overlap."
+button_pressed = true
+text = "Avoid overlap"
+
+[node name="GridSize" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=2114820987]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+min_value = 5.0
+max_value = 500.0
+step = 5.0
+value = 50.0
+
+[node name="EdgelessViewStyle" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessControlsRow" unique_id=1440268056]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+tooltip_text = "Edgeless view style: Cards (more readable) or Dots (denser overview)."
+selected = 0
+item_count = 2
+popup/item_0/text = "Cards"
+popup/item_0/id = 0
+popup/item_1/text = "Dots"
+popup/item_1/id = 1
+
+[node name="AlignRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom" unique_id=1940281963]
+layout_mode = 2
+
+[node name="AlignToGrid" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/AlignRow" unique_id=109561983]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Align to grid"
+
+icon = ExtResource("icon_fit")
+
+[node name="CenterX" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/AlignRow" unique_id=240462413]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Center X"
+
+[node name="CenterY" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/AlignRow" unique_id=1915585016]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Center Y"
+
+[node name="EdgelessLabelRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom" unique_id=1955474286]
+layout_mode = 2
+
+[node name="EdgelessLabelLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessLabelRow" unique_id=358473989]
+layout_mode = 2
+text = "Label:"
+
+[node name="EdgelessLabelEdit" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessLabelRow" unique_id=441507173]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Rename the currently selected node/cluster in the edgeless view."
+placeholder_text = "(click a node/cluster, then rename it here)"
+editable = false
+
+[node name="ApplyEdgelessLabel" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom/EdgelessLabelRow" unique_id=1113862687]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Apply the label to the currently selected node/cluster."
+disabled = true
+text = "Apply"
+
+icon = ExtResource("icon_apply")
+
+[node name="EdgelessLegend" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/RefsSplit/EdgelessPanel/EdgelessBottom" unique_id=182559962]
+layout_mode = 2
+text = "Wheel: zoom * MMB/RMB drag: pan * LMB: select * R: reset"
+
+[node name="SynDocSplit" type="HSplitContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=726904272]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(260)
+split_offset = 260
+
+[node name="BlocksPanel" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit" unique_id=581158660]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FramesHeaderRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=1334749891]
+layout_mode = 2
+
+[node name="FramesLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesHeaderRow" unique_id=1442634416]
+layout_mode = 2
+text = "Frames"
+
+[node name="PrevFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesHeaderRow" unique_id=701539276]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select previous frame."
+text = "<-"
+
+icon = ExtResource("icon_left")
+
+[node name="NextFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesHeaderRow" unique_id=2135018212]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select next frame."
+text = "->"
+
+icon = ExtResource("icon_right")
+
+[node name="FramesList" type="ItemList" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=1239754002]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+allow_reselect = true
+
+[node name="FramesButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=1622896681]
+layout_mode = 2
+
+[node name="MoveFrameUp" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesButtons" unique_id=1704054794]
+unique_name_in_owner = true
+layout_mode = 2
+text = "â†‘"
+
+icon = ExtResource("icon_up")
+
+[node name="MoveFrameDown" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesButtons" unique_id=1347653447]
+unique_name_in_owner = true
+layout_mode = 2
+text = "â†“"
+
+icon = ExtResource("icon_down")
+
+[node name="AddFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesButtons" unique_id=545527333]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add"
+
+icon = ExtResource("icon_new")
+
+[node name="DeleteFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/FramesButtons" unique_id=11727734]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete"
+
+icon = ExtResource("icon_delete")
+
+[node name="RenameRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=896173992]
+layout_mode = 2
+
+[node name="FrameId" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/RenameRow" unique_id=1111675017]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "frame_id"
+
+[node name="ApplyFrameId" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/RenameRow" unique_id=893029229]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rename"
+
+icon = ExtResource("icon_apply")
+
+[node name="BlocksLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=1590248721]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Blocks are the ordered content pieces inside the selected frame (Heading/Paragraph/Bullets)."
+text = "Contents (frame_1)"
+
+[node name="BlocksList" type="ItemList" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=472344740]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Select a block to edit its text and type."
+allow_reselect = true
+
+[node name="BlocksButtons" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel" unique_id=811080827]
+layout_mode = 2
+
+[node name="MoveUpBlock" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/BlocksButtons" unique_id=382596586]
+unique_name_in_owner = true
+layout_mode = 2
+text = "â†‘"
+
+icon = ExtResource("icon_up")
+
+[node name="MoveDownBlock" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/BlocksButtons" unique_id=1389464132]
+unique_name_in_owner = true
+layout_mode = 2
+text = "â†“"
+
+icon = ExtResource("icon_down")
+
+[node name="SendToFrame" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/BlocksButtons" unique_id=1011372970]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose the destination frame for moving the selected block."
+selected = 0
+item_count = 1
+popup/item_0/text = "(no frames)"
+popup/item_0/id = 0
+
+[node name="MoveBlockToFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/BlocksButtons" unique_id=727052215]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Move the selected block from the current frame to the destination frame."
+text = "Move block"
+
+[node name="DeleteBlock" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlocksPanel/BlocksButtons" unique_id=1532764822]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"
+
+[node name="BlockEditorPanel" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit" unique_id=1448824514]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BlockEditorHeader" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel" unique_id=1998657956]
+layout_mode = 2
+
+[node name="BlockTypeLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel/BlockEditorHeader" unique_id=2023829512]
+layout_mode = 2
+tooltip_text = "A frame contains an ordered list of content blocks. This dropdown chooses the type for the next block you add (Add after)."
+text = "Block:"
+
+[node name="BlockType" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel/BlockEditorHeader" unique_id=974932019]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Choose the type for the next block you add (Add after). This does not change the type of the currently selected block."
+selected = 1
+item_count = 4
+popup/item_0/text = "Heading"
+popup/item_0/id = 0
+popup/item_1/text = "Paragraph"
+popup/item_1/id = 1
+popup/item_2/text = "Subheading"
+popup/item_2/id = 2
+popup/item_3/text = "Bullet item"
+popup/item_3/id = 3
+
+[node name="InsertAfterBlock" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel/BlockEditorHeader" unique_id=2013102243]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Insert a new block after the selected block (or append at end if none selected)."
+text = "Add after"
+
+[node name="BlockTextLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel" unique_id=750982218]
+layout_mode = 2
+tooltip_text = "Edits the text content of the selected block in the Blocks list."
+text = "Selected block text:"
+
+[node name="BlockText" type="TextEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SynDocSplit/BlockEditorPanel" unique_id=123451534]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+wrap_mode = 1
+
+[node name="RawJsonLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=2051850202]
+layout_mode = 2
+text = "Raw SynDoc JSON (advanced):"
+
+[node name="SynDocJson" type="TextEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=1650743304]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+wrap_mode = 1
+
+[node name="SynDocJsonResizeHandle" type="Panel" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=1223905276]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+tooltip_text = "Drag to resize the Raw SynDoc JSON panel vertically."
+mouse_default_cursor_shape = 11
+
+[node name="SaveRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=275387540]
+layout_mode = 2
+
+[node name="SaveSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SaveRow" unique_id=1340648841]
+icon = ExtResource("i_bookmark")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save SynDoc to Hub"
+
+[node name="SaveAsNewVersion" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SaveRow" unique_id=2095892531]
+icon = ExtResource("i_bookmark")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save as new version"
+
+[node name="ValidateSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SaveRow" unique_id=1471903195]
+icon = ExtResource("icon_apply")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Validate"
+
+[node name="SlidesInteropRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc" unique_id=492355816]
+layout_mode = 2
+
+[node name="SlidesDeckLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SlidesInteropRow" unique_id=1370517426]
+layout_mode = 2
+text = "Slides deck:"
+
+[node name="SlidesDeckArtifactId" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SlidesInteropRow" unique_id=1941371785]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "(json slides deck artifact id)"
+
+[node name="ImportSlidesDeck" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SlidesInteropRow" unique_id=1928012462]
+icon = ExtResource("i_exportdownload")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import"
+
+[node name="ExportSlidesDeck" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Design/SynDoc/SlidesInteropRow" unique_id=1247555273]
+icon = ExtResource("i_externallink")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Export"
+
+[node name="Render" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs" unique_id=1853430313]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="RenderInfo" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1466561502]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Render mode (ComfyUI bridge) -- placeholder.
+In v1 this will connect to local ComfyUI or a hub-routed render endpoint."
+
+[node name="ComfyRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=346215949]
+layout_mode = 2
+
+[node name="ComfyUrlLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/ComfyRow" unique_id=1217368438]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "ComfyUI:"
+
+[node name="ComfyUrl" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/ComfyRow" unique_id=1590841941]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "http://100.116.159.18:8188"
+placeholder_text = "http://127.0.0.1:8188"
+
+[node name="ComfyUrlHistory" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/ComfyRow" unique_id=1336824632]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+tooltip_text = "Recent ComfyUI URLs (last 5 used). Selecting one fills the URL field."
+selected = 0
+item_count = 3
+popup/item_0/text = "Recent URLs..."
+popup/item_0/id = 0
+popup/item_1/text = "http://100.116.159.18:8188"
+popup/item_1/id = 1
+popup/item_2/text = "http://127.0.0.1:8188"
+popup/item_2/id = 2
+
+[node name="TestComfy" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/ComfyRow" unique_id=2034784490]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test"
+
+[node name="RenderRouteRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=2025192204]
+layout_mode = 2
+
+[node name="RenderRouteLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderRouteRow" unique_id=238189400]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Route:"
+
+[node name="RenderRouteMode" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderRouteRow" unique_id=2060429539]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+tooltip_text = "Render routing mode. Direct submits from SynPunkt to ComfyUI. Hub submits via /render/submit and tracks as a hub job."
+selected = 0
+item_count = 2
+popup/item_0/text = "direct/comfyui"
+popup/item_0/id = 0
+popup/item_1/text = "hub/comfyui"
+popup/item_1/id = 1
+
+[node name="WorkflowRow" type="GridContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1018772679]
+layout_mode = 2
+columns = 4
+
+[node name="WorkflowLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowRow" unique_id=1834345036]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Workflow:"
+
+[node name="Workflow" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowRow" unique_id=1830466598]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 3
+popup/item_0/text = "(select an action...)"
+popup/item_0/id = 0
+popup/item_1/text = "Refresh saved presets (json.workflow)"
+popup/item_1/id = 1
+popup/item_2/text = "Refresh render history (json.render_request)"
+popup/item_2/id = 2
+
+[node name="SubmitRender" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowRow" unique_id=156871794]
+icon = ExtResource("i_playtriangle")
+
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ButtonPrimary"
+text = "Submit (v1)"
+
+[node name="LoadWorkflowFromSynDoc" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowRow" unique_id=1125237307]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load from doc"
+
+[node name="WorkflowSaveRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=808499911]
+layout_mode = 2
+
+[node name="RenderAutoSaveWorkflows" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowSaveRow" unique_id=773210703]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When enabled, each render will also persist the workflow as a reusable preset (json.workflow) so it appears in the Workflow dropdown. When disabled, renders keep the workflow inline in the render_request for replayability, avoiding workflow artifact bloat."
+text = "Auto-save workflows"
+
+[node name="SaveWorkflowPreset" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowSaveRow" unique_id=1027628916]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Persist the current Workflow JSON as a reusable json.workflow preset (appears in the dropdown)."
+text = "Save workflow preset"
+
+[node name="PresetMetaRow" type="GridContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1134713883]
+layout_mode = 2
+columns = 4
+
+[node name="PresetTagsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=120174652]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Preset tags:"
+
+[node name="PresetTags" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=1936110057]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Comma-separated tags saved to workflow preset metadata."
+placeholder_text = "portrait, studio, sd15"
+
+[node name="PresetModelFamilyLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=701533421]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Model family:"
+
+[node name="PresetModelFamily" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=654922620]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+tooltip_text = "Optional model family label saved to workflow preset metadata."
+placeholder_text = "sd15"
+
+[node name="SavePresetVersion" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=1120512891]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Save the current workflow as a new version linked to the selected preset lineage."
+text = "Save preset version"
+
+[node name="DiffSelectedPreset" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=296358625]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Compare selected preset workflow with current Workflow JSON."
+text = "Diff selected"
+
+[node name="ArchiveSelectedPreset" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=1190680434]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Archive selected preset via metadata flag (non-destructive)."
+theme_type_variation = &"ButtonDanger"
+text = "Archive selected"
+
+[node name="PruneArchivedPreset" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/PresetMetaRow" unique_id=165034878]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Delete selected preset only if it is already archived."
+theme_type_variation = &"ButtonDanger"
+text = "Prune archived"
+
+[node name="CommonParamsPanel" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1503179138]
+layout_mode = 2
+
+[node name="CommonParamsHeader" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel" unique_id=1714970535]
+layout_mode = 2
+
+[node name="CommonParamsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonParamsHeader" unique_id=1595672114]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Convenience controls for common workflow parameters. This does not edit the workflow graph directly; it writes entries into Patch JSON."
+theme_type_variation = &"LabelSection"
+text = "Common parameters (patch layer)"
+
+[node name="CommonDetectFromWorkflow" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonParamsHeader" unique_id=1990572746]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Detect common parameter targets from the currently loaded workflow JSON."
+text = "Detect"
+
+[node name="CommonApplyToPatch" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonParamsHeader" unique_id=1391087987]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Write the current Common parameters into Patch JSON (upsert by node_id + input)."
+theme_type_variation = &"ButtonPrimary"
+text = "Apply to Patch"
+
+[node name="CommonPromptRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel" unique_id=318271815]
+layout_mode = 2
+
+[node name="CommonPromptLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonPromptRow" unique_id=1732117392]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Prompt:"
+
+[node name="CommonPrompt" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonPromptRow" unique_id=2085726633]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Positive prompt text"
+
+[node name="CommonNegativeRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel" unique_id=1003093044]
+layout_mode = 2
+
+[node name="CommonNegativeLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonNegativeRow" unique_id=198696600]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Negative:"
+
+[node name="CommonNegative" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonNegativeRow" unique_id=819325104]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Negative prompt text"
+
+[node name="CommonSamplerRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel" unique_id=1371861140]
+layout_mode = 2
+
+[node name="CommonSeedLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=189587510]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Seed:"
+
+[node name="CommonSeed" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=1747133303]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 2147480000.0
+
+[node name="CommonSeedRandomize" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=395494569]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "If enabled, Apply to Patch will generate a fresh seed."
+text = "Randomize on apply"
+
+[node name="CommonStepsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=767688654]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Steps:"
+
+[node name="CommonSteps" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=1701581131]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 200.0
+value = 20.0
+
+[node name="CommonCfgLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=494786035]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "CFG:"
+
+[node name="CommonCfg" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=916019667]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 30.0
+step = 0.1
+value = 7.0
+
+[node name="CommonDenoiseLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=999741516]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Denoise:"
+
+[node name="CommonDenoise" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSamplerRow" unique_id=1410089890]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="CommonSizeRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel" unique_id=1215884478]
+layout_mode = 2
+
+[node name="CommonWidthLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSizeRow" unique_id=1794233965]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Width:"
+
+[node name="CommonWidth" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSizeRow" unique_id=368330860]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 64.0
+max_value = 4096.0
+step = 8.0
+value = 1024.0
+
+[node name="CommonHeightLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSizeRow" unique_id=1021480344]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Height:"
+
+[node name="CommonHeight" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/CommonParamsPanel/CommonSizeRow" unique_id=2004134157]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 64.0
+max_value = 4096.0
+step = 8.0
+value = 1024.0
+
+[node name="WorkflowJsonLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1941210063]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Workflow JSON (ComfyUI prompt graph):"
+
+[node name="WorkflowJsonActionsRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=386346031]
+layout_mode = 2
+
+[node name="LoadDefaultWorkflow" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowJsonActionsRow" unique_id=108570922]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Load a built-in basic ComfyUI SD1.5 API workflow into Workflow JSON for quick testing."
+text = "Load default workflow"
+
+[node name="ClearWorkflowInputs" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/WorkflowJsonActionsRow" unique_id=911025703]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Clear Workflow JSON, Patch JSON, and detected Common Parameters mappings."
+theme_type_variation = &"ButtonDanger"
+text = "Clear all"
+
+[node name="WorkflowHealthLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=853353504]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelStatusWarn"
+theme_override_colors/font_color = Color(0.45, 0.38, 0.18, 1)
+text = "Workflow health: empty"
+
+[node name="WorkflowJson" type="TextEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1631056594]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "{\"3\": {\"class_type\": \"KSampler\", ...}}"
+wrap_mode = 1
+
+[node name="PatchJsonLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1695364963]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Patch JSON (v1 render request patches):"
+
+[node name="PatchJson" type="TextEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1559555984]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+placeholder_text = "[{\"node_id\":\"3\",\"input\":\"seed\",\"value\":123}]"
+wrap_mode = 1
+
+[node name="RenderRecipeRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1950519277]
+layout_mode = 2
+
+[node name="RenderRecipeLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderRecipeRow" unique_id=696427190]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Recipe:"
+
+[node name="RenderRecipeName" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderRecipeRow" unique_id=2039495931]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "e.g. Portrait v1"
+
+[node name="SaveRenderRecipe" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderRecipeRow" unique_id=540695264]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save recipe"
+
+[node name="SensorOverlayRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1851580182]
+layout_mode = 2
+
+[node name="EnableSensorOverlay" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/SensorOverlayRow" unique_id=1278678293]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enable sensor overlay (hub WS)"
+
+[node name="SnapshotSensors" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/SensorOverlayRow" unique_id=1904470732]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snapshot"
+
+[node name="SensorEventsList" type="ItemList" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=858858820]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RenderJobsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=18679698]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Render jobs (hub queue):"
+
+[node name="RenderJobsControlsRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=490086760]
+layout_mode = 2
+
+[node name="RefreshRenderJobs" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderJobsControlsRow" unique_id=353281352]
+icon = ExtResource("icon_refresh")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh jobs"
+
+[node name="CancelRenderJob" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderJobsControlsRow" unique_id=75350885]
+icon = ExtResource("icon_delete")
+
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ButtonDanger"
+text = "Cancel"
+
+[node name="RetryRenderJob" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderJobsControlsRow" unique_id=1441130150]
+icon = ExtResource("icon_refresh")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Retry"
+
+[node name="ResumeRenderJob" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderJobsControlsRow" unique_id=48590586]
+icon = ExtResource("i_startplaycircl")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Alias for retrying a canceled/failed job as a new queued job."
+text = "Resume"
+
+[node name="RenderJobsList" type="ItemList" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1103860307]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Shows recent hub render jobs with status and id mapping."
+item_count = 1
+item_0/text = "Hub render jobs"
+item_0/disabled = true
+
+[node name="RenderResultsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=922753061]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Render results (hub artifacts):"
+
+[node name="RenderResultsGalleryRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=651173764]
+layout_mode = 2
+
+[node name="RenderResultsFilterLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsGalleryRow" unique_id=1717144037]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Filter:"
+
+[node name="RenderResultsFilter" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsGalleryRow" unique_id=1604808016]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Text search + tokens: has:wf has:rr has:pr has:links missing:wf missing:rr missing:pr last:24h last:7d last:30d view:compact view:expanded"
+placeholder_text = "name, id...  has:wf  last:7d  view:compact"
+
+[node name="RenderResultsSortLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsGalleryRow" unique_id=967307401]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Sort:"
+
+[node name="RenderResultsSort" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsGalleryRow" unique_id=906976546]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Newest"
+popup/item_0/id = 0
+popup/item_1/text = "Oldest"
+popup/item_1/id = 1
+popup/item_2/text = "Name"
+popup/item_2/id = 2
+
+[node name="RenderResultsControlsRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1207112594]
+layout_mode = 2
+
+[node name="RenderInsertIntoFrame" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=1352989715]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Insert selected render artifact(s) as image blocks into the current SynDoc frame."
+text = "Insert to frame"
+
+[node name="RenderDeleteRenderRequest" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=1785247677]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Delete the selected render_request artifact from Workflow dropdown history (select a Render history item first)."
+theme_type_variation = &"ButtonDanger"
+text = "Delete request"
+
+[node name="RenderCopyArtifactId" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=1005105548]
+icon = ExtResource("i_copy")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Copy the selected artifact id to clipboard."
+text = "Copy id"
+
+[node name="RenderOpenArtifactFolder" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=364825428]
+icon = ExtResource("i_externallink")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the folder containing the selected artifact file."
+text = "Open folder"
+
+[node name="RenderClearResults" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=156985548]
+icon = ExtResource("icon_delete")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Clear the Render results list (does not delete artifacts on the Hub)."
+text = "Clear list"
+
+[node name="RenderRefreshResults" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=1376307689]
+icon = ExtResource("icon_refresh")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reload image.generated artifacts from the current workspace."
+text = "Refresh list"
+
+[node name="RenderDeleteSelectedArtifacts" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderResultsControlsRow" unique_id=2046555554]
+icon = ExtResource("icon_delete")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Delete selected image artifacts from the Hub and filesystem."
+theme_type_variation = &"ButtonDanger"
+text = "Delete selected"
+
+[node name="RenderArtifactNameDefaultRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=941233558]
+layout_mode = 2
+
+[node name="RenderArtifactNameDefaultLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactNameDefaultRow" unique_id=1205557845]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Default artifact name:"
+
+[node name="RenderArtifactNameDefault" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactNameDefaultRow" unique_id=457805841]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Prefix used for auto names, e.g. Render 0001, Render 0002."
+text = "Render"
+placeholder_text = "Render"
+
+[node name="SaveRenderArtifactNameDefault" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactNameDefaultRow" unique_id=1210618920]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save default"
+
+[node name="RenderArtifactRenameRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=2087757175]
+layout_mode = 2
+
+[node name="RenderArtifactNameEditLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactRenameRow" unique_id=245538752]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Selected name:"
+
+[node name="RenderArtifactNameEdit" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactRenameRow" unique_id=777325633]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type a new name for selected artifact"
+
+[node name="RenameSelectedRenderArtifact" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactRenameRow" unique_id=746151359]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rename selected"
+
+[node name="ResetSelectedRenderArtifactName" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactRenameRow" unique_id=469826239]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Remove local custom name override for selected artifact and fall back to stored metadata/default name."
+text = "Reset name"
+
+[node name="RenderResults" type="ItemList" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=1674280623]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Double-click an item to open the image artifact."
+select_mode = 1
+
+[node name="RenderArtifactDetailsLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=309934767]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Selected artifact details:"
+
+[node name="RenderArtifactDetailsActionsRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=844312546]
+layout_mode = 2
+
+[node name="RenderDetailsLoadWorkflow" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactDetailsActionsRow" unique_id=1470958961]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Load linked workflow artifact into Workflow JSON."
+text = "Load linked workflow"
+
+[node name="RenderDetailsLoadRenderRequest" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactDetailsActionsRow" unique_id=2127482730]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Load workflow via linked render_request artifact."
+text = "Load linked render_request"
+
+[node name="RenderDetailsCopyLinks" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render/RenderArtifactDetailsActionsRow" unique_id=1301397364]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Copy artifact/request/workflow/prompt link ids to clipboard."
+text = "Copy all links"
+
+[node name="RenderArtifactDetails" type="RichTextLabel" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Render" unique_id=34400529]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+bbcode_enabled = true
+text = "Select one artifact to view metadata and cross-links."
+fit_content = true
+scroll_active = false
+
+[node name="Present" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs" unique_id=1391247355]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="PresentHeader" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present" unique_id=364313441]
+layout_mode = 2
+
+[node name="PresentTitle" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentHeader" unique_id=2097178908]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Present (SynDeck-lite)"
+
+[node name="PresentPrev" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentHeader" unique_id=896810794]
+icon = ExtResource("icon_left")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Prev"
+
+[node name="PresentNext" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentHeader" unique_id=1444902945]
+icon = ExtResource("icon_right")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Next"
+
+[node name="PresentFrameLabel" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present" unique_id=121977169]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Frame: (none)"
+
+[node name="PresentViewTabs" type="TabContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present" unique_id=843875109]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+
+[node name="Outline" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs" unique_id=1672667343]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="PresentPreview" type="RichTextLabel" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Outline" unique_id=542867462]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]No SynDoc loaded.[/i]"
+fit_content = true
+
+[node name="Edgeless" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs" unique_id=726316944]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="EdgelessHeaderRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless" unique_id=262806450]
+layout_mode = 2
+
+[node name="EdgelessTitle" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=1109735081]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Edgeless (clusters + nodes)"
+
+[node name="PresentPrevCluster" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=1367460377]
+icon = ExtResource("icon_left")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Step to the previous cluster region. Clusters are colour-coded groups of semantically related frames, derived from a linked SynAxes cluster result."
+disabled = true
+text = "<- Cluster"
+
+[node name="PresentNextCluster" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=2045284613]
+icon = ExtResource("icon_right")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Step to the next cluster region. Clusters are colour-coded groups of semantically related frames, derived from a linked SynAxes cluster result."
+disabled = true
+text = "Cluster ->"
+
+[node name="PresentMakeFrameFromCluster" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=320880602]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Create a new SynDoc frame summarising the currently selected cluster (appended to the frame list)."
+disabled = true
+text = "Make Frame"
+
+[node name="PresentResetEdgelessView" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=541775928]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset View"
+
+[node name="PresentShowLabels" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=1219790888]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Show labels"
+
+[node name="PresentCaptureCamera" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=93346746]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Capture cam"
+
+[node name="PresentDeckCapture" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=1666974893]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When enabled, Capture cam adds a step to presentation deck (not tied 1:1 to frames)."
+text = "Deck capture"
+
+[node name="PresentClearDeck" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=513889357]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Clear presentation deck steps stored in this SynDoc."
+text = "Clear deck"
+
+[node name="PresentApplyCamera" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless/EdgelessHeaderRow" unique_id=659840509]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Apply camera for the current context. If a frame card is selected: apply that frame's saved camera if present, otherwise apply the most recent deck step for that frame. If no selection: apply current deck step (when deck exists)."
+text = "Apply cam"
+
+[node name="PresentEdgelessPreview" type="Control" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless" unique_id=658784463]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(0, 340)
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+script = ExtResource("2_preview")
+
+[node name="PresentEdgelessSelection" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless" unique_id=1074584106]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Selection: (none)"
+
+[node name="PresentEdgelessLegend" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Present/PresentViewTabs/Edgeless" unique_id=1940896285]
+layout_mode = 2
+text = "Wheel: zoom * MMB/RMB drag: pan * LMB: select * R: reset"
+
+[node name="Settings" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs" unique_id=836152615]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="SettingsInfo" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings" unique_id=118049099]
+layout_mode = 2
+text = "Settings -- Host/Join (Hub-first) + optional auth."
+
+[node name="HostJoinPanel" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings" unique_id=710624630]
+layout_mode = 2
+
+[node name="HostTitle" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel" unique_id=1878984639]
+layout_mode = 2
+text = "Host (share Hub URL)"
+
+[node name="HostRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel" unique_id=2012455587]
+layout_mode = 2
+
+[node name="HostIp" type="OptionButton" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/HostRow" unique_id=1916195239]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "10.8.0.6"
+popup/item_0/id = 0
+popup/item_1/text = "100.115.34.72"
+popup/item_1/id = 1
+popup/item_2/text = "192.168.0.197"
+popup/item_2/id = 2
+popup/item_3/text = "192.168.137.1"
+popup/item_3/id = 3
+
+[node name="HostPort" type="SpinBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/HostRow" unique_id=684209355]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 65535.0
+value = 17777.0
+
+[node name="HostCopyUrl" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/HostRow" unique_id=1659868485]
+icon = ExtResource("i_copy")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Copy URL"
+
+[node name="JoinTitle" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel" unique_id=940382117]
+layout_mode = 2
+text = "Join (configure Hub URL)"
+
+[node name="JoinUrlRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel" unique_id=1208323246]
+layout_mode = 2
+
+[node name="JoinHubUrl" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/JoinUrlRow" unique_id=373481704]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "http://127.0.0.1:17777"
+placeholder_text = "http://<host-ip>:17777"
+
+[node name="JoinTest" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/JoinUrlRow" unique_id=211557495]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test"
+
+[node name="JoinSave" type="Button" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/JoinUrlRow" unique_id=2068455262]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+[node name="JoinAuthRow" type="HBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel" unique_id=852703581]
+layout_mode = 2
+
+[node name="JoinUseAuth" type="CheckBox" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/JoinAuthRow" unique_id=2012960120]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Use Hub auth (Bearer token)"
+
+[node name="JoinAuthToken" type="LineEdit" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/Settings/HostJoinPanel/JoinAuthRow" unique_id=1517522334]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "(token)"
+secret = true
+
+[node name="HowTo" type="VBoxContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs" unique_id=405659139]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="HowToTitle" type="Label" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/HowTo" unique_id=819334379]
+layout_mode = 2
+text = "How To -- SynPunkt"
+
+[node name="HowToScroll" type="ScrollContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/HowTo" unique_id=2140841617]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HowToMargin" type="MarginContainer" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/HowTo/HowToScroll" unique_id=2076635180]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HowToRichText" type="RichTextLabel" parent="ScrollContainer/MarginContainer/Root/Body/Right/ModeTabs/HowTo/HowToScroll/HowToMargin" unique_id=29548539]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]SynPunkt -- How To[/b]
+
+SynPunkt is a workspace tool for turning [b]Closures[/b] (read-only run snapshots) into editable [b]SynDocs[/b] (documents you can refine, present, and export).
+
+[b]1) Connect to the Hub[/b]
+- The Hub URL at the top should point to your running Synesyn Hub (default: [url]http://127.0.0.1:17777[/url]).
+- [b]If you are hosting[/b] a shared session: go to the [b]Settings[/b] tab -> Host section, pick the network IP others can reach, copy the URL, and share it with participants.
+- [b]If you are joining[/b] a session: go to [b]Settings[/b] -> Join, paste the URL given to you by the host, and press [b]Test[/b] to verify, then [b]Save[/b].
+- To use Hub authentication: enable \"Use Hub auth\" in the Join section and paste your Bearer token.
+
+[b]2) Closures -> SynDocs[/b]
+- Go to the [b]Closures[/b] tab (left). A [b]Closure[/b] is a read-only snapshot of a completed ScenSyn session -- it captures everything said and synthesised in that run.
+- Select a Closure and press [b]Load[/b] to view it.
+- Press [b]Generate[/b] to create a new editable SynDoc draft from that Closure.
+
+[b]3) Editing a SynDoc[/b]
+- Go to the [b]SynDocs[/b] tab (left) and press [b]Load[/b] on a selected SynDoc.
+- In [b]Design -> SynDoc[/b]:
+  - Edit the title and blocks inside frames
+  - Press [b]Validate[/b] to check structure -- the status bar turns green on pass, red on error
+  - Press [b]Save SynDoc to Hub[/b] to persist -- the status bar confirms the saved artifact id
+
+[b]4) Edgeless Layout (frames as cards)[/b]
+- [b]What is edgeless?[/b] An \"edgeless\" layout is a spatial, node-graph-style overview of your document's frames -- each frame becomes a draggable card. There are no connecting edges; spatial proximity and cluster colouring carry the meaning.
+- Press [b]Build Edgeless Layout[/b] to create the card map from the current SynDoc.
+- Use [b]Fit to Layout[/b] to reveal everything if you get lost.
+- Use [b]Reset View[/b] to return to the initial camera captured when the doc was loaded.
+- Use [b]Avoid overlap[/b] to auto-separate cards on drop.
+- [b]Cards[/b] view = readable text cards per frame; [b]Dots[/b] view = dense overview for large documents.
+
+[b]5) Clusters[/b]
+- [b]What are clusters?[/b] When a SynAxes clustering result is linked via the [b]Cluster result[/b] advanced ref, clusters appear as colour-coded regions overlaid on the edgeless map. Each cluster groups semantically related frames. The [b]Cluster <- ->[/b] buttons in the Present tab let you step through clusters one by one during a live presentation.
+- Without a cluster result ref, the edgeless view still shows frames as cards -- clusters are just not highlighted.
+
+[b]6) Advanced refs (optional)[/b]
+Under [b]Advanced >>[/b] in the Design tab you'll find optional reference fields:
+- [b]Prompt Chain[/b] -- links to a prompt chain asset (for provenance / toolchain traceability).
+- [b]Projection[/b] -- links to a SynAxes projection artifact; if present, frame positions are derived from semantic coordinates instead of an auto-grid.
+- [b]Cluster result[/b] -- links to a SynAxes cluster_result artifact; if present, cluster overlays appear in the edgeless view.
+These are not required for basic use. Leave them blank unless you have upstream SynAxes artifacts to reference.
+
+[b]7) Render tab[/b]
+- Connect to a local [b]ComfyUI[/b] instance (default [url]http://127.0.0.1:8188[/url]) and submit image generation jobs.
+- Paste or load a ComfyUI API-format workflow JSON, optionally add patch overrides, and press [b]Submit[/b].
+- Results appear in the Render results list below. Double-click an image to open it; use [b]Insert to frame[/b] to embed it into the current SynDoc frame.
+- Use [b]Route: hub/comfyui[/b] to submit via the Hub (for shared render queues); [b]direct/comfyui[/b] to go straight from this client.
+
+[b]Troubleshooting[/b]
+- If lists are empty: confirm Hub is running and the URL is correct (Settings -> Join).
+- If \"Hub query failed\": check Hub URL, firewall, and that the Hub process is running, then retry.
+- Status bar colours: [color=#44d26f]green = success[/color], [color=#ed7a4b]amber = warning[/color], [color=#f97070]red = error[/color].
+"

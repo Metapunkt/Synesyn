@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf3c8x7w8k2d4"]
+
+[ext_resource type="Script" uid="uid://c1tqewcvgjxf2" path="res://addons/test_agent_alexander.gd" id="1_7x8y2"]
+
+[node name="AgentAlexanderTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7x8y2")

@@ -1,0 +1,322 @@
+[gd_scene format=3 uid="uid://c7yq7p4l2m2t0"]
+
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="1_jkx3p"]
+[ext_resource type="Script" uid="uid://mi75mjvbfrch" path="res://ScenSyn/scripts/synesyn_tools.gd" id="1_tools"]
+[ext_resource type="Texture2D" uid="uid://cehd8ulwbrshq" path="res://Synesyn_icons/Synesyn_logo.svg" id="2_logo"]
+[ext_resource type="Texture2D" uid="uid://synesyn_logo_wht" path="res://Synesyn_icons/Synesyn_logo_white.svg" id="2_logo_white"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="7_arrowleft"]
+[ext_resource type="PackedScene" uid="uid://b61ogmv77aye8" path="res://ScenSyn/scenes/services_panel.tscn" id="2_services"]
+[ext_resource type="PackedScene" uid="uid://bqsdiy7k6c4dl" path="res://addons/syntree/scenes/syntree_panel.tscn" id="3_syntree"]
+[ext_resource type="PackedScene" uid="uid://bnc44j4p830ca" path="res://addons/synaxes/scenes/synaxes_main.tscn" id="4_synaxes"]
+[ext_resource type="PackedScene" uid="uid://b6x8j0q2y4n5w" path="res://addons/metapunkt/scenes/metapunkt_main.tscn" id="5_metapunkt"]
+[ext_resource type="PackedScene" uid="uid://dew2kikqlale5" path="res://addons/synpunkt/scenes/synpunkt_dock.tscn" id="6_synpunkt"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="icon_tools_back"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tools_shell"]
+bg_color = Color(0.039, 0.055, 0.078, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tools_card"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1, 0.14, 0.2, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.227, 0.3, 0.361, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_button"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+bg_color = Color(0.157, 0.141, 0.290, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.227, 0.3, 0.361, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_button_pressed"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+bg_color = Color(0.486, 0.227, 0.929, 0.4)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.486, 0.227, 0.929, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_button_hover"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+bg_color = Color(0.196, 0.176, 0.329, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.486, 0.227, 0.929, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 3
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_theme_toggle"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+bg_color = Color(0.157, 0.141, 0.290, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.227, 0.3, 0.361, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_theme_toggle_hover"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+bg_color = Color(0.196, 0.176, 0.329, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.486, 0.227, 0.929, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SynesynTools" type="Control" unique_id=1333991464 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_jkx3p")
+script = ExtResource("1_tools")
+
+metadata/theme_surface = "base"
+[node name="Background" type="Panel" parent="." unique_id=1966957786]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tools_shell")
+
+[node name="OuterMargin" type="MarginContainer" parent="." unique_id=279867172]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="OuterMargin" unique_id=1318574652]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="HeaderCard" type="PanelContainer" parent="OuterMargin/VBox" unique_id=119290485]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_tools_card")
+
+[node name="Header" type="HBoxContainer" parent="OuterMargin/VBox/HeaderCard" unique_id=2028549884]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_constants/separation = 3
+
+[node name="HeaderLogo" type="TextureRect" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=125327513]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 39.315)
+layout_mode = 2
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1460864898]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1801228800]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"LabelHeader"
+text = "Tools"
+vertical_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=985961276]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1173021018]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"LabelMeta"
+text = "Advanced workspace. Start a session from Play."
+vertical_alignment = 2
+
+[node name="VSeparator3" type="VSeparator" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=902783803]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleRow" type="HBoxContainer" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=2140128621]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="TitleBlock" type="VBoxContainer" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1959408303]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="HeaderSpacer" type="Control" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=457553844]
+custom_minimum_size = Vector2(58, 0)
+layout_mode = 2
+
+[node name="BackBtnPanel" type="Panel" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1833525332]
+custom_minimum_size = Vector2(35, 25)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="BackButton" type="Button" parent="OuterMargin/VBox/HeaderCard/Header/BackBtnPanel" unique_id=1317888567]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 3)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.769, 0.710, 0.992, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.961, 0.953, 1, 1)
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_button_hover")
+text = "Back"
+icon = ExtResource("icon_tools_back")
+icon_alignment = 0
+
+[node name="ThemeToggleButton" type="Button" parent="OuterMargin/VBox/HeaderCard/Header" unique_id=1333991465]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.769, 0.710, 0.992, 1)
+theme_override_colors/font_hover_color = Color(0.961, 0.953, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_theme_toggle")
+theme_override_styles/hover = SubResource("StyleBoxFlat_theme_toggle_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_button_pressed")
+tooltip_text = "Switch light / dark mode"
+text = "☀"
+
+[node name="TabsCard" type="PanelContainer" parent="OuterMargin/VBox" unique_id=1135292384]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_tools_card")
+
+[node name="Tabs" type="TabContainer" parent="OuterMargin/VBox/TabsCard" unique_id=1263858037]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"MainTabContainer"
+current_tab = 0
+
+[node name="Services" type="Control" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=1114320561]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ServicesPanel" parent="OuterMargin/VBox/TabsCard/Tabs/Services" unique_id=1298461127 instance=ExtResource("2_services")]
+layout_mode = 1
+
+[node name="SynTree" type="Control" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=1766241020]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="SynTreePanel" parent="OuterMargin/VBox/TabsCard/Tabs/SynTree" unique_id=668500533 instance=ExtResource("3_syntree")]
+layout_mode = 1
+
+[node name="SynAxes" type="Control" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=1901408842]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="SynAxesPanel" parent="OuterMargin/VBox/TabsCard/Tabs/SynAxes" unique_id=584153664 instance=ExtResource("4_synaxes")]
+layout_mode = 1
+
+[node name="Metapunkt" type="Control" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=930824961]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="MetapunktPanel" parent="OuterMargin/VBox/TabsCard/Tabs/Metapunkt" unique_id=452507064 instance=ExtResource("5_metapunkt")]
+layout_mode = 1
+
+[node name="StoryStage" type="VBoxContainer" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=226245335]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="Info" type="Label" parent="OuterMargin/VBox/TabsCard/Tabs/StoryStage" unique_id=403742713]
+layout_mode = 2
+text = "Coming soon. Story Stage runs inside Play for scenarios that use it. This tab is a placeholder for a later Tools entry."
+
+[node name="OpenStoryStageButton" type="Button" parent="OuterMargin/VBox/TabsCard/Tabs/StoryStage" unique_id=158563863]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Open Story Stage (Full Screen)"
+
+[node name="SynPunkt" type="VBoxContainer" parent="OuterMargin/VBox/TabsCard/Tabs" unique_id=1468144442]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 5
+
+[node name="SynPunktPanel" parent="OuterMargin/VBox/TabsCard/Tabs/SynPunkt" unique_id=474283528 instance=ExtResource("6_synpunkt")]
+layout_mode = 2

@@ -1,0 +1,38 @@
+{
+  "id": "synaxes_headless_discover",
+  "title": "SynAxes headless import→embed→discover (REQ-NDP-024)",
+  "notes": "Not a ScenSyn Tools harness walk — Pattern Space discovery without the dock is verified by a Godot headless SceneTree script. Run from synesyn_client with the Godot 4 executable (Cursor setting godotTools.editorPath.godot4).",
+  "acceptance": [
+    "addons/synaxes/tests/test_headless_discover.gd exits 0",
+    "Dream Inbox candidates non-empty on demo text fixture",
+    "No recorded Tier 3 consent → themes_source local / tier2_tfidf"
+  ],
+  "command": {
+    "cwd": "synesyn/synesyn_client",
+    "argv": [
+      "<godot4>",
+      "--headless",
+      "--path",
+      ".",
+      "--script",
+      "res://addons/synaxes/tests/test_headless_discover.gd"
+    ]
+  },
+  "metapunkt_ops": {
+    "discover_patterns": {
+      "operation": "discover_patterns",
+      "source_data": "<array of {id, content, vector?}>",
+      "method": 0,
+      "dim_method": 0,
+      "num_clusters": 5,
+      "use_hub_embeddings": false
+    }
+  },
+  "scene_path": null,
+  "state": {},
+  "actions": [],
+  "post_actions": [],
+  "wait_frames_after_post": 0,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 0
+}

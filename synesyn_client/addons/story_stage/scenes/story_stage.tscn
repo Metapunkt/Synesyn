@@ -1,0 +1,394 @@
+[gd_scene format=3 uid="uid://df0gi5a108i6w"]
+
+[ext_resource type="Script" uid="uid://mhtlx61sxufe" path="res://addons/story_stage/scripts/story_stage.gd" id="1_stage"]
+[ext_resource type="Script" uid="uid://cdjgoi3ej24hw" path="res://addons/story_stage/scripts/story_stage_character_sprite.gd" id="2_sprite"]
+[ext_resource type="Script" uid="uid://ctn06qtb58i7p" path="res://addons/story_stage/scripts/story_stage_ui.gd" id="3_ui"]
+
+[node name="StoryStage" type="Node2D" unique_id=520929690]
+script = ExtResource("1_stage")
+
+[node name="StageViewport" type="SubViewport" parent="." unique_id=1620241145]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1948674595]
+
+[node name="Wash" type="ColorRect" parent="CanvasLayer" unique_id=60327280]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.07, 0.06, 0.08, 1)
+
+[node name="Background" type="TextureRect" parent="CanvasLayer" unique_id=2093416176]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BackgroundIncoming" type="TextureRect" parent="CanvasLayer/Background" unique_id=1153551400]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=735441646]
+layer = 2
+
+[node name="Control" type="Control" parent="CanvasLayer2" unique_id=712575844]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CharacterSprite" type="Node2D" parent="CanvasLayer2/Control" unique_id=1163876946]
+unique_name_in_owner = true
+scale = Vector2(2, 2)
+script = ExtResource("2_sprite")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer2/Control/CharacterSprite" unique_id=1568482313]
+unique_name_in_owner = true
+
+[node name="DialogUI" type="Control" parent="CanvasLayer2" unique_id=1735725626]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogBox" type="PanelContainer" parent="CanvasLayer2/DialogUI" unique_id=1703767369]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -110.0
+offset_right = -24.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DialogLine" type="RichTextLabel" parent="CanvasLayer2/DialogUI/DialogBox" unique_id=1860569162]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+scroll_following = true
+
+[node name="SpeakerBox" type="PanelContainer" parent="CanvasLayer2/DialogUI" unique_id=1719066969]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -148.0
+offset_right = 240.0
+offset_bottom = -113.0
+grow_vertical = 0
+
+[node name="SpeakerName" type="Label" parent="CanvasLayer2/DialogUI/SpeakerBox" unique_id=757847793]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ChoiceList" type="VBoxContainer" parent="CanvasLayer2/DialogUI" unique_id=547017123]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = 88.0
+offset_right = 210.0
+offset_bottom = 168.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextBlipSound" type="AudioStreamPlayer" parent="CanvasLayer2/DialogUI" unique_id=1953869763]
+unique_name_in_owner = true
+
+[node name="TextBlipTimer" type="Timer" parent="CanvasLayer2/DialogUI" unique_id=536456188]
+unique_name_in_owner = true
+wait_time = 0.09
+
+[node name="SentencePauseTimer" type="Timer" parent="CanvasLayer2/DialogUI" unique_id=1928001982]
+unique_name_in_owner = true
+wait_time = 0.35
+one_shot = true
+
+[node name="VoiceInputHBox" type="HBoxContainer" parent="CanvasLayer2/DialogUI" unique_id=1182387343]
+z_index = 5
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = -162.0
+offset_right = -32.0
+offset_bottom = -114.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 0
+theme_override_constants/separation = 4
+alignment = 2
+
+[node name="StageRecordButton" type="Button" parent="CanvasLayer2/DialogUI/VoiceInputHBox" unique_id=373776576]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Click to record your dialogue"
+text = "Record"
+
+[node name="StageAutoSendVoice" type="CheckButton" parent="CanvasLayer2/DialogUI/VoiceInputHBox" unique_id=1398214252]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Send a transcript without editing it first."
+text = "Auto send"
+
+[node name="StageAutoPlayerInput" type="CheckButton" parent="CanvasLayer2/DialogUI/VoiceInputHBox" unique_id=1465474777]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Let the installation drive the next line."
+text = "Auto input"
+
+[node name="InputContainer" type="Control" parent="CanvasLayer2" unique_id=1045458270]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 126.0
+offset_top = -271.0
+offset_right = -126.0
+offset_bottom = -207.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InputBackground" type="Panel" parent="CanvasLayer2/InputContainer" unique_id=992486501]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InputHBox" type="HBoxContainer" parent="CanvasLayer2/InputContainer" unique_id=1395143748]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -9.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="InputField" type="LineEdit" parent="CanvasLayer2/InputContainer/InputHBox" unique_id=1163547877]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type your response..."
+
+[node name="SendButton" type="Button" parent="CanvasLayer2/InputContainer/InputHBox" unique_id=582867235]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Send"
+
+[node name="CanvasLayer3" type="CanvasLayer" parent="." unique_id=341516378]
+layer = 10
+
+[node name="UIControls" type="Control" parent="CanvasLayer3" unique_id=533264107]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_ui")
+
+[node name="HamburgerMenuBtn" type="Button" parent="CanvasLayer3/UIControls" unique_id=126179515]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -58.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 58.0
+grow_horizontal = 0
+text = "☰"
+
+[node name="LoadingIndicator" type="Label" parent="CanvasLayer3/UIControls" unique_id=1378675332]
+visible = false
+layout_mode = 0
+offset_left = 80.0
+offset_top = 24.0
+offset_right = 220.0
+offset_bottom = 56.0
+text = "…"
+
+[node name="SettingsPanel" type="Panel" parent="CanvasLayer3/UIControls" unique_id=1340313042]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 68.0
+offset_right = -12.0
+offset_bottom = 540.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer3/UIControls/SettingsPanel" unique_id=271052470]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer" unique_id=1137513298]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SettingsVBox" type="VBoxContainer" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer" unique_id=1248133027]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SwitchToChatModeBtn" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1178674198]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Story log"
+
+[node name="ShowInputToggle" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=820123915]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Input Field"
+
+[node name="TtsToggleStoryStage" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=979892077]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stage owns voice"
+
+[node name="SaveSttRecordingsToggle" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=671536963]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save recordings"
+
+[node name="DualWindowToggle" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=928325249]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dual window"
+
+[node name="AvatarHealthToggle" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1474561760]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Voice health"
+
+[node name="AvatarHealthLabel" type="RichTextLabel" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1766814014]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+fit_content = true
+
+[node name="SkipWelcomeToggle" type="CheckButton" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=763979393]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skip welcome"
+
+[node name="VolumeRow" type="HBoxContainer" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1904412201]
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox/VolumeRow" unique_id=1904412202]
+layout_mode = 2
+text = "Volume"
+
+[node name="OutputVolumeSlider" type="HSlider" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox/VolumeRow" unique_id=1904412203]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="PauseTtsButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=197225299]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pause"
+
+[node name="ResumeTtsButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=425836581]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resume"
+
+[node name="SkipTtsButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1333255782]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skip"
+
+[node name="LoadStoryLogButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=182031544]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load story log"
+
+[node name="NewStoryLogButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=542781466]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New story log"
+
+[node name="ServicesButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1313386884]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Services"
+
+[node name="BackButton" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" unique_id=1040259499]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"

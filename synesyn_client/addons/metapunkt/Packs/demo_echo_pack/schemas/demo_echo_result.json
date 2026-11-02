@@ -1,0 +1,20 @@
+{
+	"schema_version": 1,
+	"type": "object",
+	"properties": {
+		"ok": {
+			"type": "boolean"
+		},
+		"result": {
+			"type": "object",
+			"properties": {
+				"message": { "type": "string" },
+				"repeat": { "type": "integer" }
+			}
+		},
+		"pack_id": { "type": "string" },
+		"pack_version": { "type": "string" },
+		"capability_id": { "type": "string" }
+	},
+	"required": ["ok"]
+}

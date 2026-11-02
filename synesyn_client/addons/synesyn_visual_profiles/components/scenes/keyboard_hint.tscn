@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/components/scripts/semantic_panel.gd" id="1_panel"]
+
+[node name="KeyboardHint" type="PanelContainer"]
+script = ExtResource("1_panel")
+semantic_role = "raised"
+metadata/synesyn_semantic_role = "keyboard_hint"
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="Label" type="Label" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ctrl + Enter"

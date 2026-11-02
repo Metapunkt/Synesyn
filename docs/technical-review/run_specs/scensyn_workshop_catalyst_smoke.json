@@ -1,0 +1,89 @@
+{
+  "_note": "Workshop Catalyst does not post its assistant response to the story log: ADR 0009 (2026-08-03) caches the Session Record narrative for /synthesis and shows only a one-line pulse. So the log holds the Narrator welcome plus the facilitator's own turns, and proof that the AI ran comes from the workshop_catalyst snapshot block instead. The turn waits 120s, matching the multiturn spec: the snapshot assertions read state that the specialist pass writes, so a wait shorter than the model's latency makes them report zeros that look like a product failure rather than a timeout. Raise both specs together, never one alone. Raised from 60s on 2026-09-06 after two consecutive runs failed with every snapshot field at zero and no script error in the log — the specialist request was still in flight when logs were dumped. A 150s probe passed immediately (node_count=5, narrative 1932 chars), confirming latency rather than regression. 60s sat close enough to real latency that a false failure was indistinguishable, on inspection, from a broken specialist pass. The orientation assertion is the ADR 0020 regression guarantee: the Closure Audit is opt-in, so a session that never opens it must record no quadrant tags and behave exactly as it did before that feature existed. On 2026-09-18 the story-log check changed from exact_story_log=2 to min_story_log=2 plus an exact Facilitator-occurrence count and the no-broadcast sender check. This is not a relaxation: the Narrator posts hub-lifecycle notices such as 'Hub back online' whenever the client starts the hub for the session, which it does on any cold run, so an exact total counted the environment rather than the product and failed on a healthy session. The two replacement assertions pin the facts that matter more tightly than the total did - exactly one facilitator turn, and zero non-system senders, which is the ADR 0009 guarantee the smoke spec previously did not check at all. Do not restore an exact total unless the hub is guaranteed warm before the run.",
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "karlsruhe_library_future_design",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "We are beginning the Karlsruhe Library of the Future design workshop. Let's start by agreeing on what a library of the future means for this session. What is the working definition we should use?",
+        "seconds": 120
+      }
+    }
+  ],
+  "wait_frames_after_post": 60,
+  "wait_time_sec_after_post": 0,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "name": "welcome-plus-facilitator-turn-at-minimum",
+      "type": "min_story_log",
+      "value": 2
+    },
+    {
+      "name": "exactly-one-facilitator-turn",
+      "type": "exact_sender_occurrences",
+      "sender": "Facilitator",
+      "value": 1
+    },
+    {
+      "name": "no-broadcast-assistant-sender",
+      "type": "exact_unique_senders",
+      "value": 0,
+      "exclude_system": false,
+      "exclude_senders": [
+        "Facilitator",
+        "Facilitator Note",
+        "Narrator",
+        "Unknown Peer"
+      ]
+    },
+    {
+      "type": "scenario_contains",
+      "value": "karlsruhe"
+    },
+    {
+      "name": "workshop-session-type-active",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.session_type",
+      "equals": "workshop_catalyst"
+    },
+    {
+      "name": "specialist-analysis-produced-prose",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.session_record_text_length",
+      "min": 200
+    },
+    {
+      "name": "pulse-reaches-the-status-bar",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.session_record_pulse",
+      "contains": "Session Record"
+    },
+    {
+      "name": "thinking-map-received-candidates",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.node_count",
+      "min": 1
+    },
+    {
+      "name": "unaudited-session-records-no-orientation",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.oriented_count",
+      "equals": 0
+    },
+    {
+      "type": "no_errors"
+    }
+  ]
+}

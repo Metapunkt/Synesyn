@@ -1,0 +1,17 @@
+{
+  "scene_path": "res://addons/synaxes/scenes/synaxes_main.tscn",
+  "state": {},
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "set_node_property",
+      "node_path": "MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer",
+      "property": "scroll_vertical",
+      "value": 9999
+    }
+  ],
+  "wait_frames_after_post": 20,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 120000
+}
+

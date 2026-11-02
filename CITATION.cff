@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+title: Synesyn
+message: >-
+  If you use Synesyn in academic or artistic research, please cite both the
+  software and the research project it comes out of.
+type: software
+abstract: >-
+  A local-first, artifact-centric platform for groups to reason with AI about
+  possible futures, drawing them out of material they already hold and building up
+  a traceable record from one session to the next. Everything a session produces is
+  stored as a versioned artifact with provenance, so any result can be traced back
+  to the inputs, models and human decisions that produced it.
+authors:
+  - given-names: Ayodele
+    family-names: Arigbabu
+    affiliation: Trondheim Academy of Fine Art, NTNU
+repository-code: "https://github.com/Metapunkt/Synesyn"
+url: "https://www.metapunkt.org/"
+license: MIT
+# 0.1.0 is the first public release. Add date-released when it is tagged.
+version: 0.1.0
+keywords:
+  - speculative design
+  - strategic foresight
+  - artistic research
+  - generative theatre
+  - human-AI collaboration
+  - provenance
+  - Godot
+references:
+  - type: generic
+    title: "Forward Remembrance: Exploring Latent Utopias"
+    abstract: >-
+      The artistic PhD research project this software was built to make operable.
+    authors:
+      - given-names: Ayodele
+        family-names: Arigbabu
+    institution:
+      name: Trondheim Academy of Fine Art, Norwegian University of Science and Technology (NTNU)

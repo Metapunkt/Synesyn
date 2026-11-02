@@ -1,0 +1,18 @@
+{
+	"nodes": {
+		"Ziluvian Species": {
+			"content": "## Ziluvian Species Classification\n\nIn the Ziluvian realm, we encounter three distinct classes of creatures, each with its own unique adaptations and characteristics.\n\n### Aerovidae: Airborne Marvels\n\n- **Ferovex**: Known for its vibrant colors, this species likely uses its striking appearance for mating displays or camouflage among colorful cloud formations.\n- **Plodorn**: Another visually stunning Aerovidae, possibly evolving its bright hues as a warning signal to predators.\n- **Kradorn**: A master of stealth, this species might possess adaptive camouflage to blend seamlessly with the ever-changing sky.\n\n### Aqualis: Aquatic Wonders\n\n- **Plophyr**: This vibrantly colored aquatic creature could use its appearance for communication or attracting prey in the depths.\n- **Minophyr**: Known for its unusual diet, this species might have evolved to consume previously unexploited food sources in its watery habitat.\n- **Teravex**: Highly resilient to extreme conditions, possibly adapted to survive in hydrothermal vents or acidic waters.\n\n### Terranox: Terrestrial Marvels\n\n- **Xyrasorn**: Exceptionally resilient to extreme conditions, this species might thrive in harsh desert or tundra environments.\n- **Zylosorn**: A master of stealth, potentially evolved to evade predators in dense forests or rocky terrains.\n- **Voraphyr**: With its unusual diet, this species could have adapted to consume toxic plants or minerals that other creatures can't process.\n\nThese fictional species represent a fascinating glimpse into the potential diversity of life forms that could evolve under different environmental pressures and conditions.\n",
+			"is_metaprompt": true,
+			"is_root": true,
+			"metadata": {
+				"file_type": "txt"
+			},
+			"name": "Ziluvian Species",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/Ziluvian_Species.txt",
+			"type": "text"
+		}
+	},
+	"root_nodes": [
+		"Ziluvian Species"
+	]
+}

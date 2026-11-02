@@ -1,0 +1,31 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/sustainability/the_crisis_goodnight_trondheim/astrid_olavson/idle/0.png" id="1_ri0bd"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/sustainability/the_crisis_goodnight_trondheim/astrid_olavson/idle/1.png" id="2_v0dqd"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/sustainability/the_crisis_goodnight_trondheim/astrid_olavson/idle/2.png" id="3_bnrf3"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/sustainability/the_crisis_goodnight_trondheim/astrid_olavson/idle/3.png" id="4_23t7v"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ri0bd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_v0dqd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_bnrf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_23t7v")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

@@ -1,0 +1,41 @@
+---
+description: Core architecture invariants for Synesyn — the Godot client / Python hub boundary, system-of-record, and continuity contract. Keeps agents coherent across the client-server seam.
+globs: **
+alwaysApply: false
+---
+
+# Synesyn — Architecture Invariants
+
+Keep these top of mind whenever working anywhere in this repository. The biggest source of drift and bugs is the seam between the Godot client and the Python hub — protect it.
+
+Read `docs/SYSTEM_MAP.md` for the repository topology, documentation
+ownership, source-of-truth hierarchy, and verification workflow.
+
+## The two halves
+
+- **Godot client** — `synesyn_client/` (Godot 4). Hosts ScenSyn (Story Log / Story Stage) and the addons (`synpunkt`, `syntree`, `metapunkt`, `synaxes`, `syntree_voice`, `limboai`). Talks to the hub over HTTP/WS via the hub substrate client.
+- **Python hub** — `services/synesyn_hub/` (FastAPI, default `127.0.0.1:17777`). Owns memory, substrate, closure, voice, render.
+
+The client is a **presentation + interaction** layer. The hub is the **source of truth**. Never duplicate authoritative state in the client that the hub already owns.
+
+## System-of-record
+
+- The **substrate** (SQLite + file artifacts under the workspace vault) is the canonical store. Persisted state flows through `substrate/`, not through ad-hoc files.
+- `stfx_store` is the canonical memory; `stfx_memory` is deterministic/seed-based (no vectors). Do not introduce a competing store.
+
+## The continuity contract is the coherence spine
+
+- ScenSyn continuity between client and hub is defined by the continuity contract (`/stfx-memory/context/continuity`; spec in `docs/implementation_docs/ScenSyn_Scenario_Continuity_Contract.md`).
+- Changes to payload shapes crossing the seam (adapters, continuity, artifact schemas) are **contract changes**: update both sides and the spec, and run the ScenSyn harness. Never change one side silently.
+
+## Scenario structure (ScenSyn)
+
+- Scenarios are plain `.txt` under `ScenSyn/session_types/`, grouped by
+  Session Type and Collection and parsed by
+  `ScenSyn/scripts/core/scenario_loader.gd`.
+- Collection-specific metaprompt managers build runtime prompts. Keep product
+  logic inside its Session Type module, not in shared monoliths.
+
+## When in doubt
+
+Consult `docs/developer-guide/architecture.md` and `code-map.md` before introducing a new cross-cutting component. Prefer extending an existing boundary over adding a new one; if a real design decision is made, record it (see the `record-decision` skill).

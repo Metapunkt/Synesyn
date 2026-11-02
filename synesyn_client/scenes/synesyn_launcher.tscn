@@ -1,0 +1,381 @@
+[gd_scene format=3 uid="uid://c0m0t7m4s2n8y"]
+
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="1_b80wb"]
+[ext_resource type="Script" uid="uid://cynox8ci7qp4p" path="res://scripts/synesyn_launcher.gd" id="1_launch"]
+[ext_resource type="Texture2D" uid="uid://50dk5h0djktm" path="res://Synesyn_icons/synesyn_icon.png" id="3_b80wb"]
+[ext_resource type="Texture2D" uid="uid://s5hbxliaa0w8" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="4_74n3i"]
+[ext_resource type="Texture2D" uid="uid://bo6oa5xcetyar" path="res://Synesyn_icons/synesyn-button-icons/icon_grid_apps.svg" id="5_ready"]
+[ext_resource type="Texture2D" uid="uid://skmp18vmoskp" path="res://Synesyn_icons/synesyn-button-icons/icon_code_bracket.svg" id="6_studio"]
+[ext_resource type="Texture2D" uid="uid://bf0pwskm0bof" path="res://Synesyn_icons/synesyn-button-icons/icon_stop_square.svg" id="7_stop"]
+[ext_resource type="Texture2D" uid="uid://bsa643t3jm2bq" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="8_restart"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-backgrounds/bg_card_glass_tile_dark.png" id="9_qdfjp"]
+[ext_resource type="Texture2D" uid="uid://yevxmkuoakc" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="9_settings"]
+[ext_resource type="Texture2D" uid="uid://bca12a7eib2ww" path="res://Synesyn_icons/synesyn-button-icons/icon_question_circle.svg" id="10_help"]
+[ext_resource type="Texture2D" uid="uid://bhdwhgjhtngjl" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="11_close"]
+
+[node name="SynesynLauncher" type="Control" unique_id=1053904042 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_b80wb")
+script = ExtResource("1_launch")
+metadata/theme_surface = "utility"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=643294073]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039, 0.055, 0.078, 1)
+
+[node name="ShellCenter" type="CenterContainer" parent="." unique_id=298696939]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ShellMargin" type="MarginContainer" parent="ShellCenter" unique_id=1931616617]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 32
+
+[node name="ShellRow" type="HBoxContainer" parent="ShellCenter/ShellMargin" unique_id=285220874]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="BrandCard" type="PanelContainer" parent="ShellCenter/ShellMargin/ShellRow" unique_id=1823964686]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="BrandBg" type="TextureRect" parent="ShellCenter/ShellMargin/ShellRow/BrandCard" unique_id=1823964701]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.18)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BrandMargin" type="MarginContainer" parent="ShellCenter/ShellMargin/ShellRow/BrandCard" unique_id=343765581]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BrandVBox" type="VBoxContainer" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin" unique_id=1467731483]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=1923500218]
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_b80wb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=1931394022]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+theme_override_font_sizes/font_size = 42
+text = "Synesyn"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=201339996]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 17
+text = "A Latent Reality Framework"
+horizontal_alignment = 1
+
+[node name="BrandSupportText" type="Label" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=1358106434]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_font_sizes/font_size = 15
+text = "Launch ScenSyn, manage the local Hub, and access support from this landing screen."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CopyrightLabel" type="Label" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=1358106435]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_font_sizes/font_size = 11
+text = "v0.0.3  © 2026 Ayodele Arigbabu | metapunkt.org | NTNU"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=1774864724]
+layout_mode = 2
+theme_override_constants/separation = 65
+
+[node name="ThemeToggleButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/BrandCard/BrandMargin/BrandVBox" unique_id=-574782445]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"SynesynQuietAction"
+text = "Switch to Light Mode"
+icon = ExtResource("8_restart")
+
+[node name="RightColumn" type="VBoxContainer" parent="ShellCenter/ShellMargin/ShellRow" unique_id=1148673699]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="LaunchCard" type="PanelContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn" unique_id=773090359]
+layout_mode = 2
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="LaunchBg" type="TextureRect" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard" unique_id=773090371]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.15)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="LaunchMargin" type="MarginContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard" unique_id=349452207]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="LaunchVBox" type="VBoxContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard/LaunchMargin" unique_id=289470259]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="OpenScenSynButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard/LaunchMargin/LaunchVBox" unique_id=2063214113]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+theme_override_font_sizes/font_size = 18
+text = "Open ScenSyn"
+icon = ExtResource("4_74n3i")
+
+[node name="OpenReadyMadeButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard/LaunchMargin/LaunchVBox" unique_id=25781346]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+theme_override_font_sizes/font_size = 18
+text = "Open ReadyMade"
+icon = ExtResource("5_ready")
+
+[node name="OpenStoryLogPlayerButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard/LaunchMargin/LaunchVBox" unique_id=1416873190]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+theme_override_font_sizes/font_size = 18
+text = "Play a Story Log"
+tooltip_text = "Replay a saved story log on the Story Stage, with no model or hub behind it."
+icon = ExtResource("4_74n3i")
+
+[node name="OpenToolsButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/LaunchCard/LaunchMargin/LaunchVBox" unique_id=1416873168]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+theme_override_font_sizes/font_size = 18
+text = "Open Synesyn Tools"
+tooltip_text = "Open the shared Tools shell — Services, SynTree, SynAxes, Metapunkt, Story Stage, and SynPunkt."
+icon = ExtResource("6_studio")
+
+[node name="HubCard" type="PanelContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn" unique_id=904716077]
+layout_mode = 2
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="HubBg" type="TextureRect" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard" unique_id=904716089]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HubMargin" type="MarginContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard" unique_id=1449908556]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="HubVBox" type="VBoxContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin" unique_id=525788657]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HubSectionTitle" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox" unique_id=1421971442]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 20
+text = "Local Hub"
+
+[node name="HubSectionDescription" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox" unique_id=837002722]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_font_sizes/font_size = 14
+text = "Check local service health, launch the hub, or open the runtime configuration."
+autowrap_mode = 3
+
+[node name="HubStatusLabel" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox" unique_id=449719423]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 17
+text = "Hub: ?"
+autowrap_mode = 3
+
+[node name="HubUrlLabel" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox" unique_id=949361738]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_font_sizes/font_size = 14
+text = "URL: ?"
+autowrap_mode = 3
+
+[node name="HubButtons" type="GridContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox" unique_id=652010823]
+layout_mode = 2
+columns = 2
+
+[node name="StartHubButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox/HubButtons" unique_id=1518249338]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+tooltip_text = "Start the local Synesyn Hub (powers local storage + hub-mode voice)."
+text = "Start Hub"
+icon = ExtResource("4_74n3i")
+
+[node name="StopHubButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox/HubButtons" unique_id=1127600610]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+tooltip_text = "Stop the hub process (only available if this Synesyn instance started it)."
+text = "Stop Hub"
+icon = ExtResource("7_stop")
+
+[node name="RestartHubButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox/HubButtons" unique_id=2007700457]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+tooltip_text = "Restart the local hub (shutdown, then start again)."
+text = "Restart Hub"
+icon = ExtResource("8_restart")
+
+[node name="OpenHubConfigButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HubCard/HubMargin/HubVBox/HubButtons" unique_id=231498430]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+tooltip_text = "Open the Synesyn client config file (hub URL, autostart, auth token, voice settings)."
+text = "Open Hub Config"
+icon = ExtResource("9_settings")
+
+[node name="HelpCard" type="PanelContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn" unique_id=1147486139]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="HelpBg" type="TextureRect" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard" unique_id=1147486151]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.13)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("9_qdfjp")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HelpMargin" type="MarginContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard" unique_id=1574277087]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="HelpVBox" type="VBoxContainer" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard/HelpMargin" unique_id=249854451]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HelpTitle" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard/HelpMargin/HelpVBox" unique_id=2067201174]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 18
+text = "How To / Help"
+
+[node name="HelpDescription" type="Label" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard/HelpMargin/HelpVBox" unique_id=262903965]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_font_sizes/font_size = 14
+text = "Open the quick guide for setup, hub troubleshooting, and where configuration lives on disk."
+autowrap_mode = 3
+
+[node name="HowToButton" type="Button" parent="ShellCenter/ShellMargin/ShellRow/RightColumn/HelpCard/HelpMargin/HelpVBox" unique_id=1763798436]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+tooltip_text = "Open a quick guide: what the Hub is, how it connects to Synesyn, and how to troubleshoot."
+text = "How To / Help"
+icon = ExtResource("10_help")
+
+[node name="HowToPopup" type="PopupPanel" parent="." unique_id=1010532409]
+unique_name_in_owner = true
+title = "Synesyn – How To"
+size = Vector2i(820, 620)
+
+[node name="HowToVBox" type="VBoxContainer" parent="HowToPopup" unique_id=1743090325]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 820.0
+offset_bottom = 620.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="HowToScroll" type="ScrollContainer" parent="HowToPopup/HowToVBox" unique_id=1984424509]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HowToRichText" type="RichTextLabel" parent="HowToPopup/HowToVBox/HowToScroll" unique_id=1811651303]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+selection_enabled = true
+
+[node name="HowToCloseButton" type="Button" parent="HowToPopup/HowToVBox" unique_id=1876213065]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Close"
+icon = ExtResource("11_close")

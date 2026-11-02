@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=3 uid="uid://w2h7ykva4b1v"]
+
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_duegf"]
+[ext_resource type="Script" uid="uid://wutcovkmvhm" path="res://addons/syntree/scripts/ui/panel/voice_popup_controller.gd" id="1_voice_popup_controller"]
+
+[node name="VoicePopup" type="PopupPanel" groups=["synesyn_themed"]]
+unique_name_in_owner = true
+size = Vector2i(420, 220)
+visible = true
+theme = ExtResource("1_duegf")
+script = ExtResource("1_voice_popup_controller")
+
+metadata/theme_surface = "utility"
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Voice"
+
+[node name="MicRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MicToggle" type="CheckButton" parent="Margin/VBox/MicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Mic"
+
+[node name="AutoSendToggle" type="CheckButton" parent="Margin/VBox/MicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Auto-send"
+
+[node name="SpeakToggle" type="CheckButton" parent="Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Speak assistant replies (TTS)"
+
+[node name="TtsRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PauseButton" type="Button" parent="Margin/VBox/TtsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pause"
+
+[node name="ResumeButton" type="Button" parent="Margin/VBox/TtsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resume"
+
+[node name="StopButton" type="Button" parent="Margin/VBox/TtsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stop"
+
+[node name="StatusLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3

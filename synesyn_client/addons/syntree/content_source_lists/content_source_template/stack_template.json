@@ -1,0 +1,32 @@
+{
+  "format_version": "1.0.0",
+  "meta": {
+	"source_id": "{{UUID}}",
+	"name": "Source Stack Name",
+	"author": "Your Name",
+	"created": "ISO 8601 Date",
+	"modified": "ISO 8601 Date",
+	"path": "{{PATH}}",
+	"ai_context": {
+	  "metaprompt": false,
+	  "is_stack": true,
+	  "stack_sources": ["source_id1", "source_id2"],
+	  "is_active": false,
+	  "model_metadata": {}
+	}
+  },
+  "content": {
+	"nodes": [
+	  {
+		"node_id": "{{NODE_UUID}}",
+		"position": {"x": 0, "y": 0},
+		"content": "# Source Stack Documentation\nThis source stack includes the following sources:\n- Source 1\n- Source 2\n\nAdd any additional documentation or notes about this stack here.",
+		"relationships": {
+		  "parents": [],
+		  "children": [],
+		  "dependencies": []
+		}
+	  }
+	]
+  }
+} 

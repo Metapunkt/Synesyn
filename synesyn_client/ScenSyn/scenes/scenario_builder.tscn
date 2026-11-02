@@ -1,0 +1,278 @@
+[gd_scene load_steps=9 format=3 uid="uid://1cet5xyobonj"]
+
+[ext_resource type="Script" uid="uid://b0l7kyvqtiodw" path="res://ScenSyn/scripts/scenario_builder.gd" id="1_vhqr0"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="2_it4bc"]
+[ext_resource type="Texture2D" uid="uid://ce7ju37d121lf" path="res://ScenSyn/icons/barUnder.png" id="3_7comy"]
+[ext_resource type="Texture2D" uid="uid://cmrtmicdp2hou" path="res://ScenSyn/icons/barProgress.png" id="4_ow8f4"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-backgrounds/bg_scenario_card_orb.png" id="5_orb_bg"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_right.svg" id="i_chevronright"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="i_arrowleft"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="i_restartrefresh"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="i_checktick"]
+
+[node name="ScenarioBuilder" type="Control" groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_vhqr0")
+theme = ExtResource("2_it4bc")
+metadata/theme_surface = "utility"
+
+[node name="ColorRect" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="OrbBackground" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+modulate = Color(1, 1, 1, 0.22)
+texture = ExtResource("5_orb_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MainMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="MainVBox" type="VBoxContainer" parent="MainMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainMargin/MainVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMargin/MainVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="PromptLabel" type="RichTextLabel" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Scenario Data........"
+fit_content = true
+scroll_active = false
+
+[node name="ControlsFlow" type="HFlowContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+
+[node name="ThemeGroup" type="VBoxContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ThemeOptionLabel" type="Label" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/ThemeGroup"]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Scenario Theme"
+
+[node name="ThemeOptionButton" type="OptionButton" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/ThemeGroup"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 35
+alignment = 1
+selected = 0
+item_count = 1
+popup/item_0/text = "Theme Options"
+popup/item_0/id = 0
+
+[node name="CustomizationGroup" type="VBoxContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 2
+
+[node name="CustomizationInputLabel" type="Label" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/CustomizationGroup"]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Customization Prompt"
+
+[node name="CustomizationInput" type="LineEdit" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/CustomizationGroup"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter additional customization prompt if needed."
+
+[node name="ProgressGroup" type="VBoxContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ProgressLabel" type="Label" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/ProgressGroup"]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Progress"
+
+[node name="ProgressBar" type="TextureProgressBar" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/ControlsFlow/ProgressGroup"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 1.0
+nine_patch_stretch = true
+texture_under = ExtResource("3_7comy")
+texture_progress = ExtResource("4_ow8f4")
+
+[node name="Content_ScrollContainer" type="VBoxContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 240)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ScenarioNameLabel" type="Label" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Scenario title"
+
+[node name="ScenarioNameInput" type="LineEdit" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Scenario title (editable)"
+caret_blink = true
+
+[node name="SettingInput" type="TextEdit" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Scenario description / setting"
+wrap_mode = 1
+
+[node name="ObjectiveInput" type="TextEdit" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Objective Input"
+wrap_mode = 1
+
+[node name="CharactersGrid" type="GridContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/v_separation = 6
+
+[node name="PlotTwistsList" type="GridContainer" parent="MainMargin/MainVBox/ScrollContainer/VBoxContainer/Content_ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/v_separation = 10
+
+[node name="PlayerInputField" type="LineEdit" parent="MainMargin/MainVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Player Input: Enter additional customization prompt if needed."
+alignment = 1
+
+[node name="ActionButtons" type="HBoxContainer" parent="MainMargin/MainVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="NextButton" type="Button" parent="MainMargin/MainVBox/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+icon = ExtResource("i_chevronright")
+
+[node name="RetryButton" type="Button" parent="MainMargin/MainVBox/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enter / Retry"
+icon = ExtResource("i_restartrefresh")
+
+[node name="PreviousButton" type="Button" parent="MainMargin/MainVBox/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+icon = ExtResource("i_arrowleft")
+
+[node name="FinishButton" type="Button" parent="MainMargin/MainVBox/ActionButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Finish"
+icon = ExtResource("i_checktick")
+
+[node name="ShareActions" type="HBoxContainer" parent="MainMargin/MainVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="ImportStoryButton" type="Button" parent="MainMargin/MainVBox/ShareActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Import…"
+tooltip_text = "Load a Story someone shared with you. It is added to your library and can then be picked from the Story list."
+
+[node name="ShareStoryButton" type="Button" parent="MainMargin/MainVBox/ShareActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Share…"
+tooltip_text = "Write this Story to a shareable bundle in Documents/Synesyn, including any generated portraits."
+
+[node name="ShareStatusLabel" type="Label" parent="MainMargin/MainVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="TextEdit" type="TextEdit" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

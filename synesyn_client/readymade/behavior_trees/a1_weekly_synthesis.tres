@@ -1,0 +1,23 @@
+[gd_resource type="BehaviorTree" load_steps=4 format=3 uid="uid://bvn3f4qg1h2k8"]
+
+[ext_resource type="Script" uid="uid://djijbka16maqs" path="res://readymade/scripts/bt_tasks/ProcessFoundConceptTask.gd" id="1_custom_task"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_1"]
+var/orchestrator/name = &"orchestrator"
+var/orchestrator/type = 0
+var/orchestrator/value = null
+var/orchestrator/hint = 0
+var/orchestrator/hint_string = ""
+var/current_task/name = &"current_task"
+var/current_task/type = 0
+var/current_task/value = null
+var/current_task/hint = 0
+var/current_task/hint_string = ""
+
+[sub_resource type="BTAction" id="ProcessFoundConceptTask_1"]
+script = ExtResource("1_custom_task")
+
+[resource]
+description = "A1 Synthesis Engine - Weekly Found Concept Processing"
+blackboard_plan = SubResource("BlackboardPlan_1")
+root_task = SubResource("ProcessFoundConceptTask_1")

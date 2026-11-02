@@ -1,0 +1,51 @@
+# Normalise line endings for text, leave binaries alone.
+* text=auto eol=lf
+
+# Windows scripts must keep CRLF to run correctly when checked out.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Godot project formats are text and benefit from readable diffs.
+*.gd      text eol=lf
+*.tscn    text eol=lf
+*.tres    text eol=lf
+*.godot   text eol=lf
+*.cfg     text eol=lf
+*.import  text eol=lf
+*.uid     text eol=lf
+
+# Binary assets: no diffing, no EOL conversion.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.ico   binary
+*.ctex  binary
+*.ttf   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
+*.wav   binary
+*.mp3   binary
+*.ogg   binary
+*.mp4   binary
+*.pdf   binary
+*.docx  binary
+*.xlsx  binary
+*.pptx  binary
+*.zip   binary
+*.7z    binary
+*.dll   binary
+*.exe   binary
+*.so    binary
+*.dylib binary
+*.pt    binary
+*.onnx  binary
+*.db    binary
+
+# Generated or vendored files: keep them out of language statistics and
+# collapse them in pull request diffs.
+utilities/checks/line_limit_baseline.json linguist-generated=true
+THIRD-PARTY-NOTICES.md         linguist-documentation=true

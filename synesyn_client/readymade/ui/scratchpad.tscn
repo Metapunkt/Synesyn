@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwhwtkglc1v7c"]
+
+[ext_resource type="Script" uid="uid://cuvfwtqy22f4b" path="res://readymade/ui/scratchpad.gd" id="1_abcde"]
+
+[node name="Scratchpad_tab" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_abcde")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="NewButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "📄 New"
+
+[node name="OpenButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "📂 Open"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "💾 Save As..."
+
+[node name="PasteButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Paste clipboard text at the caret"
+text = "📋 Paste"
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 0
+editable = true
+context_menu_enabled = true
+shortcut_keys_enabled = true
+selecting_enabled = true
+wrap_mode = 1
+placeholder_text = "✍️ Start typing your notes, ideas, or thoughts here..."
+
+[node name="OpenDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(400, 400)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.txt", "*.md", "*.html", "*.json")
+
+[node name="SaveDialog" type="FileDialog" parent="."]
+size = Vector2i(400, 400)
+access = 2
+filters = PackedStringArray("*.txt", "*.md", "*.html", "*.json")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/NewButton" to="." method="_on_new_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/OpenButton" to="." method="_on_open_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/PasteButton" to="." method="_on_paste_button_pressed"]
+[connection signal="file_selected" from="OpenDialog" to="." method="_on_open_dialog_file_selected"]
+[connection signal="file_selected" from="SaveDialog" to="." method="_on_save_dialog_file_selected"]

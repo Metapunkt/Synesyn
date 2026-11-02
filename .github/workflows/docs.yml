@@ -1,0 +1,87 @@
+name: Docs
+
+# Builds the documentation site from docs/. The build runs on every relevant
+# change and is the useful part today: --strict turns a broken cross-reference,
+# a bad anchor, or a file missing from the nav into a failed run.
+#
+# Publishing is dormant by design, see the deploy job below.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'utilities/docs/**'
+      - 'utilities/checks/check_doc_paths.py'
+      - 'utilities/checks/doc_paths_allowlist.txt'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'utilities/docs/**'
+      - 'utilities/checks/check_doc_paths.py'
+      - 'utilities/checks/doc_paths_allowlist.txt'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: utilities/docs/requirements.txt
+
+      - name: Install toolchain
+        run: pip install -r utilities/docs/requirements.txt
+
+      # Catches prose paths that mkdocs cannot see, e.g.
+      # `synesyn_client/scripts/foo.gd` written in backticks rather than as a link.
+      - name: Check documented paths
+        run: python utilities/checks/check_doc_paths.py
+
+      - name: Build (strict)
+        run: mkdocs build --strict
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # Dormant until the repository is public.
+  #
+  # GitHub Pages cannot use a private repository as a publishing source on the
+  # free organisation plan, and on paid plans the resulting site is public by
+  # default, which would defeat keeping the repository private. So this job is
+  # gated on a repository variable rather than being commented out, and stays
+  # tested-but-off until someone deliberately turns it on.
+  #
+  # To publish, once the repository is public:
+  #   1. Settings -> Pages -> Source: GitHub Actions
+  #   2. Settings -> Secrets and variables -> Actions -> Variables:
+  #      add PUBLISH_DOCS = true
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && vars.PUBLISH_DOCS == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,106 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_proposal_panel.gd" id="1_proposals"]
+
+[node name="ContextProposals" type="PanelContainer"]
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_proposals")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Graph Proposals"
+
+[node name="ProposalRequest" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 65)
+layout_mode = 2
+placeholder_text = "Ask for relationships, contradictions, clusters, missing links, split/merge ideas, or metaprompt candidates."
+wrap_mode = 1
+
+[node name="GenerateButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Generate suggestions"
+
+[node name="ProposalList" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+select_mode = 1
+
+[node name="PayloadLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Proposed payload (editable before review)"
+
+[node name="ProposalPayload" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="ReviewerNote" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Review note"
+
+[node name="ReviewActions" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AcceptButton" type="Button" parent="MarginContainer/VBoxContainer/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Accept"
+
+[node name="SaveEditButton" type="Button" parent="MarginContainer/VBoxContainer/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Edit"
+
+[node name="RejectButton" type="Button" parent="MarginContainer/VBoxContainer/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reject"
+
+[node name="DeferButton" type="Button" parent="MarginContainer/VBoxContainer/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Defer"
+
+[node name="PreviewButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preview selected impact"
+
+[node name="CommitAcceptedButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Commit only accepted/edited proposals after preview as a new immutable Context Graph version."
+text = "Commit accepted as new version"
+
+[node name="ImpactLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Semantic and compilation impact"
+
+[node name="ProposalImpact" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+
+[node name="ProposalStatus" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

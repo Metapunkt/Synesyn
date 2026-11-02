@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dudikph62yi6c"]
+
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_2mktv"]
+[ext_resource type="Script" uid="uid://d42cvw5v75ok" path="res://addons/syntree/scripts/utils/ui/toolbar_controls.gd" id="2_fyd7j"]
+[ext_resource type="Texture2D" uid="uid://c8smkiylx4pi1" path="res://addons/syntree/syntree_icons/barUnder.png" id="3_w8k5b"]
+[ext_resource type="Texture2D" uid="uid://nos8flqk4qjg" path="res://addons/syntree/syntree_icons/barProgress.png" id="4_p0sny"]
+[ext_resource type="StyleBox" uid="uid://vj8mx46yhlty" path="res://addons/syntree/resources/lilac_panel.tres" id="5_ikbn4"]
+
+[node name="ToolbarControls" type="HBoxContainer" unique_id=1270644434 groups=["synesyn_themed"]]
+size_flags_horizontal = 3
+theme = ExtResource("1_2mktv")
+theme_override_constants/separation = 10
+script = ExtResource("2_fyd7j")
+
+metadata/theme_surface = "utility"
+[node name="ProgressBarLabel" type="Label" parent="." unique_id=2101545862]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Awaiting AI Response: "
+
+[node name="ProgressBar" type="TextureProgressBar" parent="." unique_id=1316601049]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(126, 33)
+layout_mode = 2
+nine_patch_stretch = true
+texture_under = ExtResource("3_w8k5b")
+texture_progress = ExtResource("4_p0sny")
+
+[node name="VSeparator" type="VSeparator" parent="." unique_id=1424643734]
+layout_mode = 2
+
+[node name="TogglePanelsLabel2" type="Label" parent="." unique_id=1263609240]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Toggle Panels:"
+
+[node name="ToggleDevAgent" type="CheckButton" parent="." unique_id=1084205203]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Dev Agent safety toggle. When OFF, side-effect actions should be disabled (apply patches, run harness, publish, etc.)."
+text = "Dev Agent"
+
+[node name="ToggleUserInput" type="CheckButton" parent="." unique_id=2088661729]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Input"
+
+[node name="ToggleOutputContainer" type="CheckButton" parent="." unique_id=863148596]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Output"
+
+[node name="ToggleChatMenu" type="CheckButton" parent="." unique_id=887053826]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Chat Menu"
+
+[node name="ToggleContentSources" type="CheckButton" parent="." unique_id=66125049]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Content Sources"
+
+[node name="ToggleMainMenu" type="CheckButton" parent="." unique_id=722560725]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show Main Menu"

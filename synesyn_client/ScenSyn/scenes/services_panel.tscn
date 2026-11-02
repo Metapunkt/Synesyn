@@ -1,0 +1,554 @@
+[gd_scene format=3 uid="uid://b61ogmv77aye8"]
+
+[ext_resource type="Script" uid="uid://d3o4ugmddojb1" path="res://ScenSyn/scripts/services/services_panel.gd" id="1_6h3un"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="1_pq11y"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="3_378ny"]
+[ext_resource type="Theme" uid="uid://db3kfwt7iksgg" path="res://ScenSyn/themes/SynesynConsole_contemporary_dark.tres" id="3_console"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="icon_play_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_stop_square.svg" id="icon_stop_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="icon_close_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_restart_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="icon_export_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="icon_settings_sp"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="i_externallink"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="i_checktick"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_microphone.svg" id="i_microphone"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_volume_up.svg" id="i_volumeup"]
+
+[node name="ServicesPanel" type="Control" unique_id=995294324 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_pq11y")
+script = ExtResource("1_6h3un")
+
+metadata/theme_surface = "utility"
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1891861633]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=946362059]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"SynesynDialogPanel"
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel" unique_id=42311711]
+layout_mode = 2
+
+[node name="ScrollContentMargin" type="MarginContainer" parent="Panel/ScrollContainer" unique_id=386062456]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin" unique_id=1905123472]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="Header" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=2002949046]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/Header" unique_id=752996849]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelHeader"
+text = "Settings"
+
+[node name="CloseButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/Header" unique_id=1273212429]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Close Panel"
+icon = ExtResource("icon_close_sp")
+
+[node name="IntroLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=1977057361]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Configure the local Hub, workspace routing, voice settings, and provider behavior for Synesyn."
+autowrap_mode = 3
+
+[node name="HubCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=432010329]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+[node name="HubCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard" unique_id=1741684863]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HubHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox" unique_id=1757743008]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Hub"
+
+[node name="HubDescription" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox" unique_id=1843874648]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Start or stop the local hub and verify that Synesyn can reach its service endpoint."
+autowrap_mode = 3
+
+[node name="HubRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox" unique_id=1577709824]
+layout_mode = 2
+
+[node name="HubPathEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox/HubRow" unique_id=1044014998]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Path to the Synesyn Hub executable.
+
+The Hub is the local server that connects Synesyn to AI models, manages your workspace data, and enables voice synthesis. It runs in the background while Synesyn is open.
+
+Typical packaged layout:
+  <app_root>/services/synesyn_hub/synesyn_hub.exe
+
+If unsure, use Browse."
+placeholder_text = "Select synesyn_hub.exe (use Browse)"
+
+[node name="BrowseHubButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox/HubRow" unique_id=1967656072]
+icon = ExtResource("i_externallink")
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+tooltip_text = "Browse for the Synesyn Hub executable (synesyn_hub.exe)."
+text = "Browse"
+
+[node name="HubButtons" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox" unique_id=181411167]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StartHubButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox/HubButtons" unique_id=1264217160]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+tooltip_text = "Start the Synesyn Hub process using the executable path above."
+text = "Start Hub"
+icon = ExtResource("icon_play_sp")
+
+[node name="StopHubButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox/HubButtons" unique_id=2116229125]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+tooltip_text = "Stop the Synesyn Hub process (only works if this panel started it)."
+text = "Stop Hub"
+icon = ExtResource("icon_stop_sp")
+
+[node name="HealthStatusCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox" unique_id=1010515306]
+layout_mode = 2
+theme_type_variation = &"SynesynStatusPanel"
+[node name="HealthLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/HubCard/HubCardVBox/HealthStatusCard" unique_id=652545317]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "Hub: unknown"
+
+[node name="WorkspaceCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=829053221]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+[node name="WorkspaceCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard" unique_id=1195704655]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="WorkspaceHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox" unique_id=1205683676]
+layout_mode = 2
+tooltip_text = "A Workspace is a named project folder where Synesyn stores your session artifacts, AI logs, and scenario data. You choose one workspace at a time; the Hub remembers it across restarts."
+mouse_filter = 0
+theme_type_variation = &"LabelSection"
+text = "Workspace"
+
+[node name="WorkspaceHelp" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox" unique_id=2003632971]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Name = display label shown in the UI. Slug = folder name on disk. Root = base folder containing the slug sub-folder.
+Leave Root empty to use Documents/Synesyn/<slug>/.
+Tip: Root should NOT already end with the slug (to avoid <slug>/<slug>)."
+autowrap_mode = 3
+
+[node name="WorkspaceGrid" type="GridContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox" unique_id=1729969352]
+layout_mode = 2
+columns = 2
+
+[node name="WorkspaceNameLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=431979062]
+layout_mode = 2
+text = "Workspace name"
+
+[node name="WorkspaceNameRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=1381214810]
+layout_mode = 2
+
+[node name="WorkspaceNamePick" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceNameRow" unique_id=437763497]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+tooltip_text = "Pick from workspaces found under the current base Root folder."
+
+[node name="WorkspaceNameEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceNameRow" unique_id=1175035194]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Workspace display name.
+This is what you'll see in UI and exports."
+placeholder_text = "e.g. Local Test"
+
+[node name="WorkspaceSlugLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=384969218]
+layout_mode = 2
+text = "Workspace slug"
+
+[node name="WorkspaceSlugRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=649771673]
+layout_mode = 2
+
+[node name="WorkspaceSlugPick" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceSlugRow" unique_id=1599309183]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+tooltip_text = "Pick a slug (folder name) found under the current base Root folder."
+
+[node name="WorkspaceSlugEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceSlugRow" unique_id=224123540]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Workspace slug (folder name). Auto-generated from the display name above while you haven't manually edited it.
+Edit here to set a custom slug.
+The Hub stores artifacts under <root>/<slug>/."
+placeholder_text = "e.g. local-test (auto-filled from name)"
+
+[node name="WorkspaceRootLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=359267252]
+layout_mode = 2
+text = "Workspace root (optional)"
+
+[node name="WorkspaceRootRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid" unique_id=382342367]
+layout_mode = 2
+
+[node name="WorkspaceRootPick" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceRootRow" unique_id=968078218]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+tooltip_text = "Pick a base folder. The Hub will create/use <root>/<slug>/."
+
+[node name="WorkspaceRootEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/WorkspaceGrid/WorkspaceRootRow" unique_id=196949552]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional base folder. The Hub will create/use:
+  <root>/<slug>/{artifacts,substrate,exports,logs}
+
+Leave empty to use Documents/Synesyn/<slug>/.
+Avoid setting Root to a path that already ends with the slug."
+placeholder_text = "Leave empty for Documents/Synesyn/<slug>/"
+
+[node name="ApplyWorkspaceRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox" unique_id=1870051526]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ApplyWorkspaceButtonWrap" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ApplyWorkspaceRow" unique_id=536927980]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="ApplyWorkspaceButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ApplyWorkspaceRow/ApplyWorkspaceButtonWrap" unique_id=933144006]
+unique_name_in_owner = true
+icon = ExtResource("i_checktick")
+custom_minimum_size = Vector2(132, 36)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"SynesynPrimaryAction"
+tooltip_text = "Apply workspace selection to the Hub now.
+This will re-initialize the Hub substrate DB under the chosen workspace."
+text = "Apply Workspace"
+
+[node name="CurrentWorkspaceCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ApplyWorkspaceRow" unique_id=1971825830]
+layout_mode = 2
+theme_type_variation = &"SynesynStatusPanel"
+size_flags_horizontal = 3
+[node name="CurrentWorkspaceDetailsLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ApplyWorkspaceRow/CurrentWorkspaceCard" unique_id=1287881789]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Current Workspace Name: (unknown)
+Current Workspace Slug: (unknown)
+Current Workspace Root: (unknown)"
+autowrap_mode = 3
+
+[node name="ActionsRow" type="HBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox" unique_id=1073630244]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ExportButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ActionsRow" unique_id=731626130]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+tooltip_text = "Package the current workspace folder into a zip archive for backup or sharing. The archive is placed in your Downloads folder."
+text = "Export Workspace Zip"
+icon = ExtResource("icon_export_sp")
+
+[node name="VoiceTestButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ActionsRow" unique_id=1361196438]
+icon = ExtResource("i_microphone")
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Test Voice"
+
+[node name="DisplayCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=246500490]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+[node name="DisplayCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard" unique_id=44955324]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DisplayHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard/DisplayCardVBox" unique_id=442467600]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 20
+text = "Display"
+
+[node name="DisplayDescription" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard/DisplayCardVBox" unique_id=183538628]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Control UI density and readability for local use, large displays, or projection."
+autowrap_mode = 3
+
+[node name="DisplayGrid" type="GridContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard/DisplayCardVBox" unique_id=2036552803]
+layout_mode = 2
+columns = 2
+
+[node name="UIScaleLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard/DisplayCardVBox/DisplayGrid" unique_id=2110601490]
+layout_mode = 2
+tooltip_text = "Scale the entire Synesyn UI. Increase for large screens or projectors."
+mouse_filter = 0
+text = "UI scale"
+
+[node name="UIScaleOption" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/DisplayCard/DisplayCardVBox/DisplayGrid" unique_id=588947943]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Choose a UI content scale. Takes effect immediately and is saved with your provider settings."
+item_count = 5
+popup/item_0/text = "75 %"
+popup/item_0/id = 0
+popup/item_1/text = "100 % (default)"
+popup/item_1/id = 1
+popup/item_2/text = "125 %"
+popup/item_2/id = 2
+popup/item_3/text = "150 %"
+popup/item_3/id = 3
+popup/item_4/text = "200 %"
+popup/item_4/id = 4
+
+[node name="ProvidersCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=930380063]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+[node name="ProvidersCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard" unique_id=1088799058]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ProvidersHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox" unique_id=261300331]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 20
+text = "Providers (saved to Documents/Synesyn/.../synesyn_client.json)"
+
+[node name="ProvidersDescription" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox" unique_id=960143092]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Choose how voice and other runtime services are routed, then save and apply the configuration."
+autowrap_mode = 3
+
+[node name="ProvidersGrid" type="GridContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox" unique_id=132009275]
+layout_mode = 2
+columns = 2
+
+[node name="VoiceModeLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=601652903]
+layout_mode = 2
+text = "Voice mode"
+
+[node name="VoiceModeOption" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=2004413977]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "hub"
+popup/item_0/id = 0
+popup/item_1/text = "direct"
+popup/item_1/id = 1
+
+[node name="HubTtsProviderLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=275785097]
+layout_mode = 2
+text = "Hub TTS engine"
+
+[node name="HubTtsProviderOption" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=693952693]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "auto (edge_tts then sapi)"
+popup/item_0/id = 0
+popup/item_1/text = "edge_tts (force)"
+popup/item_1/id = 1
+popup/item_2/text = "sapi / pyttsx3 (force)"
+popup/item_2/id = 2
+popup/item_3/text = "sidecar (force)"
+popup/item_3/id = 3
+
+[node name="HubUrlLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=450996591]
+layout_mode = 2
+text = "Hub URL"
+
+[node name="HubUrlEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=305125657]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "http://127.0.0.1:17777"
+
+[node name="VoiceServiceUrlLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=438130841]
+layout_mode = 2
+text = "Voice service URL (direct)"
+
+[node name="VoiceServiceUrlEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=810072263]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "http://127.0.0.1:8000"
+
+[node name="SaveRecordingsLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=2100535165]
+layout_mode = 2
+text = "STT recordings"
+
+[node name="SaveRecordingsToggle" type="CheckButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox/ProvidersGrid" unique_id=950353675]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save mic input as artifacts (requires consent)"
+
+[node name="SaveProvidersButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox" unique_id=106881511]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+text = "Save & Apply Providers"
+icon = ExtResource("icon_settings_sp")
+
+[node name="HubTtsProviderStatusLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/ProvidersCard/ProvidersCardVBox" unique_id=1210825528]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "Hub TTS provider: auto (edge_tts then sapi)"
+autowrap_mode = 3
+
+[node name="MetapunktCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=1140194779]
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+[node name="MetapunktCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard" unique_id=30543637]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MetapunktAuthHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox" unique_id=1654378697]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 20
+text = "Metapunkt Auth (optional; saved to Documents/Synesyn/synesyn/config/synesyn_client.json)"
+
+[node name="MetapunktDescription" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox" unique_id=1917997940]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Optional authentication settings for Metapunkt and related hub-verified workflows."
+autowrap_mode = 3
+
+[node name="MetapunktAuthGrid" type="GridContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox" unique_id=746155719]
+layout_mode = 2
+columns = 2
+
+[node name="MetapunktAuthModeLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=1403889689]
+layout_mode = 2
+text = "Auth mode"
+
+[node name="MetapunktAuthModeOption" type="OptionButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=453532870]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "no-auth"
+popup/item_0/id = 0
+popup/item_1/text = "auth-required"
+popup/item_1/id = 1
+
+[node name="MetapunktAuthTokenLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=1127233843]
+layout_mode = 2
+text = "Auth token"
+
+[node name="MetapunktAuthTokenEdit" type="LineEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=861236618]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Bearer token (only needed when auth mode = required)"
+secret = true
+
+[node name="MetapunktVerifyViaHubLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=1338095357]
+layout_mode = 2
+text = "Verify via hub"
+
+[node name="MetapunktVerifyViaHubToggle" type="CheckButton" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox/MetapunktAuthGrid" unique_id=1200614727]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Verify bearer via hub (/auth/whoami)"
+
+[node name="PublishCharacterVoicesButton" type="Button" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/MetapunktCard/MetapunktCardVBox" unique_id=1847782788]
+icon = ExtResource("i_volumeup")
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Publish Character Voices to Hub (substrate)"
+
+[node name="StatusCard" type="PanelContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox" unique_id=1477526287]
+layout_mode = 2
+theme_type_variation = &"SynesynStatusPanel"
+[node name="StatusCardVBox" type="VBoxContainer" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/StatusCard" unique_id=760142685]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StatusHeader" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/StatusCard/StatusCardVBox" unique_id=193680141]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 18
+text = "Feedback / Status"
+
+[node name="ErrorLabel" type="Label" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/StatusCard/StatusCardVBox" unique_id=2100131990]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="StatusText" type="TextEdit" parent="Panel/ScrollContainer/ScrollContentMargin/VBox/StatusCard/StatusCardVBox" unique_id=2135488126]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_console")
+
+[node name="HubExeDialog" type="FileDialog" parent="." unique_id=1550217166]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.exe ; Windows Executable")
+
+[node name="WorkspaceRootDialog" type="FileDialog" parent="." unique_id=1349095005]
+unique_name_in_owner = true
+title = "Open a Directory"
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+
+[connection signal="pressed" from="Panel/ScrollContainer/ScrollContentMargin/VBox/WorkspaceCard/WorkspaceCardVBox/ApplyWorkspaceRow/ApplyWorkspaceButtonWrap/ApplyWorkspaceButton" to="." method="apply_workspace_selection"]

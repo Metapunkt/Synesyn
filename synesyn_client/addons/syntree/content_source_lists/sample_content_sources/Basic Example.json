@@ -1,0 +1,17 @@
+{
+	"nodes": {
+		"Basic Example": {
+			"content": "This is an initial content source for SynTree.\n\nYou can modify this file or add new content sources through the SynTree interface.\n",
+			"is_metaprompt": true,
+			"is_root": true,
+			"metadata": {
+				"file_type": "txt"
+			},
+			"name": "Basic Example",
+			"type": "text"
+		}
+	},
+	"root_nodes": [
+		"Basic Example"
+	]
+}

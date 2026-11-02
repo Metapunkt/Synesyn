@@ -1,0 +1,28 @@
+{
+  "format_version": "1.0.0",
+  "meta": {
+	"source_id": "{{UUID}}",
+	"name": "Descriptive Name",
+	"author": "Your Name",
+	"created": "ISO 8601 Date",
+	"modified": "ISO 8601 Date",
+	"ai_context": {
+	  "metaprompt": false,
+	  "model_metadata": {}
+	}
+  },
+  "content": {
+	"nodes": [
+	  {
+		"node_id": "{{NODE_UUID}}",
+		"position": {"x": 0, "y": 0},
+		"content": "Markdown content...",
+		"relationships": {
+		  "parents": [],
+		  "children": [],
+		  "dependencies": []
+		}
+	  }
+	]
+  }
+}

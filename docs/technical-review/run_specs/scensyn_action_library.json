@@ -1,0 +1,40 @@
+{
+  "action_sequences": {
+    "send_user_message": {
+      "parameters": ["message"],
+      "actions": [
+        {
+          "type": "call_scene_method",
+          "method": "test_send_user_message",
+          "args": ["{{message}}"]
+        }
+      ]
+    },
+    "wait_for_ai": {
+      "parameters": ["seconds"],
+      "actions": [
+        {
+          "type": "wait_seconds",
+          "seconds": "{{seconds}}"
+        }
+      ]
+    },
+    "send_user_message_and_wait": {
+      "parameters": ["message", "seconds"],
+      "actions": [
+        {
+          "use": "send_user_message",
+          "with": {
+            "message": "{{message}}"
+          }
+        },
+        {
+          "use": "wait_for_ai",
+          "with": {
+            "seconds": "{{seconds}}"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_diagnostics_panel.gd" id="1_diagnostics"]
+
+[node name="ContextDiagnostics" type="PanelContainer"]
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_diagnostics")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Graph Health"
+
+[node name="AnalyzeButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Analyze current graph"
+
+[node name="DiagnosticsList" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+
+[node name="FocusDiagnosticButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Focus affected records"
+
+[node name="RepairLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Safe repair preview (not applied)"
+
+[node name="RepairPreview" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+
+[node name="VersionLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Compare with graph artifact/version"
+
+[node name="VersionRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CompareVersionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/VersionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Artifact or version id"
+
+[node name="CompareButton" type="Button" parent="MarginContainer/VBoxContainer/VersionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Compare"
+
+[node name="ForkButton" type="Button" parent="MarginContainer/VBoxContainer/VersionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Create a new artifact lineage from this version without overwriting it."
+text = "Fork"
+
+[node name="ComparisonText" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 135)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+
+[node name="DiagnosticsStatus" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

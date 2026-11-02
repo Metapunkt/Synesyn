@@ -1,0 +1,55 @@
+{
+    "nodes": {
+        "234567_2345678901": {
+            "id": "234567_2345678901",
+            "name": "API Documentation",
+            "path": "res://docs/api_reference.md",
+            "type": "container",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "from_port": 0,
+                            "node": "234568_2345678902",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ]
+                },
+                "graph_position": {
+                    "x": -200,
+                    "y": 100
+                }
+            }
+        },
+        "234568_2345678902": {
+            "id": "234568_2345678902",
+            "name": "Usage Examples",
+            "path": "https://docs.example.com/usage",
+            "type": "hybrid",
+            "is_metaprompt": true,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 0,
+                            "node": "234567_2345678901",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": []
+                },
+                "graph_position": {
+                    "x": 200,
+                    "y": 100
+                }
+            }
+        }
+    },
+    "root_nodes": [
+        "234567_2345678901"
+    ]
+} 

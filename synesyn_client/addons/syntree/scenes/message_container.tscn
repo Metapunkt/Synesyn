@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://b6j8q2y4n1q8p"]
+
+[ext_resource type="Script" uid="uid://chvlwrc72stb7" path="res://addons/syntree/scripts/ui/chat/message_container.gd" id="1_pi20j"]
+[ext_resource type="Theme" uid="uid://d382cd44vr6k" path="res://addons/synesyn_core/themes/SynesynBase_contemporary_dark.tres" id="3_ra8ed"]
+
+[node name="MessageContainer" type="Control" unique_id=531150022 groups=["synesyn_themed"]]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_ra8ed")
+script = ExtResource("1_pi20j")
+
+metadata/theme_surface = "base"
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1372294685]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1564647130]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MessageContainerLabel" type="Label" parent="MarginContainer" unique_id=1276551453]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "Select a Conversation Thread to load here...."
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=839173088]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MessagesContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=413953522]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MessagesContainer" unique_id=1375428229]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="RoleLabel" type="Label" parent="MarginContainer/ScrollContainer/MessagesContainer/HeaderContainer" unique_id=1468317193]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelChatRole"
+text = "Role"
+
+[node name="TimestampLabel" type="Label" parent="MarginContainer/ScrollContainer/MessagesContainer/HeaderContainer" unique_id=1954904173]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelChatTimestamp"
+text = "Timestamp"
+horizontal_alignment = 2
+
+[node name="MessageText" type="TextEdit" parent="MarginContainer/ScrollContainer/MessagesContainer" unique_id=1391349587]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="ButtonContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MessagesContainer" unique_id=1324135388]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+alignment = 2
+
+[node name="EditButton" type="Button" parent="MarginContainer/ScrollContainer/MessagesContainer/ButtonContainer" unique_id=580496250]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Edit"
+
+[node name="ResendButton" type="Button" parent="MarginContainer/ScrollContainer/MessagesContainer/ButtonContainer" unique_id=1659721341]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resend"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/ScrollContainer/MessagesContainer/ButtonContainer" unique_id=528597503]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"

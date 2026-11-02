@@ -1,0 +1,114 @@
+---
+description: Never reference project autoloads by bare identifier inside addons/. Apply when editing any .gd file under synesyn_client/addons/.
+globs: synesyn_client/addons/**/*.gd
+alwaysApply: false
+---
+
+# Autoload access inside addons (ADR 0017)
+
+## The rule
+
+Scripts under `synesyn_client/addons/**` must **never** name a project autoload
+by bare global identifier.
+
+```gdscript
+# WRONG — fails to compile wherever the autoload is not live
+if ContentBus and ContentBus.has_method("refresh_active_sources"):
+    ContentBus.refresh_active_sources()
+```
+
+```gdscript
+# RIGHT — resolve through the scene tree at use time
+const SynTreeAutoloads = preload("res://addons/syntree/scripts/autoload/syntree_autoloads.gd")
+
+var bus := SynTreeAutoloads.content_bus()
+if is_instance_valid(bus) and bus.has_method("refresh_active_sources"):
+    bus.refresh_active_sources()
+```
+
+## Why this is not obvious
+
+A bare autoload identifier only resolves while that autoload is **live**, not
+merely declared in `project.godot`. In the editor autoloads are always live, so
+the wrong form compiles, autocompletes, and shows method signatures — there is no
+local feedback at all. It breaks only later, somewhere else: in a fresh drop-in
+project, or in headless tooling that loads scripts before autoloads register.
+
+Assume you will get no warning from the editor. Follow the rule by construction.
+
+## Which resolver
+
+| Autoload owner | Resolver |
+|---|---|
+| SynTree (`ContentBus`, `PluginManager`) | `res://addons/syntree/scripts/autoload/syntree_autoloads.gd` |
+| Host / project (`ThemeManager`, `WorkspaceBootstrapper`, `Global`, `StoryState`, `VoiceService`) | `res://addons/synesyn_core/scripts/synesyn_autoload_access.gd` |
+
+Add a new accessor to the appropriate resolver rather than reaching for the bare
+name. Those two files are the only ones exempt from the rule.
+
+Note that a script declaring `class_name X` **cannot** also be autoloaded as `X`:
+Godot rejects it with "must not collide with an existing global script class
+name". `NotificationManager` is exactly this case — it is a global class,
+instantiated directly, and must not be added to any `REQUIRED_AUTOLOADS`.
+
+## Two things that will bite you
+
+**Never cache a resolved autoload in a field.** Resolve at every use. An autoload
+that registers later would leave a cached value null forever.
+
+```gdscript
+# WRONG
+var _bus = SynTreeAutoloads.content_bus()   # captured once, possibly null forever
+
+# RIGHT
+func _refresh() -> void:
+    var bus := SynTreeAutoloads.content_bus()
+```
+
+**Do not use `:=` on values that come back through a resolver.** Accessors return
+`Node`, so method calls on them yield `Variant` and inference fails with
+"Cannot infer the type". Annotate explicitly (see also the project's typing rules).
+
+```gdscript
+# WRONG
+var gfm := _global().get_game_flow_manager() if _global() else null
+# RIGHT
+var gfm: Object = _global().get_game_flow_manager() if _global() else null
+```
+
+Where a concrete type matters, give the resolver a `preload`ed script constant as
+its return type — that keeps call sites statically checked and exposes the
+autoload's enums without a live instance:
+
+```gdscript
+const ContentBusScript = preload("res://addons/syntree/scripts/autoload/content_bus.gd")
+
+static func content_bus() -> ContentBusScript:
+    return _node("ContentBus") as ContentBusScript
+
+# enums remain reachable with no instance:
+await bus.request_view_change(ContentBusScript.ViewMode.LIST)
+```
+
+## Also: addons provision their own autoloads
+
+An addon that requires an autoload registers it in its own `EditorPlugin`
+`_enter_tree()`, and only removes in `_exit_tree()` what it actually added, so
+disabling the plugin never strips a host project's own entries. See
+`addons/syntree/syntree_plugin.gd` (`REQUIRED_AUTOLOADS`) for the pattern. Do not
+expect the host to hand-edit `project.godot`.
+
+## Verify before reporting done
+
+```bash
+# fast, no Godot needed — reads autoload names from project.godot
+python utilities/checks/check_addon_autoloads.py
+
+# ground truth: compiles every addon script with no autoloads live
+cp utilities/checks/addon_compile_sweep.gd synesyn_client/
+<godot> --headless --quit-after 3 --path synesyn_client \
+        --script res://addon_compile_sweep.gd
+```
+
+Resolve the Godot binary from `godotTools.editorPath.godot4` in
+`%APPDATA%\Cursor\User\settings.json`.

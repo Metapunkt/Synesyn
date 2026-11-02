@@ -1,0 +1,3384 @@
+[gd_resource type="Resource" script_class="SyntreeResources" format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/resources/content_source_resource.gd" id="1_8nm4d"]
+[ext_resource type="Script" path="res://addons/syntree/scripts/resources/content_state_resource.gd" id="2_tbxkq"]
+[ext_resource type="Script" path="res://addons/syntree/scripts/resources/graph_state_resource.gd" id="3_m105m"]
+[ext_resource type="Script" path="res://addons/syntree/scripts/resources/syntree_resources.gd" id="4_wogjk"]
+[ext_resource type="Script" path="res://addons/syntree/scripts/resources/view_state_resource.gd" id="5_w35po"]
+
+[sub_resource type="Resource" id="Resource_62amt"]
+script = ExtResource("1_8nm4d")
+sources = {
+"1744708860.188_271621": {
+"content": "{
+  \"content\": {
+    \"nodes\": [
+      {
+        \"content\": \"# code_architecture_stack\\nThis stack includes the following sources:\\n- code_architecture_1 (ID: code_architecture_1)\\n- code_architecture_2 (ID: code_architecture_2)\",
+        \"node_id\": \"1744708860.188_271621_node\",
+        \"position\": {
+          \"x\": 0.0,
+          \"y\": 0.0
+        },
+        \"relationships\": {
+          \"children\": [],
+          \"dependencies\": [],
+          \"parents\": []
+        }
+      }
+    ]
+  },
+  \"format_version\": \"1.0.0\",
+  \"meta\": {
+    \"ai_context\": {
+      \"is_active\": false,
+      \"is_stack\": true,
+      \"metaprompt\": false,
+      \"model_metadata\": {
+
+      },
+      \"stack_layout\": {
+        \"node_positions\": {
+          \"code_architecture_1__code_architecture_1_node_0\": {
+            \"x\": 40.0,
+            \"y\": 80.0
+          },
+          \"code_architecture_2__code_architecture_2_node_0\": {
+            \"x\": 920.0,
+            \"y\": 80.0
+          }
+        }
+      },
+      \"stack_sources\": [
+        {
+          \"id\": \"code_architecture_1\",
+          \"name\": \"code_architecture_1\",
+          \"path\": \"res://addons/syntree/docs/architecture.gd\"
+        },
+        {
+          \"id\": \"code_architecture_2\",
+          \"name\": \"code_architecture_2\",
+          \"path\": \"res://addons/syntree/docs/architecture_2.md\"
+        }
+      ]
+    },
+    \"author\": \"SynTree User\",
+    \"created\": \"2025-04-15T11:21:00\",
+    \"modified\": \"2025-04-15T11:21:00\",
+    \"name\": \"code_architecture_stack\",
+    \"path\": \"res://addons/syntree/content_source_lists/code_architecture_stack.json\",
+    \"source_id\": \"1744708860.188_271621\"
+  }
+}",
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"is_active": false,
+"is_stack": true,
+"metaprompt": false,
+"model_metadata": {},
+"stack_layout": {
+"node_positions": {
+"code_architecture_1__code_architecture_1_node_0": {
+"x": 40.0,
+"y": 80.0
+},
+"code_architecture_1__node_1766609239.813": {
+"x": 760.0,
+"y": 100.0
+},
+"code_architecture_2__code_architecture_2_node_0": {
+"x": 1240.0,
+"y": 40.0
+}
+}
+},
+"stack_sources": [{
+"id": "code_architecture_1",
+"name": "code_architecture_1",
+"path": "res://addons/syntree/docs/architecture.gd"
+}, {
+"id": "code_architecture_2",
+"name": "code_architecture_2",
+"path": "res://addons/syntree/docs/architecture_2.md"
+}]
+},
+"author": "SynTree User",
+"created": "2025-04-15T11:21:00",
+"modified": "2025-04-15T11:21:00",
+"name": "code_architecture_stack",
+"path": "res://addons/syntree/content_source_lists/code_architecture_stack.json",
+"source_id": "1744708860.188_271621"
+}
+},
+"1766609203.92_792449": {
+"content": {
+"nodes": [{
+"content": "# test2
+This stack includes the following sources:
+- code_architecture_1 (ID: code_architecture_1)
+- readmereadme (ID: readmereadme)
+- remote_readme_2 (ID: remote_readme_2_remote_152)
+- sample_source (ID: sample_source)
+- test1 (ID: test1)",
+"node_id": "1766609203.92_792449_node",
+"position": {
+"x": 0.0,
+"y": 0.0
+},
+"relationships": {
+"children": [],
+"dependencies": [],
+"parents": []
+}
+}]
+},
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"include_unwired_nodes": false,
+"is_active": false,
+"is_stack": true,
+"metaprompt": false,
+"model_metadata": {},
+"stack_sources": [{
+"id": "code_architecture_1",
+"name": "code_architecture_1",
+"path": "res://addons/syntree/docs/architecture.gd"
+}, {
+"id": "readmereadme",
+"name": "readmereadme",
+"path": "res://addons/syntree/README.md"
+}, {
+"id": "remote_readme_2_remote_152",
+"name": "remote_readme_2",
+"path": "https://raw.githubusercontent.com/BI-DS/DRE7053/master/README.md"
+}, {
+"id": "sample_source",
+"name": "sample_source",
+"path": "res://addons/syntree/README.md"
+}, {
+"id": "test1",
+"name": "test1",
+"path": "res://addons/syntree/config.cfg"
+}]
+},
+"author": "SynTree User",
+"created": "2025-12-24T21:46:43",
+"modified": "2025-12-24T21:46:43",
+"name": "test2",
+"path": "res://addons/syntree/content_source_lists/test2.json",
+"source_id": "1766609203.92_792449"
+}
+},
+"code_architecture_1": {
+"content": {
+"nodes": [{
+"content": "\"\"\"
+SYNTREE ARCHITECTURE GUIDE
+
+Component Responsibilities:
+---------------------------
+- ContentBus: Central event bus for cross-component communication
+- ContentModel: Data management and business logic
+- ContentViewManager: UI view switching and display logic
+- SyntreePanel: Main container and coordination
+
+Communication Patterns:
+----------------------
+✅ SyntreePanel -> ContentViewManager: Direct reference passing
+✅ Components -> ContentBus: Signal-based communication
+✅ ContentBus -> Components: Signal handlers
+❌ Direct node searches across components (e.g., find_node, get_node)
+
+Reference Management:
+-------------------
+✅ Pass references through constructor/setup methods
+✅ Store references in properly named variables
+❌ Search for nodes outside component boundaries
+
+Development Guidelines:
+---------------------
+1. AVOID REGRESSION: Ensure changes don't break existing functionality
+   - Maintain view switching/button visibility behavior
+   - Preserve existing signal connections
+   - Test all view modes after making changes
+
+2. REDUCE REDUNDANCY: Leverage existing infrastructure
+   - Reuse existing methods rather than creating duplicates
+   - Check if functionality already exists in ContentBus/ContentModel
+   - Place new code in appropriate component based on responsibility
+
+3. MAINTAIN SIMPLICITY: Keep code clean and maintainable
+   - Avoid overly complex solutions when simpler ones suffice
+   - Don't add unnecessary abstraction layers
+   - Keep method and class sizes reasonable
+
+4. RESPECT COMPONENT BOUNDARIES: Follow the established architecture
+   - UI logic belongs in view components
+   - Data management belongs in ContentModel
+   - Cross-component communication goes through ContentBus
+   - Container/coordination logic belongs in SyntreePanel
+
+Extension Patterns:
+-----------------
+- Add new view types by extending ContentViewManager with new view methods
+- Add new content source types by extending ContentModel parsers
+- Add new graph node types by creating new scene inheriting from ContentSourceGraphNode
+- Add new signals to ContentBus for new cross-component events
+
+Error Handling:
+-------------
+- Use NotificationManager (utils/notification_manager.gd) for user-facing notifications
+- Use dedicated error handlers in utils/error_handling/ for structured error management
+- Component-level errors should use appropriate error classes from error_handling/
+- Log technical errors using push_error() for debugging
+- Cross-component errors should be communicated via ContentBus to NotificationManager
+- For UI components, emit show_error_requested signal to bubble errors up to notification display
+
+Performance Considerations:
+------------------------
+- Defer heavy operations when UI responsiveness is important
+- Batch updates to prevent multiple UI refreshes
+- Cache frequently accessed data
+- Use signals for asynchronous operations rather than polling
+
+Documentation Preservation:
+-------------------------
+- Interface headers (COMPONENT, RESPONSIBILITY, etc.) must NOT be removed or modified without explicitly changing the component's architecture
+- ARCHITECTURE-BOUNDARY comments serve as critical guardrails and should be preserved across code changes
+- When making changes to a file, always retain these architectural markers unless specifically directed to modify them
+- If architectural boundaries must change, update both the code AND the corresponding documentation
+
+## Graph View System
+
+The graph view system visualizes content nodes and their relationships. It consists of:
+
+1. ContentGraphController: Manages the graph view and node connections
+2. ContentSourceGraphNode: Visual representation of content nodes
+3. GraphEdit: Godot's built-in graph editing control
+
+### Connection Workflow
+
+The graph connection system follows a specific workflow to ensure proper visualization:
+
+1. Node Creation:
+   - Instantiate ContentSourceGraphNode for each content node
+   - Set basic properties (node_id, node_data, content, path)
+   - Add nodes to the scene tree
+
+2. UI Update:
+   - Call update_ui_from_data() on each node after adding to tree
+   - This updates all UI elements and initializes connection slots
+   - Slots are configured based on relationship data (parents/children)
+
+3. Connection Creation:
+   - Create connections between nodes using GraphEdit.connect_node()
+   - Use slot index 0 for all connections
+   - Connections are made from parent's output slot to child's input slot
+   - Force graph update after all connections are created
+
+### Important Implementation Details
+
+- Nodes must be added to the scene tree before UI update
+- Slots must be initialized based on relationship data
+- All connections use slot index 0
+- The graph must be updated after all connections are created
+- Relationship data structure: {\"parents\": [], \"children\": [], \"dependencies\": []}
+
+## Content Source Selection Flow
+
+The content source selection follows a strict single-channel pattern:
+
+1. Selection Origin:
+   - ContentSourceItem handles the select checkbox toggle
+   - Emits directly to ContentBus.source_selected
+
+2. Selection Broadcasting:
+   - ContentBus.source_selected signal is the single source of truth
+   - All components needing selection state listen to ContentBus
+
+3. Selection Handling:
+   - ContentViewManager updates UI state and button visibility
+   - Other components can listen to ContentBus.source_selected as needed
+
+This ensures consistent selection state across the application and prevents
+duplicate or conflicting selection handling.
+
+## View State Management
+
+The view state management follows a strict pattern:
+
+1. View State Source of Truth:
+   - ContentBus maintains the single source of truth for current view mode
+   - ContentBus.request_view_change() is the only way to change views
+   - View changes are broadcast through ContentBus.view_changed signal
+
+2. View Button Visibility Rules:
+   - List View:
+     * List button: Hidden (current view)
+     * Hierarchy button: Visible and enabled only when source selected
+     * Graph button: Hidden
+   
+   - Hierarchy View:
+     * List button: Visible
+     * Hierarchy button: Hidden (current view)
+     * Graph button: Visible and enabled
+   
+   - Graph View:
+     * List button: Visible
+     * Hierarchy button: Visible and enabled
+     * Graph button: Hidden (current view)
+
+3. View UI Updates:
+   - ContentViewManager._update_view_ui_for_mode handles all UI updates
+   - View type label shows current view and source context
+   - Button states are updated through _update_button_states
+   - View visibility is managed centrally
+
+This ensures consistent view state transitions and UI feedback across the application.
+
+## Metaprompt State Management
+
+The metaprompt state follows a centralized state management pattern with source-specific persistence:
+
+1. State Source of Truth:
+   - ContentBus maintains the runtime source of truth for metaprompt state
+   - ContentBus.set_source_metaprompt() is the only way to change state
+   - Changes are broadcast through ContentBus.metaprompt_state_changed signal
+
+2. View Updates:
+   - List View: Checkbox in ContentSourceItem
+   - Hierarchy View: Visual state in hierarchy items
+   - Graph View: Node appearance in ContentSourceGraphNode
+
+3. State Flow:
+   [Any View] -> ContentBus.set_source_metaprompt()
+                 -> ContentModel.update_source()
+                 -> ContentBus.metaprompt_state_changed
+                 -> All views update
+                 -> Source data saved
+
+4. Source-Specific Persistence:
+   - Each content source saves its complete state
+   - Changes are saved with the source's other data
+   - State is restored when source is loaded
+
+This ensures consistent metaprompt state across views while maintaining source independence.
+\"\"\" ",
+"node_id": "code_architecture_1_node_0",
+"position": {
+"x": -120.0,
+"y": 300.0
+},
+"relationships": {
+"associations": [],
+"children": ["node_1766609239.813"],
+"dependencies": [],
+"parents": []
+},
+"title": "code_architecture_1",
+"type": "gdscript"
+}, {
+"content": "",
+"node_id": "node_1766609239.813",
+"position": {
+"x": 720.0,
+"y": -40.0
+},
+"relationships": {
+"associations": [],
+"children": [],
+"dependencies": [],
+"parents": ["code_architecture_1_node_0"]
+},
+"title": "New Node"
+}]
+},
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"is_active": false,
+"is_stack": false,
+"metaprompt": false,
+"model_metadata": {}
+},
+"author": "SynTree",
+"created": "2025-04-15T11:18:01",
+"modified": "2025-04-15T11:18:01",
+"name": "code_architecture_1",
+"path": "res://addons/syntree/docs/architecture.gd",
+"source_id": "code_architecture_1",
+"source_type": "gd"
+}
+},
+"code_architecture_2": {
+"content": {
+"nodes": [{
+"content": "# SynTree Architecture 2.0: Resource-Based Framework
+## Context
+SynTree is transitioning from a signal-based to a resource-based architecture to address several critical issues:
+1. Recursive signal chains causing stack overflows
+2. Complex initialization order dependencies
+3. Difficult state synchronization across views
+4. Hard-to-debug state management issues
+## Core Resource Types
+### ViewStateResource
+A centralized resource that tracks and manages view state:
+- Current view mode (LIST, HIERARCHY, GRAPH)
+- Currently selected source(s)
+- View state history
+- Selection state
+### ContentSourceResource
+The source of truth for content data:
+- Source data storage (Dictionary mapping IDs to data)
+- Node-to-source mapping
+- Normalized ID management
+- Source data validation
+- Metaprompt state for each source
+- Source metadata management
+### GraphStateResource
+Manages graph view state:
+- Node positions in graph view
+- Graph zoom and scroll state
+- Visibility of nodes
+## Component Responsibilities
+### Resources
+- **Single source of truth** for all state
+- **Self-validating** when state changes
+- **Emit changed signal** when modified
+- **Handle serialization** for persistent data
+### Views
+- **Read from Resources** for rendering
+- **Never modify Resources directly**
+- **Send user actions** to Services
+- **Subscribe to Resource changes** for updates
+### Services
+- **Modify Resources** in response to requests
+- **Implement business logic**
+- **Coordinate across Resources**
+- **Handle validation** before state changes
+## Communication Pattern
+```
+[User Action] → [View] → [Service] → [Resource] → [Views update]
+```
+- Views observe Resources through their `changed` signals
+- Services modify Resources based on user actions or other events
+- All components access the same Resource instances
+- No signals between components except Resource.changed
+## Persistence Model
+- Resources provide serialization methods
+- Serialized data matches JSON structure of existing files
+- ContentSourceResource handles both in-memory and on-disk state
+- A persistence service mediates writing to disk
+## Migration Approach
+### Phase 1: Parallel Architecture
+- Resource-based and signal-based systems coexist
+- All updates flow through both systems
+- Views can choose which system to use for rendering
+### Phase 2: View Migration
+- One view at a time transitions to resource-based rendering
+- Each view validates output matches existing behavior
+- Gradually increase resource-based dependence
+### Phase 3: Signal Deprecation
+- Remove redundant signals
+- Simplify view logic to only use resources
+- Clean up legacy code paths
+## Implementation Guidelines
+### Resource Management
+- Resources are referenced, not duplicated
+- Resources extend Godot's Resource class
+- Resources use strong typing with @export
+- Resources validate their own state
+### Service Design
+- Services are stateless
+- Services only modify Resources, never UI
+- Services validate inputs before modifying Resources
+- Services provide clear, focused APIs
+### View Principles
+- Views never directly modify Resources
+- Views update in response to Resource changes
+- Views send requests to Services
+- Views minimize internal state
+## Testing Approach
+- Resources: Unit test state changes and serialization
+- Services: Unit test business logic
+- Views: Test rendering from mock Resources
+- End-to-end: Test through full stack with real Resources
+## Architecture Benefits
+1. **Stability**
+- No signal recursion
+- Clear state ownership
+- Type-safe state updates
+2. **Developer Experience**
+- Resource inspection in editor
+- Built-in undo/redo support
+- Clear data flow
+3. **Maintainability**
+- Centralized state management
+- Easier testing
+- Better separation of concerns
+",
+"node_id": "code_architecture_2_node_0",
+"relationships": {
+"associations": [],
+"children": [],
+"dependencies": [],
+"parents": []
+},
+"title": "# SynTree Architecture 2.0: Resource-Based Framework",
+"type": "md"
+}]
+},
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"is_active": false,
+"is_stack": false,
+"metaprompt": false,
+"model_metadata": {}
+},
+"author": "SynTree",
+"created": "2025-04-15T11:18:19",
+"modified": "2025-04-15T11:18:19",
+"name": "code_architecture_2",
+"path": "res://addons/syntree/docs/architecture_2.md",
+"source_id": "code_architecture_2",
+"source_type": "md"
+}
+},
+"code_architecture_stackkkkk": {
+"content": {
+"nodes": []
+},
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"is_active": false,
+"is_stack": false,
+"metaprompt": false,
+"model_metadata": {}
+},
+"author": "SynTree User",
+"created": "2025-12-24T19:55:57",
+"modified": "2025-12-24T19:55:57",
+"name": "code_architecture_stackkkkk",
+"path": "res://addons/syntree/content_source_lists/code_architecture_stack.json",
+"source_id": "code_architecture_stackkkkk",
+"source_origin": "file",
+"source_type": "json"
+}
+},
+"test1": {
+"content": {
+"nodes": []
+},
+"format_version": "1.0.0",
+"meta": {
+"ai_context": {
+"is_active": false,
+"is_stack": false,
+"metaprompt": false,
+"model_metadata": {}
+},
+"author": "SynTree User",
+"created": "2025-04-18T21:17:51",
+"modified": "2025-04-18T21:17:51",
+"name": "test1",
+"path": "res://addons/syntree/config.cfg",
+"source_id": "test1",
+"source_origin": "file",
+"source_type": "cfg"
+}
+}
+}
+node_to_source_map = {
+"1766609203.92_792449_node": "1766609203.92_792449",
+"code_architecture_1_node_0": "code_architecture_1",
+"code_architecture_2_node_0": "code_architecture_2",
+"node_1766609239.813": "code_architecture_1",
+"node_1766609252.816": "code_architecture_1",
+"node_1766611520.652": "code_architecture_1"
+}
+sources_directory = "res://addons/syntree/content_source_lists/"
+
+[sub_resource type="Resource" id="Resource_4744b"]
+script = ExtResource("2_tbxkq")
+content_source = SubResource("Resource_62amt")
+
+[sub_resource type="Resource" id="Resource_gcneg"]
+script = ExtResource("3_m105m")
+
+[sub_resource type="Resource" id="Resource_k7rtj"]
+script = ExtResource("5_w35po")
+current_source_id = "code_architecture_1"
+selected_source_ids = Array[String](["code_architecture_1"])
+current_thread_id = "ANewThreadForTesting"
+dev_agent_enabled = true
+view_history = Array[Dictionary]([{
+"mode": 0,
+"source_id": "content_graph"
+}, {
+"mode": 1,
+"source_id": "ai_integration"
+}, {
+"mode": 0,
+"source_id": "ai_integration"
+}, {
+"mode": 1,
+"source_id": "ai_integration"
+}, {
+"mode": 2,
+"source_id": "ai_integration"
+}, {
+"mode": 0,
+"source_id": "ai_integration"
+}, {
+"mode": 1,
+"source_id": "content_graph"
+}, {
+"mode": 2,
+"source_id": "content_graph"
+}, {
+"mode": 0,
+"source_id": "ai_integration"
+}, {
+"mode": 1,
+"source_id": "content_graph"
+}, {
+"mode": 2,
+"source_id": "content_graph"
+}, {
+"mode": 1,
+"source_id": "content_graph"
+}, {
+"mode": 1,
+"source_id": "remote_readme_2_remote_152"
+}, {
+"mode": 0,
+"source_id": "remote_readme_2_remote_152"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 2,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "content_source_graph_node"
+}, {
+"mode": 0,
+"source_id": "content_source_graph_node"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "content_source_graph_node"
+}, {
+"mode": 0,
+"source_id": "content_source_graph_node"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 2,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 2,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 2,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 2,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "general_coding_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 2,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "fthyuj"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 2,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 2,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 2,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 2,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "content_graph_controller"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "remote_readme_2_remote_152"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "test1"
+}, {
+"mode": 0,
+"source_id": "test1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "test1"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "content_graph_controller"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 0,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1766583541.545_453332"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "test1"
+}, {
+"mode": 1,
+"source_id": "1766609203.92_792449"
+}, {
+"mode": 0,
+"source_id": "1766609203.92_792449"
+}, {
+"mode": 0,
+"source_id": "1766609203.92_792449"
+}, {
+"mode": 1,
+"source_id": "1766609203.92_792449"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "punkt1"
+}, {
+"mode": 2,
+"source_id": "punkt1"
+}, {
+"mode": 1,
+"source_id": "punkt1"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "node_02"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 2,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "node_02"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "new_sauce_02"
+}, {
+"mode": 1,
+"source_id": "new_sauce_02"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_03"
+}, {
+"mode": 2,
+"source_id": "node_03"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 0,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 0,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 0,
+"source_id": "new_sauce_01"
+}, {
+"mode": 0,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "new_sauce_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_01"
+}, {
+"mode": 0,
+"source_id": "new_sauce_01"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 0,
+"source_id": "1744961345.042_317210"
+}, {
+"mode": 1,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 0,
+"source_id": "1744708860.188_271621"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 0,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "code_architecture_2"
+}, {
+"mode": 0,
+"source_id": "code_architecture_2"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 0,
+"source_id": "1766590281.246_34306"
+}, {
+"mode": 1,
+"source_id": "code_architecture_stackkkkk"
+}, {
+"mode": 0,
+"source_id": "code_architecture_stackkkkk"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 0,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 2,
+"source_id": "godot_assistant_metaprompt"
+}, {
+"mode": 1,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 2,
+"source_id": "1766612147.258_826034"
+}, {
+"mode": 1,
+"source_id": "node_01"
+}, {
+"mode": 2,
+"source_id": "new_sauce_02"
+}, {
+"mode": 1,
+"source_id": "new_sauce_02"
+}, {
+"mode": 2,
+"source_id": "new_sauce_02"
+}, {
+"mode": 1,
+"source_id": "new_sauce_02"
+}, {
+"mode": 2,
+"source_id": "new_sauce_02"
+}, {
+"mode": 1,
+"source_id": "new_sauce_02"
+}, {
+"mode": 0,
+"source_id": "new_sauce_02"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 0,
+"source_id": "code_architecture_1"
+}, {
+"mode": 1,
+"source_id": "code_architecture_1"
+}, {
+"mode": 2,
+"source_id": "code_architecture_1"
+}])
+
+[resource]
+script = ExtResource("4_wogjk")
+content_state = SubResource("Resource_4744b")
+view_state = SubResource("Resource_k7rtj")
+graph_state = SubResource("Resource_gcneg")

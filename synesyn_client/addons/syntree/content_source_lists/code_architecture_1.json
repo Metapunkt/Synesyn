@@ -1,0 +1,59 @@
+{
+  "content": {
+    "nodes": [
+      {
+        "content": "\"\"\"\r\nSYNTREE ARCHITECTURE GUIDE\r\n\r\nComponent Responsibilities:\r\n---------------------------\r\n- ContentBus: Central event bus for cross-component communication\r\n- ContentModel: Data management and business logic\r\n- ContentViewManager: UI view switching and display logic\r\n- SyntreePanel: Main container and coordination\r\n\r\nCommunication Patterns:\r\n----------------------\r\n✅ SyntreePanel -> ContentViewManager: Direct reference passing\r\n✅ Components -> ContentBus: Signal-based communication\r\n✅ ContentBus -> Components: Signal handlers\r\n❌ Direct node searches across components (e.g., find_node, get_node)\r\n\r\nReference Management:\r\n-------------------\r\n✅ Pass references through constructor/setup methods\r\n✅ Store references in properly named variables\r\n❌ Search for nodes outside component boundaries\r\n\r\nDevelopment Guidelines:\r\n---------------------\r\n1. AVOID REGRESSION: Ensure changes don't break existing functionality\r\n   - Maintain view switching/button visibility behavior\r\n   - Preserve existing signal connections\r\n   - Test all view modes after making changes\r\n\r\n2. REDUCE REDUNDANCY: Leverage existing infrastructure\r\n   - Reuse existing methods rather than creating duplicates\r\n   - Check if functionality already exists in ContentBus/ContentModel\r\n   - Place new code in appropriate component based on responsibility\r\n\r\n3. MAINTAIN SIMPLICITY: Keep code clean and maintainable\r\n   - Avoid overly complex solutions when simpler ones suffice\r\n   - Don't add unnecessary abstraction layers\r\n   - Keep method and class sizes reasonable\r\n\r\n4. RESPECT COMPONENT BOUNDARIES: Follow the established architecture\r\n   - UI logic belongs in view components\r\n   - Data management belongs in ContentModel\r\n   - Cross-component communication goes through ContentBus\r\n   - Container/coordination logic belongs in SyntreePanel\r\n\r\nExtension Patterns:\r\n-----------------\r\n- Add new view types by extending ContentViewManager with new view methods\r\n- Add new content source types by extending ContentModel parsers\r\n- Add new graph node types by creating new scene inheriting from ContentSourceGraphNode\r\n- Add new signals to ContentBus for new cross-component events\r\n\r\nError Handling:\r\n-------------\r\n- Use NotificationManager (utils/notification_manager.gd) for user-facing notifications\r\n- Use dedicated error handlers in utils/error_handling/ for structured error management\r\n- Component-level errors should use appropriate error classes from error_handling/\r\n- Log technical errors using push_error() for debugging\r\n- Cross-component errors should be communicated via ContentBus to NotificationManager\r\n- For UI components, emit show_error_requested signal to bubble errors up to notification display\r\n\r\nPerformance Considerations:\r\n------------------------\r\n- Defer heavy operations when UI responsiveness is important\r\n- Batch updates to prevent multiple UI refreshes\r\n- Cache frequently accessed data\r\n- Use signals for asynchronous operations rather than polling\r\n\r\nDocumentation Preservation:\r\n-------------------------\r\n- Interface headers (COMPONENT, RESPONSIBILITY, etc.) must NOT be removed or modified without explicitly changing the component's architecture\r\n- ARCHITECTURE-BOUNDARY comments serve as critical guardrails and should be preserved across code changes\r\n- When making changes to a file, always retain these architectural markers unless specifically directed to modify them\r\n- If architectural boundaries must change, update both the code AND the corresponding documentation\r\n\r\n## Graph View System\r\n\r\nThe graph view system visualizes content nodes and their relationships. It consists of:\r\n\r\n1. ContentGraphController: Manages the graph view and node connections\r\n2. ContentSourceGraphNode: Visual representation of content nodes\r\n3. GraphEdit: Godot's built-in graph editing control\r\n\r\n### Connection Workflow\r\n\r\nThe graph connection system follows a specific workflow to ensure proper visualization:\r\n\r\n1. Node Creation:\r\n   - Instantiate ContentSourceGraphNode for each content node\r\n   - Set basic properties (node_id, node_data, content, path)\r\n   - Add nodes to the scene tree\r\n\r\n2. UI Update:\r\n   - Call update_ui_from_data() on each node after adding to tree\r\n   - This updates all UI elements and initializes connection slots\r\n   - Slots are configured based on relationship data (parents/children)\r\n\r\n3. Connection Creation:\r\n   - Create connections between nodes using GraphEdit.connect_node()\r\n   - Use slot index 0 for all connections\r\n   - Connections are made from parent's output slot to child's input slot\r\n   - Force graph update after all connections are created\r\n\r\n### Important Implementation Details\r\n\r\n- Nodes must be added to the scene tree before UI update\r\n- Slots must be initialized based on relationship data\r\n- All connections use slot index 0\r\n- The graph must be updated after all connections are created\r\n- Relationship data structure: {\"parents\": [], \"children\": [], \"dependencies\": []}\r\n\r\n## Content Source Selection Flow\r\n\r\nThe content source selection follows a strict single-channel pattern:\r\n\r\n1. Selection Origin:\r\n   - ContentSourceItem handles the select checkbox toggle\r\n   - Emits directly to ContentBus.source_selected\r\n\r\n2. Selection Broadcasting:\r\n   - ContentBus.source_selected signal is the single source of truth\r\n   - All components needing selection state listen to ContentBus\r\n\r\n3. Selection Handling:\r\n   - ContentViewManager updates UI state and button visibility\r\n   - Other components can listen to ContentBus.source_selected as needed\r\n\r\nThis ensures consistent selection state across the application and prevents\r\nduplicate or conflicting selection handling.\r\n\r\n## View State Management\r\n\r\nThe view state management follows a strict pattern:\r\n\r\n1. View State Source of Truth:\r\n   - ContentBus maintains the single source of truth for current view mode\r\n   - ContentBus.request_view_change() is the only way to change views\r\n   - View changes are broadcast through ContentBus.view_changed signal\r\n\r\n2. View Button Visibility Rules:\r\n   - List View:\r\n     * List button: Hidden (current view)\r\n     * Hierarchy button: Visible and enabled only when source selected\r\n     * Graph button: Hidden\r\n   \r\n   - Hierarchy View:\r\n     * List button: Visible\r\n     * Hierarchy button: Hidden (current view)\r\n     * Graph button: Visible and enabled\r\n   \r\n   - Graph View:\r\n     * List button: Visible\r\n     * Hierarchy button: Visible and enabled\r\n     * Graph button: Hidden (current view)\r\n\r\n3. View UI Updates:\r\n   - ContentViewManager._update_view_ui_for_mode handles all UI updates\r\n   - View type label shows current view and source context\r\n   - Button states are updated through _update_button_states\r\n   - View visibility is managed centrally\r\n\r\nThis ensures consistent view state transitions and UI feedback across the application.\r\n\r\n## Metaprompt State Management\r\n\r\nThe metaprompt state follows a centralized state management pattern with source-specific persistence:\r\n\r\n1. State Source of Truth:\r\n   - ContentBus maintains the runtime source of truth for metaprompt state\r\n   - ContentBus.set_source_metaprompt() is the only way to change state\r\n   - Changes are broadcast through ContentBus.metaprompt_state_changed signal\r\n\r\n2. View Updates:\r\n   - List View: Checkbox in ContentSourceItem\r\n   - Hierarchy View: Visual state in hierarchy items\r\n   - Graph View: Node appearance in ContentSourceGraphNode\r\n\r\n3. State Flow:\r\n   [Any View] -> ContentBus.set_source_metaprompt()\r\n                 -> ContentModel.update_source()\r\n                 -> ContentBus.metaprompt_state_changed\r\n                 -> All views update\r\n                 -> Source data saved\r\n\r\n4. Source-Specific Persistence:\r\n   - Each content source saves its complete state\r\n   - Changes are saved with the source's other data\r\n   - State is restored when source is loaded\r\n\r\nThis ensures consistent metaprompt state across views while maintaining source independence.\r\n\"\"\" ",
+        "node_id": "code_architecture_1_node_0",
+        "position": {
+          "x": -120.0,
+          "y": 300.0
+        },
+        "relationships": {
+          "associations": [],
+          "children": [
+            "node_1766609239.813"
+          ],
+          "dependencies": [],
+          "parents": []
+        },
+        "title": "code_architecture_1",
+        "type": "gdscript"
+      },
+      {
+        "content": "",
+        "node_id": "node_1766609239.813",
+        "position": {
+          "x": 720.0,
+          "y": -40.0
+        },
+        "relationships": {
+          "associations": [],
+          "children": [],
+          "dependencies": [],
+          "parents": [
+            "code_architecture_1_node_0"
+          ]
+        },
+        "title": "New Node"
+      }
+    ]
+  },
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "is_active": false,
+      "is_stack": false,
+      "metaprompt": false,
+      "model_metadata": {
+
+      }
+    },
+    "author": "SynTree",
+    "created": "2025-04-15T11:18:01",
+    "modified": "2025-04-15T11:18:01",
+    "name": "code_architecture_1",
+    "path": "res://addons/syntree/docs/architecture.gd",
+    "source_id": "code_architecture_1",
+    "source_type": "gd"
+  }
+}

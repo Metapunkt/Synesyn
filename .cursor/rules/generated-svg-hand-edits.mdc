@@ -1,0 +1,28 @@
+﻿---
+description: Never clobber hand edits in generated SVG decks and sheets
+globs: Metapunkt_artVenture/**/*.svg,Metapunkt_artVenture/**/build/*.py
+alwaysApply: false
+---
+
+# Generated SVGs are also hand-edited
+
+The presentation SVGs under `Metapunkt_artVenture/.../TowardsPracticalUtopias_Aug2026/`
+are produced by `build/` **and** edited afterwards in Inkscape by the user. A plain
+rebuild destroys that work. This has happened before; the user has asked explicitly
+that it not happen again.
+
+## Rules
+
+- Never run `build/build_deck.py` or `build/build_sheets.py` with `--force` unless the
+  user has been told what will be overwritten and has agreed.
+- `document.write_guarded()` refuses to overwrite any output whose SHA-256 no longer
+  matches the fingerprint in `_build_stamp.json`, and copies the file to `_backups/`
+  first. Do not weaken, bypass or delete that check, the stamp file, or the backups.
+- When the guard trips, the correct move is to **diff the backup against the last
+  generated version, port the user's change into `build/`, then rebuild**. Do not
+  re-apply the change by editing the output SVG, because the next build will lose it
+  again.
+- Prefer rebuilding only the artefact you are actually changing. A footer change to the
+  sheets is no reason to touch the deck.
+- Any new writer of a long-lived SVG/PDF artefact in this folder must go through
+  `write_guarded`, not `open(path, "w")`.

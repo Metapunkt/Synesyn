@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "_comment": [
+    "Story Stage character art ships as optional content packs rather than in the",
+    "repository. story_stage_sprites.py reads this file to build, publish and",
+    "install them. Sizes and checksums are written by `build --update-manifest`;",
+    "download_url is filled in by hand once the archive is attached to a release.",
+    "Paths are relative to `destination`, which is relative to the repository root."
+  ],
+  "destination": "synesyn_client/ScenSyn/story_stage/sprites",
+  "packs": [
+    {
+      "id": "ireti-okan",
+      "name": "Ireti Okan — Awaiting an Awakening",
+      "collection": "cultural_narratives",
+      "path": "cultural_narratives/ireti_okan_awaiting_an_awakening",
+      "description": "Character art for the Ireti Okan scenario. The smaller of the two packs, and the one to start with.",
+      "file_count": 94,
+      "uncompressed_bytes": 69196842,
+      "archive_bytes": 69193648,
+      "archive_sha256": "06a2b11cc4786d489b318269eac595230e8a9e1bf4464a942a251a886b44231f",
+      "download_url": ""
+    },
+    {
+      "id": "stochastic-dreams",
+      "name": "Stochastic Dreams",
+      "collection": "cultural_narratives",
+      "path": "cultural_narratives/stochastic_dreams",
+      "description": "Character art for the Stochastic Dreams scenario, which has the largest cast and the most animation states.",
+      "file_count": 638,
+      "uncompressed_bytes": 502258870,
+      "archive_bytes": 502233938,
+      "archive_sha256": "05db4aed207d0f422b152b4f4d951de0a51582cecbd6788543e2d8f25491b25e",
+      "download_url": ""
+    }
+  ]
+}

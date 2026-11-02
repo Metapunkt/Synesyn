@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[node name="WorkshopComparePaths" type="VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 7
+
+[node name="Heading" type="Label" parent="."]
+layout_mode = 2
+text = "Compare Paths"
+
+[node name="Guidance" type="Label" parent="."]
+layout_mode = 2
+text = "Review every path, including doing nothing. Evidence may support a claim but does not select or commit a path."
+autowrap_mode = 2
+
+[node name="ProposalActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ImportReviewedRecordButton" type="Button" parent="ProposalActions"]
+visible = false
+layout_mode = 2
+text = "Propose from reviewed notes"
+
+[node name="RetrieveEvidenceButton" type="Button" parent="ProposalActions"]
+visible = false
+layout_mode = 2
+text = "Retrieve evidence"
+
+[node name="EvidenceRetrievalStatus" type="Label" parent="."]
+layout_mode = 2
+text = "Evidence not retrieved. Paths without references are labelled none."
+autowrap_mode = 2
+
+[node name="PathScroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 430)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PathCards" type="HBoxContainer" parent="PathScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CombinationActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="CombinationLabel" type="LineEdit" parent="CombinationActions"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Name the combined path"
+
+[node name="CombineSelectedButton" type="Button" parent="CombinationActions"]
+visible = false
+layout_mode = 2
+text = "Combine checked paths"
+
+[node name="ClearSelectionButton" type="Button" parent="CombinationActions"]
+visible = false
+layout_mode = 2
+text = "Clear selection"
+
+[node name="SelectionStatus" type="Label" parent="."]
+layout_mode = 2
+text = "No path selected. Selection remains a draft."
+autowrap_mode = 2
+
+[node name="CommitActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PreviewPathsButton" type="Button" parent="CommitActions"]
+visible = false
+layout_mode = 2
+text = "Preview comparison"
+
+[node name="CommitPathsButton" type="Button" parent="CommitActions"]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Commit selected path set"
+
+[node name="RetryPathCommitButton" type="Button" parent="CommitActions"]
+visible = false
+layout_mode = 2
+text = "Retry commit"
+
+[node name="RoutePathOutcomesButton" type="Button" parent="CommitActions"]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Add committed outcomes to Session Record"
+
+[node name="PathCommitStatus" type="Label" parent="."]
+layout_mode = 2
+text = "Preview is required before Commit."
+autowrap_mode = 2
+
+[node name="PathPreviewPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="PathPreviewText" type="TextEdit" parent="PathPreviewPanel"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+editable = false
+wrap_mode = 1

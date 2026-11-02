@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://s0i3qen2d5pi"]
+
+[ext_resource type="Script" uid="uid://crpnovdwfk4ve" path="res://addons/syntree_voice/test_voice_debug.gd" id="1_mw55q"]
+[ext_resource type="Script" uid="uid://dqvig6bcndhpf" path="res://addons/syntree_voice/scripts/integration/scensyn_voice_bridge.gd" id="2_o7ogb"]
+
+[node name="TestSceneSyntreeVoice" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mw55q")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="VoiceBridge" type="Node" parent="."]
+script = ExtResource("2_o7ogb")

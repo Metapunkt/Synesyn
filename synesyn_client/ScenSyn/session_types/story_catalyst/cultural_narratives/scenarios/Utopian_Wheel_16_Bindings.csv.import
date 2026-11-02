@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c3bfhynrj6ou5"
+
+[deps]
+
+files=["res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Binding.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Domain.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Tension.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Thesis.translation"]
+
+source_file="res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.csv"
+dest_files=["res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Binding.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Domain.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Tension.translation", "res://ScenSyn/session_types/story_catalyst/cultural_narratives/scenarios/Utopian_Wheel_16_Bindings.Thesis.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

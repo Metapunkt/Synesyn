@@ -1,0 +1,189 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_set_panel.gd" id="1_context_sets"]
+
+[node name="ContextSets" type="PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_context_sets")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="SetTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Named context sets"
+
+[node name="SetSelector" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SetIdEdit" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Stable id (for example: research)"
+
+[node name="SetLabelEdit" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Display label"
+
+[node name="EntryCaption" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Entry nodes"
+
+[node name="EntryList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+select_mode = 1
+
+[node name="RelationCaption" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Allowed relationships (none means all)"
+
+[node name="RelationList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+select_mode = 1
+
+[node name="PolicyRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DepthLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/PolicyRow"]
+layout_mode = 2
+text = "Depth"
+
+[node name="DepthSpin" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/PolicyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 20.0
+value = 2.0
+
+[node name="BudgetLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/PolicyRow"]
+layout_mode = 2
+text = "Budget"
+
+[node name="SetBudgetSpin" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/PolicyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 100000.0
+value = 8000.0
+suffix = " tokens"
+
+[node name="PromptChainEdit" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Optional prompt-chain ids, comma separated"
+
+[node name="SetActions" type="HFlowContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SaveSetButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/SetActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save local draft"
+
+[node name="PreviewSetButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/SetActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preview"
+
+[node name="CommitSetButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/SetActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Commit the previewed context set and graph as a new immutable Hub artifact version."
+text = "Commit version"
+
+[node name="DuplicateButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/SetActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Duplicate"
+
+[node name="DeleteSetButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/SetActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete draft"
+
+[node name="HistoryRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HistoryLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/HistoryRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Committed versions"
+
+[node name="HistoryButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/HistoryRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh history"
+
+[node name="HistoryList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="ActivationSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ActivationTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Node activation"
+
+[node name="ActivationNodeSelector" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ActivationModeSelector" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PriorityRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PriorityLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/PriorityRow"]
+layout_mode = 2
+text = "Priority"
+
+[node name="PrioritySpin" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/PriorityRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -100.0
+max_value = 100.0
+
+[node name="ConditionsCaption" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Conditions (explicit JSON inputs)"
+
+[node name="ConditionsEdit" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "{}"
+wrap_mode = 1
+
+[node name="SaveActivationButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save node activation"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

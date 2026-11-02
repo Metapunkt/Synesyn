@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="white"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <path
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="m 12,1 c -0.599398,0 -1.257107,0.4301736 -1.443359,1.0957031 a 1.0001,1.0001 0 0 0 -0.0059,0.019531 L 8.96875,8.25 C 8.8772434,8.6038995 8.6039631,8.8755367 8.25,8.9667969 L 2.1152344,10.550781 a 1.0001,1.0001 0 0 0 -0.023437,0.0059 C 1.4288733,10.744802 1.0019531,11.402002 1.0019531,12 c 0,0.597998 0.4269202,1.255198 1.0898438,1.443359 a 1.0001,1.0001 0 0 0 0.023437,0.0059 L 8.25,15.03125 c 0.3540956,0.09135 0.6274017,0.364654 0.71875,0.71875 l 1.580078,6.134766 a 1.0001,1.0001 0 0 0 0.0059,0.01953 C 10.74094,22.569826 11.400602,23 12,23 c 0.599398,0 1.257107,-0.430174 1.443359,-1.095703 a 1.0001,1.0001 0 0 0 0.0059,-0.01953 L 15.03125,15.75 c 0.09135,-0.354096 0.364654,-0.627402 0.71875,-0.71875 l 6.134766,-1.580078 a 1.0001,1.0001 0 0 0 0.01563,-0.0059 c 0.668163,-0.184302 1.101562,-0.8445 1.101562,-1.445313 0,-0.600813 -0.433399,-1.261011 -1.101562,-1.445312 a 1.0001,1.0001 0 0 0 -0.01563,-0.0059 L 15.75,8.96875 C 15.395904,8.8774017 15.122598,8.6040956 15.03125,8.25 L 13.451172,2.1152344 a 1.0001,1.0001 0 0 0 -0.0059,-0.019531 C 13.25906,1.4301736 12.599398,1 12,1 Z M 12,4.5058594 13.09375,8.75 c 0.272297,1.0555098 1.10074,1.883953 2.15625,2.15625 L 19.496094,12 15.25,13.09375 C 14.19449,13.366047 13.366047,14.19449 13.09375,15.25 L 12,19.494141 10.90625,15.25 C 10.633953,14.19449 9.8055098,13.366047 8.75,13.09375 L 4.5058594,12 8.75,10.904297 C 9.805125,10.63226 10.631526,9.8049353 10.904297,8.75 a 1.0001,1.0001 0 0 0 0.002,0 z"
+     id="path1" />
+  <path
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="m 20,2 a 1,1 0 0 0 -1,1 v 4 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 V 3 A 1,1 0 0 0 20,2 Z"
+     id="path2" />
+  <path
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="m 18,4 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 h 4 A 1,1 0 0 0 23,5 1,1 0 0 0 22,4 Z"
+     id="path3" />
+  <path
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="m 4,16 a 1,1 0 0 0 -1,1 v 2 a 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 V 17 A 1,1 0 0 0 4,16 Z"
+     id="path4" />
+  <path
+     style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+     d="m 3,17 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 H 5 A 1,1 0 0 0 6,18 1,1 0 0 0 5,17 Z"
+     id="path5" />
+</svg>

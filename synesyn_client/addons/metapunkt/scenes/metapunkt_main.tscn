@@ -1,0 +1,1296 @@
+[gd_scene format=3 uid="uid://b6x8j0q2y4n5w"]
+
+[ext_resource type="Script" uid="uid://bwipt1pyv32ud" path="res://addons/metapunkt/Networking/SLOPServer/EndpointHandler.gd" id="1_endpoint"]
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_r15xa"]
+[ext_resource type="Script" uid="uid://kfke2r71q4vp" path="res://addons/metapunkt/scenes/metapunkt_main.gd" id="2_main"]
+[ext_resource type="Texture2D" uid="uid://rs8x0mw2ubwy" path="res://addons/metapunkt/icons/metaPunkt_icon3.svg" id="4_8ykfy"]
+[ext_resource type="Theme" uid="uid://d382cd44vr6k" path="res://addons/synesyn_core/themes/SynesynBase_contemporary_dark.tres" id="5_3gulf"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="icon_start"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_stop_square.svg" id="icon_stop"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="icon_connect"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_refresh"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="icon_browse"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_person_add.svg" id="icon_spawn"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_upload_arrow.svg" id="icon_load"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="icon_save"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="icon_publish"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_plus.svg" id="icon_new"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_code_bracket.svg" id="icon_template"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="icon_validate"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_copy.svg" id="icon_copy"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="icon_clear"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="icon_settings"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="icon_external"]
+[node name="MetapunktMain" type="Control" unique_id=1355949433 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_r15xa")
+script = ExtResource("2_main")
+
+metadata/theme_surface = "utility"
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="MetapunktEndpointHandler" type="Node" parent="." unique_id=1156888770]
+script = ExtResource("1_endpoint")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2034206237]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1887369134]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=2004887531]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=494623441]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1501513638]
+layout_mode = 2
+texture = ExtResource("4_8ykfy")
+expand_mode = 3
+
+[node name="HeaderPanel" type="Panel" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1634277694]
+z_index = 50
+z_as_relative = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer/HeaderPanel" unique_id=1863408157]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Metapunkt"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopSplit" type="VSplitContainer" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1831712966]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(123)
+split_offset = 123
+
+[node name="ControlsPanel" type="Panel" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit" unique_id=1034600063]
+clip_contents = true
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.24
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel" unique_id=1127006934]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ControlsTabs" type="TabContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer" unique_id=1812847682]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+
+[node name="Services" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" unique_id=1211133637]
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services" unique_id=2034071362]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer" unique_id=349612271]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Services_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer" unique_id=479386529]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SlopTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox" unique_id=1732966394]
+layout_mode = 2
+text = "SLOP server (local control plane)"
+
+[node name="SlopRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox" unique_id=1338117058]
+layout_mode = 2
+
+[node name="SlopStartButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow" unique_id=1007264735]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Start the local SLOP HTTP server (auto-fallback port if busy)."
+text = "Start"
+
+icon = ExtResource("icon_start")
+
+[node name="SlopStopButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow" unique_id=1901748721]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Stop the local SLOP HTTP server."
+text = "Stop"
+
+icon = ExtResource("icon_stop")
+
+[node name="SlopHost" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow" unique_id=132160527]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
+placeholder_text = "Host (default: 127.0.0.1)"
+
+[node name="SlopPort" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow" unique_id=1638081858]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Preferred port. If busy, Metapunkt will try 8081..8090."
+min_value = 1.0
+max_value = 65535.0
+value = 8080.0
+rounded = true
+
+[node name="SlopBound" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow" unique_id=1817289757]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "SLOP (Simple Language-to-Object Protocol) server. Agents communicate with Metapunkt through this local endpoint."
+text = "SLOP active at 127.0.0.1:8082"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox" unique_id=1412500839]
+layout_mode = 2
+
+[node name="HubTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox" unique_id=14840602]
+layout_mode = 2
+text = "Hub events (WebSocket)"
+
+[node name="HubRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox" unique_id=779919993]
+layout_mode = 2
+
+[node name="HubConnectButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=1829890309]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Connect to the Hub WS event stream at /ws/events."
+text = "Connect"
+
+icon = ExtResource("icon_connect")
+
+[node name="HubDisconnectButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=1010753403]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Disconnect from the Hub WS event stream."
+text = "Disconnect"
+
+icon = ExtResource("icon_stop")
+
+[node name="HubUrl" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=2139942841]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "http://127.0.0.1:17777"
+placeholder_text = "Hub base URL (e.g. http://127.0.0.1:17777)"
+
+[node name="HubPreset" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=1994000984]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select an event filter preset for Hub WS subscription."
+selected = 0
+item_count = 4
+popup/item_0/text = "Default (warnings+jobs)"
+popup/item_0/id = 0
+popup/item_1/text = "Jobs only"
+popup/item_1/id = 1
+popup/item_2/text = "Tools (tool.*)"
+popup/item_2/id = 2
+popup/item_3/text = "All (unfiltered)"
+popup/item_3/id = 3
+
+[node name="HubSubscribeButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=1905351497]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Send a WS subscribe message with the selected preset."
+text = "Subscribe"
+
+icon = ExtResource("icon_connect")
+
+[node name="HubState" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow" unique_id=1074556174]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Connected to the Synesyn Hub for event streaming and artifact publishing."
+text = "Hub: online"
+horizontal_alignment = 2
+
+[node name="Agents" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" unique_id=1408281063]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents" unique_id=1157055865]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer" unique_id=1511179658]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Agents_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer" unique_id=1649859435]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AgentSpawnTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=1254042342]
+layout_mode = 2
+text = "Spawn agent from AgentDefinition (.tres)"
+
+[node name="AgentSpawnRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=1985154925]
+layout_mode = 2
+
+[node name="AgentSpawnPath" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnRow" unique_id=1704201183]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Path to an AgentDefinition .tres file. Use the Browse button or the AgentDefs tab to create/save one."
+text = "user://metapunkt/agent_chaplin.tres"
+placeholder_text = "res://path/to/agent_definition.tres"
+
+[node name="AgentSpawnBrowseButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnRow" unique_id=1571513981]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Browse"
+
+icon = ExtResource("icon_browse")
+
+[node name="AgentSpawnButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnRow" unique_id=367682253]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Spawn"
+
+icon = ExtResource("icon_spawn")
+
+[node name="AgentSpawnStatus" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=655157947]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=2109624579]
+layout_mode = 2
+
+[node name="AgentManageTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=1082046162]
+layout_mode = 2
+text = "Running agents"
+
+[node name="AgentManageRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=1041977657]
+layout_mode = 2
+
+[node name="AgentList" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentManageRow" unique_id=1666809253]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "(no agents)"
+popup/item_0/id = 0
+
+[node name="AgentRefreshButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentManageRow" unique_id=1619454916]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+
+icon = ExtResource("icon_refresh")
+
+[node name="AgentStopButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentManageRow" unique_id=2022466043]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stop"
+
+icon = ExtResource("icon_stop")
+
+[node name="AgentManageStatus" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=1105333890]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AgentSpawnFileDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox" unique_id=468560856]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+filters = PackedStringArray("*.tres ; AgentDefinition (*.tres)")
+
+[node name="Roles" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" unique_id=840560679]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles" unique_id=1763045528]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer" unique_id=2099991110]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Roles_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer" unique_id=713476635]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RoleTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox" unique_id=2004146079]
+layout_mode = 2
+text = "Role policy override (stored under Documents/Synesyn/.../metapunkt/)"
+
+[node name="RoleOverrideText" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox" unique_id=1442511514]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+text = "{}"
+wrap_mode = 1
+
+[node name="RoleButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox" unique_id=1728314860]
+layout_mode = 2
+
+[node name="RoleLoadButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons" unique_id=1002476339]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load"
+
+icon = ExtResource("icon_load")
+
+[node name="RoleSaveButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons" unique_id=2030140325]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+icon = ExtResource("icon_save")
+
+[node name="RolePublishButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons" unique_id=1001321507]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Publish to hub"
+
+icon = ExtResource("icon_publish")
+
+[node name="RoleStatus" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox" unique_id=1484051622]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AgentDefs" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" unique_id=885873946]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs" unique_id=1906064204]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer" unique_id=705772588]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="AgentDefs_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer" unique_id=1022964788]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AgentDefTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1180857699]
+layout_mode = 2
+text = "AgentDefinition editor (create / load / edit / save)"
+
+[node name="AgentDefPathRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=162163631]
+layout_mode = 2
+
+[node name="AgentDefPath" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=1187455297]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "res://addons/metapunkt/resources/my_agent.tres"
+
+[node name="AgentDefLoadButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=1421083597]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load"
+
+icon = ExtResource("icon_load")
+
+[node name="AgentDefSaveButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=1253306363]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+icon = ExtResource("icon_save")
+
+[node name="AgentDefNewButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=1196712065]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New"
+
+icon = ExtResource("icon_new")
+
+[node name="AgentDefTemplateButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=1217395234]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Template"
+
+icon = ExtResource("icon_template")
+
+[node name="AgentDefValidateButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow" unique_id=318417873]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Preflight: bind required_synterfaces via MetapunktAppHost and validate against schemas (does not save or spawn)."
+text = "Validate bindings"
+
+icon = ExtResource("icon_validate")
+
+[node name="AgentDefTemplateMenu" type="PopupMenu" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1778982188]
+unique_name_in_owner = true
+item_count = 2
+item_0/text = "ScenSyn - Narrator (ports + limboai)"
+item_0/id = 0
+item_1/text = "ReadyMade - A1 Synthesis Engine (ports + limboai)"
+item_1/id = 1
+
+[node name="AgentDefStatus" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1598460575]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="AgentDefScroll" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1652177554]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AgentDefScrollVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll" unique_id=207969846]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="hSeparator5" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=60164058]
+layout_mode = 2
+
+[node name="AgentDefLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1963868980]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AGENT DEFINITION:"
+horizontal_alignment = 1
+
+[node name="hSeparator6" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1755481588]
+layout_mode = 2
+
+[node name="AgentDefForm" type="GridContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1782580166]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+columns = 2
+
+[node name="IdLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1169626902]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "agent_id:"
+horizontal_alignment = 2
+
+[node name="AgentDefId" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=320512167]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Unique identifier for this agent. Used in slot assignments and SLOP /agents API calls."
+expand_to_text_length = true
+
+[node name="NameLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1136675464]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "agent_name:"
+horizontal_alignment = 2
+
+[node name="AgentDefName" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=735770863]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+expand_to_text_length = true
+
+[node name="RoleLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=647140133]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "role:"
+horizontal_alignment = 2
+
+[node name="AgentDefRole" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1116542153]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The functional role this agent plays. Used by the role policy to determine which tools and actions it is allowed to use."
+placeholder_text = "e.g. facilitator, narrator, analyst"
+expand_to_text_length = true
+
+[node name="SchemaLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=737985178]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "schema_version:"
+horizontal_alignment = 2
+
+[node name="AgentDefSchemaVersion" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1705818175]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "metapunkt.agentdef.v1"
+expand_to_text_length = true
+
+[node name="SynterfacesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1290228694]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "required_synterfaces (comma-separated):"
+horizontal_alignment = 2
+
+[node name="AgentDefRequiredSynterfaces" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=835725714]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Comma-separated list of synterface IDs this agent needs bound before it can run.
+See 'Known Synterfaces' below for available IDs and descriptions."
+placeholder_text = "e.g. conversation_io, thread_scope, ui_hooks"
+expand_to_text_length = true
+
+[node name="KnownSynterfacesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=2134453320]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "known_synterfaces:"
+horizontal_alignment = 2
+
+[node name="KnownSynterfacesBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=410288493]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="KnownSynterfacesList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox" unique_id=337568131]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+item_count = 5
+item_0/text = "conversation_io"
+item_1/text = "scene_root"
+item_2/text = "thread_scope"
+item_3/text = "ui_hooks"
+item_4/text = "workplan"
+
+[node name="KnownSynterfacesActions" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox" unique_id=344982191]
+layout_mode = 2
+
+[node name="KnownSynterfacesCopyButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox/KnownSynterfacesActions" unique_id=1934554827]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Copy selected synterface id"
+
+icon = ExtResource("icon_copy")
+
+[node name="KnownSynterfacesDesc" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox" unique_id=40638529]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "conversation_io (v1)
+Capability to request tool calls / chat through Metapunkt (policy + audit enforced)."
+autowrap_mode = 2
+
+[node name="LogicTypeLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1189115283]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "logic_type:"
+horizontal_alignment = 2
+
+[node name="AgentDefLogicType" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1337627224]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "limboai"
+popup/item_0/id = 0
+popup/item_1/text = "behaviortree"
+popup/item_1/id = 1
+popup/item_2/text = "fsm"
+popup/item_2/id = 2
+popup/item_3/text = "policy"
+popup/item_3/id = 3
+popup/item_4/text = "pinebt"
+popup/item_4/id = 4
+
+[node name="LogicPathLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1068422359]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "logic_config.path:"
+horizontal_alignment = 2
+
+[node name="LogicPathRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=585163965]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AgentDefLogicPath" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/LogicPathRow" unique_id=1967290860]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Path to the LimboAI behaviour tree (.tres) or other decision-logic resource for this agent."
+placeholder_text = "res://path/to/behavior_tree.tres"
+expand_to_text_length = true
+
+[node name="AgentDefLogicBrowseButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/LogicPathRow" unique_id=1808140232]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Browse"
+
+icon = ExtResource("icon_browse")
+
+[node name="ToolsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1520268700]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "required_tools (comma-separated):"
+horizontal_alignment = 2
+
+[node name="AgentDefTools" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=452525695]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Comma-separated list of tool names the agent is allowed to call. Must match entries registered in the ToolRegistry."
+placeholder_text = "e.g. SynTree, GodotUtils"
+expand_to_text_length = true
+
+[node name="DescLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=436361743]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "description:"
+horizontal_alignment = 2
+
+[node name="AgentDefDescription" type="LineEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm" unique_id=1410654998]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Brief description of what this agent does"
+expand_to_text_length = true
+
+[node name="SynterfaceIssuesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1846670852]
+layout_mode = 2
+text = "synterface selection (conflicts / multiple implementations):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="SynterfaceIssuesBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=955895895]
+layout_mode = 2
+
+[node name="SynterfaceIssuesList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=546690592]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SynterfaceIssuesControls" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=976623870]
+layout_mode = 2
+
+[node name="SynterfaceImplPicker" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls" unique_id=1356183203]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SynterfaceSetOverrideButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls" unique_id=612860477]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Set override"
+
+icon = ExtResource("icon_settings")
+
+[node name="SynterfaceClearOverrideButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls" unique_id=1738517049]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear"
+
+icon = ExtResource("icon_clear")
+
+[node name="SynterfaceOverridesPathLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=1635585015]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Overrides:"
+autowrap_mode = 2
+
+[node name="UserSynterfacesPathLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=1158237458]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "User synterfaces:"
+autowrap_mode = 2
+
+[node name="UserSynterfacesControls" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=312812168]
+layout_mode = 2
+
+[node name="OpenUserSynterfacesButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/UserSynterfacesControls" unique_id=1071171484]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Open user_synterfaces.json"
+
+icon = ExtResource("icon_external")
+
+[node name="UserSynterfacesIssuesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox" unique_id=347173731]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "User synterfaces: OK"
+autowrap_mode = 2
+
+[node name="AgentSlotsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1726722673]
+layout_mode = 2
+text = "agent slots (apps):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="AgentSlotsBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=756177400]
+layout_mode = 2
+
+[node name="AgentSlotsList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox" unique_id=219283640]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AgentSlotsControls" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox" unique_id=708847736]
+layout_mode = 2
+
+[node name="AgentSlotAgentPicker" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls" unique_id=714989183]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "(no agent)"
+popup/item_0/id = 0
+
+[node name="AgentSlotSetButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls" unique_id=938393019]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Assign"
+
+icon = ExtResource("icon_settings")
+
+[node name="AgentSlotClearButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls" unique_id=548321862]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear"
+
+[node name="AgentSlotPublishButton" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls" unique_id=1266161267]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Publish to hub"
+
+[node name="AgentSlotAssignmentsPathLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox" unique_id=62728522]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Slot assignments:"
+autowrap_mode = 2
+
+[node name="AgentSlotsStatusLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox" unique_id=1057550109]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Slots: OK"
+autowrap_mode = 2
+
+[node name="hSeparatorSynterfaces" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=297737229]
+layout_mode = 2
+
+[node name="SynterfacesMetaLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1064463049]
+layout_mode = 2
+text = "synterfaces metadata (JSON):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="hSeparatorSynterfaces2" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1294093433]
+layout_mode = 2
+
+[node name="SynterfaceDefaultsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=412393103]
+layout_mode = 2
+text = "synterface_defaults (JSON object):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="AgentDefSynterfaceDefaults" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1067865367]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "JSON object: per-synterface default values the host uses when binding this agent.
+Leave as {} if the host's own defaults are appropriate."
+placeholder_text = "{\"conversation_io\": {\"scope\": \"global\"}}"
+wrap_mode = 1
+
+[node name="BindingHintsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=47092975]
+layout_mode = 2
+text = "binding_hints (JSON object):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="AgentDefBindingHints" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=435862506]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "JSON object: hints for the host's bind_synterfaces() call.
+Common keys:
+- default_scope - namespace for scoped synterfaces (e.g. \"scensyn\")
+- spawn_root_group - scene group to search for the agent's root node"
+placeholder_text = "{\"default_scope\": \"scensyn\", \"spawn_root_group\": \"game_session\"}"
+wrap_mode = 1
+
+[node name="BindingsPreviewLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1667612669]
+layout_mode = 2
+text = "bindings preview (read-only):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="AgentDefBindingsPreview" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=225247589]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "{}"
+editable = false
+wrap_mode = 1
+
+[node name="hSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=2118294294]
+layout_mode = 2
+
+[node name="PersonaLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=94874926]
+layout_mode = 2
+text = "persona:"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="hSeparator3" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=646996696]
+layout_mode = 2
+
+[node name="AgentDefPersona" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=998590820]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+wrap_mode = 1
+
+[node name="hSeparator2" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1869954583]
+layout_mode = 2
+
+[node name="CapabilitiesLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1307298291]
+layout_mode = 2
+text = "capabilities (JSON object):"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="hSeparator4" type="HSeparator" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=729800417]
+layout_mode = 2
+
+[node name="AgentDefCapabilities" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=2087089372]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+wrap_mode = 1
+
+[node name="Persona" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=1844698525]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Capabilities" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox" unique_id=847967630]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="AgentDefLoadDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1468383061]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+filters = PackedStringArray("*.tres ; AgentDefinition (*.tres)")
+
+[node name="AgentDefSaveDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=30145969]
+unique_name_in_owner = true
+title = "Save AgentDefinition"
+access = 1
+filters = PackedStringArray("*.tres ; AgentDefinition (*.tres)")
+
+[node name="AgentDefLogicDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox" unique_id=1001658770]
+unique_name_in_owner = true
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 1
+filters = PackedStringArray("*.tres ; Resource (*.tres)")
+
+[node name="Console" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" unique_id=1707346848]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+metadata/_tab_index = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console" unique_id=2021355472]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer" unique_id=78693222]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Console_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer" unique_id=46385848]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ConsoleTitle" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=1213270117]
+layout_mode = 2
+text = "Tool Call Console (in-process)"
+
+[node name="ConsoleRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=1896248698]
+layout_mode = 2
+
+[node name="ConsoleAgent" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=857001674]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "(no agent)"
+popup/item_0/id = 0
+
+[node name="ConsoleRefreshAgents" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=1261090152]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Refresh running agent list"
+text = "Refresh"
+
+[node name="ConsoleTool" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=615507365]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "GodotUtils"
+popup/item_0/id = 0
+popup/item_1/text = "SynTree"
+popup/item_1/id = 1
+popup/item_2/text = "Synaxes"
+popup/item_2/id = 2
+popup/item_3/text = "Synpunkt"
+popup/item_3/id = 3
+
+[node name="ConsoleRefreshTools" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=673696798]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Refresh available tools list"
+text = "Refresh"
+
+[node name="ConsoleOp" type="OptionButton" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=1982970519]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "print_message"
+popup/item_0/id = 0
+
+[node name="ConsoleRun" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow" unique_id=849228842]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Run"
+
+[node name="ConsoleArgsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=849203977]
+layout_mode = 2
+text = "Args (JSON object)"
+
+[node name="ConsoleArgs" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=1389665720]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+text = "{ \"operation\": \"chat\", \"message\": \"hi\" }"
+wrap_mode = 1
+
+[node name="ConsoleResultLabel" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=832437048]
+layout_mode = 2
+text = "Result"
+
+[node name="ConsoleResult" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=1225333701]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+
+[node name="ConsoleStatus" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox" unique_id=2044797684]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit" unique_id=1349988711]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+split_offsets = PackedInt32Array(116)
+split_offset = 116
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer" unique_id=191238796]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ComponentPanel" type="Panel" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer" unique_id=1319915665]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/ComponentPanel" unique_id=194454687]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/ComponentPanel/ScrollContainer" unique_id=1795683115]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/ComponentPanel/ScrollContainer/MarginContainer" unique_id=1764475267]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/ComponentPanel/ScrollContainer/MarginContainer/VBoxContainer" unique_id=169363964]
+layout_mode = 2
+text = "Components"
+horizontal_alignment = 1
+
+[node name="ComponentList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/ComponentPanel/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1678117760]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 5
+item_0/text = "SLOP server: LISTENING 127.0.0.1:8082"
+item_1/text = "Agents: 0"
+item_2/text = "Tools: 0"
+item_3/text = "Tasks: pending=0 active=0 completed=0"
+item_4/text = "Hub events: connected=true"
+
+[node name="MainPanel" type="Panel" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer" unique_id=543704048]
+layout_mode = 2
+size_flags_horizontal = 3
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel" unique_id=28549727]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer" unique_id=332408784]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer" unique_id=1070394353]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1153910242]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+
+[node name="Tasks" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=929833438]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="TaskList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer/Tasks" unique_id=1754043106]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 1
+item_0/text = "(no tasks yet)"
+
+[node name="Resources" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=1672118990]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ResourceList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer/Resources" unique_id=1112838701]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 1
+item_0/text = "(no agents spawned yet)"
+
+[node name="Patterns" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer" unique_id=1861285908]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="PatternList" type="ItemList" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/HSplitContainer/MainPanel/ScrollContainer/MarginContainer/VBoxContainer/TabContainer/Patterns" unique_id=665125474]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 1
+item_0/text = "(patterns not surfaced yet)"
+
+[node name="StatusPanel" type="Panel" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer" unique_id=1538203540]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_vertical = 3
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/StatusPanel" unique_id=1950776228]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/StatusPanel/ScrollContainer" unique_id=1298279945]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/StatusPanel/ScrollContainer/MarginContainer" unique_id=1958401283]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/StatusPanel/ScrollContainer/MarginContainer/VBoxContainer" unique_id=779032555]
+layout_mode = 2
+text = "Status"
+horizontal_alignment = 1
+
+[node name="StatusText" type="TextEdit" parent="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/VSplitContainer/StatusPanel/ScrollContainer/MarginContainer/VBoxContainer" unique_id=711061945]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "=== Metapunkt status ===
+
+[OK] SLOP server active at 127.0.0.1:8082
+     Agents can send requests to this local endpoint.
+[  ] Hub URL: http://127.0.0.1:17777
+
+Note: the Agents / Tasks lists are empty until you spawn an agent
+(use the Agents tab, or spawn via the /agents SLOP endpoint)."
+editable = false
+
+[connection signal="tab_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs" to="." method="_on_controls_tab_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow/SlopStartButton" to="." method="_on_slop_start_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/SlopRow/SlopStopButton" to="." method="_on_slop_stop_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow/HubConnectButton" to="." method="_on_hub_connect_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow/HubDisconnectButton" to="." method="_on_hub_disconnect_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Services/ScrollContainer/MarginContainer/Services_VBox/HubRow/HubSubscribeButton" to="." method="_on_hub_subscribe_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnRow/AgentSpawnBrowseButton" to="." method="_on_agent_spawn_browse_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnRow/AgentSpawnButton" to="." method="_on_agent_spawn_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentManageRow/AgentRefreshButton" to="." method="_on_agent_refresh_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentManageRow/AgentStopButton" to="." method="_on_agent_stop_pressed"]
+[connection signal="file_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Agents/ScrollContainer/MarginContainer/Agents_VBox/AgentSpawnFileDialog" to="." method="_on_agent_spawn_file_selected"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleOverrideText" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons/RoleLoadButton" to="." method="_on_role_load_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons/RoleSaveButton" to="." method="_on_role_save_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Roles/ScrollContainer/MarginContainer/Roles_VBox/RoleButtons/RolePublishButton" to="." method="_on_role_publish_pressed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefPath" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefLoadButton" to="." method="_on_agentdef_load_dialog_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefSaveButton" to="." method="_on_agentdef_save_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefNewButton" to="." method="_on_agentdef_new_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefTemplateButton" to="." method="_on_agentdef_template_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefPathRow/AgentDefValidateButton" to="." method="_on_agentdef_validate_bindings_pressed"]
+[connection signal="id_pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefTemplateMenu" to="." method="_on_agentdef_template_id_pressed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/AgentDefSchemaVersion" to="." method="_on_any_ui_state_changed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/AgentDefRequiredSynterfaces" to="." method="_on_any_ui_state_changed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox/KnownSynterfacesList" to="." method="_on_known_synterface_selected"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefForm/KnownSynterfacesBox/KnownSynterfacesActions/KnownSynterfacesCopyButton" to="." method="_on_known_synterface_copy_pressed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesList" to="." method="_on_synterface_issue_selected"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls/SynterfaceImplPicker" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls/SynterfaceSetOverrideButton" to="." method="_on_synterface_set_override_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/SynterfaceIssuesControls/SynterfaceClearOverrideButton" to="." method="_on_synterface_clear_override_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/SynterfaceIssuesBox/UserSynterfacesControls/OpenUserSynterfacesButton" to="." method="_on_open_user_synterfaces_pressed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsList" to="." method="_on_agent_slot_selected"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls/AgentSlotAgentPicker" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls/AgentSlotSetButton" to="." method="_on_agent_slot_assign_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls/AgentSlotClearButton" to="." method="_on_agent_slot_clear_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentSlotsBox/AgentSlotsControls/AgentSlotPublishButton" to="." method="_on_agent_slots_publish_pressed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefSynterfaceDefaults" to="." method="_on_any_ui_state_changed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefScroll/AgentDefScrollVBox/AgentDefBindingHints" to="." method="_on_any_ui_state_changed"]
+[connection signal="file_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefLoadDialog" to="." method="_on_agentdef_load_file_selected"]
+[connection signal="file_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefSaveDialog" to="." method="_on_agentdef_save_file_selected"]
+[connection signal="file_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/AgentDefs/ScrollContainer/MarginContainer/AgentDefs_VBox/AgentDefLogicDialog" to="." method="_on_agentdef_logic_file_selected"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleAgent" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleRefreshAgents" to="." method="_on_console_refresh_agents_pressed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleTool" to="." method="_on_console_tool_selected"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleRefreshTools" to="." method="_on_console_refresh_tools_pressed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleOp" to="." method="_on_any_ui_state_changed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleRow/ConsoleRun" to="." method="_on_console_run_pressed"]
+[connection signal="text_changed" from="MarginContainer/ScrollContainer/VBoxContainer/TopSplit/ControlsPanel/MarginContainer/ControlsTabs/Console/ScrollContainer/MarginContainer/Console_VBox/ConsoleArgs" to="." method="_on_any_ui_state_changed"]

@@ -1,0 +1,48 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/idle/0.png" id="1_n6dbh"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/idle/1.png" id="2_ncydu"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/idle/2.png" id="3_5drju"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/idle/3.png" id="4_2eojd"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/talking/0.png" id="5_mqmx3"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/talking/1.png" id="6_fj61k"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/_fallback/talking/2.png" id="7_ejo7k"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_n6dbh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ncydu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5drju")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2eojd")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_mqmx3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fj61k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ejo7k")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}]

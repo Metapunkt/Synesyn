@@ -1,0 +1,353 @@
+[gd_scene format=3 uid="uid://b7kn3pyhsgerv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_audit_step"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.945, 0.949, 0.972, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="WorkshopClosureAuditPanel" type="VBoxContainer"]
+theme_override_constants/separation = 10
+
+[node name="AuditHeadingRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AuditHeading" type="Label" parent="AuditHeadingRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Closure audit"
+tooltip_text = "Checks the map for things the group never looked at. Six steps: name the decision, explain each near-empty quadrant, rate how much that gap matters, read the pile-up in the busiest quadrant, record anything you are leaving unresolved on purpose, and pick one move to close the biggest gap. Press Suggest answers to have the model draft all six from the claims on the map. You accept, edit or discard each draft, and only what you accept is kept."
+
+[node name="AuditSuggestButton" type="Button" parent="AuditHeadingRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Asks the model to draft answers for the steps below, using the claims on the map. Each draft is labelled and changes nothing until you accept it. You can edit or discard any of them."
+text = "Suggest answers"
+
+[node name="AuditHideButton" type="Button" parent="AuditHeadingRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Closes this panel. Everything you have entered is kept and comes back when you reopen it."
+text = "Hide"
+
+[node name="AuditSuggestStatus" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = ""
+autowrap_mode = 2
+
+[node name="AuditGateStatus" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Not started."
+autowrap_mode = 2
+tooltip_text = "What is still missing before this audit counts as done. Every near-empty quadrant needs a reason, because an empty quadrant looks the same whether nobody asked, nobody knows, or there was nothing there in the first place."
+
+[node name="OrientStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="OrientBox" type="VBoxContainer" parent="OrientStep"]
+layout_mode = 2
+
+[node name="OrientLabel" type="Label" parent="OrientStep/OrientBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "0. Orient the claims"
+autowrap_mode = 2
+tooltip_text = "Numbered zero because it comes before the audit rather than being part of it. The steps below all read how claims are spread across the four quadrants, so enough claims need a tag first. You can skip tagging and run the session without it. But if you run the audit on an untagged map, it will report that nothing is missing only because it cannot see anything."
+
+[node name="OrientStatus" type="Label" parent="OrientStep/OrientBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "No claims oriented yet."
+autowrap_mode = 2
+
+[node name="DecisionStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="DecisionBox" type="VBoxContainer" parent="DecisionStep"]
+layout_mode = 2
+
+[node name="DecisionLabel" type="Label" parent="DecisionStep/DecisionBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "1. The decision under audit"
+autowrap_mode = 2
+tooltip_text = "Type the decision this session is working towards. Asking whether the map is balanced gets you nowhere on its own. Asking whether it is balanced enough to settle a particular decision does, so name the decision."
+
+[node name="DecisionRow" type="HBoxContainer" parent="DecisionStep/DecisionBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DecisionInput" type="LineEdit" parent="DecisionStep/DecisionBox/DecisionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "What is this session deciding?"
+
+[node name="DecisionSaveButton" type="Button" parent="DecisionStep/DecisionBox/DecisionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Set"
+
+[node name="DecisionSuggestion" type="VBoxContainer" parent="DecisionStep/DecisionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AbsenceStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="AbsenceBox" type="VBoxContainer" parent="AbsenceStep"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AbsenceLabel" type="Label" parent="AbsenceStep/AbsenceBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "2. Why each near-empty quadrant is empty, and how much that matters"
+autowrap_mode = 2
+tooltip_text = "Pick the kind of gap first, then rate it. Do it in that order, because you cannot rate a gap before you know what kind it is."
+
+[node name="AbsenceList" type="VBoxContainer" parent="AbsenceStep/AbsenceBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ConcentrationStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="ConcentrationBox" type="VBoxContainer" parent="ConcentrationStep"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ConcentrationLabel" type="Label" parent="ConcentrationStep/ConcentrationBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "3. What the pile-up in the busiest quadrant means"
+autowrap_mode = 2
+tooltip_text = "A lopsided map can mean two opposite things. Either the group is focused on what actually matters, or it has stopped looking anywhere else. Nothing in the map tells you which, so pick the one that matches what actually happened in the session."
+
+[node name="ConcentrationTarget" type="Label" parent="ConcentrationStep/ConcentrationBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "No dominant quadrant yet."
+autowrap_mode = 2
+
+[node name="ConcentrationPicker" type="OptionButton" parent="ConcentrationStep/ConcentrationBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+clip_text = true
+
+[node name="ConcentrationSuggestion" type="VBoxContainer" parent="ConcentrationStep/ConcentrationBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="DebtStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="DebtBox" type="VBoxContainer" parent="DebtStep"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DebtLabel" type="Label" parent="DebtStep/DebtBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "4. Closure debt"
+autowrap_mode = 2
+tooltip_text = "Only for a gap where all four answers below are yes. Most gaps are not debt. A list that collected every gap would be ignored by the end of the session."
+
+[node name="DebtQuadrantRow" type="HBoxContainer" parent="DebtStep/DebtBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DebtQuadrantPicker" type="OptionButton" parent="DebtStep/DebtBox/DebtQuadrantRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+clip_text = true
+
+[node name="DebtConditions" type="VBoxContainer" parent="DebtStep/DebtBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="DebtRecordButton" type="Button" parent="DebtStep/DebtBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Record debt"
+
+[node name="DebtStatus" type="Label" parent="DebtStep/DebtBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "No closure debt recorded."
+autowrap_mode = 2
+
+[node name="TransitionStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="TransitionBox" type="VBoxContainer" parent="TransitionStep"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TransitionLabel" type="Label" parent="TransitionStep/TransitionBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "5. One move to close the biggest gap"
+autowrap_mode = 2
+tooltip_text = "Pick the busiest quadrant, the near-empty one you want to fill, and one thing to do that would shift attention across. Just one. Name five moves and none of them gets done."
+
+[node name="TransitionRow" type="HFlowContainer" parent="TransitionStep/TransitionBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+
+[node name="TransitionFromPicker" type="OptionButton" parent="TransitionStep/TransitionBox/TransitionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+clip_text = true
+
+[node name="TransitionToPicker" type="OptionButton" parent="TransitionStep/TransitionBox/TransitionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+clip_text = true
+
+[node name="TransitionActionInput" type="LineEdit" parent="TransitionStep/TransitionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "By doing what?"
+
+[node name="TransitionSaveButton" type="Button" parent="TransitionStep/TransitionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Set transition"
+
+[node name="TransitionSuggestion" type="VBoxContainer" parent="TransitionStep/TransitionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TransitionStatus" type="Label" parent="TransitionStep/TransitionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "No transition named."
+autowrap_mode = 2
+
+[node name="ActionStep" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_audit_step")
+
+[node name="ActionBox" type="VBoxContainer" parent="ActionStep"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ActionLabel" type="Label" parent="ActionStep/ActionBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "6. Reopening actions"
+autowrap_mode = 2
+tooltip_text = "All three are needed: who does it, by when, and what result would change the decision. The third one matters most. Without it, nobody can tell later whether doing the work settled anything or not."
+
+[node name="ActionInput" type="LineEdit" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "What has to be done?"
+
+[node name="ActionOwnerRow" type="HBoxContainer" parent="ActionStep/ActionBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ActionOwnerInput" type="LineEdit" parent="ActionStep/ActionBox/ActionOwnerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Owner"
+
+[node name="ActionDateInput" type="LineEdit" parent="ActionStep/ActionBox/ActionOwnerRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "By when (YYYY-MM-DD)"
+
+[node name="ActionFalsifierInput" type="LineEdit" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "What evidence would change the decision?"
+
+[node name="ActionAddButton" type="Button" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Add reopening action"
+
+[node name="ActionSuggestion" type="VBoxContainer" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ActionStatus" type="Label" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = ""
+autowrap_mode = 2
+
+[node name="ActionList" type="VBoxContainer" parent="ActionStep/ActionBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RouteRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RouteButton" type="Button" parent="RouteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Propose to Session Record"
+tooltip_text = "Sends this audit's questions and actions to the Session Record as suggestions. Review them there and accept the ones you want. Nothing worked out from the map is filed automatically over something a person actually said."
+
+[node name="RouteStatus" type="Label" parent="RouteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Nothing proposed yet."
+autowrap_mode = 2

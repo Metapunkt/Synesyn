@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://readymade/test_phase_4_6_export_reporting.gd" id="1"]
+
+[node name="TestPhase46" type="Node"]
+script = ExtResource("1")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TestUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TestUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="Title" type="Label" parent="CanvasLayer/TestUI/VBoxContainer"]
+layout_mode = 2
+text = "ReadyMade Phase 4.6: Export and Reporting Features Test Suite"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="RichTextLabel" parent="CanvasLayer/TestUI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Phase 4.6 Test Coverage:[/b]
+
+• [color=blue]Report Generation[/color] - HTML, Markdown, JSON, Plain Text, PDF-Ready formats
+• [color=green]Document Export[/color] - Single and bulk export with change tracking
+• [color=orange]Session Sharing[/color] - Anonymized package creation and export
+• [color=purple]Analytics Features[/color] - Comprehensive productivity metrics and insights
+• [color=cyan]Export Formats[/color] - Format validation and feature testing
+• [color=red]Error Handling[/color] - Edge cases and graceful failure testing
+
+[b]Keyboard Shortcuts:[/b]
+• F10 - Run all Phase 4.6 tests
+• F11 - Test report generation only  
+• F12 - Test analytics features only
+
+[b]Test Status:[/b] Ready to run comprehensive Phase 4.6 feature validation."
+
+[node name="Instructions" type="Label" parent="CanvasLayer/TestUI/VBoxContainer"]
+layout_mode = 2
+text = "Phase 4.6 tests will run automatically on scene load. Check console for detailed results."
+horizontal_alignment = 1 

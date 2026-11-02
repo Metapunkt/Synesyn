@@ -1,0 +1,52 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/idle/1.png" id="1_jjnrp"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/idle/2.png" id="2_mmuck"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/idle/3.png" id="3_aveec"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/idle/4.png" id="4_n5ae6"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/talking/1.png" id="5_urf31"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/talking/2.png" id="6_061us"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/talking/3.png" id="7_wwde6"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/_fallback/talking/4.png" id="8_rvfco"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jjnrp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mmuck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_aveec")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_n5ae6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_urf31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_061us")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_wwde6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rvfco")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}]

@@ -1,0 +1,1110 @@
+[gd_scene load_steps=22 format=3 uid="uid://vpjspesvpg4s"]
+
+[ext_resource type="PackedScene" path="res://ScenSyn/session_types/workshop_catalyst/workshop_thinking_map.tscn" id="1_thinking_map"]
+[ext_resource type="PackedScene" path="res://ScenSyn/session_types/workshop_catalyst/workshop_compare_paths.tscn" id="2_compare_paths"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_light.tres" id="theme_utility"]
+[ext_resource type="Texture2D" uid="uid://cvpyq8uutg6x0" path="res://Synesyn_icons/synesyn-button-icons/icon_chat_menu_bubble.svg" id="icon_chat"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_graph_scatter.svg" id="icon_map"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_note_document.svg" id="icon_review"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_grid_apps.svg" id="icon_dashboard"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="icon_custom"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_person_add.svg" id="icon_invite"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_plus.svg" id="icon_plus"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_content_sources_stack.svg" id="icon_sessions"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_sparkle_ai.svg" id="icon_insights"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_flag.svg" id="icon_plans"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_next_stage_arrow.svg" id="icon_progress"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="icon_save"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_hamburger_menu.svg" id="icon_menu"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_question_circle.svg" id="icon_how_to"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/core/menu_dismiss_catcher.gd" id="menu_dismiss_catcher"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_facilitator_card"]
+bg_color = Color(0.98, 0.985, 0.995, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.635, 0.7, 0.35)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.05, 0.07, 0.1, 0.25)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_facilitator_field"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.635, 0.7, 0.45)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 10
+content_margin_top = 6
+content_margin_right = 10
+content_margin_bottom = 6
+
+[node name="WorkshopWorkspaceShell" type="VBoxContainer" unique_id=413245315]
+visible = false
+clip_contents = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="SessionHeader" type="PanelContainer" parent="." unique_id=1600458334]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"SynesynRaisedPanel"
+
+
+[node name="HeaderRows" type="VBoxContainer" parent="SessionHeader" unique_id=1814265278]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TopBar" type="HBoxContainer" parent="SessionHeader/HeaderRows" unique_id=441937326]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="WorkspaceToolbar" type="HFlowContainer" parent="SessionHeader/HeaderRows/TopBar" unique_id=604238291]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="PresetLabel" type="Label" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=326905959]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Workspace:"
+
+[node name="TalkPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=819575328]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+tooltip_text = "Shows the conversation panel. This does not listen. Use Record to speak."
+text = "Show Chat"
+icon = ExtResource("icon_chat")
+
+[node name="MapPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=1312517744]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+tooltip_text = "Show the Thinking Map in the center so you can review claims from the discussion."
+text = "Map"
+icon = ExtResource("icon_map")
+
+[node name="ReviewPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=110299413]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+tooltip_text = "Weigh one decision path against another, including doing nothing. Moves the Session Record into the centre beside Compare Paths."
+text = "Review"
+icon = ExtResource("icon_review")
+
+[node name="FullDashboardPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=498429749]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigationSelected"
+tooltip_text = "Show the full workspace: conversation, map, and Session Record together."
+text = "Full Dashboard"
+icon = ExtResource("icon_dashboard")
+
+[node name="CustomPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=1300851315]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+tooltip_text = "Apply your custom layout and open the panel toggles."
+text = "Custom ▾"
+icon = ExtResource("icon_custom")
+
+[node name="HowToPresetButton" type="Button" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=1300851316]
+layout_mode = 2
+theme_type_variation = &"SynesynNavigation"
+tooltip_text = "Show this scenario's how-to guidance in the main workspace."
+text = "How To"
+icon = ExtResource("icon_how_to")
+
+[node name="ActivePresetLabel" type="Label" parent="SessionHeader/HeaderRows/TopBar/WorkspaceToolbar" unique_id=1467149975]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "Active: Full Dashboard"
+
+[node name="DashboardBody" type="HSplitContainer" parent="." unique_id=1257789005]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="SessionMenuPanel" type="PanelContainer" parent="DashboardBody" unique_id=2071387058]
+custom_minimum_size = Vector2(210, 0)
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="LeftRail" type="VBoxContainer" parent="DashboardBody/SessionMenuPanel" unique_id=1028055260]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="LeftRailScroll" type="ScrollContainer" parent="DashboardBody/SessionMenuPanel/LeftRail" unique_id=972010867]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LeftRailMargin" type="MarginContainer" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll" unique_id=1556037528]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 4
+
+[node name="LeftRailContent" type="VBoxContainer" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin" unique_id=1556037529]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ProductIdentity" type="Label" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=2087940428]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "ScenSyn"
+
+[node name="ProductSubtitle" type="Label" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=1214234479]
+layout_mode = 2
+text = "Strategic Foresight"
+
+[node name="NewConversationButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=159733471]
+layout_mode = 2
+tooltip_text = "Show the conversation panel. This does not listen. Use Record to speak."
+text = "New Conversation"
+icon = ExtResource("icon_plus")
+
+[node name="InviteParticipantButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=2067680579]
+layout_mode = 2
+tooltip_text = "Opens an explanation. It does not request contact details or send anything."
+text = "Invite"
+icon = ExtResource("icon_invite")
+
+[node name="MySessionsButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=2029243467]
+layout_mode = 2
+tooltip_text = "Lists previously saved Workshop Catalyst sessions (from local story log files) and lets you resume one live."
+text = "My Sessions"
+icon = ExtResource("icon_sessions")
+
+[node name="LeftRailStabilitySpacer" type="Control" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=875841403]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 32)
+tooltip_text = "Do not remove: at this exact content height, resizing this rail's ScrollContainer between certain viewport sizes segfaults Godot 4.7.1-rc2 (reproducible, engine-level). This spacer keeps LeftRailContent's minimum height clear of that boundary. See 11_Workshop_Catalyst_Build_Staging.md, 2026-08-04."
+
+[node name="InsightsButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=2070218443]
+layout_mode = 2
+tooltip_text = "Show or hide the Insights rail (AI Assistant panel and Session Record) on the right. Same toggle as \"Insights\" in the Custom panel."
+text = "Insights"
+icon = ExtResource("icon_insights")
+
+[node name="PlansPreviewButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=123801019]
+layout_mode = 2
+text = "Plans — preview"
+icon = ExtResource("icon_plans")
+
+[node name="ProgressPreviewButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=853826702]
+layout_mode = 2
+text = "Progress — preview"
+icon = ExtResource("icon_progress")
+
+[node name="SettingsButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=1102155345]
+layout_mode = 2
+tooltip_text = "Opens the ☰ settings drawer: stage timer, Next Stage, facilitator notes, exports, Inject Stress, and the facilitator command reference."
+text = "Settings"
+icon = ExtResource("icon_custom")
+
+[node name="EndAndSaveButton" type="Button" parent="DashboardBody/SessionMenuPanel/LeftRail/LeftRailScroll/LeftRailMargin/LeftRailContent" unique_id=1452321418]
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+text = "End & Save Session"
+icon = ExtResource("icon_save")
+
+[node name="MenuPreviewCard" type="PanelContainer" parent="DashboardBody/SessionMenuPanel/LeftRail" unique_id=389007840]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="MenuPreviewMargin" type="MarginContainer" parent="DashboardBody/SessionMenuPanel/LeftRail/MenuPreviewCard" unique_id=389007841]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="MenuPreviewBox" type="VBoxContainer" parent="DashboardBody/SessionMenuPanel/LeftRail/MenuPreviewCard/MenuPreviewMargin" unique_id=3890078420]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NavigationPreviewState" type="Label" parent="DashboardBody/SessionMenuPanel/LeftRail/MenuPreviewCard/MenuPreviewMargin/MenuPreviewBox" unique_id=389007842]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+theme_override_font_sizes/font_size = 13
+text = "Session shortcuts"
+autowrap_mode = 2
+
+[node name="NavigationPreviewAvailable" type="Label" parent="DashboardBody/SessionMenuPanel/LeftRail/MenuPreviewCard/MenuPreviewMargin/MenuPreviewBox" unique_id=1451392064]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Live now: Show Chat, Thinking Map, Session Record, and Compare Paths."
+autowrap_mode = 2
+
+[node name="NavigationPreviewUnavailable" type="Label" parent="DashboardBody/SessionMenuPanel/LeftRail/MenuPreviewCard/MenuPreviewMargin/MenuPreviewBox" unique_id=737203207]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Plans and Progress open labelled previews only."
+autowrap_mode = 2
+
+[node name="MainRegionSplit" type="HSplitContainer" parent="DashboardBody" unique_id=1874891100]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterWorkspace" type="VBoxContainer" parent="DashboardBody/MainRegionSplit" unique_id=1159606656]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="CenterVerticalSplit" type="VSplitContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace" unique_id=772228415]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConversationAndDockSplit" type="VSplitContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit" unique_id=1263698490]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="ConversationPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit" unique_id=741735138]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="ConversationBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel" unique_id=1740498764]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConversationOverlayScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox"]
+visible = false
+clip_contents = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="ConversationOverlayBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TranscriptPreviewPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox" unique_id=379776765]
+visible = false
+layout_mode = 2
+
+[node name="TranscriptPreviewBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel" unique_id=1006603310]
+layout_mode = 2
+
+[node name="TranscriptPreviewHeading" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox" unique_id=1403486026]
+layout_mode = 2
+text = "Speech transcript preview (editable)"
+
+[node name="TranscriptPreviewEditor" type="TextEdit" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox" unique_id=1498886396]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+placeholder_text = "Your transcription will appear here for review."
+wrap_mode = 1
+
+[node name="TranscriptPreviewStatus" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox" unique_id=147124058]
+layout_mode = 2
+text = "No transcript awaiting review."
+autowrap_mode = 2
+
+[node name="TranscriptPreviewActions" type="HFlowContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox" unique_id=2137662402]
+layout_mode = 2
+
+[node name="SendTranscriptButton" type="Button" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox/TranscriptPreviewActions" unique_id=369879451]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Send transcript"
+
+[node name="CancelTranscriptButton" type="Button" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptPreviewPanel/TranscriptPreviewBox/TranscriptPreviewActions" unique_id=1876237121]
+visible = false
+layout_mode = 2
+text = "Cancel / re-record"
+
+[node name="TranscriptCorrectionPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox" unique_id=209397655]
+visible = false
+layout_mode = 2
+
+[node name="TranscriptCorrectionBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel" unique_id=2072018003]
+layout_mode = 2
+
+[node name="TranscriptCorrectionHeading" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=1659248716]
+layout_mode = 2
+text = "Correct sent speech transcript"
+
+[node name="TranscriptOriginalText" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=1082347671]
+layout_mode = 2
+text = "Original STT:"
+autowrap_mode = 2
+
+[node name="TranscriptCorrectionEditor" type="TextEdit" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=536035035]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+placeholder_text = "Corrected transcript text"
+wrap_mode = 1
+
+[node name="TranscriptCorrectionReason" type="LineEdit" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=2121707537]
+layout_mode = 2
+placeholder_text = "Reason for correction (required)"
+
+[node name="TranscriptCorrectionStatus" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=1019706077]
+layout_mode = 2
+text = "Corrections update the record only unless explicitly resent."
+autowrap_mode = 2
+
+[node name="TranscriptCorrectionActions" type="HFlowContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox" unique_id=1989536987]
+layout_mode = 2
+
+[node name="SaveTranscriptCorrectionButton" type="Button" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox/TranscriptCorrectionActions" unique_id=278036258]
+visible = false
+layout_mode = 2
+text = "Save correction only"
+
+[node name="ResendTranscriptCorrectionButton" type="Button" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationOverlayScroll/ConversationOverlayBox/TranscriptCorrectionPanel/TranscriptCorrectionBox/TranscriptCorrectionActions" unique_id=1303670189]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Resend corrected text"
+
+[node name="ConversationTranscriptScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox" unique_id=1263698496]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ConversationContentSlot" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationPanel/ConversationBox/ConversationTranscriptScroll" unique_id=2035865584]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConversationInputDock" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit" unique_id=527263283]
+clip_contents = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ConversationInputDockBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationInputDock" unique_id=1113194512]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="ConversationTextInputSlot" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationInputDock/ConversationInputDockBox" unique_id=325455069]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConversationInputActionsSlot" type="HFlowContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/ConversationAndDockSplit/ConversationInputDock/ConversationInputDockBox" unique_id=1327887437]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 2
+
+[node name="CenterSecondaryPane" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit" unique_id=862777816]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ThinkingMapPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane" unique_id=1741496685]
+theme_type_variation = &"SynesynSurfacePanel"
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ThinkingMapBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/ThinkingMapPanel" unique_id=2126820628]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="ThinkingMapHeading" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/ThinkingMapPanel/ThinkingMapBox" unique_id=1616097113]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Live Thinking Map"
+
+[node name="WorkshopThinkingMap" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/ThinkingMapPanel/ThinkingMapBox" unique_id=264110319 instance=ExtResource("1_thinking_map")]
+
+[node name="HowToSurface" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane" unique_id=68419210]
+visible = false
+theme_type_variation = &"SynesynSurfacePanel"
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HowToScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/HowToSurface" unique_id=68419211]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="HowToContentMargin" type="MarginContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/HowToSurface/HowToScroll" unique_id=68419212]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="HowToContentBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/HowToSurface/HowToScroll/HowToContentMargin" unique_id=68419213]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HowToHeading" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/HowToSurface/HowToScroll/HowToContentMargin/HowToContentBox" unique_id=68419214]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = "How To"
+
+[node name="HowToContentLabel" type="RichTextLabel" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/HowToSurface/HowToScroll/HowToContentMargin/HowToContentBox" unique_id=68419215]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]Loading how-to guidance…[/i]"
+fit_content = true
+
+[node name="CenterReviewSurface" type="PanelContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane" unique_id=68419209]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ReviewScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/CenterReviewSurface" unique_id=319967637]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ReviewContent" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/CenterReviewSurface/ReviewScroll" unique_id=931364386]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReviewHeading" type="Label" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/CenterReviewSurface/ReviewScroll/ReviewContent" unique_id=1547321167]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = "Review Session Record & Compare Paths"
+
+[node name="CenterSessionRecordSlot" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/CenterReviewSurface/ReviewScroll/ReviewContent" unique_id=588394277]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WorkshopComparePaths" parent="DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/CenterReviewSurface/ReviewScroll/ReviewContent" unique_id=1438023701 instance=ExtResource("2_compare_paths")]
+
+[node name="RightRailContainer" type="PanelContainer" parent="DashboardBody/MainRegionSplit" unique_id=1428136756]
+custom_minimum_size = Vector2(310, 0)
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RightVerticalSplit" type="VSplitContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer" unique_id=279069977]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="AiAssistantPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit" unique_id=1329889649]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.4
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="AiAssistantScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel" unique_id=630111221]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="AiAssistantBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll" unique_id=1859697685]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AiAssistantHeading" type="Label" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox" unique_id=1617914787]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "AI Assistant"
+
+[node name="AiAssistantStatus" type="Label" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox" unique_id=18550813]
+layout_mode = 2
+text = "One synthesized Session Record response is produced per facilitator turn."
+autowrap_mode = 2
+
+[node name="ShowReasoningToggle" type="CheckButton" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox" unique_id=112824034]
+layout_mode = 2
+tooltip_text = "Shows retained specialist summaries and provenance, never private chain-of-thought."
+text = "Show reasoning/analysis"
+
+[node name="ReasoningDisclosure" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox" unique_id=1244621265]
+visible = false
+layout_mode = 2
+
+[node name="ReasoningDisclosureNotice" type="Label" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox/ReasoningDisclosure" unique_id=885470559]
+layout_mode = 2
+text = "Retained specialist summaries only — private chain-of-thought is never collected or shown."
+autowrap_mode = 2
+
+[node name="ReasoningStatus" type="Label" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox/ReasoningDisclosure" unique_id=1862535860]
+layout_mode = 2
+text = "No specialist trace is available for this session yet."
+autowrap_mode = 2
+
+[node name="ReasoningSummaries" type="RichTextLabel" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/AiAssistantPanel/AiAssistantScroll/AiAssistantBox/ReasoningDisclosure" unique_id=641122974]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+bbcode_enabled = true
+text = "[i]Send a facilitator turn to generate retained specialist summaries.[/i]"
+fit_content = true
+
+[node name="SessionRecordPanel" type="PanelContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit" unique_id=2077049517]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.6
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="SessionRecordBox" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/SessionRecordPanel" unique_id=1988513531]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SessionRecordHeading" type="Label" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/SessionRecordPanel/SessionRecordBox" unique_id=798177280]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Session Record"
+
+[node name="SessionRecordScroll" type="ScrollContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/SessionRecordPanel/SessionRecordBox" unique_id=492196127]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SessionRecordContentSlot" type="VBoxContainer" parent="DashboardBody/MainRegionSplit/RightRailContainer/RightVerticalSplit/SessionRecordPanel/SessionRecordBox/SessionRecordScroll" unique_id=983407644]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CustomPanelLayer" type="CanvasLayer" parent="." unique_id=616222401]
+layer = 41
+
+[node name="CustomPanelDismissCatcher" type="Control" parent="CustomPanelLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("menu_dismiss_catcher")
+
+[node name="CustomPanelPopup" type="PanelContainer" parent="CustomPanelLayer" unique_id=616222402]
+visible = false
+offset_left = 24.0
+offset_top = 84.0
+offset_right = 264.0
+offset_bottom = 400.0
+
+[node name="CustomPanelBox" type="VBoxContainer" parent="CustomPanelLayer/CustomPanelPopup" unique_id=616222403]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CustomPanelHeading" type="Label" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=616222404]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Show panels"
+
+[node name="ConversationToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=519174027]
+layout_mode = 2
+text = "Conversation"
+
+[node name="ConversationSubPanels" type="MarginContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=616222408]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+
+[node name="ConversationSubPanelsBox" type="VBoxContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/ConversationSubPanels" unique_id=616222409]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ConversationInputToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/ConversationSubPanels/ConversationSubPanelsBox" unique_id=616222410]
+layout_mode = 2
+tooltip_text = "Show or hide the message input dock (text entry, Record, Send)."
+button_pressed = true
+text = "Message input"
+
+[node name="ThinkingMapToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=231101061]
+layout_mode = 2
+text = "Thinking Map"
+
+[node name="ThinkingMapSubPanels" type="MarginContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+
+[node name="ThinkingMapSubPanelsBox" type="VBoxContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/ThinkingMapSubPanels"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MapClaimsToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/ThinkingMapSubPanels/ThinkingMapSubPanelsBox"]
+layout_mode = 2
+tooltip_text = "Show or hide the claim columns (Causes, Effects, Opportunities, Outcomes), or the Graph view when that is the one on screen. Drag the divider under them to change their height."
+button_pressed = true
+text = "Claim columns"
+
+[node name="MapClosureToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/ThinkingMapSubPanels/ThinkingMapSubPanelsBox"]
+layout_mode = 2
+tooltip_text = "Show or hide the Closure audit panel below the map. Same switch as the Closure audit button in the map footer. Drag the divider above it to change its height."
+text = "Closure audit panel"
+
+[node name="ParticipantsToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=1278498319]
+layout_mode = 2
+tooltip_text = "Show or hide the facilitator presence strip in the footer. The Session Record pulse and safety alerts stay visible."
+text = "Facilitator presence"
+
+[node name="SessionMenuToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=1198798094]
+layout_mode = 2
+tooltip_text = "Show or hide the Session Menu (New Conversation, Insights, Settings, End & Save, and other destinations)."
+text = "Session Menu"
+icon = ExtResource("icon_menu")
+
+[node name="InsightsToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=435684692]
+layout_mode = 2
+tooltip_text = "Show or hide the Insights panel (AI Assistant and Session Record)."
+text = "Insights"
+
+[node name="InsightsSubPanels" type="MarginContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=616222406]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+
+[node name="InsightsSubPanelsBox" type="VBoxContainer" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/InsightsSubPanels" unique_id=616222407]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AiAssistantToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/InsightsSubPanels/InsightsSubPanelsBox" unique_id=1980884645]
+layout_mode = 2
+text = "AI Assistant"
+
+[node name="SessionRecordToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox/InsightsSubPanels/InsightsSubPanelsBox" unique_id=246771114]
+layout_mode = 2
+text = "Session Record"
+
+[node name="CustomPanelSeparator" type="HSeparator" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=616222405]
+layout_mode = 2
+
+[node name="ResetPanelSizesButton" type="Button" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=1796960455]
+layout_mode = 2
+tooltip_text = "Restore the default Workshop panel sizes."
+text = "Reset panel sizes"
+
+[node name="LayoutDiagnosticsToggle" type="CheckButton" parent="CustomPanelLayer/CustomPanelPopup/CustomPanelBox" unique_id=1634891994]
+visible = false
+layout_mode = 2
+tooltip_text = "Debug-only layout ownership, sizing, clipping, and overflow data."
+text = "Layout diagnostics"
+
+[node name="LayoutDiagnosticsLayer" type="CanvasLayer" parent="." unique_id=616222434]
+layer = 40
+
+[node name="LayoutDiagnosticsPanel" type="PanelContainer" parent="LayoutDiagnosticsLayer" unique_id=1383993047]
+visible = false
+offset_left = 24.0
+offset_top = 88.0
+offset_right = 900.0
+offset_bottom = 520.0
+
+[node name="LayoutDiagnosticsBox" type="VBoxContainer" parent="LayoutDiagnosticsLayer/LayoutDiagnosticsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LayoutDiagnosticsHeader" type="HBoxContainer" parent="LayoutDiagnosticsLayer/LayoutDiagnosticsPanel/LayoutDiagnosticsBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="LayoutDiagnosticsCloseButton" type="Button" parent="LayoutDiagnosticsLayer/LayoutDiagnosticsPanel/LayoutDiagnosticsBox/LayoutDiagnosticsHeader"]
+layout_mode = 2
+tooltip_text = "Close the layout diagnostics overlay. Same as unticking Layout diagnostics under Custom."
+text = "Close"
+
+[node name="LayoutDiagnosticsScroll" type="ScrollContainer" parent="LayoutDiagnosticsLayer/LayoutDiagnosticsPanel/LayoutDiagnosticsBox" unique_id=1276198626]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="LayoutDiagnosticsText" type="RichTextLabel" parent="LayoutDiagnosticsLayer/LayoutDiagnosticsPanel/LayoutDiagnosticsBox/LayoutDiagnosticsScroll" unique_id=1218470197]
+custom_minimum_size = Vector2(840, 390)
+layout_mode = 2
+bbcode_enabled = true
+text = "Layout diagnostics are waiting for the first responsive update."
+fit_content = true
+
+[node name="InviteUnavailableDialog" type="AcceptDialog" parent="." unique_id=838242698]
+title = "Join from another ScenSyn instance"
+ok_button_text = "Understood"
+dialog_text = "Local multi-instance Workshop sessions use the start-screen Multiplayer checkbox.
+
+1. First instance: create or select a Scenario, enable Multiplayer, start (hosts on 127.0.0.1:28960).
+2. Later instances: enable Multiplayer and confirm — no need to recreate the Scenario; the host sends it.
+3. In-session, each peer enters a display name. Facilitator is claim-until-taken; the Facilitator-needed dialog closes once someone claims (or when you join after a claim exists).
+
+Email invitations and remote Hub sync are not implemented. Nothing outbound was sent."
+
+[node name="ModalOverlayLayer" type="CanvasLayer" parent="."]
+layer = 80
+
+[node name="NeedFacilitatorDialog" type="Control" parent="ModalOverlayLayer"]
+unique_name_in_owner = true
+visible = false
+mouse_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NeedFacilitatorScrim" type="ColorRect" parent="ModalOverlayLayer/NeedFacilitatorDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.043, 0.067, 0.098, 0.55)
+
+[node name="NeedFacilitatorCenter" type="CenterContainer" parent="ModalOverlayLayer/NeedFacilitatorDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="NeedFacilitatorCard" type="PanelContainer" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter"]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_facilitator_card")
+
+[node name="NeedFacilitatorMargin" type="MarginContainer" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="NeedFacilitatorRoot" type="VBoxContainer" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="NeedFacilitatorTitle" type="Label" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+text = "Facilitator needed"
+
+[node name="NeedFacilitatorBody" type="Label" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "This workshop needs a Facilitator before stage advances, commits, and End & Save are available.
+
+Enter your display name, then either claim Facilitator or join as a participant. This card stays on screen on every instance until someone claims Facilitator."
+autowrap_mode = 3
+
+[node name="NeedFacilitatorNameEdit" type="LineEdit" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynField"
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_facilitator_field")
+placeholder_text = "Your name (e.g. Alex)"
+
+[node name="NeedFacilitatorButtons" type="HBoxContainer" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NeedFacilitatorClaimButton" type="Button" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot/NeedFacilitatorButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynPrimaryAction"
+text = "Become Facilitator"
+tooltip_text = "Claim Facilitator for this session. Your name appears as Name (Facilitator)."
+
+[node name="NeedFacilitatorJoinButton" type="Button" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot/NeedFacilitatorButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Join as Participant"
+tooltip_text = "Register with your display name. The Facilitator card stays until someone claims."
+
+[node name="PresenceRenameButton" type="Button" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Rename me"
+tooltip_text = "Update your display name after joining. Renames sync to other instances."
+
+[node name="NeedFacilitatorStatusLabel" type="Label" parent="ModalOverlayLayer/NeedFacilitatorDialog/NeedFacilitatorCenter/NeedFacilitatorCard/NeedFacilitatorMargin/NeedFacilitatorRoot"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+autowrap_mode = 3
+
+[node name="NavigationUnavailableDialog" type="AcceptDialog" parent="." unique_id=1002007228]
+title = "Navigation destination unavailable"
+ok_button_text = "Understood"
+dialog_text = "This destination is not available inside the live workshop. No external action was started."
+
+[node name="MySessionsDialog" type="Control" parent="ModalOverlayLayer"]
+unique_name_in_owner = true
+visible = false
+mouse_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MySessionsScrim" type="ColorRect" parent="ModalOverlayLayer/MySessionsDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.043, 0.067, 0.098, 0.55)
+
+[node name="MySessionsCenter" type="CenterContainer" parent="ModalOverlayLayer/MySessionsDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="MySessionsCard" type="PanelContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter"]
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_facilitator_card")
+
+[node name="MySessionsMargin" type="MarginContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="MySessionsRoot" type="VBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="MySessionsHeading" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+text = "My Sessions"
+
+[node name="MySessionsTitle" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "Resume a previously saved Workshop Catalyst session. Selecting one loads it live, the same as \"Load Story Log\" under the ☰ settings menu."
+autowrap_mode = 3
+
+[node name="MySessionsEmptyState" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+visible = false
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "No saved Workshop Catalyst sessions were found in the local story log folder yet."
+autowrap_mode = 3
+
+[node name="MySessionsScroll" type="ScrollContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MySessionsListContainer" type="VBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot/MySessionsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="MySessionsFooter" type="HBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+alignment = 2
+
+[node name="MySessionsCloseButton" type="Button" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot/MySessionsFooter"]
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Close"
+
+[node name="SafetyBar" type="PanelContainer" parent="." unique_id=713352696]
+layout_mode = 2
+theme_type_variation = &"SynesynStatusPanel"
+
+[node name="SafetyBarMargin" type="MarginContainer" parent="SafetyBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 6
+
+[node name="SafetyBarStack" type="VBoxContainer" parent="SafetyBar/SafetyBarMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SafetyStatusRow" type="HBoxContainer" parent="SafetyBar/SafetyBarMargin/SafetyBarStack" unique_id=178785152]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ParticipantsPanel" type="HBoxContainer" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=294816374]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="FacilitatorAvatar" type="PanelContainer" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel" unique_id=2017227928]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"SynesynBadgeReadOnly"
+
+[node name="FacilitatorInitial" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel/FacilitatorAvatar" unique_id=92284808]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "F"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FacilitatorName" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel" unique_id=1969115974]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+theme_override_font_sizes/font_size = 14
+text = "Facilitator · Present on this device"
+vertical_alignment = 1
+
+[node name="FacilitatorPresenceStatus" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel" unique_id=286477172]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Present on this device"
+
+[node name="ParticipantsStatus" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel" unique_id=483643919]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+theme_override_font_sizes/font_size = 14
+text = "Remote participant presence and multi-client sync are not available."
+
+[node name="ParticipantsActionStatus" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow/ParticipantsPanel" unique_id=1746332835]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "No invitations have been requested or sent."
+
+[node name="ListeningStatusLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1796492007]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Listening…"
+
+[node name="MicrophoneStatusLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1913999758]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Mic unavailable"
+
+[node name="ConsentStatusLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1811921741]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Saving audio"
+
+[node name="ConnectionErrorLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=179470763]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Connection issue"
+
+[node name="TranscriptionErrorLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1412007013]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Transcription error"
+
+[node name="UncommittedWarningLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1277478844]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Uncommitted changes"
+
+[node name="SafetyStatusSpacer" type="Control" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1333881232]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SessionRecordPulseLabel" type="Label" parent="SafetyBar/SafetyBarMargin/SafetyBarStack/SafetyStatusRow" unique_id=1333881233]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+theme_override_font_sizes/font_size = 14
+tooltip_text = "Ambient summary of what the hidden Session Record analysis found this turn. Type /synthesis in the message box for the full recap."
+text = "Session Record: awaiting the first facilitator turn."
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = false
+text_overrun_behavior = 0
+horizontal_alignment = 2
+
+[node name="WaitProgressSlot" type="MarginContainer" parent="SafetyBar/SafetyBarMargin/SafetyBarStack"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2

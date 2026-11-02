@@ -1,0 +1,25 @@
+{
+	"metadata": {
+		"created_date": "2025-07-01T10:37:18",
+		"readymade_version": "1.0",
+		"task_count": 1
+	},
+	"tasks": [
+		{
+			"channel": "YouTube",
+			"completion_date": "",
+			"core_idea": "Video: \"Why 3+1 Dims = 4-Item Mind?\"",
+			"cosmic_instrument": "Abductive Hypothesis Generation (Quantum Reasoning)",
+			"created_date": "2025-07-01T10:33:28",
+			"deadline": "2025-01-08",
+			"deliverable_path": "",
+			"format": "Video",
+			"generated_content": "",
+			"notes": "Main deliverable for the week. Drive to Discord #start-here.",
+			"priority": 0,
+			"start_date": "2025-01-02",
+			"status": "In Progress",
+			"title": "Dimensions & Mind Video"
+		}
+	]
+}

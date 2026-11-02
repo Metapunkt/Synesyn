@@ -1,0 +1,27 @@
+[gd_resource type="BehaviorTree" load_steps=8 format=3 uid="uid://d1tegt5u81yej"]
+
+[ext_resource type="Script" uid="uid://dnmqykiq7q27w" path="res://ai/tasks/pass.gd" id="1_50pkn"]
+[ext_resource type="Script" uid="uid://cvduht87go5mm" path="res://addons/metapunkt/limboai_tasks/CallMetapunktToolTask.gd" id="2_wqury"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_ao0xu"]
+
+[sub_resource type="BTAction" id="BTAction_tpw0o"]
+script = ExtResource("1_50pkn")
+
+[sub_resource type="BTAction" id="BTAction_j4am5"]
+children = [SubResource("BTAction_tpw0o")]
+script = ExtResource("2_wqury")
+tool_name = "GodotUtils"
+tool_args = {
+"action": "print message"
+}
+
+[sub_resource type="BTSelector" id="BTSelector_74201"]
+children = [SubResource("BTAction_j4am5")]
+
+[sub_resource type="BTSequence" id="BTSequence_mxnw5"]
+children = [SubResource("BTSelector_74201")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_ao0xu")
+root_task = SubResource("BTSequence_mxnw5")

@@ -1,0 +1,23 @@
+{
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "ireti_okan_awaiting_an_awakening",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "call_scene_method",
+      "method": "test_send_user_message",
+      "args": [
+        "HARNESS_WAIT_FOR_AI_RESPONSE_TEST"
+      ]
+    }
+  ],
+  "wait_frames_after_post": 60,
+  "wait_time_sec_after_post": 50,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 256000
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="11.41358mm"
+   height="4.2457356mm"
+   viewBox="0 0 11.41358 4.2457356"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1" /><g
+     id="layer1"
+     transform="translate(-985.66618,-1469.6993)"><rect
+       style="fill:none;stroke:#000000;stroke-width:0.058851;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;paint-order:stroke fill markers"
+       id="rect97"
+       width="11.354759"
+       height="4.1868763"
+       x="985.69562"
+       y="1469.7286"
+       ry="0.97289026" /><path
+       d="m 989.23258,1473.5704 c 0.0249,-0.1015 0.29742,-0.689 0.23059,-0.9866 -0.0671,-0.299 -0.11192,-0.9233 -0.11192,-0.9233 h 0.26122 c 0.0264,0.2825 0.0791,0.7223 0.0791,0.7223 0.10755,-0.241 0.20494,-0.4831 0.31114,-0.7223 h 0.27793 c 0,0 0.0307,0 0.0377,0 0.0119,0 0.008,0.018 0.005,0.025 -0.44477,1.0011 -0.45638,0.9973 -0.86153,2.0525 -0.0707,0.048 -0.24036,-0.1249 -0.2289,-0.1719 z"
+       id="path108"
+       style="font-style:italic;font-weight:bold;font-size:27.4926px;font-family:Sans;-inkscape-font-specification:'Sans, Bold Italic';text-align:center;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.0261636;stroke-dasharray:none"
+       aria-label="y" /><text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.79826px;font-family:Sans;-inkscape-font-specification:'Sans, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.0261636;stroke-dasharray:none;stroke-opacity:1"
+       x="990.3111"
+       y="1472.6423"
+       id="text108"><tspan
+         id="tspan108"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.79826px;font-family:Sans;-inkscape-font-specification:'Sans, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.0261636;stroke-dasharray:none"
+         x="990.3111"
+         y="1472.6423">npunkt</tspan></text><g
+       id="g112"
+       transform="matrix(0.06540895,0,0,0.06540895,949.07152,1395.4659)"><rect
+         style="fill:none;stroke:none;stroke-width:0.4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect108"
+         width="42.607075"
+         height="42.607075"
+         x="570.51855"
+         y="1146.0801"
+         ry="21.303537" /><path
+         id="path109"
+         style="fill:none;stroke:#000000;stroke-width:2.663;stroke-linecap:round"
+         d="m 584.56351,1187.4279 c -8.20745,-2.9561 -14.045,-10.7935 -14.045,-20.0443 0,-8.7292 5.19765,-16.1997 12.67955,-19.4982" /><path
+         style="fill:#000000;stroke:#000000;stroke-width:0.4;stroke-linecap:square;stroke-linejoin:miter;stroke-dasharray:none;stroke-dashoffset:0;paint-order:normal"
+         d="m 585.53165,1187.7502 16.24125,-20.1354 c 0.93642,-1.1609 -0.19913,-2.8319 -1.62329,-2.3887 l -15.39991,4.7924 c -1.91329,0.5954 -3.78557,-1.0276 -3.46765,-3.0061 l 3.15394,-19.627 c 0,0 6.31772,-4.228 11.28792,-1.9787 1.77077,0.8013 2.25221,3.6757 1.24203,4.9427 l -11.29853,14.5327 c -0.6569,0.8436 0.17828,2.0271 1.19325,1.6909 l 18.45236,-6.1123 c 1.53228,-0.5075 2.98006,0.9651 2.44653,2.4885 l -7.25015,20.7022 c -1.06983,2.2649 -2.55239,5.9116 -6.66845,6.2786 -7.2091,0.6429 -8.3093,-2.1798 -8.3093,-2.1798 z"
+         id="path110" /><path
+         id="path112"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-dasharray:none"
+         d="m 597.34857,1146.7982 c 9.10592,2.4222 15.77702,10.6961 15.77702,20.5854 0,9.4646 -6.11033,17.4495 -14.61746,20.2413" /></g></g></svg>

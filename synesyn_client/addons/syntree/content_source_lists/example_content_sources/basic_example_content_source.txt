@@ -1,0 +1,3 @@
+This is an initial content source for SynTree.
+
+You can modify this file or add new content sources through the SynTree interface.

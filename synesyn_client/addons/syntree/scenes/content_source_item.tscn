@@ -1,0 +1,209 @@
+[gd_scene format=3 uid="uid://jj0l38l3jfed"]
+
+[ext_resource type="Script" uid="uid://bk20ytwy4sm47" path="res://addons/syntree/scripts/ui/content_source_list/content_source_item.gd" id="1"]
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_dyku2"]
+
+[node name="ContentSourceItem" type="VBoxContainer" unique_id=1543917065 groups=["synesyn_themed"]]
+custom_minimum_size = Vector2(0, 50)
+offset_right = 1152.0
+offset_bottom = 648.0
+pivot_offset = Vector2(-1596, 1032)
+size_flags_horizontal = 3
+theme = ExtResource("1_dyku2")
+theme_override_constants/separation = 15
+script = ExtResource("1")
+
+metadata/theme_surface = "utility"
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1618766018]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="SourceContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1355144588]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SelectCheck" type="CheckBox" parent="MarginContainer/SourceContainer" unique_id=411703298]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "✦"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=96616789]
+layout_mode = 2
+
+[node name="Title_Label_Name" type="Label" parent="MarginContainer/SourceContainer" unique_id=21790692]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Name:"
+
+[node name="NameLabel" type="Label" parent="MarginContainer/SourceContainer" unique_id=547202087]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Source Name"
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=490684343]
+layout_mode = 2
+
+[node name="StackBadge" type="Label" parent="MarginContainer/SourceContainer" unique_id=220358013]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "STACK"
+
+[node name="UnwiredBadge" type="Label" parent="MarginContainer/SourceContainer" unique_id=888878001]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Unwired: 0"
+
+[node name="IncludeUnwiredCheck" type="CheckBox" parent="MarginContainer/SourceContainer" unique_id=334395373]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Include unwired"
+
+[node name="VSeparator_Stack" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=1062337429]
+layout_mode = 2
+
+[node name="Show_Hierarchy_Button" type="Button" parent="MarginContainer/SourceContainer" unique_id=223585787]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🔍Expand"
+
+[node name="VSeparator7" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=158301548]
+layout_mode = 2
+
+[node name="ActiveSourceCheck" type="CheckBox" parent="MarginContainer/SourceContainer" unique_id=1907244709]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Active Source?"
+
+[node name="VSeparator3" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=885760308]
+layout_mode = 2
+
+[node name="MetapromptCheck" type="CheckBox" parent="MarginContainer/SourceContainer" unique_id=1683666085]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "isMetaprompt?"
+
+[node name="VSeparator4" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=1917644820]
+layout_mode = 2
+
+[node name="Title_Label_Path" type="Label" parent="MarginContainer/SourceContainer" unique_id=774819836]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Path: "
+
+[node name="PathLabel" type="Label" parent="MarginContainer/SourceContainer" unique_id=262252401]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Source Path"
+
+[node name="VSeparator5" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=1684543329]
+layout_mode = 2
+
+[node name="Delete_Source_Button" type="Button" parent="MarginContainer/SourceContainer" unique_id=1587861360]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "❌Delete"
+
+[node name="Title_Label_Delete" type="Label" parent="MarginContainer/SourceContainer" unique_id=719013458]
+visible = false
+layout_mode = 2
+text = "Delete"
+
+[node name="VSeparator6" type="VSeparator" parent="MarginContainer/SourceContainer" unique_id=2087356786]
+layout_mode = 2
+
+[node name="GraphView_Button" type="Button" parent="MarginContainer/SourceContainer" unique_id=1626265300]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🔍 Context Graph"
+
+[node name="FooterContainer" type="HBoxContainer" parent="." unique_id=950148759]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_constants/separation = 10
+
+[node name="ContentListViewButton" type="Button" parent="FooterContainer" unique_id=976405594]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "List View"
+
+[node name="SelectedSourceViewButton" type="Button" parent="FooterContainer" unique_id=277808434]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Selected Source"
+
+[node name="ContentGraphViewButton" type="Button" parent="FooterContainer" unique_id=1873069176]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Context Graph"
+
+[node name="ContentSourceMenuButton" type="Button" parent="FooterContainer" unique_id=975621026]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select a content source and click here for it's context menu"
+text = "Menu SourceMenu"
+
+[node name="MenuButton2" type="TextureButton" parent="FooterContainer" unique_id=804966313]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SearchBox" type="LineEdit" parent="FooterContainer" unique_id=1653987066]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FilterButton" type="Button" parent="FooterContainer" unique_id=262924575]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Filter"
+
+[node name="StatsButton" type="Button" parent="FooterContainer" unique_id=1019858493]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stats"
+
+[node name="RefreshButton" type="Button" parent="FooterContainer" unique_id=281136928]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+
+[node name="DeleteButton" type="Button" parent="FooterContainer" unique_id=1538008477]
+layout_mode = 2
+text = "Delete"
+
+[node name="Button3" type="Button" parent="FooterContainer" unique_id=2130494343]
+layout_mode = 2
+text = "Button"
+
+[node name="Button4" type="Button" parent="FooterContainer" unique_id=1030578059]
+layout_mode = 2
+text = "Button"
+
+[connection signal="toggled" from="MarginContainer/SourceContainer/SelectCheck" to="." method="_on_select_check_toggled"]
+[connection signal="toggled" from="MarginContainer/SourceContainer/IncludeUnwiredCheck" to="." method="_on_include_unwired_check_toggled"]
+[connection signal="pressed" from="MarginContainer/SourceContainer/Show_Hierarchy_Button" to="." method="_on_show_hierarchy_button_pressed"]
+[connection signal="toggled" from="MarginContainer/SourceContainer/ActiveSourceCheck" to="." method="_on_active_source_check_toggled"]
+[connection signal="toggled" from="MarginContainer/SourceContainer/MetapromptCheck" to="." method="_on_metaprompt_check_toggled"]
+[connection signal="pressed" from="MarginContainer/SourceContainer/Delete_Source_Button" to="." method="_on_delete_source_button_pressed"]
+[connection signal="pressed" from="MarginContainer/SourceContainer/GraphView_Button" to="." method="_on_graph_view_button_pressed"]

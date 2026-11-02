@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions about using Synesyn or running a session
+    url: https://discord.com/invite/fscuH8RmFZ
+    about: Discord is faster than an issue for setup problems, facilitation questions and "is this supposed to work yet?"
+  - name: Security reports
+    url: https://github.com/Metapunkt/Synesyn/blob/main/SECURITY.md
+    about: Please email rather than opening a public issue.
+  - name: Code of conduct concerns
+    url: https://github.com/Metapunkt/Synesyn/blob/main/CODE_OF_CONDUCT.md
+    about: Reported privately by email, not through issues.

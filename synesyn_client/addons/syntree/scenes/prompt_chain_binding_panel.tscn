@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/prompt_chain/prompt_chain_binding_panel.gd" id="1_binding"]
+
+[node name="PromptChainBindingPanel" type="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("1_binding")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Context Graph binding"
+
+[node name="ArtifactRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BindingArtifactEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/ArtifactRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Graph artifact id"
+
+[node name="BindingVersionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/ArtifactRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Pinned version id"
+
+[node name="ScopeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BindingOwnerEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/ScopeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Owner source id"
+
+[node name="BindingContextSetEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/ScopeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Owner-qualified context-set id"
+
+[node name="PolicyRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BindingPresetSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/PolicyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BindingBudgetSpin" type="SpinBox" parent="MarginContainer/VBoxContainer/PolicyRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 100000.0
+value = 8000.0
+suffix = " tokens"
+
+[node name="ActionRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProposeBindingButton" type="Button" parent="MarginContainer/VBoxContainer/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Add this binding to the chain proposal. Use the main Commit button to accept it."
+text = "Propose binding"
+
+[node name="PreviewBindingButton" type="Button" parent="MarginContainer/VBoxContainer/ActionRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Preview bound context"
+
+[node name="BindingStatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="BindingPreviewText" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+editable = false
+wrap_mode = 1

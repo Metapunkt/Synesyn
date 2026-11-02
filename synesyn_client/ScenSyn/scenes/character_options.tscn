@@ -1,0 +1,222 @@
+[gd_scene load_steps=5 format=3 uid="uid://djhnncudkdg6x"]
+
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="1_lq2tm"]
+[ext_resource type="Script" uid="uid://u42alpmcnbbi" path="res://ScenSyn/scripts/character_options.gd" id="1_ug7yh"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/core/menu_dismiss_catcher.gd" id="menu_dismiss_catcher"]
+[ext_resource type="Script" uid="uid://dgy8fxiw3rl8u" path="res://ScenSyn/scripts/networkscripts/Network.gd" id="2_lrf2o"]
+[ext_resource type="PackedScene" uid="uid://b61ogmv77aye8" path="res://ScenSyn/scenes/services_panel.tscn" id="4_services_panel"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="i_checktick"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="i_settingsgear"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="i_arrowleft"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-backgrounds/bg_main_home_dark.png" id="bg_home_dark"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-backgrounds/bg_main_home_light.png" id="bg_home_light"]
+
+[node name="CharacterOptions" type="Control" groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lq2tm")
+script = ExtResource("1_ug7yh")
+
+metadata/theme_surface = "utility"
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1774532819]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("bg_home_dark")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 52.0
+offset_top = 52.0
+offset_right = -52.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 28
+text = "Choose Your Character"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Instructions For How To Use This "
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="GenerateButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Generate Button"
+
+[node name="Character_Container" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CharacterList_Container" type="VBoxContainer" parent="VBoxContainer/Character_Container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/Character_Container/CharacterList_Container"]
+visible = false
+layout_mode = 2
+text = "Hello"
+
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ConfirmButton" type="Button" parent="VBoxContainer"]
+icon = ExtResource("i_checktick")
+
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 17
+text = "Confirm Selection"
+
+[node name="ConfirmButton2" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Confirm Selection2"
+
+[node name="HamburgerMenuLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HamburgerMenuBtn" type="Button" parent="HamburgerMenuLayer"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -68.0
+offset_top = 26.0
+offset_right = -28.0
+offset_bottom = 66.0
+grow_horizontal = 0
+groups=["synesyn_themed"]
+theme_type_variation = &"ButtonThemeToggle"
+text = "☰"
+
+[node name="HamburgerUIControls" type="Control" parent="HamburgerMenuLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+groups=["synesyn_themed"]
+
+[node name="HamburgerDismissCatcher" type="Control" parent="HamburgerMenuLayer/HamburgerUIControls"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("menu_dismiss_catcher")
+
+[node name="HamburgerSettingsPanel" type="PanelContainer" parent="HamburgerMenuLayer/HamburgerUIControls"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+offset_left = 797.0
+offset_top = 75.0
+offset_right = 1121.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="SettingsVBox" type="VBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ServicesButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox"]
+icon = ExtResource("i_settingsgear")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Hub, AI model, voice, and workspace. Do this once before a live session."
+text = "Settings"
+
+[node name="NavigationSeparator" type="HSeparator" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox"]
+icon = ExtResource("i_arrowleft")
+
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Return to ScenSyn landing scene"
+text = "Back"
+
+[node name="ServicesPanel" parent="." instance=ExtResource("4_services_panel")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Network" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_lrf2o")
+
+[connection signal="pressed" from="VBoxContainer/GenerateButton" to="." method="_on_generate_pressed"]

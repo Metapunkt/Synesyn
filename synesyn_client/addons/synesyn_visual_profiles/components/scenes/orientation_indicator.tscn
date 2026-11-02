@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/components/scripts/orientation_indicator.gd" id="1_indicator"]
+
+[node name="OrientationIndicator" type="PanelContainer"]
+theme_type_variation = &"SynesynStatusPanel"
+script = ExtResource("1_indicator")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Overview · 1/6"

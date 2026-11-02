@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp3pefk0vlj61"]
+
+[ext_resource type="Script" path="res://readymade/test_phase_5_1_task_integration.gd" id="1_xr2k1"]
+
+[node name="TestPhase51" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_xr2k1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Phase 5.1: Task Integration Test Suite"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+custom_minimum_size = Vector2(0, 120)
+bbcode_enabled = true
+text = "[b]Phase 5.1: Task Integration[/b]
+
+This test suite validates the seamless integration between edit sessions and task management:
+• Task creation from edit sessions
+• Document references and snapshots
+• Session insights integration  
+• AI-powered task suggestions
+• Multiple task creation workflows
+
+[color=yellow]Press F9 to run all tests, or use the buttons below.[/color]"
+
+[node name="TestButtons" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RunAllTests" type="Button" parent="VBoxContainer/TestButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Run All Tests (F9)"
+
+[node name="QuickTest" type="Button" parent="VBoxContainer/TestButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quick Task Creation Test"
+
+[node name="AITest" type="Button" parent="VBoxContainer/TestButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AI Suggestions Test"
+
+[node name="TestOutput" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=gray]Test output will appear here...[/color]" 

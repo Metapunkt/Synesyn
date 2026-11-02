@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SynesynVisualProfileDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/definitions/visual_profile_definition.gd" id="1_profile"]
+[ext_resource type="Theme" path="res://readymade/ui/readymade_theme_light.tres" id="2_light"]
+[ext_resource type="Theme" path="res://readymade/ui/readymade_theme.tres" id="3_dark"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = "readymade_compatibility"
+profile_family = "readymade"
+base_light = ExtResource("2_light")
+base_dark = ExtResource("3_dark")
+utility_light = ExtResource("2_light")
+utility_dark = ExtResource("3_dark")
+console_light = ExtResource("2_light")
+console_dark = ExtResource("3_dark")
+tools_light = ExtResource("2_light")
+tools_dark = ExtResource("3_dark")

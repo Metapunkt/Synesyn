@@ -1,0 +1,28 @@
+{
+  "scene_path": "res://addons/synaxes/scenes/synaxes_main.tscn",
+  "state": {},
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "set_node_property",
+      "node_path": "MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer",
+      "property": "scroll_vertical",
+      "value": 9999
+    },
+    {
+      "type": "set_node_property",
+      "node_path": "MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/UseHubEmbeddings",
+      "property": "button_pressed",
+      "value": true
+    },
+    {
+      "type": "call_scene_method",
+      "method": "_save_synaxes_settings",
+      "args": []
+    }
+  ],
+  "wait_frames_after_post": 30,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 120000
+}
+

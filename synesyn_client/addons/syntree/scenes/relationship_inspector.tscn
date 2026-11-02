@@ -1,0 +1,186 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/relationship_inspector.gd" id="1_inspector"]
+
+[node name="RelationshipInspector" type="PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_inspector")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Relationships"
+
+[node name="EndpointCaption" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create with keyboard"
+
+[node name="EndpointRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FromSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EndpointRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Relationship source node"
+
+[node name="DirectionLabel" type="Label" parent="MarginContainer/VBoxContainer/EndpointRow"]
+layout_mode = 2
+text = "→"
+
+[node name="ToSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EndpointRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Relationship target node"
+
+[node name="CreateEndpointsButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Create a relationship between the selected endpoints. Available through normal keyboard focus navigation."
+text = "Choose relationship type"
+
+[node name="EdgeSelector" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select an existing relationship to inspect or edit."
+
+[node name="EmptyLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Draw a connection or select a relationship."
+autowrap_mode = 2
+
+[node name="EditorContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EndpointsCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Direction"
+
+[node name="EndpointsLabel" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="RelationCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Relationship type"
+
+[node name="RelationSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Choose the meaning of this directed relationship."
+
+[node name="NotesCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Explanation / notes"
+
+[node name="NotesEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="ConfidenceCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Confidence"
+
+[node name="ConfidenceSpin" type="SpinBox" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="AuthorshipCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Authorship / derivation"
+
+[node name="AuthorshipSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "How this relationship was authored. Unknown is explicit and is never inferred."
+
+[node name="EvidenceCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Evidence status (separate from confidence)"
+
+[node name="EvidenceSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ReviewCaption" type="Label" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+text = "Review status"
+
+[node name="ReviewSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ProvenanceSummary" type="RichTextLabel" parent="MarginContainer/VBoxContainer/EditorContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="PrimaryActions" type="HBoxContainer" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/EditorContainer/PrimaryActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save changes"
+
+[node name="CancelButton" type="Button" parent="MarginContainer/VBoxContainer/EditorContainer/PrimaryActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cancel"
+
+[node name="EditActions" type="HBoxContainer" parent="MarginContainer/VBoxContainer/EditorContainer"]
+layout_mode = 2
+
+[node name="ReverseButton" type="Button" parent="MarginContainer/VBoxContainer/EditorContainer/EditActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reverse the direction while preserving the edge id."
+text = "Reverse"
+
+[node name="DisconnectButton" type="Button" parent="MarginContainer/VBoxContainer/EditorContainer/EditActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Remove this relationship."
+text = "Disconnect"
+
+[node name="LegendSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Legend" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "→ Structural (containment)   ⇢ Dependency (ordering)\n⇒ Evidential (support/conflict)   ↔ Semantic (meaning)"
+fit_content = true
+
+[node name="DisconnectConfirmation" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Disconnect relationship?"
+dialog_text = "This removes the selected relationship. The connected nodes remain."
+ok_button_text = "Disconnect"

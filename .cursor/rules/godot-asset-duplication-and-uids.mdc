@@ -1,0 +1,83 @@
+---
+description: Never clone Godot UIDs when copying or relocating assets and scripts. Apply when moving, copying, duplicating or bundling any .gd/.tscn/.tres/.ttf/.png, or when editing ext_resource UIDs.
+globs: synesyn_client/**/*.tscn,synesyn_client/**/*.tres,synesyn_client/**/*.import
+alwaysApply: false
+---
+
+# Asset duplication and UIDs (ADR 0017)
+
+Every Godot resource owns a UID recorded in a sidecar (`<file>.uid` for scripts,
+`uid=` inside `<file>.import` for imported assets) or in its own header
+(`[gd_resource ... uid="..."]`). A UID must map to exactly one file. When two
+files claim one UID, Godot silently resolves `ext_resource` lookups to whichever
+it indexed first, so a scene can load a different resource than its `path=` says.
+
+## Relocating a file
+
+- **Move, never copy.** Take the sidecar (`.uid` / `.import`) with it and delete
+  the original. The UID stays valid and all `uid://` references keep resolving.
+- Leaving the old copy behind is what breaks: two scripts declaring the same
+  `class_name` produce `Parse Error: Class "X" hides a global script class`,
+  which fails every dependent script and cascades into
+  `Compile Error: Failed to compile depended scripts`.
+- After relocating, scan for stragglers before declaring the migration done:
+
+```powershell
+# any remaining reference to the old location?
+Select-String -Path (Get-ChildItem -Recurse -Include *.gd,*.tscn,*.tres,*.cfg,*.godot -File) -Pattern "res://old/path"
+# any class_name declared twice?
+Select-String -Path (Get-ChildItem -Recurse -Filter *.gd -File) -Pattern "^\s*class_name\s+(\w+)"
+```
+
+## Deliberately duplicating a file
+
+Some duplication is intentional — ADR 0017 rule 4 keeps a bundled
+`addons/synesyn_core/themes/` pack beside the richer host `ScenSyn/themes/`
+override. When adding such a copy:
+
+- Copy **only** the source asset. Never copy its `.uid` / `.import` sidecar —
+  that clones the UID. Let Godot mint a fresh one on reimport.
+- To break an existing collision, delete the `uid=` line from the losing
+  `.import` file (or the `uid="..."` attribute from a `.tres` header) **and**
+  strip the `uid="..."` attribute from every `ext_resource` pointing at that
+  path. Godot then resolves by `path=` and backfills a new UID on save. Leaving
+  the reference's UID intact makes it resolve to the *other* file.
+
+## Never hand-write a UID
+
+`uid://dsynpunkt_logo_wht` is not a UID — it is a placeholder that produces
+`ext_resource, invalid UID: ... using text path instead`. Either omit the
+attribute and let Godot generate it, or copy the real value from the asset's
+`.import` file.
+
+## A bundled pack must be self-contained
+
+If an addon ships a drop-in default, every path it references must resolve
+*inside* that addon. A `path=` pointing outside the addon while a cloned `uid=`
+silently resolves elsewhere still "works" in the host project and fails the
+moment the addon is dropped into a clean one. Check paths, not just behaviour.
+
+## File-streaming sync can make files unreadable to Godot
+
+This machine has Synology Drive Client file streaming (on-demand sync) active
+over the working directory. Such tools can replace a file's contents with a
+*placeholder*: the directory entry and byte count remain, but the data is
+offloaded. Reading it asks the sync provider to stream the content back. If the
+provider is not running, that fails, and Godot reports it as a file corruption:
+
+```
+core/io/file_access.cpp:577 - Condition "r != len" is true
+modules/gdscript/gdscript.cpp:1146 - ... Returning: ERR_CANT_OPEN
+Failed loading resource: res://...
+```
+
+Before treating this as a code fault, check for the `RECALL_ON_DATA_ACCESS`
+attribute (`0x400000`). A hit means the file is a placeholder, not broken:
+
+```powershell
+Get-ChildItem -Recurse -File -Force | Where-Object { $_.Attributes -band 0x400000 }
+```
+
+Diagnose read-only; do not try to force files local by changing sync attributes.
+Fix it in the sync client by keeping the Godot project always available offline —
+that is the user's call, not something to script.

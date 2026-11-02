@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/components/scripts/semantic_panel.gd" id="1_panel"]
+[ext_resource type="PackedScene" path="res://addons/synesyn_visual_profiles/components/scenes/semantic_status_badge.tscn" id="2_badge"]
+
+[node name="AttentionLoadingIndicator" type="PanelContainer"]
+script = ExtResource("1_panel")
+semantic_role = "raised"
+metadata/synesyn_semantic_role = "attention_loading"
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Row" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StateBadge" parent="Margin/Row" instance=ExtResource("2_badge")]
+layout_mode = 2
+semantic_role = "reviewed"
+display_text = "Working"
+
+[node name="Progress" type="ProgressBar" parent="Margin/Row"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 42.0
+show_percentage = false
+
+[node name="Message" type="Label" parent="Margin/Row"]
+layout_mode = 2
+text = "Preparing surface"

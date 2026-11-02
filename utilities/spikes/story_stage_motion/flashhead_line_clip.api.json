@@ -1,0 +1,39 @@
+{
+  "2": {
+    "inputs": {
+      "seed": 42,
+      "width": 512,
+      "height": 512,
+      "pipeline": ["6", 0],
+      "ref_audio": ["3", 0],
+      "avatar_image": ["4", 0]
+    },
+    "class_type": "RunningHub SoulX-FlashHead Sampler",
+    "_meta": {"title": "FlashHead Sampler"}
+  },
+  "3": {
+    "inputs": {"audio": "synesyn/line.wav"},
+    "class_type": "LoadAudio",
+    "_meta": {"title": "Line audio (uploaded by the hub)"}
+  },
+  "4": {
+    "inputs": {"image": "synesyn/portrait.png"},
+    "class_type": "LoadImage",
+    "_meta": {"title": "Portrait (uploaded by the hub)"}
+  },
+  "5": {
+    "inputs": {
+      "filename_prefix": "story_stage_spike/flashhead",
+      "format": "auto",
+      "codec": "auto",
+      "video": ["2", 0]
+    },
+    "class_type": "SaveVideo",
+    "_meta": {"title": "Save clip"}
+  },
+  "6": {
+    "inputs": {"model_type": "lite"},
+    "class_type": "RunningHub SoulX-FlashHead Loader",
+    "_meta": {"title": "FlashHead Loader"}
+  }
+}

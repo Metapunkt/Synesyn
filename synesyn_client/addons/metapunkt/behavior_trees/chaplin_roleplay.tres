@@ -1,0 +1,21 @@
+[gd_resource type="BehaviorTree" load_steps=5 format=3 uid="uid://b4myssc335u03"]
+
+[ext_resource type="Script" uid="uid://cvduht87go5mm" path="res://addons/metapunkt/limboai_tasks/CallMetapunktToolTask.gd" id="1_metapunkt_tool_task"]
+
+[sub_resource type="BTAction" id="CallMetapunktToolTask_1"]
+script = ExtResource("1_metapunkt_tool_task")
+tool_name = "SynTree"
+tool_args = {
+"message": "Ah, greetings! *tips hat with theatrical flourish* I am Agent-Chaplin, forever ready to bring wit, charm, and delightful performance to our conversation. How may I entertain and assist you today?",
+"operation": "chat"
+}
+
+[sub_resource type="BTSequence" id="BTSequence_1"]
+children = [SubResource("CallMetapunktToolTask_1")]
+
+[sub_resource type="BTSelector" id="BTSelector_1"]
+children = [SubResource("BTSequence_1")]
+
+[resource]
+description = "Agent-Chaplin's roleplay behavior tree"
+root_task = SubResource("BTSelector_1")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/components/scripts/semantic_action_button.gd" id="1_action"]
+
+[node name="SemanticActionButton" type="Button"]
+custom_minimum_size = Vector2(0, 38)
+text = "Action"
+script = ExtResource("1_action")

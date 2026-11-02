@@ -1,0 +1,51 @@
+{
+  "_note": "Produces the Story Stage image used by the root README and the docs site. Story Stage is a view of a running session, not a scene that can stage itself: it shows whoever is speaking in the story log, so the run opens a Story Catalyst session, takes one real turn against Ireti Okan, then mounts the stage beside it to replay that log with backdrop, portrait and speech. That costs a model call and a few minutes, so it is run deliberately rather than as part of a suite - see the capture guide. Two preconditions are the operator's: a model provider must be configured, and the Story Stage character art must be installed, since it ships as an optional content pack. The stage displays one entry at a time and fades the portrait between them, so the run captures a series and the best frame is published; the AI character arrives third, after the narrator's welcome and the typed line have each been spoken. The window is 16:9 rather than the 1600x1120 the other published captures use, because the stage is laid out for the project's 1152x648 viewport: any other ratio expands the canvas, which drifts the centre-anchored input field over the portrait and pushes a long line past the fold of its dialogue box.",
+  "harness_window_size": "1920x1080",
+  "harness_timeout_sec": 400,
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "ireti_okan_awaiting_an_awakening",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "What are we waiting for, and who decided we should wait here?",
+        "seconds": 130
+      }
+    },
+    {
+      "type": "mount_scene",
+      "scene_path": "res://ScenSyn/scenes/scensyn_story_stage.tscn"
+    },
+    { "type": "wait_seconds", "seconds": 6 },
+    { "type": "capture_screenshot", "name": "stage-01" },
+    { "type": "wait_seconds", "seconds": 5 },
+    { "type": "capture_screenshot", "name": "stage-02" },
+    { "type": "wait_seconds", "seconds": 5 },
+    { "type": "capture_screenshot", "name": "stage-03" },
+    { "type": "wait_seconds", "seconds": 5 },
+    { "type": "capture_screenshot", "name": "stage-04" },
+    { "type": "wait_seconds", "seconds": 5 },
+    { "type": "capture_screenshot", "name": "stage-05" }
+  ],
+  "wait_frames_after_post": 60,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "type": "scenario_contains",
+      "value": "ireti"
+    },
+    {
+      "type": "min_story_log",
+      "value": 3
+    }
+  ]
+}

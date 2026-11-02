@@ -1,0 +1,23 @@
+{
+  "content": {
+    "nodes": []
+  },
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "is_active": false,
+      "metaprompt": false,
+      "model_metadata": {
+
+      }
+    },
+    "author": "SynTree User",
+    "created": "2025-12-24T19:55:57",
+    "modified": "2025-12-24T19:55:57",
+    "name": "code_architecture_stackkkkk",
+    "path": "res://addons/syntree/content_source_lists/code_architecture_stack.json",
+    "source_id": "code_architecture_stackkkkk",
+    "source_origin": "file",
+    "source_type": "json"
+  }
+}

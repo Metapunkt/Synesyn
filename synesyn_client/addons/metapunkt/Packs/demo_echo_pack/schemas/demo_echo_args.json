@@ -1,0 +1,17 @@
+{
+	"schema_version": 1,
+	"type": "object",
+	"properties": {
+		"message": {
+			"type": "string",
+			"description": "The message to echo back."
+		},
+		"repeat": {
+			"type": "integer",
+			"description": "How many times to repeat (1-10).",
+			"minimum": 1,
+			"maximum": 10
+		}
+	},
+	"required": ["message"]
+}

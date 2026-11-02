@@ -1,0 +1,28 @@
+# In AIModelManager.gd
+func set_current_model(model_name: String) -> Dictionary:
+	print("AIModelManager: Attempting to set model. Received: '%s', Current: '%s'" % [model_name, _current_model]) # DEBUG
+	if not model_name in _available_models:
+		print("DEBUG: AI Model Manager - Invalid model name: ", model_name)
+	if not _api_service:
+		return {"success": false, "error": "API service not available"}
+	if not _api_service.has_api_key(provider):
+		return {"success": false, "error": "API key required for " + provider.capitalize() + " models"}
+	
+	_current_model = model_name
+	print("AIModelManager: Model successfully set. Current: '%s'" % _current_model) # DEBUG
+	
+	# Update API service error handler provider
+	if _api_service:
+		_api_service.set_error_handler_provider(provider)
+
+# In APIService.gd
+func process_message_with_history(messages: Array, context_string: String = "") -> Dictionary:
+	if not ai_model_manager:
+		return {"success": false, "error": "AI model manager not available"}
+	
+	var model = ai_model_manager.get_current_model()
+	print("APIService: process_message_with_history using model: '%s'" % model) # DEBUG
+	if model.is_empty():
+		return {"success": false, "error": "No model selected"}
+
+// ... existing code ... 

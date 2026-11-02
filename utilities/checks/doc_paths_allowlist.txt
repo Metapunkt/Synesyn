@@ -1,0 +1,43 @@
+# Paths that documentation names legitimately, but that do not exist in a fresh
+# checkout. Read by check_doc_paths.py. One path per line; `#` starts a comment.
+#
+# Add an entry only if the path is real for the reader but absent from the
+# repository. If it is absent because code moved, fix the document instead.
+
+# --- Packaged build output: exists only after services/synesyn_hub/packaging ---
+services/synesyn_hub/synesyn_hub.exe
+services/synesyn_hub/_internal/
+services/synesyn_hub/config.yaml
+godot/config/synesyn_client.yaml
+dist/synesyn_hub/
+
+# --- Excluded from the repository, installed by the developer ---
+# LimboAI binaries are fetched from upstream at setup time, see
+# docs/developer-guide/local-dev.md. They exist locally but are git-ignored, so
+# these entries keep the check honest on a fresh clone and in CI.
+addons/limboai/bin/
+synesyn_client/addons/limboai/bin/
+synesyn_client/addons/limboai/bin/limboai.gdextension
+# Story Stage sprite packs are optional downloads excluded by .gitignore.
+synesyn_client/ScenSyn/story_stage/sprites/
+# Local API-key config copied from config.example.cfg and excluded by .gitignore.
+synesyn_client/addons/syntree/config.cfg
+
+# --- Optional, operator-created ---
+# The hub loads this if present and falls back to environment variables, so it is
+# deliberately not shipped. See services/synesyn_hub/app/config.py.
+services/synesyn_hub/app/config.yaml
+
+# --- Created at runtime, not versioned ---
+services/synesyn_hub/logs/
+services/synesyn_hub/data/artifacts/
+stfx_store/store_manifest.json
+stfx_store/closures/
+seeds/seed_registry.json
+
+# --- External to this repository ---
+# ComfyUI is a separate installation the hub can talk to.
+services/comfyui/logs/
+# Authoring source held outside the repository, see ADR 0024 for the same pattern.
+development_notes/Stochastic_Dreams_Concept_Note_v5.txt
+stochasticdreams_visualsystem/Artrhythmetic/artrhythmetic-database_system/

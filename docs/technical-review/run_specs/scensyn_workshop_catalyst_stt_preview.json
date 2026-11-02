@@ -1,0 +1,69 @@
+{
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "karlsruhe_library_future_design",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "call_scene_method",
+      "method": "_on_game_session_transcription_completed",
+      "args": [
+        "Draft speech that remains awaiting explicit review.",
+        ""
+      ]
+    },
+    {
+      "type": "wait_seconds",
+      "seconds": 1
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "This deterministic harness turn represents the reviewed transcript after explicit confirmation.",
+        "seconds": 45
+      }
+    }
+  ],
+  "wait_frames_after_post": 0,
+  "wait_time_sec_after_post": 0,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "type": "min_story_log",
+      "value": 2
+    },
+    {
+      "type": "scenario_contains",
+      "value": "karlsruhe"
+    },
+    {
+      "type": "no_errors"
+    },
+    {
+      "name": "one-visible-workshop-assistant",
+      "type": "exact_unique_senders",
+      "value": 1,
+      "exclude_system": false,
+      "exclude_senders": [
+        "Facilitator",
+        "Facilitator Note",
+        "Narrator",
+        "Unknown Peer"
+      ]
+    },
+    {
+      "name": "one-session-record-response",
+      "type": "exact_sender_occurrences",
+      "sender": "Session Record",
+      "value": 1
+    }
+  ]
+}

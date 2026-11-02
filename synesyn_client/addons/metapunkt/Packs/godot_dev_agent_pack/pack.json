@@ -1,0 +1,37 @@
+{
+	"id": "synesyn.godot_dev_agent",
+	"name": "Godot Dev Agent Pack",
+	"version": "0.1.0",
+	"description": "Pack wrapper for the SynTree Godot Dev Agent workflow (Run Spec + harness artifacts + patch apply/revert). This pack is UI-only and delegates orchestration to SynTree.",
+	"author": "Synesyn Team",
+	"license": "MIT",
+	"synesyn_min_version": "0.1.0",
+	"capabilities": [
+		{
+			"capability_id": "godot_dev_agent.panel",
+			"type": "ui_panel",
+			"entrypoints": {
+				"scene_path": "ui/godot_dev_agent_panel.tscn",
+				"mount": {
+					"label": "Godot Dev Agent"
+				}
+			}
+		}
+	],
+	"permissions": {
+		"network": {
+			"allow": []
+		},
+		"filesystem": {
+			"read": [],
+			"write": []
+		},
+		"secrets": [],
+		"dangerous_actions": []
+	},
+	"schemas": {
+		"manifest": "metapunkt.capability_pack.v1"
+	},
+	"limits": {}
+}
+

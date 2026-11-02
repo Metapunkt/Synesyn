@@ -1,0 +1,56 @@
+{
+	"nodes": {
+		"basic_example": {
+			"id": "basic_example",
+			"name": "Basic Example",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/basic_example_content_source.txt",
+			"type": "file",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			}
+		},
+		"elgorian_names": {
+			"id": "elgorian_names",
+			"name": "Elgorian Names",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/ElgorianNames.txt",
+			"type": "file",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 100,
+					"y": 0
+				}
+			}
+		},
+		"ziluvian_species": {
+			"id": "ziluvian_species",
+			"name": "Ziluvian Species",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/Ziluvian_Species.txt",
+			"type": "file",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 200,
+					"y": 0
+				}
+			}
+		}
+	},
+	"root_nodes": ["basic_example", "elgorian_names", "ziluvian_species"]
+} 

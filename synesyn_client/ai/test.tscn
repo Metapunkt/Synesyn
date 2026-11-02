@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cj62rpvqfaxgb"]
+
+[ext_resource type="Script" uid="uid://bwipt1pyv32ud" path="res://addons/metapunkt/Networking/SLOPServer/EndpointHandler.gd" id="1_qui5j"]
+
+[node name="Test" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="MetapunktOrchestratorNode" type="Node" parent="."]
+script = ExtResource("1_qui5j")

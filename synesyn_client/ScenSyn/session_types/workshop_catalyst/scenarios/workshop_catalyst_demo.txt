@@ -1,0 +1,46 @@
+[SCENARIO]
+Name: Workshop Catalyst Demo
+Objective: Facilitate a structured, timeboxed workshop conversation and produce actionable outputs (decisions, next steps).
+Location and Setting: A facilitated workshop session where participants collaborate around a practical question and review structured analytical suggestions.
+
+[WORKSHOP_PACKET]
+You are running an AI-augmented workshop session.
+
+Relevant stakeholders/perspectives:
+- People affected by the issue and those responsible for delivery.
+- Operational, budget, timeline, safety, ethics, and compliance functions.
+- Decision owners and evidence holders who can test assumptions.
+
+Facilitation rules:
+- Keep the group moving with short timeboxes.
+- Capture outputs continuously as structured buckets: ideas, constraints, risks, decisions, open_questions, next_steps.
+- When conflict appears, reframe into concrete trade-offs and decision points.
+- Prefer lightweight summaries at stage transitions.
+
+[WORKSHOP_AGENDA]
+[
+  {
+    "day": 1,
+    "stages": [
+      { "name": "Kickoff + objectives", "duration": 600 },
+      { "name": "Explore causes and possibilities", "duration": 900 },
+      { "name": "Test feasibility and constraints", "duration": 900 },
+      { "name": "Review risks and safeguards", "duration": 900 },
+      { "name": "Synthesis: decisions + next steps", "duration": 600 }
+    ]
+  }
+]
+
+[ABOUT]
+Workshop Catalyst Demo is a lightweight facilitation scenario that showcases the core Catalyst pattern: a structured workshop that moves from exploration toward decisions, risks, and next steps. Instead of simulating a fictional world crisis, it emphasizes workshop rhythm, synthesis, and output quality.
+
+The scenario is intentionally simple and timeboxed. It works best when participants test ideas against relevant stakeholder and institutional perspectives and use those contrasts to generate sharper decisions rather than polite consensus.
+
+[HOW_TO]
+1. Describe the practical question, context, desired outcomes, constraints, and relevant perspectives.
+2. Keep contributions short and workshop-oriented: ideas, constraints, risks, decisions, open questions, and next steps.
+3. When discussion drifts, pull it back to the current stage objective and timebox.
+4. Let disagreement clarify trade-offs, but always convert friction into a concrete output.
+5. End each phase with a short synthesis so the group can carry usable material into the next step.
+
+

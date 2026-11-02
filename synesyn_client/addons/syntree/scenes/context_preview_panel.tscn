@@ -1,0 +1,87 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_preview_panel.gd" id="1_preview"]
+
+[node name="ContextPreview" type="PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_preview")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Context Preview"
+
+[node name="EnabledCheck" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Use this frozen preview as the context for the next SynTree chat submission."
+text = "Use compiled context for chat"
+
+[node name="PresetRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PresetSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/PresetRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BudgetSpin" type="SpinBox" parent="MarginContainer/VBoxContainer/PresetRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 256.0
+max_value = 100000.0
+step = 1.0
+value = 8000.0
+suffix = " tokens"
+
+[node name="RefreshButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh preview"
+
+[node name="BudgetLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="IncludedCaption" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Included"
+
+[node name="IncludedList" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="OmittedCaption" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Omitted"
+
+[node name="OmittedList" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+
+[node name="CompiledCaption" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exact compiled context"
+
+[node name="CompiledText" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1

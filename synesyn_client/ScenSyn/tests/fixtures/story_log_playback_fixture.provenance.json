@@ -1,0 +1,32 @@
+{
+  "ai_model": "fixture",
+  "entry_count": 5,
+  "file_stem": "story_log_playback_fixture",
+  "participants": [
+    "The Child",
+    "The Diviner",
+    "The Echo",
+    "The Seeker"
+  ],
+  "saved_at": "2026-09-23 18:00:15",
+  "scenario": "Stochastic Dreams",
+  "schema": "synesyn_provenance_v2",
+  "session_id": "fixture",
+  "session_type": "story_catalyst",
+  "stage": {
+    "cast": [
+      "Narrator",
+      "The Child",
+      "The Diviner",
+      "The Echo",
+      "The Seeker"
+    ],
+    "collection": "cultural_narratives",
+    "default_background": "",
+    "scenario_key": "stochastic_dreams",
+    "scenario_name": "Stochastic Dreams",
+    "voice_overrides": {
+      "The Child": "Narrator"
+    }
+  }
+}

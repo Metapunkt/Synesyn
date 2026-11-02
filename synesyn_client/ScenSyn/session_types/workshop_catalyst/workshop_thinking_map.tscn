@@ -1,0 +1,431 @@
+[gd_scene format=3]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_map_column"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.93, 0.952, 0.98, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="WorkshopThinkingMap" type="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="MapToolbar" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ColumnsViewButton" type="Button" parent="MapToolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+tooltip_text = "Show claims grouped into Causes / Effects / Opportunities columns, one card per claim."
+text = "Columns"
+
+[node name="GraphViewButton" type="Button" parent="MapToolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+tooltip_text = "Show claims as a node graph, with visible lines for the relationships between them (e.g. causes, contradicts)."
+text = "Graph"
+
+[node name="MapToolbarSpacer" type="Control" parent="MapToolbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MapContextToggle" type="CheckButton" parent="MapToolbar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+button_pressed = false
+text = "Specialist context"
+tooltip_text = "When ON, the last committed map is fed back into the AI specialists' prompt on later turns, so their analysis builds on what you already reviewed. Pending suggestions are never sent. OFF by default, and safe to switch either way: turning it off just stops sending the map, it does not erase anything."
+
+[node name="PreviewMapButton" type="Button" parent="MapToolbar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Click to open the Semantic impact preview below: a JSON diff of what committing right now would change (only Accepted/Edited items are included). Click again to close it. Nothing is saved to the Hub until you also press Commit."
+text = "Preview"
+
+[node name="CommitMapButton" type="Button" parent="MapToolbar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+disabled = true
+tooltip_text = "Sends the previewed map to the Hub as a new, immutable version. Enabled only after a valid Preview. Rejected/deferred items are excluded."
+text = "Commit"
+
+[node name="RetryMapCommitButton" type="Button" parent="MapToolbar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Retry the last failed commit using the same reviewed draft, without rebuilding the preview."
+text = "Retry"
+
+[node name="MapAddItemRow" type="HFlowContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 4
+
+[node name="AddItemCategory" type="OptionButton" parent="MapAddItemRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Which column the claim belongs in. Picking it here is exact. Claims pulled out of the conversation are sorted by keyword, which sometimes lands them in the wrong column."
+item_count = 3
+popup/item_0/text = "Cause"
+popup/item_0/id = 0
+popup/item_1/text = "Effect"
+popup/item_1/id = 1
+popup/item_2/text = "Opportunity"
+popup/item_2/id = 2
+selected = 0
+
+[node name="AddItemText" type="LineEdit" parent="MapAddItemRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Add a claim in your own words, then press Enter"
+tooltip_text = "Type a cause, effect, or opportunity the specialists missed. It goes onto the map as Accepted straight away, since you wrote it yourself. Nothing reaches the Hub until you Preview and Commit."
+
+[node name="AddItemButton" type="Button" parent="MapAddItemRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Put this claim on the map as your own, marked \"Added by facilitator\". You can Withdraw it again any time before it is committed."
+text = "Add"
+
+[node name="MapBodySplit" type="VSplitContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MapBodyPane" type="VBoxContainer" parent="MapBodySplit"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="MapColumns" type="GridContainer" parent="MapBodySplit/MapBodyPane"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+columns = 4
+
+[node name="CausesColumn" type="PanelContainer" parent="MapBodySplit/MapBodyPane/MapColumns"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_map_column")
+
+[node name="CausesBox" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/CausesColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CausesHeading" type="Label" parent="MapBodySplit/MapBodyPane/MapColumns/CausesColumn/CausesBox"]
+layout_mode = 2
+text = "Causes"
+
+[node name="CausesScroll" type="ScrollContainer" parent="MapBodySplit/MapBodyPane/MapColumns/CausesColumn/CausesBox"]
+layout_mode = 2
+clip_contents = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="CausesItems" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/CausesColumn/CausesBox/CausesScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="EffectsColumn" type="PanelContainer" parent="MapBodySplit/MapBodyPane/MapColumns"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_map_column")
+
+[node name="EffectsBox" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/EffectsColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EffectsHeading" type="Label" parent="MapBodySplit/MapBodyPane/MapColumns/EffectsColumn/EffectsBox"]
+layout_mode = 2
+text = "Effects"
+
+[node name="EffectsScroll" type="ScrollContainer" parent="MapBodySplit/MapBodyPane/MapColumns/EffectsColumn/EffectsBox"]
+layout_mode = 2
+clip_contents = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EffectsItems" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/EffectsColumn/EffectsBox/EffectsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="OpportunitiesColumn" type="PanelContainer" parent="MapBodySplit/MapBodyPane/MapColumns"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_map_column")
+
+[node name="OpportunitiesBox" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OpportunitiesColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OpportunitiesHeading" type="Label" parent="MapBodySplit/MapBodyPane/MapColumns/OpportunitiesColumn/OpportunitiesBox"]
+layout_mode = 2
+text = "Opportunities"
+
+[node name="OpportunitiesScroll" type="ScrollContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OpportunitiesColumn/OpportunitiesBox"]
+layout_mode = 2
+clip_contents = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="OpportunitiesItems" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OpportunitiesColumn/OpportunitiesBox/OpportunitiesScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="OutcomesColumn" type="PanelContainer" parent="MapBodySplit/MapBodyPane/MapColumns"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_map_column")
+
+[node name="OutcomesBox" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OutcomesColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OutcomesHeading" type="Label" parent="MapBodySplit/MapBodyPane/MapColumns/OutcomesColumn/OutcomesBox"]
+layout_mode = 2
+text = "Outcomes"
+tooltip_text = "Decisions, risks, owners and next steps. These are the claims you can send to the Session Record. They sit here rather than under Opportunities because an opportunity is something you could do, while an outcome is something you have settled."
+
+[node name="OutcomesScroll" type="ScrollContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OutcomesColumn/OutcomesBox"]
+layout_mode = 2
+clip_contents = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="OutcomesItems" type="VBoxContainer" parent="MapBodySplit/MapBodyPane/MapColumns/OutcomesColumn/OutcomesBox/OutcomesScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="MapGraphHost" type="PanelContainer" parent="MapBodySplit/MapBodyPane"]
+unique_name_in_owner = true
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MapGraphReview" type="HBoxContainer" parent="MapBodySplit/MapBodyPane"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="GraphSelectedLabel" type="Label" parent="MapBodySplit/MapBodyPane/MapGraphReview"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Select a map node to review."
+autowrap_mode = 2
+
+[node name="GraphReviewAcceptedButton" type="Button" parent="MapBodySplit/MapBodyPane/MapGraphReview"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Accept the selected claim as-is. Required before it can be included in a Commit."
+text = "Accept"
+
+[node name="GraphReviewEditedButton" type="Button" parent="MapBodySplit/MapBodyPane/MapGraphReview"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Accept the selected claim with facilitator edits to its wording."
+text = "Edit"
+
+[node name="GraphReviewRejectedButton" type="Button" parent="MapBodySplit/MapBodyPane/MapGraphReview"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reject the selected claim. Kept for the record but excluded from commits."
+text = "Reject"
+
+[node name="GraphReviewDeferredButton" type="Button" parent="MapBodySplit/MapBodyPane/MapGraphReview"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Postpone review of the selected claim for now."
+text = "Defer"
+
+[node name="MapLowerPane" type="VBoxContainer" parent="MapBodySplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.85
+theme_override_constants/separation = 2
+
+[node name="MapFooterRow" type="HBoxContainer" parent="MapBodySplit/MapLowerPane"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="RelationshipStatus" type="Label" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Typed connections: none"
+autowrap_mode = 2
+tooltip_text = "How many typed relationships (e.g. causes, contradicts, supports) the specialists proposed or the facilitator drew between claims on the Graph view."
+
+[node name="SymbolicInsightsLabel" type="Label" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Symbolic checks: none flagged"
+autowrap_mode = 2
+tooltip_text = "No contradictions, causal chains, or evidence gaps detected yet."
+
+[node name="ClosureAuditToggle" type="CheckButton" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+button_pressed = false
+text = "Closure audit"
+tooltip_text = "Tags each claim with where it sits in time: something you were handed, something you expect, something you keep doing, or something you are turning into. The Causes and Effects columns only cover the first two, so this is where you check what the group skipped. Optional. Claims without a tag are still valid."
+
+[node name="SuggestOrientationsButton" type="Button" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Asks the model to propose a tag for each untagged claim, or to say none fits. Nothing is tagged by pressing this: every proposal waits for you to accept it or pick something else."
+text = "Suggest"
+
+[node name="ViewsReviewButton" type="Button" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Shows the claims people read differently, worst disagreement first."
+text = "Views"
+
+[node name="MapCommitStatus" type="Label" parent="MapBodySplit/MapLowerPane/MapFooterRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Local draft — not committed."
+autowrap_mode = 2
+tooltip_text = "Whether this map has been saved to the Hub. A local draft is safe, but only you can see it until Commit succeeds."
+
+[node name="ClosureCoverageLabel" type="Label" parent="MapBodySplit/MapLowerPane"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Closure: no claims oriented yet."
+autowrap_mode = 2
+tooltip_text = "How many claims sit in each of the four quadrants, which one holds the most, and which hold none."
+
+[node name="ClosureAuditHost" type="ScrollContainer" parent="MapBodySplit/MapLowerPane"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ViewsReviewPanel" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ViewsReviewHeading" type="Label" parent="ViewsReviewPanel"]
+layout_mode = 2
+text = "Where people disagree"
+tooltip_text = "Claims ordered by how far apart the recorded views are, most divided first. A single card only tells you whether one claim is disputed. This list tells you which claims the group turned out not to agree on."
+
+[node name="ViewsRevealRow" type="HBoxContainer" parent="ViewsReviewPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RevealViewsButton" type="Button" parent="ViewsReviewPanel/ViewsRevealRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Shows everyone's recorded views to the whole group. Until you press this, nobody sees anyone else's reading, including you, so each one is entered independently. It cannot be undone. Hiding views the group has already discussed would record a retraction that never happened."
+text = "Reveal views"
+
+[node name="ViewsRevealStatus" type="Label" parent="ViewsReviewPanel/ViewsRevealRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "No views recorded yet."
+autowrap_mode = 2
+
+[node name="ViewsReviewScroll" type="ScrollContainer" parent="ViewsReviewPanel"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="ViewsReviewList" type="VBoxContainer" parent="ViewsReviewPanel/ViewsReviewScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="MapPreviewPanel" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="PreviewHeading" type="Label" parent="MapPreviewPanel"]
+layout_mode = 2
+tooltip_text = "A read-only technical preview of what Commit would send to the Hub: whether the draft is valid, the full resulting map document, and a summary of what changed. Nothing here is saved yet."
+text = "Semantic impact preview"
+
+[node name="MapPreviewText" type="TextEdit" parent="MapPreviewPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+tooltip_text = "Raw JSON: \"mutated\" shows whether this differs from the last commit, \"resulting_map\" is the full document Commit would save, and \"valid\" (further down) gates whether Commit is enabled."
+
+[node name="ManualConnectRelationMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true

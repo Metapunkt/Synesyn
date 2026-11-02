@@ -1,0 +1,30 @@
+{
+  "content": {
+    "nodes": [
+      {
+        "content": "# SynTree Architecture 2.0: Resource-Based Framework\n## Context\nSynTree is transitioning from a signal-based to a resource-based architecture to address several critical issues:\n1. Recursive signal chains causing stack overflows\n2. Complex initialization order dependencies\n3. Difficult state synchronization across views\n4. Hard-to-debug state management issues\n## Core Resource Types\n### ViewStateResource\nA centralized resource that tracks and manages view state:\n- Current view mode (LIST, HIERARCHY, GRAPH)\n- Currently selected source(s)\n- View state history\n- Selection state\n### ContentSourceResource\nThe source of truth for content data:\n- Source data storage (Dictionary mapping IDs to data)\n- Node-to-source mapping\n- Normalized ID management\n- Source data validation\n- Metaprompt state for each source\n- Source metadata management\n### GraphStateResource\nManages graph view state:\n- Node positions in graph view\n- Graph zoom and scroll state\n- Visibility of nodes\n## Component Responsibilities\n### Resources\n- **Single source of truth** for all state\n- **Self-validating** when state changes\n- **Emit changed signal** when modified\n- **Handle serialization** for persistent data\n### Views\n- **Read from Resources** for rendering\n- **Never modify Resources directly**\n- **Send user actions** to Services\n- **Subscribe to Resource changes** for updates\n### Services\n- **Modify Resources** in response to requests\n- **Implement business logic**\n- **Coordinate across Resources**\n- **Handle validation** before state changes\n## Communication Pattern\n```\n[User Action] → [View] → [Service] → [Resource] → [Views update]\n```\n- Views observe Resources through their `changed` signals\n- Services modify Resources based on user actions or other events\n- All components access the same Resource instances\n- No signals between components except Resource.changed\n## Persistence Model\n- Resources provide serialization methods\n- Serialized data matches JSON structure of existing files\n- ContentSourceResource handles both in-memory and on-disk state\n- A persistence service mediates writing to disk\n## Migration Approach\n### Phase 1: Parallel Architecture\n- Resource-based and signal-based systems coexist\n- All updates flow through both systems\n- Views can choose which system to use for rendering\n### Phase 2: View Migration\n- One view at a time transitions to resource-based rendering\n- Each view validates output matches existing behavior\n- Gradually increase resource-based dependence\n### Phase 3: Signal Deprecation\n- Remove redundant signals\n- Simplify view logic to only use resources\n- Clean up legacy code paths\n## Implementation Guidelines\n### Resource Management\n- Resources are referenced, not duplicated\n- Resources extend Godot's Resource class\n- Resources use strong typing with @export\n- Resources validate their own state\n### Service Design\n- Services are stateless\n- Services only modify Resources, never UI\n- Services validate inputs before modifying Resources\n- Services provide clear, focused APIs\n### View Principles\n- Views never directly modify Resources\n- Views update in response to Resource changes\n- Views send requests to Services\n- Views minimize internal state\n## Testing Approach\n- Resources: Unit test state changes and serialization\n- Services: Unit test business logic\n- Views: Test rendering from mock Resources\n- End-to-end: Test through full stack with real Resources\n## Architecture Benefits\n1. **Stability**\n- No signal recursion\n- Clear state ownership\n- Type-safe state updates\n2. **Developer Experience**\n- Resource inspection in editor\n- Built-in undo/redo support\n- Clear data flow\n3. **Maintainability**\n- Centralized state management\n- Easier testing\n- Better separation of concerns\n",
+        "node_id": "code_architecture_2_node_0",
+        "title": "# SynTree Architecture 2.0: Resource-Based Framework",
+        "type": "md"
+      }
+    ]
+  },
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "is_active": false,
+      "is_stack": false,
+      "metaprompt": false,
+      "model_metadata": {
+
+      }
+    },
+    "author": "SynTree",
+    "created": "2025-04-15T11:18:19",
+    "modified": "2025-04-15T11:18:19",
+    "name": "code_architecture_2",
+    "path": "res://addons/syntree/docs/architecture_2.md",
+    "source_id": "code_architecture_2",
+    "source_type": "md"
+  }
+}

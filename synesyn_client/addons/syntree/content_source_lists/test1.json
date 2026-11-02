@@ -1,0 +1,24 @@
+{
+  "content": {
+    "nodes": []
+  },
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "is_active": false,
+      "is_stack": false,
+      "metaprompt": false,
+      "model_metadata": {
+
+      }
+    },
+    "author": "SynTree User",
+    "created": "2025-04-18T21:17:51",
+    "modified": "2025-04-18T21:17:51",
+    "name": "test1",
+    "path": "res://addons/syntree/config.cfg",
+    "source_id": "test1",
+    "source_origin": "file",
+    "source_type": "cfg"
+  }
+}

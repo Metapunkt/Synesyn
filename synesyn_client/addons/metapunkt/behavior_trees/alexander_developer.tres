@@ -1,0 +1,21 @@
+[gd_resource type="BehaviorTree" script_class="BehaviorTree" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://addons/metapunkt/limboai_tasks/CallMetapunktToolTask.gd" id="1_metapunkt_tool_task"]
+
+[sub_resource type="BTAction" id="CallMetapunktToolTask_1"]
+script = ExtResource("1_metapunkt_tool_task")
+tool_name = "SynTree"
+tool_args = {
+"operation": "chat",
+"message": "Hello, I'm Agent-Alexander. I'm ready to help with development tasks using systematic thinking and pattern recognition."
+}
+
+[sub_resource type="BTSequence" id="BTSequence_1"]
+children = [SubResource("CallMetapunktToolTask_1")]
+
+[sub_resource type="BTSelector" id="BTSelector_1"]
+children = [SubResource("BTSequence_1")]
+
+[resource]
+root_task = SubResource("BTSelector_1")
+description = "Agent-Alexander's development behavior tree"

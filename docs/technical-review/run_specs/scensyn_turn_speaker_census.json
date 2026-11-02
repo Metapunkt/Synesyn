@@ -1,0 +1,51 @@
+{
+  "_note": "Counts how many speakers a turn plans and how many of them actually speak, over three consecutive inputs against Ireti Okan. The speaker count per turn is a local weighted roll (one speaker 60%, two 25%, three 15%), so a session that answers with a single character every time is either rolling ones or losing planned lines to validation - and the [turn] line in the Godot log reports both numbers, which tells the two apart. None of the three messages names a cast member, because naming one makes that character the priority speaker and forces a single-speaker turn by design. Costs a director call and one actor call per planned speaker, three times over, so run it deliberately. Model is whichever the session's Settings select; a slow one needs the per-message wait raised.",
+  "harness_window_size": "1152x648",
+  "harness_timeout_sec": 520,
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "ireti_okan_awaiting_an_awakening",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "The interface flickered just now. Did anyone else see it?",
+        "seconds": 110
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "How long have we been waiting in this room?",
+        "seconds": 110
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "And if the awakening never comes at all?",
+        "seconds": 110
+      }
+    }
+  ],
+  "wait_frames_after_post": 30,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "type": "scenario_contains",
+      "value": "ireti"
+    },
+    {
+      "type": "min_story_log",
+      "value": 6
+    }
+  ]
+}

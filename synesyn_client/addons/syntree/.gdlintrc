@@ -1,0 +1,26 @@
+[gdlint]
+# Architecture enforcement rules
+max_line_length = 100
+function_args_on_newline_after = 4
+
+[gdformat]
+max_line_length = 100
+
+# Custom rules for architectural boundaries
+[architecture]
+# Forbidden patterns that break architecture
+forbidden_patterns = [
+    # Prevent cross-component node searches outside proper boundaries
+    "get_node\\(\"%[^\"]+\"\\)",
+    "find_node\\(\"[^\"]+\"",
+    # Direct access to view paths from non-UI components
+    "ContentModel.*\\.get_node",
+]
+
+# Component boundaries
+component_responsibilities = {
+    "content_bus.gd": ["signal", "event", "communication"],
+    "content_model.gd": ["data", "storage", "model"],
+    "content_view_manager.gd": ["view", "display", "ui"],
+    "syntree_panel.gd": ["container", "coordination"]
+} 

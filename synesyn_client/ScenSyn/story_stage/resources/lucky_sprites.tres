@@ -1,0 +1,65 @@
+[gd_resource type="SpriteFrames" load_steps=11 format=3 uid="uid://d37dm2bp3m3v4"]
+
+[ext_resource type="Texture2D" uid="uid://bhse8wcl0oii5" path="res://ScenSyn/story_stage/sprites/lucky/idle/0.png" id="1_h6s2o"]
+[ext_resource type="Texture2D" uid="uid://pmefklc4y0o0" path="res://ScenSyn/story_stage/sprites/lucky/idle/1.png" id="2_2as8n"]
+[ext_resource type="Texture2D" uid="uid://bt3e7xngr7m5o" path="res://ScenSyn/story_stage/sprites/lucky/idle/2.png" id="3_rna46"]
+[ext_resource type="Texture2D" uid="uid://d3jmgumj84jau" path="res://ScenSyn/story_stage/sprites/lucky/talking/0.png" id="4_jir6y"]
+[ext_resource type="Texture2D" uid="uid://bruu0j2upmn2a" path="res://ScenSyn/story_stage/sprites/lucky/talking/1.png" id="5_6lfhw"]
+[ext_resource type="Texture2D" uid="uid://s5gwwug4luq5" path="res://ScenSyn/story_stage/sprites/lucky/talking/2.png" id="6_yrd50"]
+[ext_resource type="Texture2D" uid="uid://1ncus2dffgdd" path="res://ScenSyn/story_stage/sprites/lucky/talking-big/nano-banana-lucky_00020_.png" id="7_0gbbr"]
+[ext_resource type="Texture2D" uid="uid://ct2h030nacfjd" path="res://ScenSyn/story_stage/sprites/lucky/talking-big/nano-banana-lucky_00021_.png" id="8_gdb53"]
+[ext_resource type="Texture2D" uid="uid://ovkpr8mduoln" path="res://ScenSyn/story_stage/sprites/lucky/talking-big/nano-banana-lucky_00022_.png" id="9_54rmp"]
+[ext_resource type="Texture2D" uid="uid://5tnxth0qx104" path="res://ScenSyn/story_stage/sprites/lucky/talking-big/nano-banana-lucky_00023_.png" id="10_cvxnx"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.5,
+"texture": ExtResource("1_h6s2o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_2as8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_rna46")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_jir6y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6lfhw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_yrd50")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_0gbbr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_gdb53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_54rmp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_cvxnx")
+}],
+"loop": true,
+"name": &"talking-big",
+"speed": 5.0
+}]

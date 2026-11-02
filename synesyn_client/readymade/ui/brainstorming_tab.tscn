@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=3 uid="uid://df7wmtw5l7m3q"]
+
+[ext_resource type="Script" uid="uid://cken1yf3ma805" path="res://readymade/ui/brainstorming_tab.gd" id="1_12345"]
+
+[node name="Brainstorming_tab" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_12345")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="NewSessionButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "✨ New Session"
+
+[node name="ImportButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "📥 Import Chat"
+
+[node name="ExportButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "📤 Export Chat"
+
+[node name="PasteButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Paste clipboard text into the chat history"
+text = "📋 Paste"
+
+[node name="ChatHistory" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 0
+editable = true
+context_menu_enabled = true
+shortcut_keys_enabled = true
+selecting_enabled = true
+wrap_mode = 1
+placeholder_text = "Chat history — type or paste notes here..."
+text = "🎯 Welcome to the AI Brainstorming session!
+
+💡 This is your creative space to explore ideas, solve problems, and generate innovative concepts.
+
+🚀 Type or paste here, or send a message below."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PromptInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 2
+mouse_filter = 0
+editable = true
+context_menu_enabled = true
+shortcut_keys_enabled = true
+placeholder_text = "💭 Type your message here and press Enter or click Generate..."
+
+[node name="GenerateButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "🧠 Generate"
+
+[node name="ImportDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(500, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json ; JSON Chat Log")
+
+[node name="ExportDialog" type="FileDialog" parent="."]
+title = "Export Chat History"
+size = Vector2i(500, 500)
+access = 2
+filters = PackedStringArray("*.json ; JSON Chat Log")
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Status: Ready"
+horizontal_alignment = 1

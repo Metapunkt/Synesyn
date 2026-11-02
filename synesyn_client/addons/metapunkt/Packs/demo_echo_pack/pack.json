@@ -1,0 +1,46 @@
+{
+	"id": "synesyn.demo_echo",
+	"name": "Demo Echo Pack",
+	"version": "0.1.0",
+	"description": "Reference capability pack: one echo tool + one UI panel. Use as a template.",
+	"author": "Synesyn Team",
+	"license": "MIT",
+	"synesyn_min_version": "0.1.0",
+	"capabilities": [
+		{
+			"capability_id": "demo.echo_tool",
+			"type": "tool",
+			"entrypoints": {
+				"tool_name": "pack.demo.echo",
+				"execution_mode": "echo",
+				"args_schema": "schemas/demo_echo_args.json",
+				"result_schema": "schemas/demo_echo_result.json"
+			}
+		},
+		{
+			"capability_id": "demo.echo_panel",
+			"type": "ui_panel",
+			"entrypoints": {
+				"scene_path": "ui/demo_echo_panel.tscn",
+				"mount": {
+					"label": "Echo Demo"
+				}
+			}
+		}
+	],
+	"permissions": {
+		"network": {
+			"allow": []
+		},
+		"filesystem": {
+			"read": [],
+			"write": []
+		},
+		"secrets": [],
+		"dangerous_actions": []
+	},
+	"schemas": {
+		"manifest": "metapunkt.capability_pack.v1"
+	},
+	"limits": {}
+}

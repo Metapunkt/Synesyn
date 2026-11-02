@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[sub_resource type="GDScript" id="GDScript_panel"]
+script/source = "extends VBoxContainer
+
+@onready var _open_syntree_btn: Button = $Buttons/OpenSynTreeDevAgentButton
+@onready var _open_artifacts_btn: Button = $Buttons/OpenArtifactsButton
+@onready var _open_backups_btn: Button = $Buttons/OpenBackupsButton
+@onready var _refresh_last_run_btn: Button = $Buttons/RefreshLastRunButton
+@onready var _last_run_text: TextEdit = $LastRunText
+
+func _ready() -> void:
+	if _open_syntree_btn:
+		_open_syntree_btn.pressed.connect(_on_open_syntree)
+	if _open_artifacts_btn:
+		_open_artifacts_btn.pressed.connect(_on_open_artifacts)
+	if _open_backups_btn:
+		_open_backups_btn.pressed.connect(_on_open_backups)
+	if _refresh_last_run_btn:
+		_refresh_last_run_btn.pressed.connect(_refresh_last_run)
+	_refresh_last_run()
+
+func _get_syntree_panel() -> Node:
+	var tree := get_tree()
+	if not tree:
+		return null
+	return tree.get_first_node_in_group(\"syntree_panel\")
+
+func _refresh_last_run() -> void:
+	if not _last_run_text:
+		return
+	var panel := _get_syntree_panel()
+	if not panel or not panel.has_method(\"_get_session_data_root_dir\"):
+		_last_run_text.text = \"SynTree panel not found (open the SynTree dock first).\\n\"
+		return
+	var root := str(panel.call(\"_get_session_data_root_dir\"))
+	if root.strip_edges() == \"\":
+		_last_run_text.text = \"Session data root not available.\\n\"
+		return
+	var p := root.path_join(\"syntree_artifacts\").path_join(\"harness_last_run.json\")
+	if not FileAccess.file_exists(p):
+		_last_run_text.text = \"No harness_last_run.json yet:\\n\" + p
+		return
+	var raw := FileAccess.get_file_as_string(p)
+	_last_run_text.text = raw if raw.strip_edges() != \"\" else (\"Empty:\\n\" + p)
+
+func _on_open_syntree() -> void:
+	var panel := _get_syntree_panel()
+	if not panel:
+		_refresh_last_run()
+		return
+	if panel.has_method(\"open_dev_agent_popup\"):
+		panel.call(\"open_dev_agent_popup\")
+
+func _on_open_artifacts() -> void:
+	var panel := _get_syntree_panel()
+	if not panel:
+		_refresh_last_run()
+		return
+	if panel.has_method(\"open_dev_agent_artifacts_folder\"):
+		panel.call(\"open_dev_agent_artifacts_folder\")
+
+func _on_open_backups() -> void:
+	var panel := _get_syntree_panel()
+	if not panel:
+		_refresh_last_run()
+		return
+	if panel.has_method(\"open_dev_agent_backups_folder\"):
+		panel.call(\"open_dev_agent_backups_folder\")
+"
+
+[node name="GodotDevAgentPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_panel")
+
+[node name="HeaderLabel" type="Label" parent="."]
+text = "Godot Dev Agent (SynTree)"
+
+[node name="DescLabel" type="Label" parent="."]
+autowrap_mode = 3
+text = "This is a Metapunkt Pack panel that delegates to SynTree. Use it to open the SynTree Dev Agent UI and quickly locate harness artifacts."
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+name = "Buttons"
+
+[node name="OpenSynTreeDevAgentButton" type="Button" parent="Buttons"]
+text = "Open Dev Agent…"
+
+[node name="OpenArtifactsButton" type="Button" parent="Buttons"]
+text = "Open artifacts folder"
+
+[node name="OpenBackupsButton" type="Button" parent="Buttons"]
+text = "Open backups folder"
+
+[node name="RefreshLastRunButton" type="Button" parent="Buttons"]
+text = "Refresh last run"
+
+[node name="LastRunText" type="TextEdit" parent="."]
+custom_minimum_size = Vector2(0, 140)
+size_flags_vertical = 3
+editable = false
+wrap_mode = 1
+placeholder_text = "(last run JSON appears here)"
+

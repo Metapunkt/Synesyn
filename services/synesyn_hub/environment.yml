@@ -1,0 +1,23 @@
+name: synesyn-hub
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - ffmpeg
+  # Whisper relies on torch, but the Hub only ever runs it on CPU
+  # (app/voice/stt.py pins device="cpu"). Do not use the pytorch channel's
+  # `cpuonly` metapackage here: it does not constrain conda-forge builds, so
+  # the solver resolves a cuda* build anyway and PyInstaller then bundles
+  # ~3.9 GB of GPU libraries that are never loaded. Name the CPU build.
+  - pytorch-cpu
+  # openai-whisper pulls in numba, which refuses NumPy newer than 2.3 and fails
+  # at import, disabling STT. Resolve numpy through conda explicitly so a torch
+  # upgrade cannot drag a newer one in behind it. Keep in step with
+  # requirements.txt, which pins the same version for the pip side.
+  - numpy=2.1.3
+  - pip:
+      - -r requirements.txt
+      - openai-whisper==20231117
+
+

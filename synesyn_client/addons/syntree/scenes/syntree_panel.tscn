@@ -1,0 +1,1741 @@
+[gd_scene format=3 uid="uid://bqsdiy7k6c4dl"]
+
+[ext_resource type="Script" uid="uid://cm8yahjwl0pwv" path="res://addons/syntree/scripts/syntree_panel.gd" id="1_ik7y6"]
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_rj42h"]
+[ext_resource type="Texture2D" uid="uid://blkfcei0cdrvp" path="res://addons/syntree/syntree_icons/SynTree_logo_mini_04-2025.png" id="2_bfdq4"]
+[ext_resource type="Texture2D" uid="uid://dm7aboyfr7xhr" path="res://addons/syntree/syntree_icons/SynTree_logo_mini_white.png" id="2_logo_white"]
+[ext_resource type="Script" uid="uid://bxpadhig1yeam" path="res://addons/syntree/scripts/ui/content_source_list/content_list_view.gd" id="4_1jksa"]
+[ext_resource type="Script" uid="uid://dnp1psisu8lsr" path="res://addons/syntree/scripts/ui/content_graph/content_graph.gd" id="4_6k02w"]
+[ext_resource type="Texture2D" uid="uid://b22rqlvpwtcp6" path="res://addons/syntree/syntree_icons/SynTree-glyph_.png" id="4_iu4dt"]
+[ext_resource type="Texture2D" uid="uid://ciu2fu5q2rro8" path="res://addons/syntree/syntree_icons/SynTree-glyph_white.png" id="4_glyph_white"]
+[ext_resource type="PackedScene" uid="uid://dudikph62yi6c" path="res://addons/syntree/scenes/toolbar_controls.tscn" id="4_n06il"]
+[ext_resource type="Script" uid="uid://jbntlddmkgky" path="res://addons/syntree/scripts/ui/content_source_list/content_hierarchy_view.gd" id="5_2lvof"]
+[ext_resource type="StyleBox" uid="uid://vj8mx46yhlty" path="res://addons/syntree/resources/lilac_panel.tres" id="5_rj42h"]
+[ext_resource type="Theme" uid="uid://d382cd44vr6k" path="res://addons/synesyn_core/themes/SynesynBase_contemporary_dark.tres" id="6_rj42h"]
+[ext_resource type="Script" uid="uid://diiehgha4wmup" path="res://addons/syntree/scripts/ui/dialogs/content_source_dialog.gd" id="6_wjs21"]
+[ext_resource type="Script" uid="uid://b56krki801kux" path="res://addons/syntree/scripts/ui/dialogs/filter_popup.gd" id="12_0hfeb"]
+[ext_resource type="Script" uid="uid://bkifphej02lly" path="res://addons/syntree/scripts/ui/dialogs/stats_popup.gd" id="13_n06il"]
+[ext_resource type="Script" uid="uid://b3cekpecbhe0i" path="res://addons/syntree/scripts/ui/prompt_chain/prompt_chain_panel.gd" id="14_prompt_chain_panel"]
+[ext_resource type="PackedScene" uid="uid://dxxx" path="res://addons/syntree/scenes/notification_popup.tscn" id="15_notification_popup"]
+[ext_resource type="PackedScene" uid="uid://w2h7ykva4b1v" path="res://addons/syntree/scenes/voice_popup.tscn" id="16_voice_popup"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/relationship_inspector.tscn" id="17_relationship_inspector"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_preview_panel.tscn" id="18_context_preview"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_set_panel.tscn" id="19_context_sets"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/prompt_chain_binding_panel.tscn" id="20_prompt_binding"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_trace_panel.tscn" id="21_context_trace"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_provenance_panel.tscn" id="22_context_provenance"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_proposal_panel.tscn" id="23_context_proposals"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_diagnostics_panel.tscn" id="24_context_diagnostics"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_focus_panel.tscn" id="25_context_focus"]
+[ext_resource type="PackedScene" path="res://addons/syntree/scenes/context_layout_panel.tscn" id="26_context_layout"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="icon_save"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_refresh"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="icon_clear"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_external_link.svg" id="icon_external"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_bookmark.svg" id="icon_bookmark"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_plus.svg" id="icon_plus"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_hamburger_menu.svg" id="icon_menu"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_focus_crosshair.svg" id="icon_filter"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_info_circle.svg" id="icon_info"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_send_paper_plane.svg" id="icon_send"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_microphone.svg" id="icon_voice"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_dev_agent_terminal.svg" id="icon_terminal"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_restart"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_up.svg" id="i_chevronup"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_down.svg" id="i_chevrondown"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_person_silhouette.svg" id="i_personsilhouet"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_note_document.svg" id="i_notedocument"]
+[node name="SynTreePanel_tscn" type="Control" unique_id=1861392822 groups=["synesyn_themed"]]
+clip_contents = true
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_rj42h")
+script = ExtResource("1_ik7y6")
+metadata/_edit_vertical_guides_ = [17.0]
+
+metadata/theme_surface = "utility"
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1123398129]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="GodotSynTree" type="Node" parent="." unique_id=431137183]
+unique_name_in_owner = true
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1849349597]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1808956951]
+layout_mode = 2
+
+[node name="Main_VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=1095999949]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="Main_Menu_Container" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=738913505]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container" unique_id=1990547505]
+layout_mode = 2
+
+[node name="SyntreeLogo" type="TextureRect" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/VBoxContainer" unique_id=1478591277]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+texture = ExtResource("2_bfdq4")
+expand_mode = 3
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container" unique_id=1677454636]
+layout_mode = 2
+
+[node name="TopButtonsContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container" unique_id=738397506]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="AI_Model_Container" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer" unique_id=65054059]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="ModelRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="AI_Model_Label" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ModelRow" unique_id=718977378]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = "  AI Model"
+
+[node name="AIModelSelector" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ModelRow" unique_id=1587263126]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+alignment = 1
+
+[node name="ApiKeyRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="API_Key_Label" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ApiKeyRow" unique_id=459229096]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Provider / API key:"
+
+[node name="APIProviderSelector" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ApiKeyRow" unique_id=1247618900]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+selected = 0
+item_count = 6
+popup/item_0/text = "OpenAI"
+popup/item_0/id = 0
+popup/item_1/text = "Anthropic"
+popup/item_1/id = 1
+popup/item_2/text = "Google"
+popup/item_2/id = 2
+popup/item_3/text = "Deepseek"
+popup/item_3/id = 3
+popup/item_4/text = "xAI"
+popup/item_4/id = 4
+popup/item_5/text = "Ollama"
+popup/item_5/id = 5
+
+[node name="APIKeyInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ApiKeyRow" unique_id=1631445299]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+placeholder_text = "Enter provider API key"
+alignment = 0
+caret_blink = true
+secret = true
+tooltip_text = "Paste the API key for the selected provider, then click Save."
+
+[node name="SaveApiKeyButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/AI_Model_Container/ApiKeyRow" unique_id=2039485761]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Save"
+icon = ExtResource("icon_save")
+tooltip_text = "Save the API key for the selected provider."
+
+[node name="OllamaStatusLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.62, 0.68, 0.74, 1)
+theme_override_font_sizes/font_size = 11
+text = "Ollama status will appear here."
+horizontal_alignment = 2
+autowrap_mode = 2
+
+[node name="OllamaEndpointRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="OllamaEndpointLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/OllamaEndpointRow"]
+layout_mode = 2
+text = "Ollama URL"
+
+[node name="OllamaEndpointInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/OllamaEndpointRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "http://127.0.0.1:11434"
+tooltip_text = "Ollama server origin. Local and trusted remote HTTP/HTTPS endpoints are supported."
+
+[node name="ApplyOllamaEndpointButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/OllamaEndpointRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"
+tooltip_text = "Save this Ollama endpoint and refresh installed models."
+
+[node name="RefreshOllamaModelsButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/OllamaEndpointRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+tooltip_text = "Refresh installed models and Ollama status."
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer" unique_id=405236420]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SystemPromptContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer" unique_id=384093419]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="System_Prompt_Label" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/SystemPromptContainer" unique_id=1382280357]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "   System Prompt: "
+
+[node name="SystemPromptInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/SystemPromptContainer" unique_id=1328938706]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "You are SynTree, an AI assistant evolved to be helpful, harmless, and honest."
+placeholder_text = " Input System Prompt"
+wrap_mode = 1
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+caret_blink = true
+
+[node name="SystemInfoContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer" unique_id=1244802196]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SystemInfoLabel_1" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/SystemInfoContainer" unique_id=2060375894]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "System Information:  "
+
+[node name="SystemInfoLabel_2" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/SystemInfoContainer" unique_id=2068753386]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Hub: up | Voice: TTS+STT | Provider: openai | Model: ?"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/SystemInfoContainer" unique_id=1526726679]
+layout_mode = 2
+
+[node name="ActiveFiltersContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer" unique_id=559118640]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ActiveFiltersLabel_1" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/ActiveFiltersContainer" unique_id=2079568696]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Active Content Source Filters:  "
+
+[node name="ActiveFiltersLabel_2" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Main_Menu_Container/TopButtonsContainer/ActiveFiltersContainer" unique_id=593612020]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Active Source Filters"
+
+[node name="TogglePanelButtonsContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=2059898930]
+layout_mode = 2
+
+[node name="TopToolbarControls" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/TogglePanelButtonsContainer" unique_id=1879494845 instance=ExtResource("4_n06il")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="DetachPanelButton" type="CheckButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/TogglePanelButtonsContainer" unique_id=1762515177]
+icon = ExtResource("icon_external")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 14
+text = "detach panel"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=1211135364]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ContentSourcesContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=88234428]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContentSourcesScroll" type="ScrollContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer" unique_id=1733702093]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll" unique_id=912133963]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 0)
+
+[node name="SourcesDisplay" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll" unique_id=703783037]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ViewTypeLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=598000645]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("5_rj42h")
+text = "Content Sources / List View"
+horizontal_alignment = 1
+
+[node name="Hbox" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=592435246]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ContentSourceLabel2" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/Hbox" unique_id=546218360]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = ExtResource("5_rj42h")
+text = "  Content Sources             /        "
+
+[node name="ContentSourceButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=635867240]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="ContentSourceLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=761760055]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = " Content Sources"
+
+[node name="ContentSourcesMenus" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=488839514]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CreateSourcesMenu" type="MenuButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons/ContentSourcesMenus" unique_id=238297109]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/icon_max_width = 0
+text = " Create "
+flat = false
+item_count = 2
+popup/item_0/text = "Create Source(s)"
+popup/item_0/id = 0
+popup/item_1/text = "Save Active Sources List"
+popup/item_1/id = 1
+
+[node name="ManageSourcesMenu" type="MenuButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons/ContentSourcesMenus" unique_id=1667570427]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Manage "
+flat = false
+item_count = 7
+popup/item_0/text = "Filter"
+popup/item_0/id = 0
+popup/item_1/text = "Stats"
+popup/item_1/id = 1
+popup/item_2/text = "Refresh Active Sources"
+popup/item_2/id = 2
+popup/item_3/text = "Update Sources Displayed"
+popup/item_3/id = 3
+popup/item_4/text = "Delete"
+popup/item_4/id = 4
+popup/item_5/id = -1
+popup/item_5/separator = true
+popup/item_6/text = "Publish Context Graph"
+popup/item_6/id = 100
+
+[node name="CheckContentSourceButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=1948075779]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Update Content Sources"
+
+icon = ExtResource("icon_refresh")
+
+[node name="ClearFetchedContent" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=2049987078]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Clear Fetched Content"
+
+icon = ExtResource("icon_clear")
+
+[node name="ChangeContentDirButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=1833897629]
+unique_name_in_owner = true
+layout_mode = 2
+text = " Change Source Directory >> "
+
+icon = ExtResource("icon_external")
+
+[node name="ContentDirPathLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=1798026993]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "res://addons/syntree/content_source_lists/"
+autowrap_mode = 3
+
+[node name="ContentSourceListOptions" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=1387809260]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+selected = 0
+item_count = 6
+popup/item_0/text = "All Sources"
+popup/item_0/id = 0
+popup/item_1/text = "AI Integration"
+popup/item_1/id = 1
+popup/item_2/text = "Core Concepts"
+popup/item_2/id = 2
+popup/item_3/text = "GDScript Basics"
+popup/item_3/id = 3
+popup/item_4/text = "Optimization"
+popup/item_4/id = 4
+popup/item_5/text = "UI Systems"
+popup/item_5/id = 5
+
+[node name="SaveContentSourcesList" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/ContentSourceButtons" unique_id=3963827]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Save Content Source List"
+
+icon = ExtResource("icon_bookmark")
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=2069856211]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SourcesTabContainer" type="TabContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=757439205]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+tab_0/title = "Hierarchy"
+tab_1/title = "Hierarchy (Select Source)"
+tab_1/disabled = true
+tab_2/title = "Context Graph (Select Source)"
+tab_2/disabled = true
+
+[node name="ContentList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer" unique_id=1076703549]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_1jksa")
+metadata/_tab_index = 0
+metadata/_tab_name = "Hierarchy"
+
+[node name="ContentHierarchy" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer" unique_id=1263595792]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("5_2lvof")
+metadata/_tab_index = 1
+metadata/_tab_name = "Hierarchy (Select Source)"
+
+[node name="ContextGraphWorkspace" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer"]
+visible = false
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 2
+metadata/_tab_name = "Context Graph (Select Source)"
+
+[node name="ContentGraph" type="GraphEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace" unique_id=1946722716]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+panning_scheme = 1
+right_disconnects = true
+zoom_min = 0.2
+zoom_max = 2.0
+show_zoom_label = true
+minimap_enabled = true
+script = ExtResource("4_6k02w")
+
+[node name="ContextGraphSidebar" type="TabContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace"]
+custom_minimum_size = Vector2(310, 300)
+layout_mode = 2
+tab_0/title = "Relationships"
+tab_1/title = "Preview"
+tab_2/title = "Context Sets"
+tab_3/title = "Trace"
+tab_4/title = "Provenance"
+tab_5/title = "Proposals"
+tab_6/title = "Health"
+tab_7/title = "Focus"
+tab_8/title = "Layouts"
+
+[node name="RelationshipInspector" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("17_relationship_inspector")]
+unique_name_in_owner = true
+
+[node name="ContextPreview" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("18_context_preview")]
+unique_name_in_owner = true
+
+[node name="ContextSets" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("19_context_sets")]
+unique_name_in_owner = true
+
+[node name="ContextTrace" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("21_context_trace")]
+unique_name_in_owner = true
+
+[node name="ContextProvenance" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("22_context_provenance")]
+unique_name_in_owner = true
+
+[node name="ContextProposals" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("23_context_proposals")]
+unique_name_in_owner = true
+
+[node name="ContextDiagnostics" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("24_context_diagnostics")]
+unique_name_in_owner = true
+
+[node name="ContextFocus" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("25_context_focus")]
+unique_name_in_owner = true
+
+[node name="ContextLayouts" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/SourcesTabContainer/ContextGraphWorkspace/ContextGraphSidebar" instance=ExtResource("26_context_layout")]
+unique_name_in_owner = true
+
+[node name="ContentViewManager" type="Control" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=1611291780]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="FooterContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay" unique_id=1340162862]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_constants/separation = 10
+
+[node name="AddSourceBtn" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=1519530742]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add"
+
+icon = ExtResource("icon_plus")
+
+[node name="DeleteSourceBtn" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=104954776]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"
+
+icon = ExtResource("icon_clear")
+
+[node name="ContentSourceMenuButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=208212543]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select a content source and click here for it's context menu"
+text = "Source Menu"
+
+icon = ExtResource("icon_menu")
+
+[node name="SearchBox" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=690152844]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Type a source name/id/path keyword and press Enter to select the best match."
+placeholder_text = "Search sources... (Enter to select)"
+
+[node name="FilterButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=150844679]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Filter"
+
+icon = ExtResource("icon_filter")
+
+[node name="StatsButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=976678722]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stats"
+
+icon = ExtResource("icon_info")
+
+[node name="RefreshButton" type="MenuButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=359710843]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+item_count = 2
+popup/item_0/text = "Refresh Active"
+popup/item_0/id = 1
+popup/item_1/text = "Refresh List"
+popup/item_1/id = 2
+
+[node name="DebugDataButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer" unique_id=206224354]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Debug Data"
+
+[node name="Chat_Menu_Container" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=461829292]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme_override_constants/separation = 10
+
+[node name="Chat_Menu_SubContainer_1" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container" unique_id=1103577039]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SyntreeGlyph" type="TextureRect" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=1406039928]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(19, 19)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("4_iu4dt")
+expand_mode = 3
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=1686646491]
+layout_mode = 2
+
+[node name="ConversationManagerLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=2002558466]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelHeader"
+text = " Conversation Manager"
+
+[node name="NewThreadNameInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=495173638]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Type a thread name here, then click "Create New Thread"."
+placeholder_text = "Set new thread name here >>>"
+
+[node name="NewThreadButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=307743472]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Enter a thread name in the field, then click to create/switch threads."
+text = "Create New Thread"
+
+icon = ExtResource("icon_plus")
+
+[node name="ThreadDropdown" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=1968350073]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 1
+popup/item_0/text = "Select Thread"
+popup/item_0/id = 0
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=187962309]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="SyntreeGlyph2" type="TextureRect" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1" unique_id=1778722602]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(19, 19)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+texture = ExtResource("4_iu4dt")
+expand_mode = 3
+flip_h = true
+
+[node name="Chat_Menu_SubContainer_2" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container" unique_id=534041499]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="OpenThreadsFolderButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2" unique_id=1491265213]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the folder where conversation threads are stored on disk."
+text = "Open Threads Folder"
+
+icon = ExtResource("icon_external")
+
+[node name="ThreadHubVersionsButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2" unique_id=566022446]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hub Versions"
+
+icon = ExtResource("icon_info")
+
+[node name="OpenStoreTraceButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the latest STFX Store retrieval trace/context-pack folder for this chat."
+text = "Open Store Trace"
+icon = ExtResource("icon_external")
+
+[node name="ViewStoreTraceButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "View the latest STFX Store retrieval trace and context pack inline."
+text = "View Store Trace"
+icon = ExtResource("icon_info")
+
+[node name="OpenStoreChunkButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the canonical chunk folder for the first selected chunk in the latest Store context pack."
+text = "Open Store Chunk"
+icon = ExtResource("icon_external")
+
+[node name="RepairStoreSymbolicButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Write a human-review repair note for the first selected Store chunk's symbolic metadata."
+text = "Repair Store Symbolic"
+icon = ExtResource("icon_restart")
+
+[node name="StoreRepairButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Run STFX Store validate, repair report, and index rebuild through the Hub."
+text = "Store Repair"
+icon = ExtResource("icon_restart")
+
+[node name="ScrollControlsContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2" unique_id=1900086650]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ScrollTopButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/ScrollControlsContainer" unique_id=1135471672]
+icon = ExtResource("i_chevronup")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Skip to top"
+
+[node name="ScrollBottomButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/ScrollControlsContainer" unique_id=1191200358]
+icon = ExtResource("i_chevrondown")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = "Skip to bottom"
+
+[node name="ThreadHubVersionsPopup" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=853606526]
+unique_name_in_owner = true
+size = Vector2i(560, 360)
+
+[node name="ThreadHubVersionsVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ThreadHubVersionsPopup" unique_id=630220440]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 560.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ThreadHubVersionsLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ThreadHubVersionsPopup/ThreadHubVersionsVBox" unique_id=1124724754]
+layout_mode = 2
+text = "Thread Hub Versions (double-click to load)"
+
+[node name="ThreadHubVersionsList" type="ItemList" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ThreadHubVersionsPopup/ThreadHubVersionsVBox" unique_id=1184310917]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ConversationTabs" type="TabContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=1836256121]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+
+[node name="Chat" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs" unique_id=1714186123]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 0
+metadata/_tab_name = "Chat"
+
+[node name="OutputContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Chat" unique_id=646478445]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="OutputScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Chat" unique_id=2090237065]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+vertical_scroll_mode = 2
+
+[node name="User_Input_Label" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Chat" unique_id=1747502742]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelHeader"
+text = "  User Input  / "
+
+[node name="MessageInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Chat" unique_id=2006002320]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/background_color = Color(0.885887, 0.8547557, 1, 1)
+theme_override_constants/caret_width = 1
+theme_override_constants/outline_size = 0
+placeholder_text = "Enter your prompts here and click the 'send input' button to send to the AI model"
+wrap_mode = 1
+
+[node name="Prompt Chains" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs" unique_id=76361286]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 1
+metadata/_tab_name = "Prompt Chains"
+
+[node name="PromptChainsScroll" type="ScrollContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Prompt Chains" unique_id=2016780337]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="PromptChainPanel" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Prompt Chains/PromptChainsScroll" unique_id=854168123]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("14_prompt_chain_panel")
+
+[node name="PromptChainBindingPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/ConversationTabs/Prompt Chains/PromptChainsScroll/PromptChainPanel" instance=ExtResource("20_prompt_binding")]
+unique_name_in_owner = true
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=972450377]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BottomMenuContainer_HBox" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=1649257664]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox" unique_id=330433023]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="ButtomMenuContainer_VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox" unique_id=1380115894]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ButtomButtonsContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox" unique_id=2028160170]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="StatusStripLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=894721645]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Hub: up | Voice: TTS+STT | Provider: openai | Model: ?"
+autowrap_mode = 3
+
+[node name="SendButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=141078513]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Send Input"
+
+icon = ExtResource("icon_send")
+
+[node name="StopRequestButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Stop"
+tooltip_text = "Cancel the active AI request."
+
+[node name="VoiceButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=270826046]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Voice"
+
+icon = ExtResource("icon_voice")
+
+[node name="EnsemblesButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=1915176761]
+icon = ExtResource("i_personsilhouet")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Ensembles"
+
+[node name="DevAgentButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=822461020]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Dev Agent actions (apply patch, revert, run spec, artifacts)."
+text = "Dev Agent"
+
+icon = ExtResource("icon_terminal")
+
+[node name="TestButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=1456645340]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Test Button"
+
+[node name="EditHistoryButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer" unique_id=1091309684]
+icon = ExtResource("i_notedocument")
+
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Edit History"
+
+[node name="BottomToolbarControls" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox" unique_id=284848428 instance=ExtResource("4_n06il")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox" unique_id=1490632311]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Popups_Container" type="BoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer" unique_id=51848014]
+layout_mode = 2
+
+[node name="VoicePopup" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=321935567 instance=ExtResource("16_voice_popup")]
+visible = false
+
+[node name="DevAgentPopup" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=1235225366]
+unique_name_in_owner = true
+size = Vector2i(860, 520)
+
+[node name="DevAgentPopupVBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup" unique_id=1536937613]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 860.0
+offset_bottom = 520.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="DevAgentTitle" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox" unique_id=390684635]
+layout_mode = 2
+text = "Dev Agent"
+
+[node name="DevAgentSubtitle" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox" unique_id=350558308]
+layout_mode = 2
+text = "Side-effect tools (patch apply/revert, harness runs). Start in the "How To" tab for a quick reference."
+autowrap_mode = 3
+
+[node name="DevAgentMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox" unique_id=1048113227]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="DevAgentScroll" type="ScrollContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin" unique_id=799592884]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="DevAgentTabs" type="TabContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll" unique_id=1488222464]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 0
+tab_4/title = "How To"
+
+[node name="Patch" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs" unique_id=508531766]
+layout_mode = 2
+metadata/_tab_index = 0
+metadata/_tab_name = "Patch"
+
+[node name="PatchHelp" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch" unique_id=110902976]
+layout_mode = 2
+text = "Apply code changes via unified diff patches (--- / +++ / @@ hunks).
+
+Tip: start with Dry run to validate the patch. Dev Agent toggle must be ON to apply/revert."
+autowrap_mode = 3
+
+[node name="PatchInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch" unique_id=1443604140]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Paste a unified diff patch here.
+
+This is the same format `git diff` outputs.
+Dry run = validate only.
+Apply = writes files (requires Dev Agent toggle ON)."
+placeholder_text = "Paste unified diff patch here...
+
+Example header lines:
+--- a/path/to/file.gd
++++ b/path/to/file.gd
+@@ ..."
+wrap_mode = 1
+caret_blink = true
+
+[node name="PatchButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch" unique_id=767761628]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PatchDryRunButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch/PatchButtons" unique_id=1056955495]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Validate the patch and show what would change.
+Does NOT modify files."
+text = "Dry run"
+
+icon = ExtResource("icon_info")
+
+[node name="PatchApplyButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch/PatchButtons" unique_id=1712226029]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Apply the patch to files.
+Requires Dev Agent toggle ON.
+A backup is created so you can revert."
+text = "Apply"
+
+icon = ExtResource("icon_save")
+
+[node name="PatchRevertButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch/PatchButtons" unique_id=705609520]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Revert the last applied patch using the saved backup.
+Requires Dev Agent toggle ON."
+text = "Revert last apply"
+
+icon = ExtResource("icon_restart")
+
+[node name="PatchCloseButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch/PatchButtons" unique_id=485406301]
+layout_mode = 2
+tooltip_text = "Close the Dev Agent window."
+text = "Close"
+
+icon = ExtResource("icon_clear")
+
+[node name="PatchResult" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Patch" unique_id=1128821684]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+tooltip_text = "Status output from Dry run / Apply / Revert."
+placeholder_text = "Result..."
+editable = false
+wrap_mode = 1
+
+[node name="Run Spec" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs" unique_id=513561022]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "Run Spec"
+
+[node name="RunSpecHelp" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=1801800574]
+layout_mode = 2
+text = "Run Spec is a deterministic harness run config (JSON).
+
+- Required: scene_path
+- Optional: state, actions
+- Load/Save are per-thread
+- Runs write artifacts under your Synesyn session data dir"
+autowrap_mode = 3
+
+[node name="RunSpecStructured" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=58526076]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RunSpecSchemaStatusLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured" unique_id=526214258]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Structured fields below come from the configured Run Spec UI schema.
+Project setting: syntree/dev_agent/run_spec_ui_schema_path
+Fallback: res://syntree_run_spec_ui_schema.json"
+text = "Schema: ScenSyn Run Spec UI - res://ScenSyn/syntree_run_spec_ui_schema.json"
+autowrap_mode = 3
+
+[node name="ScenePathRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured" unique_id=571647618]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ScenePathLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/ScenePathRow" unique_id=1416576627]
+layout_mode = 2
+text = "Scene:"
+
+[node name="RunSpecScenePath" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/ScenePathRow" unique_id=944771152]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Godot scene to run in the harness.
+Use Browse... to avoid typos.
+Example: res://scenes/game_session.tscn"
+placeholder_text = "res://path/to/scene.tscn"
+
+[node name="RunSpecBrowseSceneButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/ScenePathRow" unique_id=1699775195]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Pick a scene file from the project (res://...)."
+text = "Browse"
+
+[node name="RunSpecSchemaFields" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured" unique_id=1169195629]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StructuredButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured" unique_id=1668396524]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RunSpecSyncToJsonButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/StructuredButtons" unique_id=766984181]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Take the structured fields above and write them into the Run Spec JSON below."
+text = "Update JSON from fields"
+
+[node name="RunSpecFillFromJsonButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/StructuredButtons" unique_id=1897824951]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Parse the Run Spec JSON below and populate the structured fields above."
+text = "Fill fields from JSON"
+
+[node name="LastRunBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured" unique_id=1929414226]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LastRunLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox" unique_id=1975316405]
+layout_mode = 2
+text = "Last harness run:"
+
+[node name="RunSpecLastRunText" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox" unique_id=1092479391]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+tooltip_text = "A summary pointer to the latest harness run (harness_last_run.json).
+Use Refresh after running."
+text = ""
+editable = false
+wrap_mode = 1
+scroll_vertical = 0.16666666666666652
+
+[node name="LastRunButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox" unique_id=746628904]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RunSpecRefreshLastRunButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox/LastRunButtons" unique_id=326012488]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reload the last-run pointer from disk."
+text = "Refresh"
+
+[node name="RunSpecOpenLastRunDirButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox/LastRunButtons" unique_id=378265068]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the folder containing the latest run artifacts (screenshot, ui_metrics, logs, run.json)."
+text = "Open run folder"
+
+[node name="RunSpecOpenLastRunManifestButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecStructured/LastRunBox/LastRunButtons" unique_id=2065314438]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the latest run.json manifest in your file manager."
+text = "Open run.json"
+
+[node name="RunSpecScenePickerDialog" type="FileDialog" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=1919783072]
+unique_name_in_owner = true
+title = "Open a File"
+file_mode = 0
+filters = PackedStringArray("*.tscn ; Godot Scene", "*.scn ; Godot Scene")
+
+[node name="RunSpecInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=1350552108]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Raw Run Spec JSON.
+
+Required: scene_path
+Optional: state, actions
+This JSON is what gets saved/loaded per thread and passed to the harness runner."
+placeholder_text = "{
+  \"scene_path\": \"res://path/to/scene.tscn\",
+  \"state\": {},
+  \"actions\": []
+}
+"
+wrap_mode = 1
+caret_blink = true
+
+[node name="RunSpecButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=1231612360]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RunSpecLoadButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecButtons" unique_id=646675367]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Load the saved Run Spec for the current thread."
+text = "Load (thread)"
+
+[node name="RunSpecSaveButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecButtons" unique_id=681710561]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Save the current Run Spec JSON for the current thread."
+text = "Save (thread)"
+
+[node name="RunSpecRunButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec/RunSpecButtons" unique_id=6812982]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Run the harness runner with this run spec (captures screenshot + metrics to session data dir)."
+text = "Run"
+
+[node name="RunSpecResult" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Run Spec" unique_id=207965946]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+tooltip_text = "Status output from Load / Save / Run."
+placeholder_text = "Result..."
+editable = false
+wrap_mode = 1
+
+[node name="Loop" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs" unique_id=1174610501]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+metadata/_tab_name = "Loop"
+
+[node name="LoopHelp" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop" unique_id=92978335]
+layout_mode = 2
+text = "Automated Dev Agent loop: plan up propose patch + run spec up apply patch up run harness up read run.json up decide iterate/stop.
+
+Requires Dev Agent toggle ON.
+
+Goal is required. The other fields help the agent stay scoped and verifiable."
+autowrap_mode = 3
+
+[node name="LoopForm" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop" unique_id=290469962]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LoopGoalLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=1949827477]
+layout_mode = 2
+text = "Goal:"
+
+[node name="LoopGoalInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=649880107]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+tooltip_text = "What you want the agent to accomplish.
+Be specific and testable.
+Example: \"Fix the button layout so it does not overlap at 1280x720.\""
+placeholder_text = "What you want Dev Agent to achieve for you."
+wrap_mode = 1
+
+[node name="LoopWhereLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=414683472]
+layout_mode = 2
+text = "Where (optional):"
+
+[node name="LoopWhereInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=1537790564]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Optional. Give a hint about where to work.
+Example: res://ui/main_menu.tscn or res://scripts/player.gd"
+placeholder_text = "Optional: where to focus (e.g. res://path/to/scene.tscn or res://path/to/script.gd)"
+
+[node name="LoopVerifyLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=479184792]
+layout_mode = 2
+text = "Verify:"
+
+[node name="LoopVerifyInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=1485481251]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+tooltip_text = "How you'll judge success.
+Good: \"screenshot shows X\" or \"ui_metrics contains Y\".
+Avoid: \"looks better\"."
+placeholder_text = "How will we know it worked after a harness run? (What should screenshot/ui_metrics/scene_logs show?)"
+wrap_mode = 1
+
+[node name="LoopConstraintsLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=748816473]
+layout_mode = 2
+text = "Constraints (optional):"
+
+[node name="LoopConstraintsInput" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopForm" unique_id=726178424]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+tooltip_text = "Optional constraints.
+Examples: \"Only edit Active Sources\", \"Don't change gameplay\", \"No new plugins\"."
+placeholder_text = "Optional: anything the agent must not change (scope limits, style rules, safety constraints)."
+wrap_mode = 1
+
+[node name="LoopControls" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop" unique_id=12566124]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LoopMaxItersLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopControls" unique_id=192368569]
+layout_mode = 2
+text = "Max iterations:"
+
+[node name="LoopMaxIters" type="SpinBox" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopControls" unique_id=1095027920]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Max planuppatchuprun iterations before stopping."
+min_value = 1.0
+max_value = 10.0
+value = 2.0
+
+[node name="LoopStartButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopControls" unique_id=400635359]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Start the automated loop.
+Requires Dev Agent toggle ON.
+Writes patches + runs harness."
+text = "Start loop"
+
+[node name="LoopStopButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop/LoopControls" unique_id=722811244]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Request the loop to stop after the current step completes."
+disabled = true
+text = "Stop"
+
+[node name="LoopLog" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Loop" unique_id=351265099]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+tooltip_text = "A step-by-step log of what the loop is doing."
+placeholder_text = "(loop log)"
+editable = false
+wrap_mode = 1
+
+[node name="Artifacts" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs" unique_id=1715412581]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+metadata/_tab_name = "Artifacts"
+
+[node name="ArtifactsHelp" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Artifacts" unique_id=665223591]
+layout_mode = 2
+text = "Open useful folders on disk.
+Artifacts include runs/* (run.json, screenshot, ui_metrics, logs).
+Backups are used for patch revert."
+autowrap_mode = 3
+
+[node name="ArtifactsButtons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Artifacts" unique_id=166687140]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OpenBackupsFolderButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Artifacts/ArtifactsButtons" unique_id=1490681747]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the backups folder under the configured Synesyn session data dir."
+text = "Open backups folder"
+
+[node name="OpenArtifactsFolderButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/Artifacts/ArtifactsButtons" unique_id=141334523]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the artifacts folder under the configured Synesyn session data dir."
+text = "Open artifacts folder"
+
+[node name="HowTo" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs" unique_id=2038959778]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+metadata/_tab_index = 4
+metadata/_tab_name = "How To"
+
+[node name="HowToText" type="RichTextLabel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/DevAgentPopup/DevAgentPopupVBox/DevAgentMargin/DevAgentScroll/DevAgentTabs/HowTo" unique_id=482140520]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]What Dev Agent is[/b]
+Dev Agent is SynTree's developer mode: it gives the AI model controlled agency to make real project changes and run the harness.
+
+[b]How it's set up in SynTree / Synesyn[/b]
+- You provide [i]scope[/i] via Active Sources (files the agent is allowed to work in).
+- You control [i]side effects[/i] via the Dev Agent toggle.
+- Runs and backups are written under your configured session data dir: [code]synesyn/session_data_dir[/code].
+
+[b]Safety / agency[/b]
+When Dev Agent toggle is ON, the model may:
+- create / modify / rename / [b]delete[/b] files (via patch apply)
+- run the harness (which writes artifacts to disk)
+
+[b]Quick start[/b]
+
+[b]1) Set your scope[/b]
+- Add the files you want the agent to edit to [i]Active Sources[/i] (SynTree main panel).
+- Turn the Dev Agent toggle ON only when you're ready for side effects (patch apply/revert, harness run).
+
+[b]2) Run a deterministic harness run[/b]
+- Go to [i]Run Spec[/i]
+- Pick a [b]Scene[/b] (scene_path) with [b]Browse...[/b]
+- (Optional) Fill structured fields (if your project provides a schema)
+- Click [b]Run[/b]
+
+[b]3) Inspect results[/b]
+- Use [b]Last harness run[/b] -> Refresh -> Open run folder
+- Each run folder contains: run.json, run_spec.json, screenshot.png, ui_metrics.json, and optional logs.
+
+[b]4) Iterate automatically[/b]
+- Go to [i]Loop[/i]
+- Fill [b]Goal[/b] (required), then [b]Verify[/b] (how you'll judge success)
+- Click [b]Start loop[/b]
+
+[b]Troubleshooting[/b]
+- If a button seems to do nothing, check the log/result box on that tab.
+- If the harness won't run: verify scene_path points to an existing .tscn.
+- If structured fields are empty: set project setting [code]syntree/dev_agent/run_spec_ui_schema_path[/code] or add [code]res://syntree_run_spec_ui_schema.json[/code]."
+
+[node name="SaveCustomSourcesPopUp" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=1551578968]
+unique_name_in_owner = true
+size = Vector2i(337, 342)
+script = ExtResource("6_wjs21")
+
+[node name="SaveSourceListContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp" unique_id=1280011014]
+offset_right = 337.0
+offset_bottom = 342.0
+
+[node name="SaveAllFromFolderCheckbox" type="CheckButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=501038688]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_rj42h")
+text = "Save individual content source"
+
+[node name="FileNameInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=1111967622]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Insert name for the content source"
+
+[node name="SetPathContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=786981607]
+layout_mode = 2
+
+[node name="SetPathButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer/SetPathContainer" unique_id=850604153]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select directory to use for saving content source(s). Leave as default unless you really need to change it."
+text = "Set Path"
+
+[node name="PathInput" type="LineEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer/SetPathContainer" unique_id=953746018]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter path for the content source"
+
+[node name="MetapromptCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=128945590]
+unique_name_in_owner = true
+layout_mode = 2
+text = "is metaprompt?"
+
+[node name="ActiveSourceCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=1511326809]
+unique_name_in_owner = true
+layout_mode = 2
+text = "is active?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer" unique_id=1718388374]
+layout_mode = 2
+
+[node name="ConfirmSaveButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer/HBoxContainer" unique_id=2086967372]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Confirm Save"
+
+[node name="CancelSaveButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/SaveCustomSourcesPopUp/SaveSourceListContainer/HBoxContainer" unique_id=663355614]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cancel Save"
+
+[node name="EditHistoryPopup" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=2062416991]
+unique_name_in_owner = true
+size = Vector2i(610, 493)
+theme_override_styles/panel = ExtResource("5_rj42h")
+
+[node name="EditHistoryContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup" unique_id=834049798]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 605.0
+offset_bottom = 491.0
+
+[node name="HistoryTextEdit" type="TextEdit" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup/EditHistoryContainer" unique_id=66521476]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 450)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Edit chat history here"
+
+[node name="SaveCancelHistoryContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup/EditHistoryContainer" unique_id=221514174]
+layout_mode = 2
+
+[node name="SaveHistoryButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup/EditHistoryContainer/SaveCancelHistoryContainer" unique_id=687244280]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save History"
+
+[node name="Edit_Warning_Label" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup/EditHistoryContainer/SaveCancelHistoryContainer" unique_id=499737278]
+layout_mode = 2
+text = "Editing the chat history like this may break something. Proceed with caution only if necessary."
+
+[node name="CancelEditButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/EditHistoryPopup/EditHistoryContainer/SaveCancelHistoryContainer" unique_id=1575650932]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cancel Edit"
+
+[node name="FilterPopup" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=1871463895]
+unique_name_in_owner = true
+size = Vector2i(192, 249)
+script = ExtResource("12_0hfeb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup" unique_id=1140074324]
+offset_right = 192.0
+offset_bottom = 249.0
+
+[node name="FilterLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=2006251841]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_rj42h")
+text = "Filter Options"
+
+[node name="SourceOriginOptions" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=1142601351]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All Origins"
+popup/item_0/id = 0
+popup/item_1/text = "File"
+popup/item_1/id = 1
+popup/item_2/text = "Remote"
+popup/item_2/id = 2
+
+[node name="SourceTypeOptions" type="OptionButton" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=704566819]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "All Types"
+popup/item_0/id = 0
+
+[node name="MetapromptCheck" type="CheckBox" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=290031048]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Metaprompt Filter"
+
+[node name="ActiveStateCheck" type="CheckBox" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=139118047]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Active Sources Filter"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer" unique_id=1806412770]
+layout_mode = 2
+alignment = 1
+
+[node name="ApplyFilterButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer/HBoxContainer" unique_id=1128152889]
+icon = ExtResource("icon_save")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"
+
+[node name="ClearFilterButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/FilterPopup/VBoxContainer/HBoxContainer" unique_id=1676096837]
+icon = ExtResource("icon_clear")
+
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear"
+
+[node name="StatsPopup" type="PopupPanel" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=575283577]
+unique_name_in_owner = true
+auto_translate_mode = 1
+size = Vector2i(400, 600)
+script = ExtResource("13_n06il")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup" unique_id=2039210870]
+offset_right = 400.0
+offset_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ContentStatisticsLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer" unique_id=2037563217]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_rj42h")
+text = "Content Statistics"
+
+[node name="StatsLabel" type="Label" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer" unique_id=117636762]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 2
+text = "Stats"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer" unique_id=191857604]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer/ScrollContainer" unique_id=1428857619]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 350)
+layout_mode = 2
+
+[node name="RefreshStatsButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer" unique_id=474473442]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh Stats"
+
+[node name="CloseStatsButton" type="Button" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container/StatsPopup/VBoxContainer" unique_id=141113789]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="NotificationPopup" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=190911175 instance=ExtResource("15_notification_popup")]
+unique_name_in_owner = true
+auto_translate_mode = 1
+visible = false
+
+[node name="TreeContextMenu" type="PopupMenu" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=327964168]
+unique_name_in_owner = true
+size = Vector2i(155, 259)
+theme_override_styles/panel = ExtResource("5_rj42h")
+item_count = 12
+item_0/text = "Edit"
+item_0/id = 100
+item_1/id = 1
+item_1/separator = true
+item_2/text = "Refresh Content"
+item_2/id = 107
+item_3/id = 2
+item_3/separator = true
+item_4/text = "Save Hierarchy"
+item_4/id = 105
+item_5/text = "Import Hierarchy"
+item_5/id = 106
+item_6/id = 4
+item_6/separator = true
+item_7/text = "Add Child"
+item_7/id = 101
+item_8/text = "Delete"
+item_8/id = 102
+item_9/id = 8
+item_9/separator = true
+item_10/text = "Move Up"
+item_10/id = 103
+item_11/text = "Move Down"
+item_11/id = 104
+
+[node name="ContentSourceContextMenu" type="PopupMenu" parent="MarginContainer/ScrollContainer/Main_VBoxContainer/Popups_Container" unique_id=1806525983]
+unique_name_in_owner = true
+size = Vector2i(260, 320)
+theme_override_styles/panel = ExtResource("5_rj42h")
+
+[connection signal="toggled" from="MarginContainer/ScrollContainer/Main_VBoxContainer/TogglePanelButtonsContainer/DetachPanelButton" to="." method="_on_detach_panel_toggled"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/ContentSourcesContainer/ContentSourcesScroll/SourcesDisplay/FooterContainer/AddSourceBtn" to="." method="_on_add_source_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1/NewThreadButton" to="." method="_on_new_thread_button_pressed"]
+[connection signal="item_selected" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_1/ThreadDropdown" to="." method="_on_thread_dropdown_item_selected"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/OpenThreadsFolderButton" to="." method="_on_open_threads_folder_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/ThreadHubVersionsButton" to="." method="_on_thread_hub_versions_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/OpenStoreTraceButton" to="." method="_on_open_store_trace_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/ViewStoreTraceButton" to="." method="_on_view_store_trace_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/OpenStoreChunkButton" to="." method="_on_open_store_chunk_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/RepairStoreSymbolicButton" to="." method="_on_repair_store_symbolic_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/Chat_Menu_Container/Chat_Menu_SubContainer_2/StoreRepairButton" to="." method="_on_store_repair_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer/SendButton" to="." method="_on_send_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer/StopRequestButton" to="." method="_on_stop_request_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer/VoiceButton" to="." method="_on_voice_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer/EnsemblesButton" to="." method="_on_ensembles_button_pressed"]
+[connection signal="pressed" from="MarginContainer/ScrollContainer/Main_VBoxContainer/BottomMenuContainer_HBox/ButtomMenuContainer_VBox/ButtomButtonsContainer/DevAgentButton" to="." method="_on_dev_agent_button_pressed"]

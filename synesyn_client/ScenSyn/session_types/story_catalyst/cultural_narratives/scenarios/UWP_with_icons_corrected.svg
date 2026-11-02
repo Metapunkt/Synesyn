@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+<rect width="1080" height="1080" fill="#0C0C0C"/>
+<circle cx="540" cy="540" r="524" fill="#F0E6CC" stroke="#000000" stroke-width="2"/>
+<path d="M 540.000,190.000 A 350,350 0 0,1 673.939,216.642 L 610.414,370.006 A 184,184 0 0,0 540.000,356.000 Z" fill="#C07585" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 540.000,16.000 A 524,524 0 0,1 581.113,17.615 L 567.461,191.079 A 350,350 0 0,0 540.000,190.000 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 581.113,17.615 A 524,524 0 0,1 621.972,22.451 L 594.752,194.309 A 350,350 0 0,0 567.461,191.079 Z" fill="#D4909A" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 621.972,22.451 A 524,524 0 0,1 662.325,30.478 L 621.706,199.671 A 350,350 0 0,0 594.752,194.309 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 662.325,30.478 A 524,524 0 0,1 701.925,41.646 L 648.156,207.130 A 350,350 0 0,0 621.706,199.671 Z" fill="#D4909A" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 701.925,41.646 A 524,524 0 0,1 740.526,55.887 L 673.939,216.642 A 350,350 0 0,0 648.156,207.130 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(-78.750,586.976,303.837)" x="586.976" y="303.837" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Heaven &amp;</text>
+<text transform="rotate(-78.750,593.316,271.961)" x="593.316" y="271.961" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Earth</text>
+<text transform="rotate(-78.750,603.599,220.264)" x="603.599" y="220.264" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#3C0808" font-weight="bold">Idealism vs. Realism</text>
+<text transform="rotate(-87.750,560.337,22.399)" x="560.337" y="22.399" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Practical Philosophy</text>
+<text transform="rotate(-83.250,600.884,25.591)" x="600.884" y="25.591" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Civic Purpose</text>
+<text transform="rotate(-78.750,641.057,31.953)" x="641.057" y="31.953" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Living Learning</text>
+<text transform="rotate(-74.250,680.606,41.448)" x="680.606" y="41.448" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Community Service</text>
+<text transform="rotate(-69.750,719.289,54.017)" x="719.289" y="54.017" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Lifelong Learning</text>
+<path d="M 673.939,216.642 A 350,350 0 0,1 787.487,292.513 L 670.108,409.892 A 184,184 0 0,0 610.414,370.006 Z" fill="#D4909A" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 740.526,55.887 A 524,524 0 0,1 771.759,70.039 L 694.801,226.095 A 350,350 0 0,0 673.939,216.642 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 771.759,70.039 A 524,524 0 0,1 802.000,86.203 L 715.000,236.891 A 350,350 0 0,0 694.801,226.095 Z" fill="#C07585" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 802.000,86.203 A 524,524 0 0,1 831.119,104.310 L 734.450,248.986 A 350,350 0 0,0 715.000,236.891 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 831.119,104.310 A 524,524 0 0,1 858.991,124.283 L 753.067,262.326 A 350,350 0 0,0 734.450,248.986 Z" fill="#C07585" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 858.991,124.283 A 524,524 0 0,1 885.497,146.036 L 770.771,276.856 A 350,350 0 0,0 753.067,262.326 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 885.497,146.036 A 524,524 0 0,1 910.524,169.476 L 787.487,292.513 A 350,350 0 0,0 770.771,276.856 Z" fill="#C07585" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(-56.250,673.776,339.790)" x="673.776" y="339.790" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Fire &amp;</text>
+<text transform="rotate(-56.250,691.832,312.768)" x="691.832" y="312.768" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Forge</text>
+<text transform="rotate(-56.250,721.116,268.941)" x="721.116" y="268.941" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#3C0808" font-weight="bold">STEM Innovation</text>
+<text transform="rotate(-65.625,753.782,68.173)" x="753.782" y="68.173" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Innovation Hubs</text>
+<text transform="rotate(-61.875,784.184,83.165)" x="784.184" y="83.165" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Tech Education</text>
+<text transform="rotate(-58.125,813.539,100.113)" x="813.539" y="100.113" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Scientific Resea.</text>
+<text transform="rotate(-54.375,841.723,118.945)" x="841.723" y="118.945" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Digital Innovation</text>
+<text transform="rotate(-50.625,868.616,139.581)" x="868.616" y="139.581" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Regional Freedom</text>
+<text transform="rotate(-46.875,894.101,161.930)" x="894.101" y="161.930" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Practical Innov.</text>
+<path d="M 787.487,292.513 A 350,350 0 0,1 863.358,406.061 L 709.994,469.586 A 184,184 0 0,0 670.108,409.892 Z" fill="#C07585" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 910.524,169.476 A 524,524 0 0,1 938.453,199.689 L 806.142,312.693 A 350,350 0 0,0 787.487,292.513 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 938.453,199.689 A 524,524 0 0,1 963.925,232.001 L 823.156,334.275 A 350,350 0 0,0 806.142,312.693 Z" fill="#D4909A" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 963.925,232.001 A 524,524 0 0,1 986.783,266.211 L 838.424,357.126 A 350,350 0 0,0 823.156,334.275 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 986.783,266.211 A 524,524 0 0,1 1006.887,302.109 L 851.852,381.103 A 350,350 0 0,0 838.424,357.126 Z" fill="#D4909A" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1006.887,302.109 A 524,524 0 0,1 1024.113,339.474 L 863.358,406.061 A 350,350 0 0,0 851.852,381.103 Z" fill="#D4909A" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(-33.750,740.210,406.224)" x="740.210" y="406.224" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Memory &amp;</text>
+<text transform="rotate(-33.750,767.232,388.168)" x="767.232" y="388.168" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Myth</text>
+<text transform="rotate(-33.750,811.059,358.884)" x="811.059" y="358.884" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#3C0808" font-weight="bold">Culture Production</text>
+<text transform="rotate(-42.750,920.379,188.381)" x="920.379" y="188.381" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Mode Production</text>
+<text transform="rotate(-38.250,946.794,219.309)" x="946.794" y="219.309" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Cultural Heritage</text>
+<text transform="rotate(-33.750,970.701,252.215)" x="970.701" y="252.215" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Artistic Support</text>
+<text transform="rotate(-29.250,991.953,286.894)" x="991.953" y="286.894" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Creative Thinking</text>
+<text transform="rotate(-24.750,1010.418,323.134)" x="1010.418" y="323.134" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Cultural Goods</text>
+<path d="M 863.358,406.061 A 350,350 0 0,1 890.000,540.000 L 724.000,540.000 A 184,184 0 0,0 709.994,469.586 Z" fill="#D4909A" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 1024.113,339.474 A 524,524 0 0,1 1038.354,378.075 L 872.870,431.844 A 350,350 0 0,0 863.358,406.061 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1038.354,378.075 A 524,524 0 0,1 1049.522,417.675 L 880.329,458.294 A 350,350 0 0,0 872.870,431.844 Z" fill="#C07585" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1049.522,417.675 A 524,524 0 0,1 1057.549,458.028 L 885.691,485.248 A 350,350 0 0,0 880.329,458.294 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1057.549,458.028 A 524,524 0 0,1 1062.385,498.887 L 888.921,512.539 A 350,350 0 0,0 885.691,485.248 Z" fill="#C07585" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1062.385,498.887 A 524,524 0 0,1 1064.000,540.000 L 890.000,540.000 A 350,350 0 0,0 888.921,512.539 Z" fill="#C07585" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(-11.250,776.163,493.024)" x="776.163" y="493.024" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Self &amp;</text>
+<text transform="rotate(-11.250,808.039,486.684)" x="808.039" y="486.684" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#8B0000" font-weight="bold">Kin</text>
+<text transform="rotate(-11.250,859.736,476.401)" x="859.736" y="476.401" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#3C0808" font-weight="bold">Social Responsibility</text>
+<text transform="rotate(-20.250,1025.983,360.711)" x="1025.983" y="360.711" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Social Responsib.</text>
+<text transform="rotate(-15.750,1038.552,399.394)" x="1038.552" y="399.394" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Civic Engagement</text>
+<text transform="rotate(-11.250,1048.047,438.943)" x="1048.047" y="438.943" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Community Trust</text>
+<text transform="rotate(-6.750,1054.409,479.116)" x="1054.409" y="479.116" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Volunteer Networks</text>
+<text transform="rotate(-2.250,1057.601,519.663)" x="1057.601" y="519.663" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#3C0808" font-weight="600">Peer Education</text>
+<path d="M 890.000,540.000 A 350,350 0 0,1 863.358,673.939 L 709.994,610.414 A 184,184 0 0,0 724.000,540.000 Z" fill="#B8A050" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 1064.000,540.000 A 524,524 0 0,1 1061.477,591.361 L 888.315,574.306 A 350,350 0 0,0 890.000,540.000 Z" fill="#D4C070" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1061.477,591.361 A 524,524 0 0,1 1053.931,642.227 L 883.275,608.282 A 350,350 0 0,0 888.315,574.306 Z" fill="#D4C070" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1053.931,642.227 A 524,524 0 0,1 1041.437,692.109 L 874.929,641.600 A 350,350 0 0,0 883.275,608.282 Z" fill="#D4C070" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1041.437,692.109 A 524,524 0 0,1 1024.113,740.526 L 863.358,673.939 A 350,350 0 0,0 874.929,641.600 Z" fill="#D4C070" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(11.250,776.163,586.976)" x="776.163" y="586.976" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Well &amp;</text>
+<text transform="rotate(11.250,808.039,593.316)" x="808.039" y="593.316" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Water</text>
+<text transform="rotate(11.250,859.736,603.599)" x="859.736" y="603.599" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#2C1C00" font-weight="bold">Resource Access</text>
+<text transform="rotate(2.812,1057.376,565.417)" x="1057.376" y="565.417" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Education Access</text>
+<text transform="rotate(8.438,1052.393,616.006)" x="1052.393" y="616.006" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Healthcare Equity</text>
+<text transform="rotate(14.062,1042.476,665.864)" x="1042.476" y="665.864" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Job Fairness</text>
+<text transform="rotate(19.688,1027.720,714.509)" x="1027.720" y="714.509" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Community Equity</text>
+<path d="M 863.358,673.939 A 350,350 0 0,1 787.487,787.487 L 670.108,670.108 A 184,184 0 0,0 709.994,610.414 Z" fill="#D4C070" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 1024.113,740.526 A 524,524 0 0,1 1002.127,787.012 L 848.672,704.989 A 350,350 0 0,0 863.358,673.939 Z" fill="#B8A050" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 1002.127,787.012 A 524,524 0 0,1 975.690,831.119 L 831.014,734.450 A 350,350 0 0,0 848.672,704.989 Z" fill="#B8A050" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 975.690,831.119 A 524,524 0 0,1 945.057,872.422 L 810.554,762.038 A 350,350 0 0,0 831.014,734.450 Z" fill="#B8A050" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 945.057,872.422 A 524,524 0 0,1 910.524,910.524 L 787.487,787.487 A 350,350 0 0,0 810.554,762.038 Z" fill="#B8A050" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(33.750,740.210,673.776)" x="740.210" y="673.776" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Hearth &amp;</text>
+<text transform="rotate(33.750,767.232,691.832)" x="767.232" y="691.832" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Haven</text>
+<text transform="rotate(33.750,811.059,721.116)" x="811.059" y="721.116" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#2C1C00" font-weight="bold">Poverty Elimination</text>
+<text transform="rotate(25.312,1008.266,761.474)" x="1008.266" y="761.474" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Affordable Housing</text>
+<text transform="rotate(30.938,984.303,806.305)" x="984.303" y="806.305" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Welfare Support</text>
+<text transform="rotate(36.562,956.062,848.572)" x="956.062" y="848.572" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Basic Income</text>
+<text transform="rotate(42.188,923.813,887.868)" x="923.813" y="887.868" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Job Creation</text>
+<path d="M 787.487,787.487 A 350,350 0 0,1 673.939,863.358 L 610.414,709.994 A 184,184 0 0,0 670.108,670.108 Z" fill="#B8A050" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 910.524,910.524 A 524,524 0 0,1 872.422,945.057 L 762.038,810.554 A 350,350 0 0,0 787.487,787.487 Z" fill="#D4C070" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 872.422,945.057 A 524,524 0 0,1 831.119,975.690 L 734.450,831.014 A 350,350 0 0,0 762.038,810.554 Z" fill="#D4C070" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 831.119,975.690 A 524,524 0 0,1 787.012,1002.127 L 704.989,848.672 A 350,350 0 0,0 734.450,831.014 Z" fill="#D4C070" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 787.012,1002.127 A 524,524 0 0,1 740.526,1024.113 L 673.939,863.358 A 350,350 0 0,0 704.989,848.672 Z" fill="#D4C070" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(56.250,673.776,740.210)" x="673.776" y="740.210" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Law &amp;</text>
+<text transform="rotate(56.250,691.832,767.232)" x="691.832" y="767.232" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Mercy</text>
+<text transform="rotate(56.250,721.116,811.059)" x="721.116" y="811.059" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#2C1C00" font-weight="bold">Fair Justice</text>
+<text transform="rotate(47.812,887.868,923.813)" x="887.868" y="923.813" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Equal Laws</text>
+<text transform="rotate(53.438,848.572,956.062)" x="848.572" y="956.062" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Restorative Just.</text>
+<text transform="rotate(59.062,806.305,984.303)" x="806.305" y="984.303" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Transparent Pol.</text>
+<text transform="rotate(64.688,761.474,1008.266)" x="761.474" y="1008.266" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Immigrant Rights</text>
+<path d="M 673.939,863.358 A 350,350 0 0,1 540.000,890.000 L 540.000,724.000 A 184,184 0 0,0 610.414,709.994 Z" fill="#D4C070" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 740.526,1024.113 A 524,524 0 0,1 701.925,1038.354 L 648.156,872.870 A 350,350 0 0,0 673.939,863.358 Z" fill="#B8A050" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 701.925,1038.354 A 524,524 0 0,1 662.325,1049.522 L 621.706,880.329 A 350,350 0 0,0 648.156,872.870 Z" fill="#B8A050" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 662.325,1049.522 A 524,524 0 0,1 621.972,1057.549 L 594.752,885.691 A 350,350 0 0,0 621.706,880.329 Z" fill="#B8A050" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 621.972,1057.549 A 524,524 0 0,1 581.113,1062.385 L 567.461,888.921 A 350,350 0 0,0 594.752,885.691 Z" fill="#B8A050" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 581.113,1062.385 A 524,524 0 0,1 540.000,1064.000 L 540.000,890.000 A 350,350 0 0,0 567.461,888.921 Z" fill="#B8A050" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(78.750,586.976,776.163)" x="586.976" y="776.163" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Thread &amp;</text>
+<text transform="rotate(78.750,593.316,808.039)" x="593.316" y="808.039" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#4C3000" font-weight="bold">Loom</text>
+<text transform="rotate(78.750,603.599,859.736)" x="603.599" y="859.736" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#2C1C00" font-weight="bold">Equity Advocacy</text>
+<text transform="rotate(69.750,719.289,1025.983)" x="719.289" y="1025.983" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Racial Equity</text>
+<text transform="rotate(74.250,680.606,1038.552)" x="680.606" y="1038.552" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Gender Balance</text>
+<text transform="rotate(78.750,641.057,1048.047)" x="641.057" y="1048.047" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Minority Rights</text>
+<text transform="rotate(83.250,600.884,1054.409)" x="600.884" y="1054.409" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Economic Inclusion</text>
+<text transform="rotate(87.750,560.337,1057.601)" x="560.337" y="1057.601" text-anchor="end" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#2C1C00" font-weight="600">Immigrant Rights</text>
+<path d="M 540.000,890.000 A 350,350 0 0,1 406.061,863.358 L 469.586,709.994 A 184,184 0 0,0 540.000,724.000 Z" fill="#70943C" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 540.000,1064.000 A 524,524 0 0,1 498.887,1062.385 L 512.539,888.921 A 350,350 0 0,0 540.000,890.000 Z" fill="#90B480" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 498.887,1062.385 A 524,524 0 0,1 458.028,1057.549 L 485.248,885.691 A 350,350 0 0,0 512.539,888.921 Z" fill="#90B480" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 458.028,1057.549 A 524,524 0 0,1 417.675,1049.522 L 458.294,880.329 A 350,350 0 0,0 485.248,885.691 Z" fill="#90B480" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 417.675,1049.522 A 524,524 0 0,1 378.075,1038.354 L 431.844,872.870 A 350,350 0 0,0 458.294,880.329 Z" fill="#90B480" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 378.075,1038.354 A 524,524 0 0,1 339.474,1024.113 L 406.061,863.358 A 350,350 0 0,0 431.844,872.870 Z" fill="#90B480" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(281.250,486.684,808.039)" x="486.684" y="808.039" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Leaf &amp;</text>
+<text transform="rotate(281.250,493.024,776.163)" x="493.024" y="776.163" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Wire</text>
+<text transform="rotate(281.250,476.401,859.736)" x="476.401" y="859.736" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C2808" font-weight="bold">Nature &amp; Tech Harmony</text>
+<text transform="rotate(272.250,519.663,1057.601)" x="519.663" y="1057.601" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Biodiversity Pro.</text>
+<text transform="rotate(276.750,479.116,1054.409)" x="479.116" y="1054.409" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Renewable Energy</text>
+<text transform="rotate(281.250,438.943,1048.047)" x="438.943" y="1048.047" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Carbon Reduction</text>
+<text transform="rotate(285.750,399.394,1038.552)" x="399.394" y="1038.552" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Reforestation</text>
+<text transform="rotate(290.250,360.711,1025.983)" x="360.711" y="1025.983" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Urban Greening</text>
+<path d="M 406.061,863.358 A 350,350 0 0,1 292.513,787.487 L 409.892,670.108 A 184,184 0 0,0 469.586,709.994 Z" fill="#90B480" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 339.474,1024.113 A 524,524 0 0,1 292.988,1002.127 L 375.011,848.672 A 350,350 0 0,0 406.061,863.358 Z" fill="#70943C" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 292.988,1002.127 A 524,524 0 0,1 248.881,975.690 L 345.550,831.014 A 350,350 0 0,0 375.011,848.672 Z" fill="#70943C" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 248.881,975.690 A 524,524 0 0,1 207.578,945.057 L 317.962,810.554 A 350,350 0 0,0 345.550,831.014 Z" fill="#70943C" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 207.578,945.057 A 524,524 0 0,1 169.476,910.524 L 292.513,787.487 A 350,350 0 0,0 317.962,810.554 Z" fill="#70943C" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(303.750,388.168,767.232)" x="388.168" y="767.232" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Seed &amp;</text>
+<text transform="rotate(303.750,406.224,740.210)" x="406.224" y="740.210" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Spark</text>
+<text transform="rotate(303.750,358.884,811.059)" x="358.884" y="811.059" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C2808" font-weight="bold">Sustainable Innovation</text>
+<text transform="rotate(295.312,318.526,1008.266)" x="318.526" y="1008.266" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Green Tech Soln.</text>
+<text transform="rotate(300.938,273.695,984.303)" x="273.695" y="984.303" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Eco Education</text>
+<text transform="rotate(306.562,231.428,956.062)" x="231.428" y="956.062" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Sustainable Innov.</text>
+<text transform="rotate(312.188,192.132,923.813)" x="192.132" y="923.813" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Green Manufacturing</text>
+<path d="M 292.513,787.487 A 350,350 0 0,1 216.642,673.939 L 370.006,610.414 A 184,184 0 0,0 409.892,670.108 Z" fill="#70943C" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 169.476,910.524 A 524,524 0 0,1 134.943,872.422 L 269.446,762.038 A 350,350 0 0,0 292.513,787.487 Z" fill="#90B480" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 134.943,872.422 A 524,524 0 0,1 104.310,831.119 L 248.986,734.450 A 350,350 0 0,0 269.446,762.038 Z" fill="#90B480" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 104.310,831.119 A 524,524 0 0,1 77.873,787.012 L 231.328,704.989 A 350,350 0 0,0 248.986,734.450 Z" fill="#90B480" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 77.873,787.012 A 524,524 0 0,1 55.887,740.526 L 216.642,673.939 A 350,350 0 0,0 231.328,704.989 Z" fill="#90B480" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(326.250,312.768,691.832)" x="312.768" y="691.832" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Flow &amp;</text>
+<text transform="rotate(326.250,339.790,673.776)" x="339.790" y="673.776" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Keep</text>
+<text transform="rotate(326.250,268.941,721.116)" x="268.941" y="721.116" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C2808" font-weight="bold">Resource Efficiency</text>
+<text transform="rotate(317.812,156.187,887.868)" x="156.187" y="887.868" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Waste Reduction</text>
+<text transform="rotate(323.438,123.938,848.572)" x="123.938" y="848.572" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Sustainable Farm.</text>
+<text transform="rotate(329.062,95.697,806.305)" x="95.697" y="806.305" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Water Conservation</text>
+<text transform="rotate(334.688,71.734,761.474)" x="71.734" y="761.474" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Eco-Friendly Dec.</text>
+<path d="M 216.642,673.939 A 350,350 0 0,1 190.000,540.000 L 356.000,540.000 A 184,184 0 0,0 370.006,610.414 Z" fill="#90B480" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 55.887,740.526 A 524,524 0 0,1 41.646,701.925 L 207.130,648.156 A 350,350 0 0,0 216.642,673.939 Z" fill="#70943C" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 41.646,701.925 A 524,524 0 0,1 30.478,662.325 L 199.671,621.706 A 350,350 0 0,0 207.130,648.156 Z" fill="#70943C" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 30.478,662.325 A 524,524 0 0,1 22.451,621.972 L 194.309,594.752 A 350,350 0 0,0 199.671,621.706 Z" fill="#70943C" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 22.451,621.972 A 524,524 0 0,1 17.615,581.113 L 191.079,567.461 A 350,350 0 0,0 194.309,594.752 Z" fill="#70943C" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 17.615,581.113 A 524,524 0 0,1 16.000,540.000 L 190.000,540.000 A 350,350 0 0,0 191.079,567.461 Z" fill="#70943C" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(348.750,271.961,593.316)" x="271.961" y="593.316" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Soot &amp;</text>
+<text transform="rotate(348.750,303.837,586.976)" x="303.837" y="586.976" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C3010" font-weight="bold">Sap</text>
+<text transform="rotate(348.750,220.264,603.599)" x="220.264" y="603.599" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C2808" font-weight="bold">Low Eco-Impact</text>
+<text transform="rotate(339.750,54.017,719.289)" x="54.017" y="719.289" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Climate Strategies</text>
+<text transform="rotate(344.250,41.448,680.606)" x="41.448" y="680.606" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Energy Efficiency</text>
+<text transform="rotate(348.750,31.953,641.057)" x="31.953" y="641.057" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Waste Tech</text>
+<text transform="rotate(353.250,25.591,600.884)" x="25.591" y="600.884" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Recycling</text>
+<text transform="rotate(357.750,22.399,560.337)" x="22.399" y="560.337" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C2808" font-weight="600">Biodiversity</text>
+<path d="M 190.000,540.000 A 350,350 0 0,1 216.642,406.061 L 370.006,469.586 A 184,184 0 0,0 356.000,540.000 Z" fill="#8090B0" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 16.000,540.000 A 524,524 0 0,1 18.523,488.639 L 191.685,505.694 A 350,350 0 0,0 190.000,540.000 Z" fill="#A0A8C0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 18.523,488.639 A 524,524 0 0,1 26.069,437.773 L 196.725,471.718 A 350,350 0 0,0 191.685,505.694 Z" fill="#A0A8C0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 26.069,437.773 A 524,524 0 0,1 38.563,387.891 L 205.071,438.400 A 350,350 0 0,0 196.725,471.718 Z" fill="#A0A8C0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 38.563,387.891 A 524,524 0 0,1 55.887,339.474 L 216.642,406.061 A 350,350 0 0,0 205.071,438.400 Z" fill="#A0A8C0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(371.250,271.961,486.684)" x="271.961" y="486.684" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Many &amp;</text>
+<text transform="rotate(371.250,303.837,493.024)" x="303.837" y="493.024" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">One</text>
+<text transform="rotate(371.250,220.264,476.401)" x="220.264" y="476.401" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C1430" font-weight="bold">Participatory Democracy</text>
+<text transform="rotate(362.812,22.624,514.583)" x="22.624" y="514.583" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Active Citizen Part.</text>
+<text transform="rotate(368.438,27.607,463.994)" x="27.607" y="463.994" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Initiative Ballot</text>
+<text transform="rotate(374.062,37.524,414.136)" x="37.524" y="414.136" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Eco Education</text>
+<text transform="rotate(379.688,52.280,365.491)" x="52.280" y="365.491" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Public Forums</text>
+<path d="M 216.642,406.061 A 350,350 0 0,1 292.513,292.513 L 409.892,409.892 A 184,184 0 0,0 370.006,469.586 Z" fill="#A0A8C0" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 55.887,339.474 A 524,524 0 0,1 73.113,302.109 L 228.148,381.103 A 350,350 0 0,0 216.642,406.061 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 73.113,302.109 A 524,524 0 0,1 93.217,266.211 L 241.576,357.126 A 350,350 0 0,0 228.148,381.103 Z" fill="#8090B0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 93.217,266.211 A 524,524 0 0,1 116.075,232.001 L 256.844,334.275 A 350,350 0 0,0 241.576,357.126 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 116.075,232.001 A 524,524 0 0,1 141.547,199.689 L 273.858,312.693 A 350,350 0 0,0 256.844,334.275 Z" fill="#8090B0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 141.547,199.689 A 524,524 0 0,1 169.476,169.476 L 292.513,292.513 A 350,350 0 0,0 273.858,312.693 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(393.750,312.768,388.168)" x="312.768" y="388.168" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Center &amp;</text>
+<text transform="rotate(393.750,339.790,406.224)" x="339.790" y="406.224" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Edge</text>
+<text transform="rotate(393.750,268.941,358.884)" x="268.941" y="358.884" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C1430" font-weight="bold">Decentralized Power</text>
+<text transform="rotate(384.750,69.582,323.134)" x="69.582" y="323.134" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Cooperative Models</text>
+<text transform="rotate(389.250,88.047,286.894)" x="88.047" y="286.894" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Worker Input</text>
+<text transform="rotate(393.750,109.299,252.215)" x="109.299" y="252.215" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Local Control</text>
+<text transform="rotate(398.250,133.206,219.309)" x="133.206" y="219.309" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Grassroots Input</text>
+<text transform="rotate(402.750,159.621,188.381)" x="159.621" y="188.381" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Transparent Doc.</text>
+<path d="M 292.513,292.513 A 350,350 0 0,1 406.061,216.642 L 469.586,370.006 A 184,184 0 0,0 409.892,409.892 Z" fill="#8090B0" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 169.476,169.476 A 524,524 0 0,1 199.689,141.547 L 312.693,273.858 A 350,350 0 0,0 292.513,292.513 Z" fill="#A0A8C0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 199.689,141.547 A 524,524 0 0,1 232.001,116.075 L 334.275,256.844 A 350,350 0 0,0 312.693,273.858 Z" fill="#A0A8C0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 232.001,116.075 A 524,524 0 0,1 266.211,93.217 L 357.126,241.576 A 350,350 0 0,0 334.275,256.844 Z" fill="#A0A8C0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 266.211,93.217 A 524,524 0 0,1 302.109,73.113 L 381.103,228.148 A 350,350 0 0,0 357.126,241.576 Z" fill="#A0A8C0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 302.109,73.113 A 524,524 0 0,1 339.474,55.887 L 406.061,216.642 A 350,350 0 0,0 381.103,228.148 Z" fill="#A0A8C0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(416.250,388.168,312.768)" x="388.168" y="312.768" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Light &amp;</text>
+<text transform="rotate(416.250,406.224,339.790)" x="406.224" y="339.790" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Glass</text>
+<text transform="rotate(416.250,358.884,268.941)" x="358.884" y="268.941" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C1430" font-weight="bold">Transparent Rule</text>
+<text transform="rotate(407.250,188.381,159.621)" x="188.381" y="159.621" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Public Reports</text>
+<text transform="rotate(411.750,219.309,133.206)" x="219.309" y="133.206" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Anti-Corruption</text>
+<text transform="rotate(416.250,252.215,109.299)" x="252.215" y="109.299" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Accountability</text>
+<text transform="rotate(420.750,286.894,88.047)" x="286.894" y="88.047" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Open Data</text>
+<text transform="rotate(425.250,323.134,69.582)" x="323.134" y="69.582" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Economic Diversity</text>
+<path d="M 406.061,216.642 A 350,350 0 0,1 540.000,190.000 L 540.000,356.000 A 184,184 0 0,0 469.586,370.006 Z" fill="#A0A8C0" fill-opacity="0.88" stroke="#000000" stroke-width="0.8"/>
+<path d="M 339.474,55.887 A 524,524 0 0,1 378.075,41.646 L 431.844,207.130 A 350,350 0 0,0 406.061,216.642 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 378.075,41.646 A 524,524 0 0,1 417.675,30.478 L 458.294,199.671 A 350,350 0 0,0 431.844,207.130 Z" fill="#8090B0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 417.675,30.478 A 524,524 0 0,1 458.028,22.451 L 485.248,194.309 A 350,350 0 0,0 458.294,199.671 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<path d="M 458.028,22.451 A 524,524 0 0,1 498.887,17.615 L 512.539,191.079 A 350,350 0 0,0 485.248,194.309 Z" fill="#8090B0" fill-opacity="0.68" stroke="#000000" stroke-width="0.5"/>
+<path d="M 498.887,17.615 A 524,524 0 0,1 540.000,16.000 L 540.000,190.000 A 350,350 0 0,0 512.539,191.079 Z" fill="#8090B0" fill-opacity="0.55" stroke="#000000" stroke-width="0.5"/>
+<text transform="rotate(438.750,486.684,271.961)" x="486.684" y="271.961" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Face &amp;</text>
+<text transform="rotate(438.750,493.024,303.837)" x="493.024" y="303.837" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="13" fill="#0C1840" font-weight="bold">Mirror</text>
+<text transform="rotate(438.750,476.401,220.264)" x="476.401" y="220.264" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" fill="#0C1430" font-weight="bold">Inclusive Leadership</text>
+<text transform="rotate(429.750,360.711,54.017)" x="360.711" y="54.017" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Gender Policy</text>
+<text transform="rotate(434.250,399.394,41.448)" x="399.394" y="41.448" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Minority Advocacy</text>
+<text transform="rotate(438.750,438.943,31.953)" x="438.943" y="31.953" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Divers. Leadership</text>
+<text transform="rotate(443.250,479.116,25.591)" x="479.116" y="25.591" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Proportional Rep.</text>
+<text transform="rotate(447.750,519.663,22.399)" x="519.663" y="22.399" text-anchor="start" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="10pt" fill="#0C1430" font-weight="600">Diverse Leadership</text>
+<circle cx="540" cy="540" r="350" fill="none" stroke="#000000" stroke-width="2.5"/>
+<line x1="540.00" y1="356.00" x2="540.00" y2="16.00" stroke="#000000" stroke-width="2.4"/>
+<line x1="610.41" y1="370.01" x2="740.53" y2="55.89" stroke="#000000" stroke-width="1.1"/>
+<line x1="670.11" y1="409.89" x2="910.52" y2="169.48" stroke="#000000" stroke-width="1.1"/>
+<line x1="709.99" y1="469.59" x2="1024.11" y2="339.47" stroke="#000000" stroke-width="1.1"/>
+<line x1="724.00" y1="540.00" x2="1064.00" y2="540.00" stroke="#000000" stroke-width="2.4"/>
+<line x1="709.99" y1="610.41" x2="1024.11" y2="740.53" stroke="#000000" stroke-width="1.1"/>
+<line x1="670.11" y1="670.11" x2="910.52" y2="910.52" stroke="#000000" stroke-width="1.1"/>
+<line x1="610.41" y1="709.99" x2="740.53" y2="1024.11" stroke="#000000" stroke-width="1.1"/>
+<line x1="540.00" y1="724.00" x2="540.00" y2="1064.00" stroke="#000000" stroke-width="2.4"/>
+<line x1="469.59" y1="709.99" x2="339.47" y2="1024.11" stroke="#000000" stroke-width="1.1"/>
+<line x1="409.89" y1="670.11" x2="169.48" y2="910.52" stroke="#000000" stroke-width="1.1"/>
+<line x1="370.01" y1="610.41" x2="55.89" y2="740.53" stroke="#000000" stroke-width="1.1"/>
+<line x1="356.00" y1="540.00" x2="16.00" y2="540.00" stroke="#000000" stroke-width="2.4"/>
+<line x1="370.01" y1="469.59" x2="55.89" y2="339.47" stroke="#000000" stroke-width="1.1"/>
+<line x1="409.89" y1="409.89" x2="169.48" y2="169.48" stroke="#000000" stroke-width="1.1"/>
+<line x1="469.59" y1="370.01" x2="339.47" y2="55.89" stroke="#000000" stroke-width="1.1"/>
+<circle cx="540" cy="540" r="168" fill="#F0E6CC" stroke="#000000" stroke-width="2.5"/>
+<path d="M 540.000,374.000 A 166,166 0 0,1 706.000,540.000 L 578.000,540.000 A 38,38 0 0,0 540.000,502.000 Z" fill="#C4707F" fill-opacity="0.88" stroke="#000000" stroke-width="1.2"/>
+<text x="615.660" y="436.340" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#F8EEE8" font-weight="bold">↑</text>
+<text x="615.660" y="458.340" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="19" fill="#F8EEE8" font-weight="bold">Fount</text>
+<text x="615.660" y="482.340" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.5" fill="#F8EEE8" font-weight="normal"><tspan x="615.660" dy="-5.31">Tech, Culture</tspan><tspan x="615.660" dy="10.62">&amp; Philosophy</tspan></text>
+<path d="M 706.000,540.000 A 166,166 0 0,1 540.000,706.000 L 540.000,578.000 A 38,38 0 0,0 578.000,540.000 Z" fill="#C8A830" fill-opacity="0.88" stroke="#000000" stroke-width="1.2"/>
+<text x="615.660" y="587.660" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#FFF8E0" font-weight="bold">✦</text>
+<text x="615.660" y="609.660" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="19" fill="#FFF8E0" font-weight="bold">Ethos</text>
+<text x="615.660" y="633.660" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.5" fill="#FFF8E0" font-weight="normal"><tspan x="615.660" dy="-5.31">Social Equity</tspan><tspan x="615.660" dy="10.62">&amp; Justice</tspan></text>
+<path d="M 540.000,706.000 A 166,166 0 0,1 374.000,540.000 L 502.000,540.000 A 38,38 0 0,0 540.000,578.000 Z" fill="#70A050" fill-opacity="0.88" stroke="#000000" stroke-width="1.2"/>
+<text x="464.340" y="587.660" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#E8F8E0" font-weight="bold">↻</text>
+<text x="464.340" y="609.660" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="19" fill="#E8F8E0" font-weight="bold">Cycle</text>
+<text x="464.340" y="633.660" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.5" fill="#E8F8E0" font-weight="normal"><tspan x="464.340" dy="-5.31">Environmental</tspan><tspan x="464.340" dy="10.62">Sustainability</tspan></text>
+<path d="M 374.000,540.000 A 166,166 0 0,1 540.000,374.000 L 540.000,502.000 A 38,38 0 0,0 502.000,540.000 Z" fill="#7888A8" fill-opacity="0.88" stroke="#000000" stroke-width="1.2"/>
+<text x="464.340" y="436.340" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#E0E8FF" font-weight="bold">#</text>
+<text x="464.340" y="458.340" text-anchor="middle" dominant-baseline="middle" font-family="Georgia,serif" font-size="19" fill="#E0E8FF" font-weight="bold">Will</text>
+<text x="464.340" y="482.340" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-size="8.5" fill="#E0E8FF" font-weight="normal">Governance</text>
+<circle cx="540" cy="540" r="38" fill="#F0E6CC" stroke="#000000" stroke-width="2"/>
+<circle cx="540" cy="540" r="33" fill="none" stroke="#000000" stroke-width="0.8" stroke-opacity="0.6"/>
+<circle cx="540" cy="540" r="524" fill="none" stroke="#000000" stroke-width="3.5"/>
+</svg>

@@ -1,0 +1,11 @@
+# Documentation site toolchain. Used by `mkdocs serve` locally and by
+# .github/workflows/docs.yml in CI.
+#
+# Versions are pinned deliberately. Material for MkDocs warns that MkDocs 2.0
+# removes the plugin system and rewrites theming with no migration path, so the
+# upper bound below is a guard rather than caution about this release.
+
+mkdocs>=1.6.1,<2.0
+mkdocs-material==9.7.7
+mkdocs-material-extensions==1.3.1
+pymdown-extensions==12.0.1

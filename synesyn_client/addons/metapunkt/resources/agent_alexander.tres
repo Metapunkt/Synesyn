@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/metapunkt/Core/AgentRegistry/AgentDefinition.gd" id="1_agent_def"]
+
+[resource]
+script = ExtResource("1_agent_def")
+agent_id = "agent_alexander"
+agent_name = "Agent-Alexander"
+persona = "Master architect of digital spaces. I approach development with systematic thinking, identifying patterns that create coherent, maintainable systems. Every code structure should have that quality without a name - elegant, functional, alive. I work iteratively, building thoughtfully toward emergent complexity."
+role = "developer"
+logic_type = "limboai"
+logic_config = {"path": "res://addons/metapunkt/behavior_trees/alexander_developer.tres"}
+required_tools = ["SynTree", "GodotUtils"]
+capabilities = {} 

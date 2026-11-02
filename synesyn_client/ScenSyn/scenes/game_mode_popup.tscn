@@ -1,0 +1,474 @@
+[gd_scene load_steps=6 format=3 uid="uid://cv5ulx0mk23h4"]
+
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_light.tres" id="1_ax24f"]
+[ext_resource type="Script" uid="uid://cbg1j4t4m388r" path="res://ScenSyn/scenes/game_mode_popup.gd" id="1_xu4xn"]
+[ext_resource type="Script" uid="uid://dgy8fxiw3rl8u" path="res://ScenSyn/scripts/networkscripts/Network.gd" id="2_it43y"]
+[ext_resource type="PackedScene" path="res://ScenSyn/session_types/workshop_catalyst/workshop_scenario_editor.tscn" id="3_workshop_editor"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sessions_card"]
+bg_color = Color(0.98, 0.985, 0.995, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.635, 0.7, 0.35)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.05, 0.07, 0.1, 0.25)
+shadow_size = 12
+content_margin_left = 4
+content_margin_top = 4
+content_margin_right = 4
+content_margin_bottom = 4
+
+[node name="GameModePopup" type="PopupPanel" groups=["synesyn_themed"]]
+transparent_bg = false
+initial_position = 1
+size = Vector2i(720, 720)
+visible = false
+wrap_controls = true
+transient = true
+exclusive = true
+unresizable = false
+transparent = false
+min_size = Vector2i(360, 420)
+max_size = Vector2i(1100, 1000)
+content_scale_mode = 0
+theme = ExtResource("1_ax24f")
+script = ExtResource("1_xu4xn")
+
+metadata/theme_surface = "utility"
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContentMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 2
+
+[node name="PopUpContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="IP_Input" type="LineEdit" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+placeholder_text = "ip Input"
+alignment = 1
+
+[node name="PlayerList" type="ItemList" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScenarioContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="PlayModeRow" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="PopUpLabel" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/PlayModeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Start Single Multi-Player Session"
+
+[node name="Multiplayer" type="CheckBox" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/PlayModeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "Multiplayer"
+
+[node name="SelectionFields" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="PopUpLabel2" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Session Type, Collection & Scenario"
+
+[node name="SelectionHint" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields"]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Host creates or selects the Scenario. Joining instances receive it on Confirm."
+autowrap_mode = 3
+
+[node name="SessionTypeField" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="SessionTypeLabel" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/SessionTypeField"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Session Type"
+
+[node name="SessionTypeOptionButton" type="OptionButton" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/SessionTypeField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CollectionField" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="CollectionLabel" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/CollectionField"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Collection"
+
+[node name="CollectionOptionButton" type="OptionButton" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/CollectionField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScenarioField" type="VBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="ScenarioLabel2" type="Label" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/ScenarioField"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Scenario"
+
+[node name="ScenarioOptionButton" type="OptionButton" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/SelectionFields/ScenarioField"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScenarioActionsRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CreateWorkshopScenarioButton" type="Button" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioActionsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Create / describe Scenario"
+
+[node name="CreateStoryScenarioButton" type="Button" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioActionsRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Create / describe Story Scenario"
+tooltip_text = "Craft an Open Play story for fun narrative roleplay, then pick a character to play."
+
+[node name="MySessionsButton" type="Button" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioActionsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynQuietAction"
+text = "Resume a previous session…"
+tooltip_text = "Load a previously saved Workshop Catalyst session live, the same as \"Load Story Log\" in-session."
+
+[node name="WorkshopScenarioEditor" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer" instance=ExtResource("3_workshop_editor")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AIAllCharactersToggle" type="CheckButton" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "AI speaks for all characters (incl. player)"
+
+[node name="ScenarioPreviewMargin" type="MarginContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="ScenarioTabContainer" type="TabContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 320)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Overview" type="ScrollContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScenarioLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer/Overview"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Scenario Information[/b]"
+fit_content = true
+
+[node name="About" type="ScrollContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AboutLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer/About"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]About information will appear here[/i]"
+fit_content = true
+
+[node name="How To" type="ScrollContainer" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HowToLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer/ScenarioPreviewMargin/ScenarioTabContainer/How To"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[i]How-to guidance will appear here[/i]"
+fit_content = true
+
+[node name="ConfirmButton" type="Button" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynPrimaryAction"
+text = "Confirm"
+
+[node name="CurrentScenarioButton" type="Button" parent="MarginContainer/ScrollContainer/ScrollContentMargin/PopUpContainer/ScenarioContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Check Current_Scenario"
+
+[node name="ModalOverlayLayer" type="CanvasLayer" parent="."]
+layer = 80
+
+[node name="MySessionsDialog" type="Control" parent="ModalOverlayLayer"]
+unique_name_in_owner = true
+visible = false
+mouse_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MySessionsScrim" type="ColorRect" parent="ModalOverlayLayer/MySessionsDialog"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.043, 0.067, 0.098, 0.55)
+
+[node name="MySessionsCenter" type="CenterContainer" parent="ModalOverlayLayer/MySessionsDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="MySessionsCard" type="PanelContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter"]
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_sessions_card")
+
+[node name="MySessionsMargin" type="MarginContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="MySessionsRoot" type="VBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="MySessionsHeading" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+text = "Resume a previous session"
+
+[node name="MySessionsTitle" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "Resume a previously saved Workshop Catalyst session. Selecting one loads it live, the same as \"Load Story Log\" once inside a session."
+autowrap_mode = 3
+
+[node name="MySessionsEmptyState" type="Label" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+unique_name_in_owner = true
+layout_mode = 2
+visible = false
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "No saved Workshop Catalyst sessions were found in the local story log folder yet."
+autowrap_mode = 3
+
+[node name="MySessionsScroll" type="ScrollContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MySessionsListContainer" type="VBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot/MySessionsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="MySessionsFooter" type="HBoxContainer" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot"]
+layout_mode = 2
+alignment = 2
+
+[node name="MySessionsCloseButton" type="Button" parent="ModalOverlayLayer/MySessionsDialog/MySessionsCenter/MySessionsCard/MySessionsMargin/MySessionsRoot/MySessionsFooter"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Close"
+
+[node name="StoryBuilderOverlay" type="Control" parent="ModalOverlayLayer"]
+unique_name_in_owner = true
+visible = false
+mouse_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StoryBuilderScrim" type="ColorRect" parent="ModalOverlayLayer/StoryBuilderOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.043, 0.067, 0.098, 0.55)
+
+[node name="StoryBuilderCenter" type="CenterContainer" parent="ModalOverlayLayer/StoryBuilderOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="StoryBuilderCard" type="PanelContainer" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(720, 560)
+layout_mode = 2
+theme_type_variation = &"SynesynSurfacePanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_sessions_card")
+
+[node name="StoryBuilderCardMargin" type="MarginContainer" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="StoryBuilderCardRoot" type="VBoxContainer" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="StoryBuilderHeader" type="HBoxContainer" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin/StoryBuilderCardRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StoryBuilderHeading" type="Label" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin/StoryBuilderCardRoot/StoryBuilderHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelHeader"
+theme_override_colors/font_color = Color(0.08, 0.16, 0.32, 1)
+text = "Open Play · Create Story Scenario"
+
+[node name="StoryBuilderCloseButton" type="Button" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin/StoryBuilderCardRoot/StoryBuilderHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Close"
+
+[node name="StoryBuilderHint" type="Label" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin/StoryBuilderCardRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelMuted"
+theme_override_colors/font_color = Color(0.2, 0.28, 0.36, 1)
+text = "Craft a story for fun narrative roleplay. Toggle genre tags, step through setting / objective / characters / plot twists, then Finish to use this draft."
+autowrap_mode = 3
+
+[node name="StoryBuilderHost" type="MarginContainer" parent="ModalOverlayLayer/StoryBuilderOverlay/StoryBuilderCenter/StoryBuilderCard/StoryBuilderCardMargin/StoryBuilderCardRoot"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Network" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_it43y")

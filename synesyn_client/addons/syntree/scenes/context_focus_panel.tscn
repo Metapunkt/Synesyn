@@ -1,0 +1,124 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_focus_panel.gd" id="1_focus"]
+
+[node name="ContextFocus" type="PanelContainer"]
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_focus")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Focus and Filter"
+
+[node name="SearchEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Search id or label"
+
+[node name="TagEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Tag"
+
+[node name="RelationsEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Relations: contains, supports…"
+
+[node name="ActivationEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Activation modes"
+
+[node name="AuthorshipEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Authorship kinds"
+
+[node name="ReviewStateEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Review states"
+
+[node name="FocusNodeSelector" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FocusDepth" type="SpinBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 10.0
+value = 1.0
+suffix = " depth"
+
+[node name="CollapsedEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Collapsed structural node ids"
+
+[node name="ShowInactive" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show inactive"
+
+[node name="ShowRejected" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show rejected"
+
+[node name="ShowLowConfidence" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show low-confidence relationships"
+
+[node name="ConfidenceThreshold" type="SpinBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.5
+suffix = " confidence"
+
+[node name="ShowUnrelated" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Show unrelated nodes"
+
+[node name="Actions" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ApplyFocusButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Apply"
+
+[node name="ResetFocusButton" type="Button" parent="MarginContainer/VBoxContainer/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reset"
+
+[node name="FitRelevantButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Fit all currently visible graph nodes into the canvas."
+text = "Fit relevant context"
+
+[node name="FocusStatus" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

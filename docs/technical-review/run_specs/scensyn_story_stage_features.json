@@ -1,0 +1,29 @@
+{
+  "harness_window_size": "1920x1080",
+  "harness_timeout_sec": 420,
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "stochastic_dreams",
+    "toggles": { "auto_player_input": false }
+  },
+  "action_libraries": ["scensyn_action_library.json"],
+  "actions": [],
+  "post_actions": [
+    { "type": "mount_scene", "scene_path": "res://ScenSyn/scenes/scensyn_story_stage.tscn" },
+    { "type": "wait_seconds", "seconds": 18 },
+    { "type": "capture_screenshot", "name": "features-01-opening" },
+    {
+      "use": "send_user_message_and_wait",
+      "with": { "message": "Where does the dream begin?", "seconds": 120 }
+    },
+    { "type": "capture_screenshot", "name": "features-02-reply" },
+    { "type": "wait_seconds", "seconds": 75 },
+    { "type": "capture_screenshot", "name": "features-03-lull" }
+  ],
+  "wait_frames_after_post": 60,
+  "godot_log_tail_bytes": 800000,
+  "assertions": [
+    { "type": "scenario_contains", "value": "Stochastic" },
+    { "type": "min_story_log", "value": 2 }
+  ]
+}

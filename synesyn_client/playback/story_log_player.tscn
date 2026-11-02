@@ -1,0 +1,119 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://playback/scripts/story_log_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://addons/syntree/harness/dev_harness_hooks.gd" id="2_hooks"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="3_theme"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_note_document.svg" id="4_open"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="5_play"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_next_stage_arrow.svg" id="6_step"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_person_group.svg" id="7_sprites"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="8_back"]
+
+[node name="StoryLogPlayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_player")
+
+[node name="DevHarnessHooks" type="Node" parent="."]
+script = ExtResource("2_hooks")
+hook_kind = "story_log_player"
+
+[node name="StageSlot" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="TransportLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="TransportBar" type="PanelContainer" parent="TransportLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 12.0
+offset_right = 420.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme = ExtResource("3_theme")
+theme_type_variation = &"SynesynRaisedPanel"
+
+[node name="Margin" type="MarginContainer" parent="TransportLayer/TransportBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="Row" type="HBoxContainer" parent="TransportLayer/TransportBar/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="BackButton" type="Button" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Back to the launcher"
+theme_type_variation = &"SynesynQuietAction"
+icon = ExtResource("8_back")
+
+[node name="OpenButton" type="Button" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open a saved story log (.json)"
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Open"
+icon = ExtResource("4_open")
+
+[node name="PlayButton" type="Button" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+disabled = true
+text = "Play"
+icon = ExtResource("5_play")
+
+[node name="StepButton" type="Button" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Show the next line now"
+theme_type_variation = &"SynesynQuietAction"
+disabled = true
+text = "Step"
+icon = ExtResource("6_step")
+
+[node name="PaceOption" type="OptionButton" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reading: each line follows once the last is read or spoken.
+Original: lines keep the gaps they had when the session was played.
+Manual: lines follow only when you press Step."
+
+[node name="SpeedOption" type="OptionButton" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Playback speed"
+
+[node name="LoopToggle" type="CheckButton" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Start again from the first line after the last (for exhibitions)"
+text = "Loop"
+
+[node name="SpritesButton" type="Button" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Draw characters from another sprite folder"
+theme_type_variation = &"SynesynQuietAction"
+icon = ExtResource("7_sprites")
+
+[node name="StatusLabel" type="Label" parent="TransportLayer/TransportBar/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelMuted"
+text_overrun_behavior = 3

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c8j2f8xw3xj0y"]
+
+[node name="MySessionListItemButton" type="Button"]
+layout_mode = 2
+autowrap_mode = 3
+alignment = 0
+text = "Session"

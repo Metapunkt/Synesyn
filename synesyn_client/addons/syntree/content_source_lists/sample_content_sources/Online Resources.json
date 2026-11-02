@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Online Resources": {
+			"id": "Online Resources",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Online Resources",
+			"path": "https://api.example.com/docs",
+			"type": "url"
+		}
+	},
+	"root_nodes": [
+		"Online Resources"
+	]
+}

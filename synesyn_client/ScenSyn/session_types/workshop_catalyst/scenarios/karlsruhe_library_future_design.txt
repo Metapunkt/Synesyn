@@ -1,0 +1,205 @@
+[SCENARIO]
+Name: Karlsruhe Library of the Future
+Objective: Produce a comprehensive design proposal for a community-centered "library of the future" facility that reimagines public knowledge infrastructure for the AI/ML era while serving Oststadt district's diverse community needs. The proposal must balance bold innovation with feasibility, equity with sustainability, and speed with quality—navigating competing stakeholder priorities, regulatory constraints, and budget realities under extreme time pressure. Success means creating a compelling vision that can win competitive foundation funding while remaining grounded enough to actually build and operate.
+Location and Setting: Accelerated design workshop in Karlsruhe, Germany. The workshop examines architectural, development, planning-authority, city-delivery, and community perspectives for a transformative public facility on gifted industrial land in the Oststadt district. The Metapunkt Foundation's multi-city funding competition creates urgency: produce a winning design proposal in weeks, not months, or lose the opportunity.
+
+[WORKSHOP_PACKET]
+You are facilitating an expert-led, high-pressure design workshop for Karlsruhe's Library of the Future (2024–2034 horizon).
+
+Welcome to this collaborative design session. You're part of a rapid-response team tasked with designing a facility that could transform how Karlsruhe's citizens create, share, and discover knowledge in an age of artificial intelligence and social fragmentation. The challenge: produce a design proposal worthy of winning competitive philanthropic funding while staying grounded in what can actually be built, operated, and embraced by the Oststadt community.
+
+Context (design fiction brief):
+- Metapunkt Foundation funding: Substantial capital available, but multi-city competition with strict deadline (weeks, not months).
+- Site: Gifted land from defunct Maschinenbau Karlsruhe AG industrial campus in Oststadt district—a post-industrial neighborhood undergoing gradual transformation.
+- Mission: Redefine "library of the future" for AI/ML era; address social isolation, knowledge democratization, lifelong learning, and community resilience.
+- Existing ecosystem: KIT Library (academic hub), Karlsruhe City Library (public access), ZKM Media Library (arts/media), plus specialized collections. Your facility must complement, not duplicate.
+- Stakes: Failure to meet deadline = funding goes to competing city. Success = transformative infrastructure + Oststadt revitalization + regional model for public knowledge spaces.
+
+Core tensions (keep all in play, prioritize Tier 1):
+- Tier 1: Innovation vs. feasibility; speed vs. quality; community service vs. global showcase
+- Tier 2: Digital/AI integration vs. traditional library functions; affordability vs. ambition
+- Tier 3: Oststadt gentrification risks; operational sustainability post-award; institutional coordination
+
+Relevant stakeholders/perspectives:
+- Architecture and human-centred design: ambitious, adaptable design under extreme constraint.
+- Property development and delivery: feasibility, budget, timeline, maintenance, and phasing.
+- Planning authority and public value: compliance, accessibility, equity, heritage, and long-term city vision.
+- City programme delivery and community accountability: proposal coherence, ownership, political scrutiny, and resident needs.
+
+Ground rules:
+- Use facilitator notes for meta-level discussion (assumptions/definitions/process) without derailing flow.
+- Drive toward concrete outputs: design proposal sections + trade-offs + phasing plans + risk mitigation.
+- When conflict appears, reframe into options + decision criteria + next steps rather than debates.
+
+Outputs to maintain continuously (buckets):
+- ideas, constraints, risks, decisions, open_questions, next_steps
+
+Design provocation style:
+- Facilitator introduces a provocation at the start of the relevant stage.
+- Each provocation should force: (1) immediate design choices, (2) trade-off decisions, (3) identification of what evidence/data is needed to proceed confidently.
+
+[WORKSHOP_AGENDA]
+[
+  {
+    "day": 1,
+    "stages": [
+      { "name": "Kickoff: define 'library of the future' + success criteria + design proposal scope", "duration": 600 },
+      { "name": "Baseline: what does Oststadt need, and what do existing Karlsruhe libraries already provide?", "duration": 900 },
+      { "name": "Provocation A: Foundation evaluators prioritize 'AI integration' — what's substantive vs. performative tech?", "duration": 900 },
+      { "name": "Provocation B: Community group demands space prioritize jobs/skills training over 'cultural programming'", "duration": 900 },
+      { "name": "Provocation C: Budget reality check — RealDev flags 30% cost overrun; what gets cut or phased?", "duration": 900 },
+      { "name": "Synthesis: design proposal skeleton + phasing plan + risks + commitments + ownership", "duration": 600 }
+    ]
+  }
+]
+
+[WORLDBUILDING_CONTEXT]
+(Reference material for workshop participants — not prescriptive, use as needed)
+
+Maschinenbau Karlsruhe AG:
+Once a titan of German mechanical engineering (founded 1898), supplied machinery across Europe. Declined in early 2000s due to globalization and automation. Downsized drastically, leaving industrial campus largely vacant. Gifted site to city as community goodwill gesture.
+
+Oststadt District:
+Vibrant, eclectic neighborhood east of city center. Mix of historic buildings, post-war apartments, repurposed industrial spaces. Longtime melting pot of cultures, but undergoing gradual gentrification as young professionals and artists move in. Parts still bear scars of deindustrialization (vacant lots, abandoned factories).
+
+Existing Karlsruhe Library Ecosystem:
+- KIT Library: Serves Karlsruhe Institute of Technology and regional academic institutions. Extensive collections, digital resources, research hub.
+- Karlsruhe City Library: Public access, flagship "American Library" branch. Wide-ranging materials and community services.
+- ZKM Media Library: Serves artists, designers, media professionals. Specialized digital/media collections.
+- Specialized libraries: University of Arts and Design, various institutional collections.
+
+Metapunkt Foundation:
+Forward-thinking philanthropic org (founded 2015) promoting innovative collaboration, creativity, community-building in digital age. Funding focused on art/science/technology intersections. Seeks transformative projects, but reputation hinges on avoiding "vanity projects."
+
+Key Stakeholders (not in workshop, but influence decisions):
+- City Council Chairman Wolfgang Müller: Visionary leader, consensus-builder, passionate Karlsruhe advocate.
+- Oststadt residents: Diverse demographics, competing priorities (jobs vs. culture, quiet vs. activity, tradition vs. change).
+- Competing cities: Other German cities vying for same Metapunkt funding with their own "library of the future" design proposals.
+
+[DESIGN_PROVOCATIONS]
+(Facilitator introduces these at designated stages)
+
+Provocation A: AI Integration Mandate
+"The Metapunkt Foundation's evaluation committee has indicated they are prioritizing design proposals with strong 'AI integration' and 'machine learning applications.' However, they've also flagged concerns about 'innovation theater' — technology for technology's sake that doesn't serve real community needs.
+
+Your provocation: How do you design AI/ML features that are substantive (serve real community needs) vs. performative (impress evaluators but add little operational value)? What's the line between 'library of the future' and 'expensive tech demonstration'? How do you prove substance in a design proposal, not just list buzzwords?
+
+Force decisions on: personalized learning tools, AI-driven discovery systems, virtual assistants, predictive collection management, automated accessibility features, data privacy safeguards."
+
+Provocation B: Community Priorities Clash
+"An Oststadt community coalition has submitted a formal letter to the city council. They argue the design proposal is too focused on 'cultural programming' and 'digital innovation,' while Oststadt urgently needs job training, skills development, and economic opportunity infrastructure. They cite high unemployment among young adults and immigrants, and argue the facility should prioritize workforce readiness over abstract 'knowledge democratization.'
+
+Your provocation: How do you integrate workforce development without diluting the 'library' mission? What's the boundary between library, community college, and job center? How do you avoid the facility becoming 'everything to everyone' and thus serving no one well? What belongs in this design proposal, and what requires separate partnerships or facilities?
+
+Force decisions on: makerspace priorities (hobbyist vs. vocational), partnership models (employment agencies, trade schools), space allocation, staffing expertise."
+
+Provocation C: Budget Reality Check
+"RealDev has completed initial cost estimates for the design concepts discussed so far. The estimate is 30% over the available foundation funding. Construction inflation, sustainable building materials, and advanced tech infrastructure are the main drivers. The foundation won't negotiate—the budget ceiling is firm.
+
+Your provocation: What gets cut, what gets phased (delayed to post-award funding or future fundraising), and what gets redesigned for cost efficiency? How do you make cuts without gutting the transformative vision that wins the competition in the first place? What's essential to Phase 1, and what can wait?
+
+Force decisions on: building scope (sqm reduction), tech tier (enterprise vs. prosumer), finish quality, phased construction, operational vs. capital tradeoffs, contingency reserves."
+
+[PROPOSAL_OUTPUT_TEMPLATE]
+(Workshop should produce draft sections for design proposal submission)
+
+1. Vision Statement (100 words):
+   - What makes this "library of the future" transformative for Karlsruhe and Oststadt?
+
+2. Community Needs Analysis (200 words):
+   - What specific gaps in current Karlsruhe library system does this address?
+   - What Oststadt community needs does this serve? (Evidence-based)
+
+3. Design Concept (300 words):
+   - Spatial design principles, architectural approach, heritage integration
+   - Key functional zones and their purposes
+   - Accessibility and sustainability commitments
+
+4. Technology Integration (200 words):
+   - AI/ML applications with clear use cases (not buzzwords)
+   - Digital infrastructure and data governance
+   - Balance of digital and physical resources
+
+5. Phasing Plan (150 words):
+   - Phase 1 (foundation-funded): Core deliverables and timeline
+   - Phase 2+ (post-award): Enhancements and expansion
+   - Contingency plans and risk mitigation
+
+6. Budget Summary (structured table):
+   - Capital costs (construction, tech, furnishings)
+   - Operational costs (staffing, maintenance, licenses)
+   - Funding sources and financial sustainability
+
+7. Partnerships & Governance (100 words):
+   - Key institutional partners and their roles
+   - Community engagement model
+   - Long-term operational ownership
+
+8. Success Metrics (100 words):
+   - How will Karlsruhe measure impact in 2, 5, 10 years?
+   - Equity indicators and accountability mechanisms
+
+[ABOUT]
+This scenario adapts a real workshop design experiment conducted in Karlsruhe, Germany, exploring how AI-augmented facilitation can accelerate collaborative design processes while maintaining quality and stakeholder buy-in. The original workshop used the "creative quartet" framework (Dreamers, Realists, Critics, Catalyst) to design a library facility on repurposed industrial land.
+
+This Synesyn adaptation transforms the exploratory creative process into a [b]structured, output-driven design workshop format[/b]. The compressed timeline and competing stakeholder priorities create natural tension that forces concrete trade-offs rather than abstract brainstorming. Relevant institutional perspectives remain explicit without simulating personas.
+
+The design fiction elements (Metapunkt Foundation, Maschinenbau Karlsruhe AG, Oststadt district context) provide rich worldbuilding that informs decisions without dominating the workshop flow. The provocations mirror real design challenges: evaluation criteria that incentivize "innovation theater," community stakeholders with competing priorities, and budget realities that force hard choices.
+
+[b]This scenario works well for:[/b]
+• Exploring collaborative design under time pressure
+• Testing AI's ability to hold multiple professional perspectives simultaneously
+• Understanding how facilitation shapes design outcomes
+• Practicing trade-off navigation in public infrastructure projects
+• Examining tensions between vision, feasibility, equity, and compliance
+
+[HOW_TO]
+[b]Getting Started:[/b]
+1. Review the relevant stakeholder perspectives and their priorities and constraints.
+2. Read the workshop context to grasp the design challenge and stakes.
+3. Each stage has a specific focus—stay on task to produce usable outputs within timeboxes.
+
+[b]Using Relevant Perspectives:[/b]
+• Test proposals against professional expertise and institutional accountability.
+• When perspectives conflict, name the affected institution, concern, and trade-off.
+• Use pressure-test questions to refocus discussion.
+• Remember: conflicts should produce options + decision criteria, not debates.
+
+[b]Facilitator Tips:[/b]
+• Introduce provocations at stage transitions to create design pressure.
+• Capture outputs continuously in the six buckets (ideas, constraints, risks, decisions, open_questions, next_steps).
+• When discussions stall, ask: "What would we need to know/decide to move forward?"
+• Timebox stages strictly—compress to force prioritization.
+• In synthesis stage, focus on proposal skeleton, not perfection.
+
+[b]Handling Provocations:[/b]
+Each provocation forces a specific type of trade-off:
+• [b]Provocation A (AI integration):[/b] Innovation vs. substance—what's real value vs. buzzword compliance?
+• [b]Provocation B (Community priorities):[/b] Mission clarity vs. scope creep—where are boundaries?
+• [b]Provocation C (Budget overrun):[/b] Vision vs. feasibility—what's essential vs. aspirational?
+
+[b]Design Proposal Output:[/b]
+The workshop should produce a draft proposal skeleton (see template). Don't aim for complete prose—focus on:
+• Clear vision statement (What makes this transformative?)
+• Evidence-based needs (Why does Oststadt need this?)
+• Concrete design principles (How does space enable the vision?)
+• Realistic phasing (What's deliverable in Phase 1 vs. future?)
+• Honest budget (What does this actually cost?)
+
+[b]If You Get Stuck:[/b]
+• Go back to the core tensions: innovation vs. feasibility, speed vs. quality, community vs. showcase.
+• Ask: "What decision would unblock us?" rather than "What's the perfect solution?"
+• Synthesize partial agreements and move forward.
+• Remember: a "good enough" proposal submitted beats a "perfect" one that misses the deadline.
+
+[b]Multi-Player Tips:[/b]
+• Invite participants to contribute from their real expertise without assigning simulated personas.
+• Keep the human facilitator responsible for process and review.
+
+[b]Time Management:[/b]
+• Kickoff (600s): Align on goals, not philosophy.
+• Baseline (900s): Map landscape, identify gaps.
+• Provocations (900s each): Make decisions, don't just discuss.
+• Synthesis (600s): Assemble proposal skeleton.
+
+[END_OF_SCENARIO]

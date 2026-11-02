@@ -1,0 +1,99 @@
+[gd_scene load_steps=2 format=3 uid="uid://cy8xwnjrgw41d"]
+
+[ext_resource type="Script" path="res://readymade/components/workplan_task_card.gd" id="1_abcde"]
+
+[node name="WorkplanTaskCard" type="PanelContainer"]
+script = ExtResource("1_abcde")
+custom_minimum_size = Vector2(0, 200)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="CoreIdeaLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+text = "Core Idea: [Placeholder]"
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Status: [Placeholder]"
+
+[node name="ChannelLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Channel: [Placeholder]"
+horizontal_alignment = 2
+
+[node name="CompletionCheckbox" type="CheckBox" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "☐ Mark Complete"
+
+[node name="DetailsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PriorityLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Priority: 0"
+
+[node name="FormatLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Format: [Placeholder]"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 100.0
+step = 1.0
+value = 0.0
+
+[node name="ContentPreview" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Content Preview:\n[No content generated yet]"
+autowrap_mode = 3
+visible = false
+
+[node name="ActionButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start Task"
+
+[node name="ReviewButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Send for Review"
+visible = false
+
+[node name="CompleteButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mark Complete"
+visible = false
+
+[node name="EditButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Edit Task"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete" 

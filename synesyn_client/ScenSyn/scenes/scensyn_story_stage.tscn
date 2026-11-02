@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://c0oke2mh0tv8x" path="res://addons/story_stage/scenes/story_stage.tscn" id="1_stage"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/core/menu_dismiss_catcher.gd" id="menu_dismiss_catcher"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_light.tres" id="6_rkiiv"]
+[ext_resource type="PackedScene" uid="uid://b61ogmv77aye8" path="res://ScenSyn/scenes/services_panel.tscn" id="7_services_panel"]
+[ext_resource type="Script" uid="uid://wutbn2jfmerc" path="res://addons/syntree/harness/dev_harness_hooks.gd" id="8_dev_harness_hooks"]
+
+[node name="StoryStage" instance=ExtResource("1_stage")]
+
+[node name="DevHarnessHooks" type="Node" parent="." index="0" unique_id=1207744413]
+script = ExtResource("8_dev_harness_hooks")
+hook_kind = "story_stage"
+
+[node name="UIControls" parent="CanvasLayer3"]
+theme = ExtResource("6_rkiiv")
+
+[node name="HamburgerDismissCatcher" parent="CanvasLayer3/UIControls"]
+script = ExtResource("menu_dismiss_catcher")
+
+[node name="SynpunktRenderSeparator" type="HSeparator" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="10" unique_id=1508365292]
+layout_mode = 2
+
+[node name="SynpunktRenderLabel" type="Label" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="11" unique_id=1534939091]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Synpunkt renders (async)"
+
+[node name="EnqueueBackgroundRenderBtn" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="12" unique_id=1929799291]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Submit a background render job (never blocks playback)"
+text = "Enqueue background render"
+
+[node name="EnqueuePortraitRenderBtn" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="13" unique_id=1295152992]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Submit a portrait render job for the current speaker (never blocks playback)"
+text = "Enqueue portrait render (current speaker)"
+
+[node name="EnqueuePropCardRenderBtn" type="Button" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="14" unique_id=1469349484]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Submit a prop/card render job (never blocks playback)"
+text = "Enqueue prop card render"
+
+[node name="SynpunktRenderStatusLabel" type="RichTextLabel" parent="CanvasLayer3/UIControls/SettingsPanel/MarginContainer/ScrollContainer/SettingsVBox" index="15" unique_id=1900416079]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+fit_content = true
+scroll_active = false
+autowrap_mode = 2
+
+[node name="ServicesPanel" parent="." unique_id=215233562 instance=ExtResource("7_services_panel")]
+unique_name_in_owner = true
+visible = false

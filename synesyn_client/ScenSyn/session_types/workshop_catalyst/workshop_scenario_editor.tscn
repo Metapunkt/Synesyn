@@ -1,0 +1,237 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://ScenSyn/session_types/workshop_catalyst/workshop_scenario_editor.gd" id="1_editor"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field_normal"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.945, 0.96, 0.985, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46, 0.583, 0.68, 0.35)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field_focus"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.45, 0.86, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="WorkshopScenarioEditor" type="PanelContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynSurfacePanel"
+script = ExtResource("1_editor")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Fields" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Heading" type="Label" parent="Margin/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = "Scenario draft"
+
+[node name="SourceBanner" type="PanelContainer" parent="Margin/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SynesynStatusPanel"
+
+[node name="SourceBannerMargin" type="MarginContainer" parent="Margin/Fields/SourceBanner"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="SourceBannerLabel" type="Label" parent="Margin/Fields/SourceBanner/SourceBannerMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "New local draft. Nothing is published or committed."
+autowrap_mode = 3
+
+[node name="JoinHintLabel" type="Label" parent="Margin/Fields"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "Multiplayer join: Confirm pulls the host Scenario into this instance. You do not need to recreate it here unless you intend to host instead."
+autowrap_mode = 3
+
+[node name="TitleLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Title"
+
+[node name="WorkshopScenarioTitle" type="LineEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynField"
+placeholder_text = "Scenario title"
+
+[node name="ObjectiveLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Central question / objective"
+
+[node name="WorkshopScenarioObjective" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+placeholder_text = "What must this workshop understand or decide?"
+wrap_mode = 1
+
+[node name="ContextLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Context"
+
+[node name="WorkshopScenarioContext" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+placeholder_text = "Situation, setting, and important background"
+wrap_mode = 1
+
+[node name="OutcomesLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Desired outcomes (one per line)"
+
+[node name="WorkshopScenarioOutcomes" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+placeholder_text = "e.g. Select a pilot"
+wrap_mode = 1
+
+[node name="ConstraintsLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Constraints (one per line)"
+
+[node name="WorkshopScenarioConstraints" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+placeholder_text = "e.g. Fixed annual budget"
+wrap_mode = 1
+
+[node name="TimeHorizonLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Time horizon"
+
+[node name="WorkshopScenarioTimeHorizon" type="LineEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynField"
+placeholder_text = "e.g. next 18 months"
+
+[node name="PerspectivesLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Relevant stakeholders / perspectives (one per line)"
+
+[node name="WorkshopScenarioPerspectives" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+wrap_mode = 1
+
+[node name="EvidenceLabel" type="Label" parent="Margin/Fields"]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Optional evidence / context notes"
+
+[node name="WorkshopScenarioEvidence" type="TextEdit" parent="Margin/Fields"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_field_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_field_focus")
+wrap_mode = 1
+
+[node name="WorkshopScenarioDraftStatus" type="Label" parent="Margin/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"LabelMuted"
+text = "Review the fields, then use this Scenario or start a new draft."
+autowrap_mode = 3
+
+[node name="Actions" type="HBoxContainer" parent="Margin/Fields"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="ImportWorkshopScenarioButton" type="Button" parent="Margin/Fields/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Import…"
+tooltip_text = "Load a Scenario bundle someone shared with you. It is added to your library and never replaces this draft."
+
+[node name="ShareWorkshopScenarioButton" type="Button" parent="Margin/Fields/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Share…"
+tooltip_text = "Write these fields to a shareable Scenario bundle in Documents/Synesyn."
+
+[node name="CancelWorkshopScenarioButton" type="Button" parent="Margin/Fields/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynQuietAction"
+text = "Cancel"
+
+[node name="FreshWorkshopScenarioButton" type="Button" parent="Margin/Fields/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynSecondaryAction"
+text = "Start a new draft"
+tooltip_text = "Clear these fields and begin an empty Scenario draft on this device."
+
+[node name="SaveWorkshopScenarioButton" type="Button" parent="Margin/Fields/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SynesynPrimaryAction"
+text = "Use this Scenario"
+tooltip_text = "Save as a local draft on this device and use it for the session you host."

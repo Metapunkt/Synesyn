@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://c6q3i8358jjq7"]
+
+[ext_resource type="Texture2D" uid="uid://b33k364teos15" path="res://ScenSyn/story_stage/sprites/pozzo/idle/0.png" id="1_8mshs"]
+[ext_resource type="Texture2D" uid="uid://be8dsosdvug18" path="res://ScenSyn/story_stage/sprites/pozzo/idle/1.png" id="2_ymw7e"]
+[ext_resource type="Texture2D" uid="uid://b3kj2jqo0nbnq" path="res://ScenSyn/story_stage/sprites/pozzo/idle/2.png" id="3_4am4v"]
+[ext_resource type="Texture2D" uid="uid://ogkfhdh3t40p" path="res://ScenSyn/story_stage/sprites/pozzo/talking/0.png" id="4_6t16x"]
+[ext_resource type="Texture2D" uid="uid://bowtyvxiuer4f" path="res://ScenSyn/story_stage/sprites/pozzo/talking/1.png" id="5_y45pv"]
+[ext_resource type="Texture2D" uid="uid://eovy6ugiow6" path="res://ScenSyn/story_stage/sprites/pozzo/talking/2.png" id="6_bl3hl"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.5,
+"texture": ExtResource("1_8mshs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ymw7e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_4am4v")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_6t16x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_y45pv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_bl3hl")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}]

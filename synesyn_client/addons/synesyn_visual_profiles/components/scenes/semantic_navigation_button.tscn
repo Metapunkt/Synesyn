@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/synesyn_visual_profiles/components/scripts/semantic_navigation_button.gd" id="1_navigation"]
+
+[node name="SemanticNavigationButton" type="Button"]
+custom_minimum_size = Vector2(128, 40)
+text = "Workspace"
+toggle_mode = true
+script = ExtResource("1_navigation")

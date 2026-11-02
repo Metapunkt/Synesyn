@@ -1,0 +1,194 @@
+[gd_scene load_steps=2 format=3 uid="uid://6bphos48g2el"]
+
+[ext_resource type="Script" uid="uid://b1xwmm42mp2rx" path="res://ScenSyn/scripts/feedback_ui.gd" id="1_4fxvo"]
+
+[node name="FeedbackUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1002.0
+offset_bottom = -162.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4fxvo")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="FunContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FunSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/FunContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Story Engagement Influence"
+
+[node name="FunSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/FunContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144.655, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="CriticalEngagementContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CriticalEngagementSliderLabel" type="Label" parent="ScrollContainer/VBoxContainer/CriticalEngagementContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Sustainability Focus Influence"
+
+[node name="CriticalEngagementSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/CriticalEngagementContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="AICreativityContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AICreativityLabel" type="Label" parent="ScrollContainer/VBoxContainer/AICreativityContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Creative Solutions Influence"
+
+[node name="AICreativitySlider" type="HSlider" parent="ScrollContainer/VBoxContainer/AICreativityContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="AICollaborationContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AICollaborationLabel" type="Label" parent="ScrollContainer/VBoxContainer/AICollaborationContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Character Interaction Influence"
+
+[node name="AICollaborationSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/AICollaborationContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="PublicEngagmentContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PublicEngagementLabel" type="Label" parent="ScrollContainer/VBoxContainer/PublicEngagmentContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Community Engagement Influence"
+
+[node name="PublicEngagementSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/PublicEngagmentContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="AIContentQualityContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AIContentQualityLabel" type="Label" parent="ScrollContainer/VBoxContainer/AIContentQualityContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Content Depth Influence"
+
+[node name="AIContentQualitySlider" type="HSlider" parent="ScrollContainer/VBoxContainer/AIContentQualityContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="EnergyAndCityContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EnergyAndCityLabel" type="Label" parent="ScrollContainer/VBoxContainer/EnergyAndCityContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Energy & Urban Focus Influence"
+
+[node name="EnergyAndCitySlider" type="HSlider" parent="ScrollContainer/VBoxContainer/EnergyAndCityContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="StoryTellingContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StoryTellingLabel" type="Label" parent="ScrollContainer/VBoxContainer/StoryTellingContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Narrative Quality Influence"
+
+[node name="StoryTellingSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/StoryTellingContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -50.0
+max_value = 50.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Submit_Influence_Btn" type="Button" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 9
+text = "Submit Influence"

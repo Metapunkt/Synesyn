@@ -1,0 +1,39 @@
+[gd_resource type="BehaviorTree" format=3 load_steps=10]
+
+[ext_resource type="Script" path="res://ScenSyn/scripts/limbo_tasks/check_event_task.gd" id="1_event"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/limbo_tasks/determine_narrator_intent_task.gd" id="2_intent"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/limbo_tasks/story_stall_task.gd" id="3_stall"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/limbo_tasks/prompt_character_task.gd" id="4_prompt"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/limbo_tasks/spotlight_decision_task.gd" id="5_spotlight"]
+[ext_resource type="Script" path="res://ScenSyn/session_types/story_catalyst/sustainability/sustainability_alert_task.gd" id="6_sustainability"]
+
+[sub_resource type="BTAction" id="stall_branch"]
+script = ExtResource("3_stall")
+stall_threshold = 3
+
+[sub_resource type="BTAction" id="sustainability_branch"]
+script = ExtResource("6_sustainability")
+energy_threshold = 30
+resource_statuses = ["critical", "low"]
+
+[sub_resource type="BTAction" id="prompt_branch"]
+script = ExtResource("4_prompt")
+challenge = "What will you do next?"
+
+[sub_resource type="BTAction" id="spotlight_branch"]
+script = ExtResource("5_spotlight")
+
+[sub_resource type="BTAction" id="event_branch"]
+script = ExtResource("1_event")
+event_id = "POWER_FAIL"
+narrator_intent = "EVENT_NARRATION"
+
+[sub_resource type="BTAction" id="intent_branch"]
+script = ExtResource("2_intent")
+
+[sub_resource type="BTSelector" id="root"]
+children = [SubResource("stall_branch"), SubResource("sustainability_branch"), SubResource("prompt_branch"), SubResource("spotlight_branch"), SubResource("event_branch"), SubResource("intent_branch")]
+
+[resource]
+root_task = SubResource("root")
+description = "Narrator: stall, sustainability, prompt, spotlight, event, intent fallback" 

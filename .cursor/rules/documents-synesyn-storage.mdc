@@ -1,0 +1,27 @@
+﻿---
+description: User-authored Synesyn data belongs under Documents/Synesyn, not Godot app_userdata
+alwaysApply: true
+---
+
+# Documents/Synesyn storage root (ADR 0014)
+
+When adding or changing **user-authored / user-visible** ScenSyn persistence
+(drafts, scenario libraries, story logs, config, exports the user may open in
+Explorer):
+
+- **Do** resolve paths via `RuntimeConfig` helpers under
+  `Documents/Synesyn` (or `storage.root_dir` from config).
+- Prefer: `get_storage_root_dir()`, `get_scensyn_data_dir()`,
+  `get_synesyn_module_dir()`, `get_open_play_scenarios_dir()`,
+  `get_open_play_draft_path()`, `get_workshop_draft_path()`,
+  `get_scensyn_story_log_dir()`, `get_readymade_data_dir()`,
+  `get_metapunkt_data_dir()`, `get_packs_dir()`, plus
+  `migrate_file_if_needed()` / `migrate_binary_file_if_needed()`.
+- **Do not** write long-lived user-facing artifacts to Godot `user://`
+  / `AppData/Roaming/Godot/app_userdata/...` unless there is an explicit
+  engine constraint and a Documents fallback/migration path.
+- `user://` remains acceptable only for ephemeral engine cache or true
+  fallbacks when Documents is unavailable.
+
+Example Open Play library location:
+`C:/Users/<you>/Documents/Synesyn/scensyn/story_catalyst/open_play/scenarios/`

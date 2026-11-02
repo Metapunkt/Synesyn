@@ -1,0 +1,30 @@
+{
+  "_note": "Story-log player (ADR 0029, Phase 3): plays the committed five-line fixture on a Story Stage with no session behind it. Asserts every line reached the stage, the sidecar's stage block was read, voice stayed off, and no ScenSyn session services or vis_story hub client were created. Reading pace at 4x keeps the run under a minute.",
+  "harness_window_size": "1600x900",
+  "harness_timeout_sec": 180,
+  "scene_path": "res://playback/story_log_player.tscn",
+  "state": {
+    "log_path": "res://ScenSyn/tests/fixtures/story_log_playback_fixture.json",
+    "pace": "reading",
+    "speed": 4.0,
+    "loop": false,
+    "voice": false
+  },
+  "actions": [],
+  "post_actions": [
+    { "type": "wait_seconds", "seconds": 6 },
+    { "type": "capture_screenshot", "name": "playback-01-first-lines" },
+    { "type": "wait_seconds", "seconds": 34 }
+  ],
+  "godot_log_tail_bytes": 400000,
+  "assertions": [
+    { "type": "snapshot_field", "name": "fixture-loaded", "path": "playback.entry_count", "equals": 5 },
+    { "type": "snapshot_field", "name": "every-line-displayed", "path": "playback.all_lines_displayed", "equals": true },
+    { "type": "snapshot_field", "name": "displayed-once-each", "path": "playback.lines_displayed", "equals": 5 },
+    { "type": "snapshot_field", "name": "stage-record-read", "path": "playback.has_stage_record", "equals": true },
+    { "type": "snapshot_field", "name": "voice-off", "path": "playback.voice_on", "equals": false },
+    { "type": "snapshot_field", "name": "no-session-services", "path": "hub.stage_session_attached", "equals": false },
+    { "type": "log_not_contains", "name": "no-hub-client", "value": "hub client created" },
+    { "type": "no_errors" }
+  ]
+}

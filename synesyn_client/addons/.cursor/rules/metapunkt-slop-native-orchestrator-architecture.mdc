@@ -1,0 +1,79 @@
+---
+description: This rule defines the architectural blueprint and implementation guide for the Metapunkt addon, which serves as a SLOP-Native Orchestrator for Synesyn Agents within Godot applications. All development for Metapunkt **MUST** adhere to this structure and its principles.
+globs: 
+alwaysApply: false
+---
+
+Okay, here is the updated Metapunkt architectural outline formatted as a project rule for Cursor.
+
+```markdown
+# Rule: Metapunkt SLOP-Native Orchestrator Architecture
+
+**Purpose:** This rule defines the architectural blueprint and implementation guide for the Metapunkt addon, which serves as a SLOP-Native Orchestrator for Synesyn Agents within Godot applications. All development for Metapunkt **MUST** adhere to this structure and its principles.
+
+**Base Directory:** All file paths mentioned in this rule are relative to the Metapunkt addon root directory: `res://addons/metapunkt/`.
+
+**Core Principles:**
+
+*   **SLOP-Native:** All major interaction points **MUST** be designed around and mapped to standard SLOP endpoints (HTTP/WebSocket).
+*   **Agent Orchestration:** Metapunkt's primary role is to manage the lifecycle, coordination, and resource access for **Synesyn Agents** operating within a runtime application (game/tool).
+*   **Decoupled Communication:** Interaction between Metapunkt, agents, and Synesyn components **MUST** primarily use the SLOP protocol (via the `Networking` layer), not direct GDScript calls across addon boundaries.
+*   **Synesyn Components as Tools:** SynTree, Synaxes, Synpunkt, and other Synesyn capabilities **MUST** be treated as discoverable "Tools" accessed via standardized interfaces within the `Integrations/` directory.
+*   **Godot Integration:** Leverage Godot-native features where appropriate (Resources for configuration, Signals for internal events, BTs/FSMs for decision logic, `await`/`TaskManager` for async).
+*   **Separation of Concerns:** Metapunkt **MUST NOT** handle user authentication. It consumes user context (ID, scopes) provided by the application layer and performs scope-based authorization.
+
+**Directory Structure & Component Responsibilities:**
+
+*   **`Core/`**: Core orchestration logic & agent management.
+    *   **`AgentRegistry/`**: Manages Synesyn agent lifecycle, status, discovery. Implements SLOP `/agents` endpoint logic.
+        *   `AgentDefinition.gd` (Resource): Defines agent capabilities, required tools, decision logic config.
+        *   `AgentInstance.gd` (Node/Object): Runtime representation of an active agent. Includes optional `owner_user_id`.
+    *   **`SensorInterface/`**: Routes/queries sensor data for agents. Implements SLOP `/sensors` endpoint logic.
+    *   **`DecisionLogicManager/`**: Configures & manages agent decision logic (BTs, FSMs, Policies). Implements SLOP `/models` endpoint logic.
+        *   `BehaviorTreeRunner.gd`: Integrates Godot-native or addon BTs.
+        *   `StateMachineRunner.gd`: Integrates Godot-native or addon FSMs.
+        *   `PolicyLoader.gd`: Loads RL/LLM policies via `Integrations/`.
+    *   **`ActionDispatcher/`**: Dispatches agent action requests to components/game world. Implements SLOP `/actions` endpoint logic.
+
+*   **`Memory/`**: Unified agent memory access, brokered by Metapunkt. Implements SLOP `/memory` endpoint logic.
+    *   `ShortTermMemory.gd`: In-engine dictionaries/resources for fast-access state.
+    *   `LongTermMemoryClient.gd`: Client for accessing external Vector DBs via SLOP HTTP client. Handles user-specific data scoping based on provided context.
+
+*   **`Tools/`**: Registry & interface for capabilities agents can use. Implements SLOP `/tools` endpoint logic.
+    *   `ToolRegistry.gd`: Discovers & lists available tools (Synesyn components, Godot utils, external APIs).
+    *   `ToolInterfaceBase.gd`: Base class/interface for tool interaction logic.
+
+*   **`Integrations/`**: Adapters for specific Synesyn components & external services. These adapters **MUST** communicate using appropriate protocols (SLOP client, HTTP, etc.) and expose a consistent interface (potentially inheriting from `ToolInterfaceBase.gd`).
+    *   `SynTreeInterface.gd`: Adapter/client for SynTree capabilities.
+    *   `SynaxesInterface.gd`: Adapter/client for Synaxes capabilities.
+    *   `SynpunktInterface.gd`: Adapter/client for Synpunkt capabilities.
+    *   `GodotUtilsInterface.gd`: Adapter for core Godot features exposed as tools.
+    *   `ExternalLLMClient.gd` (Optional): Adapter for non-SynTree LLMs.
+    *   `RLPolicyClient.gd`: Adapter for external RL services/models.
+
+*   **`TaskManager/`**: Handles asynchronous task execution & status tracking. Implements SLOP `/tasks` and `/queue` endpoint logic.
+    *   `TaskQueue.gd`: Manages prioritized task queue.
+    *   `TaskRunner.gd`: Executes tasks, handles async polling/callbacks.
+
+*   **`Audit/`**: Centralized logging and observability. Implements SLOP `/audit` endpoint logic (or logs locally if server not enabled).
+    *   `AuditLogger.gd`: Logs agent actions, decisions, errors. **MUST** include `user_id` from context when available.
+
+*   **`Networking/`**: SLOP server/client infrastructure & alternatives.
+    *   **`SLOPServer/`**: Godot HTTP/WebSocket server exposing Metapunkt's endpoints locally.
+        *   `EndpointHandler.gd`: Routes incoming SLOP requests to appropriate modules (`Core`, `Memory`, `Tools`, `TaskManager`). **MUST** extract user context (ID, scopes) from requests and perform scope-based authorization before dispatching.
+    *   **`SLOPClients/`**: Outbound HTTP/WebSocket clients for external SLOP services (LTM, APIs).
+    *   **`MCPClientServer/`** (Optional): Alternative/complementary networking using MCP protocol.
+
+*   **`(Optional) Payments/`**: Payment gateway integration. Implements SLOP `/pay` endpoint logic.
+    *   `PaymentClient.gd`: Client for payment processing services.
+
+**Implementation Notes:**
+
+*   Use Godot Resources (`.tres`) extensively for configuration (Agent Definitions, Tool configurations).
+*   Define clear interfaces (potentially using placeholder GDScript functions or abstract base classes) for interaction between modules before implementing details.
+*   Prioritize the `Networking/SLOPServer/EndpointHandler.gd` and the core SLOP request/response flow early in development to establish the communication backbone.
+*   Ensure all network communication (both inbound server and outbound clients) handles errors gracefully.
+*   Document the expected format for user context headers (`X-User-ID`, `Authorization`, `X-SLOP-Scope`) required by the `EndpointHandler`.
+```
+
+This rule should provide a clear architectural guide for any LLM assisting with the development of the Metapunkt addon, ensuring consistency with the agreed-upon SLOP-based design.

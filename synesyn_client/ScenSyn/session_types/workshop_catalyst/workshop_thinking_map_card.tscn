@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[node name="ThinkingMapCard" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 198)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CardMargin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="CardBox" type="VBoxContainer" parent="CardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ItemText" type="TextEdit" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="MetaSeparator" type="HSeparator" parent="CardMargin/CardBox"]
+layout_mode = 2
+
+[node name="ProvenanceLabel" type="Label" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+text = "Source: Provenance unavailable"
+autowrap_mode = 2
+tooltip_text = "Where this claim came from: a direct participant quote, an AI inference from the discussion, or a claim backed by cited external evidence."
+
+[node name="StateLabel" type="Label" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.5, 0.05, 1)
+theme_override_font_sizes/font_size = 12
+text = "Status: Suggested"
+tooltip_text = "This claim's review status. Suggested items need a facilitator decision (Accept / Edit / Reject / Defer) before they can be committed."
+
+[node name="OrientationRow" type="HFlowContainer" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 2
+
+[node name="OrientationLabel" type="Label" parent="CardMargin/CardBox/OrientationRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.45, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+text = "Closure:"
+
+[node name="OrientationOption" type="OptionButton" parent="CardMargin/CardBox/OrientationRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+tooltip_text = "Where this claim sits on the Closure Map's four quadrants. Leaving it untagged is fine. Tags are only asked for during a Closure Audit, and they never affect review or commit."
+
+[node name="OrientationSuggestionLabel" type="Label" parent="CardMargin/CardBox/OrientationRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.42, 0.62, 1)
+theme_override_font_sizes/font_size = 11
+text = "AI suggests:"
+autowrap_mode = 2
+tooltip_text = "What the model proposed for this claim. It is only a suggestion, so the claim stays untagged until you accept it or choose a different quadrant yourself."
+
+[node name="ViewSpreadLabel" type="Label" parent="CardMargin/CardBox/OrientationRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+
+[node name="OrientationContestedCheck" type="CheckBox" parent="CardMargin/CardBox/OrientationRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Tick when people did not agree on where this claim sits. The disagreement is worth recording rather than quietly settling, because it shows the group does not share one reading of its own situation. Works with or without a quadrant, and never affects review or commit."
+text = "Contested"
+
+[node name="OrientationAcceptButton" type="Button" parent="CardMargin/CardBox/OrientationRow"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+tooltip_text = "Records the suggested quadrant for this claim. If you pick a different one from the dropdown instead, that is recorded as your own choice."
+text = "Accept"
+
+[node name="ReviewActions" type="HFlowContainer" parent="CardMargin/CardBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="AcceptButton" type="Button" parent="CardMargin/CardBox/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Accept this claim as-is. Required before it can be included in a Commit."
+text = "Accept"
+
+[node name="EditButton" type="Button" parent="CardMargin/CardBox/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Accept this claim, but let you change its wording first."
+text = "Edit"
+
+[node name="RejectButton" type="Button" parent="CardMargin/CardBox/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Reject this claim. Kept for the record but excluded from commits."
+text = "Reject"
+
+[node name="DeferButton" type="Button" parent="CardMargin/CardBox/ReviewActions"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Leaves this claim for later. It stays marked Suggested."
+text = "Defer"
+
+[node name="WithdrawButton" type="Button" parent="CardMargin/CardBox/ReviewActions"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Remove this item from the map, along with any connections drawn to it. Only available for items you added yourself and only until they are committed."
+text = "Withdraw"
+
+[node name="RouteButton" type="Button" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Send this accepted claim's outcome into the Session Record (e.g. as a decision or risk) so it's captured in the workshop's committed record."
+text = "Route approved outcome to Session Record"
+autowrap_mode = 2
+
+[node name="ClosureButton" type="Button" parent="CardMargin/CardBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Create a closure entry for this accepted claim, marking it as resolved for the workshop's outcome record."
+text = "Create approved closure"
+autowrap_mode = 2

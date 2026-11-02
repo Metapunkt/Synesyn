@@ -1,0 +1,15 @@
+{
+	"osc_listen_port": 9002,
+
+	"pendulum_frame_width": 1280,
+	"pendulum_frame_height": 720,
+	"uwp_wheel_bounds_px": [0, 0, 1280, 720],
+
+	"board_warped_size": [760, 760],
+	"sector_anchors": {
+		"Fount": [0.78, 0.24],
+		"Ethos": [0.50, 0.78],
+		"Will":  [0.50, 0.18],
+		"Cycle": [0.22, 0.78]
+	}
+}

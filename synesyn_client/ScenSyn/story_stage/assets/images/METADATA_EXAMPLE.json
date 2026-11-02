@@ -1,0 +1,62 @@
+{
+    "_comment": "This is a comprehensive example of background metadata format",
+    "_note": "Copy this file and rename it to match your background image filename (e.g., detective_office.json for detective_office.png)",
+    
+    "description": "A detailed description of the location that helps the AI understand when to use it. Be specific about the visual elements, atmosphere, and setting details.",
+    
+    "ai_instructions": "Clear instructions for the AI about when and how to use this location. Examples: 'Use for tense confrontations', 'Perfect for private meetings', 'Ideal for action scenes'",
+    
+    "tags": [
+        "indoor/outdoor",
+        "mood_descriptors",
+        "scene_types",
+        "atmosphere_tags",
+        "functional_descriptors"
+    ],
+    
+    "mood": "Choose from: serious, focused, welcoming, tense, dramatic, peaceful, mysterious, formal, casual, etc.",
+    
+    "_examples": {
+        "detective_office": {
+            "description": "A cluttered detective's office with case files scattered across the desk, dim lighting from a single lamp, and evidence boards on the walls",
+            "ai_instructions": "Use this location for investigation scenes, case discussions, private detective work, or when characters need to analyze evidence",
+            "tags": ["indoor", "professional", "investigation", "private", "focused"],
+            "mood": "serious"
+        },
+        
+        "dark_alley": {
+            "description": "A narrow alley behind downtown buildings, poorly lit with dumpsters and fire escapes, creating an atmosphere of danger",
+            "ai_instructions": "Perfect for tense confrontations, secret meetings, dramatic reveals, or scenes requiring privacy and tension",
+            "tags": ["outdoor", "urban", "dramatic", "tense", "secretive"],
+            "mood": "mysterious"
+        },
+        
+        "cozy_cafe": {
+            "description": "A warm, inviting cafe with comfortable seating, soft lighting, and a relaxed atmosphere perfect for conversations",
+            "ai_instructions": "Use for friendly conversations, casual meetings, relationship building, or when characters need a comfortable social setting",
+            "tags": ["indoor", "social", "casual", "comfortable", "public"],
+            "mood": "welcoming"
+        }
+    },
+    
+    "_field_explanations": {
+        "description": "Required. A one-sentence description that helps AI understand the visual and atmospheric qualities of the location.",
+        "ai_instructions": "Optional but recommended. Specific guidance for AI about when this location is most appropriate to use in the story.",
+        "tags": "Optional. Array of keywords that help the system match AI descriptions to this location. Include indoor/outdoor, mood, and functional descriptors.",
+        "mood": "Optional. Single word describing the overall emotional tone of the location. Used for matching AI content to appropriate visual settings."
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+# Development / test-only dependencies for the Synesyn Hub.
+# Install into the hub .venv:  .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+#
+# Runtime deps live in requirements.txt; keep these two files separate so the
+# packaged build stays lean.
+
+-r requirements.txt
+
+# Test runner (the run-hub-tests / synesyn-reviewer skills invoke pytest).
+pytest==8.3.4
+
+# Required by FastAPI/Starlette's TestClient, used in test_stfx_store.py.
+httpx==0.28.1

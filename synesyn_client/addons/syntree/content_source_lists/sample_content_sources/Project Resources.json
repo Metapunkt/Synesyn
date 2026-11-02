@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Project Resources": {
+			"id": "Project Resources",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Project Resources",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/advanced_example.gd",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"Project Resources"
+	]
+}

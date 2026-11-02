@@ -1,0 +1,579 @@
+{
+  "schema_version": "1.0",
+  "corpus_version": "0.2",
+  "description": "Stochastic Dreams canonical verse corpus — 16 primary Odu, structured for the verse expansion engine.",
+  "verses": [
+    {
+      "index": 1,
+      "odu_name": "OGBE MEJI",
+      "odu_bits": "0000",
+      "title": "The Founding Wager",
+      "group": "Primary",
+      "province": "Charter Hall",
+      "region": "Foundries of Fount",
+      "predicament_id": "PF01",
+      "predicament": "The Founding Wager",
+      "domain": "Governance",
+      "complement_odu": "OYEKU MEJI",
+      "complement_predicament_id": "PF02",
+      "deep_agent": "map_maker",
+      "opening_texture": "situation_first_agent_mid",
+      "fragments": {
+        "A": [
+          "Before the hall was full, the charter stone was struck.",
+          "The Map Maker sealed it — and every avenue aligned at once."
+        ],
+        "B": [
+          "But ink that dries before the hall is full",
+          "writes law for those who came,",
+          "not those who could not come in time."
+        ],
+        "C": [
+          "The threshold shines.",
+          "Somewhere beyond it, a name is missing from the register."
+        ],
+        "Q": [
+          "Who will the next hand write into the margin?"
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "odu_name": "OYEKU MEJI",
+      "odu_bits": "1111",
+      "title": "The Entropy Bargain",
+      "group": "Primary",
+      "province": "Fade District",
+      "region": "Returning Ring of Cycle",
+      "predicament_id": "PF02",
+      "predicament": "The Entropy Bargain",
+      "domain": "Ecology",
+      "complement_odu": "OGBE MEJI",
+      "complement_predicament_id": "PF01",
+      "deep_agent": "path_finder",
+      "opening_texture": "event_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "The old house was let to fall.",
+          "Someone stood in its dust, listening",
+          "for what would feed on what was lost."
+        ],
+        "B": [
+          "What decays in public sight",
+          "feeds something underneath the hearing —",
+          "but the tenants of the ruin",
+          "were not asked what they still needed from its walls."
+        ],
+        "C": [
+          "Green shoots in the rubble.",
+          "A woman walks past carrying what she saved."
+        ],
+        "Q": [
+          "Who decides what grows in the place of what was let go?"
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "odu_name": "IWORI MEJI",
+      "odu_bits": "1001",
+      "title": "The Clarity That Blinds",
+      "group": "Transitional",
+      "province": "Lens Tower",
+      "region": "Bridge Districts",
+      "predicament_id": "PF03",
+      "predicament": "The Clarity That Blinds",
+      "domain": "Education",
+      "complement_odu": "ODI MEJI",
+      "complement_predicament_id": "PF05",
+      "deep_agent": "map_maker",
+      "opening_texture": "situation_first_agent_mid",
+      "fragments": {
+        "A": [
+          "Every ledger in Lens Tower opened at once.",
+          "The Map Maker stood in the light and said: let the record speak."
+        ],
+        "B": [
+          "What is seen cannot return to shade,",
+          "but shade was where the handshake lived,",
+          "where trust was made in rooms without a transcript."
+        ],
+        "C": [
+          "The tower publishes. The bridge falls quiet.",
+          "A child reads the record and asks why the numbers don't match the story."
+        ],
+        "Q": [
+          "Can the next hand build a room that holds both truth and tenderness?"
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "odu_name": "ODI MEJI",
+      "odu_bits": "0110",
+      "title": "The Sealed Passage",
+      "group": "Primary",
+      "province": "Gate Quarter",
+      "region": "Root Wards",
+      "predicament_id": "PF05",
+      "predicament": "The Sealed Passage",
+      "domain": "Infrastructure",
+      "complement_odu": "IWORI MEJI",
+      "complement_predicament_id": "PF03",
+      "deep_agent": "map_maker",
+      "opening_texture": "place_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "Gate Quarter shut its mouth against the wind",
+          "and called the silence safety."
+        ],
+        "B": [
+          "What is locked to save the well",
+          "also locks the well from rain.",
+          "The garden thrives one season,",
+          "then the soil turns to salt."
+        ],
+        "C": [
+          "Inside, the ward breathes its own air.",
+          "Beyond the wall, a market learns to live without it."
+        ],
+        "Q": [
+          "Will the gate open from the inside, or must the rain find another way?"
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "odu_name": "IROSUN MEJI",
+      "odu_bits": "0011",
+      "title": "Reopening the Buried Route",
+      "group": "Transitional",
+      "province": "Root Archive",
+      "region": "Archive Coast",
+      "predicament_id": "PF06",
+      "predicament": "Reopening the Buried Route",
+      "domain": "Culture",
+      "complement_odu": "OWONRIN MEJI",
+      "complement_predicament_id": "PF07",
+      "deep_agent": "path_finder",
+      "opening_texture": "situation_first_agent_end",
+      "fragments": {
+        "A": [
+          "A song was sung at the sealed archive",
+          "until the stone remembered it was a door.",
+          "The Path Finder entered first."
+        ],
+        "B": [
+          "What returns from burial",
+          "brings its old companions:",
+          "the song, the grievance, and the map",
+          "that shows the road they were forbidden to walk."
+        ],
+        "C": [
+          "The archive is open. Old rites return to public hearing.",
+          "A grandmother corrects the official history and no one can prove her wrong."
+        ],
+        "Q": [
+          "Can the next hand hold what was returned without fearing what it remembers?"
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "odu_name": "OWONRIN MEJI",
+      "odu_bits": "1100",
+      "title": "The Scrambled Inheritance",
+      "group": "Transitional",
+      "province": "Loom Exchange",
+      "region": "Commons of Ethos",
+      "predicament_id": "PF07",
+      "predicament": "The Scrambled Inheritance",
+      "domain": "Economy",
+      "complement_odu": "IROSUN MEJI",
+      "complement_predicament_id": "PF06",
+      "deep_agent": "path_finder",
+      "opening_texture": "place_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "Contracts scattered in the air above the Loom Exchange",
+          "and the heirs grabbed thread without knowing its provenance."
+        ],
+        "B": [
+          "Every scramble feels like freedom",
+          "to those who hated the old arrangement,",
+          "and like theft to those whose labour was woven into it."
+        ],
+        "C": [
+          "The exchange hums with new deals, none of them signed.",
+          "Someone is weaving beautifully.",
+          "Someone else is searching for a pattern that no longer exists."
+        ],
+        "Q": [
+          "Will the new cloth hold, or will it unravel at the first pull?"
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "odu_name": "OBARA MEJI",
+      "odu_bits": "0111",
+      "title": "The Generosity Trap",
+      "group": "Primary",
+      "province": "Feast Market",
+      "region": "Commons of Ethos",
+      "predicament_id": "PF09",
+      "predicament": "The Generosity Trap",
+      "domain": "Community",
+      "complement_odu": "OSA MEJI",
+      "complement_predicament_id": "PF08",
+      "deep_agent": "path_finder",
+      "opening_texture": "situation_first_agent_mid",
+      "fragments": {
+        "A": [
+          "Every bowl at Feast Market was filled to the brim.",
+          "The Path Finder poured the last measure herself,",
+          "knowing the morning would ask where it went."
+        ],
+        "B": [
+          "Generosity that cannot count",
+          "gives and gives until",
+          "the cupboard holds only the echo of a feast.",
+          "The morning after abundance is always a quiet room."
+        ],
+        "C": [
+          "The table groans with shared bread.",
+          "In the granary, a child counts the remaining sacks on one hand."
+        ],
+        "Q": [
+          "Who will plant before the warmth of the feast has cooled?"
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "odu_name": "OKANRAN MEJI",
+      "odu_bits": "1110",
+      "title": "Threshold Overreach",
+      "group": "Transitional",
+      "province": "Signal Spire",
+      "region": "Foundries of Fount",
+      "predicament_id": "PF04",
+      "predicament": "Threshold Overreach",
+      "domain": "Technology",
+      "complement_odu": "OGUNDA MEJI",
+      "complement_predicament_id": "PF10",
+      "deep_agent": "map_maker",
+      "opening_texture": "situation_first_agent_mid",
+      "fragments": {
+        "A": [
+          "Signal Spire lit up before anyone could read the terms.",
+          "The Map Maker drew the frame at lightning speed",
+          "and the field complied."
+        ],
+        "B": [
+          "Brilliance casts its shadow forward.",
+          "What leaps without looking",
+          "lands precisely on the ground",
+          "that someone else was standing on."
+        ],
+        "C": [
+          "The spire blazes.",
+          "A district outside its permissions watches through the fence."
+        ],
+        "Q": [
+          "Will the next hand widen the frame, or will the bright walls grow doors?"
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "odu_name": "OGUNDA MEJI",
+      "odu_bits": "0001",
+      "title": "The First Cut",
+      "group": "Rhythmic",
+      "province": "Forge Terrace",
+      "region": "Foundries of Fount",
+      "predicament_id": "PF10",
+      "predicament": "The First Cut",
+      "domain": "Justice",
+      "complement_odu": "OKANRAN MEJI",
+      "complement_predicament_id": "PF04",
+      "deep_agent": "map_maker",
+      "opening_texture": "situation_first_agent_mid",
+      "fragments": {
+        "A": [
+          "A blade was lifted in the Foundries.",
+          "The Map Maker held it steady",
+          "and asked no one which vein it was."
+        ],
+        "B": [
+          "Every necessary cut",
+          "also severs something it did not intend.",
+          "The surgeon heals by choosing what to sacrifice,",
+          "and the sacrifice has a name."
+        ],
+        "C": [
+          "The obstruction is cleared. The Foundries breathe again.",
+          "In the ward, a severed connection bleeds quietly into the floor."
+        ],
+        "Q": [
+          "Was the cut clean enough to heal, or did it sever something load-bearing?"
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "odu_name": "OSA MEJI",
+      "odu_bits": "1000",
+      "title": "The Mirror That Judges the Frame",
+      "group": "Rhythmic",
+      "province": "Mirror Court",
+      "region": "High Seat of Will",
+      "predicament_id": "PF08",
+      "predicament": "The Mirror That Judges the Frame",
+      "domain": "Philosophy",
+      "complement_odu": "OBARA MEJI",
+      "complement_predicament_id": "PF09",
+      "deep_agent": "both",
+      "opening_texture": "direct_encounter",
+      "fragments": {
+        "A": [
+          "The Map Maker built the throne. The Path Finder brought the mirror.",
+          "What the ruler saw in it",
+          "was not the ruler's story."
+        ],
+        "B": [
+          "A mirror cannot be uninvented.",
+          "Once the frame has seen its shadow,",
+          "it can pretend, but the pretending",
+          "now costs more than the truth."
+        ],
+        "C": [
+          "Mirror Court falls silent.",
+          "Authority stands with its contradiction on public view,",
+          "and the crowd has not yet decided what to do."
+        ],
+        "Q": [
+          "Will the next hand reform the frame, or shatter the glass?"
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "odu_name": "IKA MEJI",
+      "odu_bits": "1101",
+      "title": "The Binding That Breaks",
+      "group": "Alternating",
+      "province": "Bond Archive",
+      "region": "Archive Coast",
+      "predicament_id": "PF11",
+      "predicament": "The Binding That Breaks",
+      "domain": "Governance",
+      "complement_odu": "IRETE MEJI",
+      "complement_predicament_id": "PF14",
+      "deep_agent": "map_maker",
+      "opening_texture": "event_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "The oath was read aloud in Bond Archive",
+          "and every signatory heard a different promise."
+        ],
+        "B": [
+          "An oath kept past its season",
+          "binds the letter but releases the spirit.",
+          "Those who hold to the words most faithfully",
+          "betray the reason the words were spoken."
+        ],
+        "C": [
+          "The compact is enforced.",
+          "Two districts honor the same clause and arrive at opposite actions."
+        ],
+        "Q": [
+          "Can the next hand write new words, or are the old ones too sacred to touch?"
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "odu_name": "OTURUPON MEJI",
+      "odu_bits": "1011",
+      "title": "The Unseen Contagion",
+      "group": "Rhythmic",
+      "province": "Reservoir Commons",
+      "region": "Returning Ring of Cycle",
+      "predicament_id": "PF12",
+      "predicament": "The Unseen Contagion",
+      "domain": "Health",
+      "complement_odu": "OTURA MEJI",
+      "complement_predicament_id": "PF13",
+      "deep_agent": "map_maker",
+      "opening_texture": "event_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "The well was treated. The well was declared clean.",
+          "Underneath, the old seepage shifted its path."
+        ],
+        "B": [
+          "A remedy that reaches only the surface",
+          "teaches the sickness to travel deeper.",
+          "The well ran clear for a season.",
+          "Then the taste changed again."
+        ],
+        "C": [
+          "Reservoir Commons drinks and trusts the test.",
+          "In the lower aquifer, the contaminant adjusts."
+        ],
+        "Q": [
+          "Will the next hand follow the water downward, or trust the surface reading?"
+        ]
+      }
+    },
+    {
+      "index": 13,
+      "odu_name": "OTURA MEJI",
+      "odu_bits": "0100",
+      "title": "The Wager of Transparency",
+      "group": "Alternating",
+      "province": "Glass Agora",
+      "region": "Bridge Districts",
+      "predicament_id": "PF13",
+      "predicament": "The Wager of Transparency",
+      "domain": "Art",
+      "complement_odu": "OTURUPON MEJI",
+      "complement_predicament_id": "PF12",
+      "deep_agent": "both",
+      "opening_texture": "direct_encounter",
+      "fragments": {
+        "A": [
+          "The Map Maker said: frame it. The Path Finder said: let it stand raw.",
+          "The work was mounted in public light",
+          "and both stepped back to see what the room would do."
+        ],
+        "B": [
+          "Not every truth survives its audience.",
+          "The artist who shows everything",
+          "wagers that the commons can hold",
+          "what the commons spent years hiding from itself."
+        ],
+        "C": [
+          "Glass Agora is full. The work hangs in the open.",
+          "Half the room weeps. The other half looks for the exit."
+        ],
+        "Q": [
+          "Will the next hand build a vessel for the truth, or will the truth dissolve?"
+        ]
+      }
+    },
+    {
+      "index": 14,
+      "odu_name": "IRETE MEJI",
+      "odu_bits": "0010",
+      "title": "The Deferred Foundation",
+      "group": "Alternating",
+      "province": "Seed Vault",
+      "region": "Dreaming Quarter",
+      "predicament_id": "PF14",
+      "predicament": "The Deferred Foundation",
+      "domain": "Agriculture",
+      "complement_odu": "IKA MEJI",
+      "complement_predicament_id": "PF11",
+      "deep_agent": "path_finder",
+      "opening_texture": "agent_first",
+      "fragments": {
+        "A": [
+          "The Path Finder held the seed another year.",
+          "The season did not come.",
+          "The vault stayed full and the ground stayed bare."
+        ],
+        "B": [
+          "Patience, when it grows too long,",
+          "becomes the shape of refusal.",
+          "The seed preserved in perfect darkness",
+          "forgets what soil feels like."
+        ],
+        "C": [
+          "Seed Vault is full and silent.",
+          "Outside, the ground is ready but unplanted.",
+          "A farmer asks: how many perfect seasons must pass before we risk the first?"
+        ],
+        "Q": [
+          "Will the next hand break the ground, or polish the seed for another year?"
+        ]
+      }
+    },
+    {
+      "index": 15,
+      "odu_name": "OSE MEJI",
+      "odu_bits": "0101",
+      "title": "The Festival on the Fault Line",
+      "group": "Rhythmic",
+      "province": "Rhythm Court",
+      "region": "Commons of Ethos",
+      "predicament_id": "PF15",
+      "predicament": "The Festival on the Fault Line",
+      "domain": "Culture",
+      "complement_odu": "OFUN MEJI",
+      "complement_predicament_id": "PF16",
+      "deep_agent": "path_finder",
+      "opening_texture": "event_first_agent_unnamed",
+      "fragments": {
+        "A": [
+          "A drum was struck at Rhythm Court",
+          "and the commons rose to dance",
+          "on ground that had not finished grieving."
+        ],
+        "B": [
+          "Joy laid over fracture",
+          "mends the ear but not the floor.",
+          "The music always stops eventually,",
+          "and what is underneath",
+          "does not care who was dancing."
+        ],
+        "C": [
+          "Rhythm Court is luminous tonight.",
+          "Beneath the dance floor, a crack the builders know about widens by a finger."
+        ],
+        "Q": [
+          "Will the next hand give the ground a voice, or will the music play louder?"
+        ]
+      }
+    },
+    {
+      "index": 16,
+      "odu_name": "OFUN MEJI",
+      "odu_bits": "1010",
+      "title": "The Reversal of Beginnings",
+      "group": "Primary",
+      "province": "Origin Gate",
+      "region": "Dreaming Quarter",
+      "predicament_id": "PF16",
+      "predicament": "The Reversal of Beginnings",
+      "domain": "Spirituality",
+      "complement_odu": "OSE MEJI",
+      "complement_predicament_id": "PF15",
+      "deep_agent": "both",
+      "opening_texture": "direct_encounter",
+      "fragments": {
+        "A": [
+          "The Map Maker and the Path Finder returned together to Origin Gate.",
+          "Each insisted the story had always been theirs.",
+          "The gate did not settle the argument."
+        ],
+        "B": [
+          "The origin is never still.",
+          "Those who go back to recover what was",
+          "find instead what they now need it to have been.",
+          "No one returns to the same beginning twice."
+        ],
+        "C": [
+          "Origin Gate stands open.",
+          "The myth the founders told is not the myth their children recognize.",
+          "Both versions are true. Neither is sufficient."
+        ],
+        "Q": [
+          "Will the next hand write a new beginning, or learn to live with two?"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+# General Godot Project Architecture Guidelines
+
+When developing Godot projects, consider these architectural patterns for maintainability and clarity.
+
+## Component Responsibilities (Example Roles)
+
+Clearly define the responsibility of major scenes, nodes, or scripts. Examples:
+- **EventBus (Autoload):** Central singleton for emitting and handling global signals, decoupling components.
+- **DataManager (Node/Resource):** Manages core game data, state, and business logic (e.g., player stats, inventory, quest state). Could be a node or a custom Resource.
+- **UIManager/ViewManager (Node):** Handles UI screen transitions, updates UI elements based on data changes.
+- **MainScene/Coordinator (Node):** The main scene that instantiates and coordinates major systems.
+
+## Communication Patterns
+
+- **Coordinator -> Manager:** Direct reference passing during setup (e.g., MainScene passes UI nodes to UIManager).
+- **Component -> EventBus:** Emit signals on the global EventBus for significant events (e.g., `player_died`, `item_picked_up`).
+- **EventBus -> Component:** Components connect to relevant EventBus signals in their `_ready` function.
+- **Avoid Cross-Boundary `get_node`:** Minimize direct `get_node` calls between distinct systems (e.g., the Player scene shouldn't use `get_node` to find a specific button within the HUD scene). Use signals or pass references instead.
+
+## Reference Management
+
+- **Pass References:** Pass necessary node references during initialization (e.g., in a `setup` function or `_ready`).
+- **Store References:** Store needed references in variables (`@onready` is useful).
+- **Avoid Scene Tree Traversal:** Limit searches (`get_node`, `find_child`) outside a component's own scene tree boundary. Prefer signals or dependency injection.
+
+## Development Guidelines
+
+1.  **Avoid Regression:** Test thoroughly after changes to ensure existing functionality isn't broken.
+2.  **Reduce Redundancy:** Reuse code where possible. Check if similar functionality exists in autoloads or utility scripts before writing new code. Place code in the component with the most relevant responsibility.
+3.  **Maintain Simplicity:** Favor clear, straightforward solutions. Avoid unnecessary complexity or premature optimization. Keep functions and scripts focused.
+4.  **Respect Component Boundaries:** Define clear responsibilities.
+    - UI logic belongs in UI scenes/scripts.
+    - Core game logic/data belongs in data management nodes/resources.
+    - Use the EventBus (or signals) for cross-component communication.
+    - Coordination logic belongs in parent/coordinator nodes.
+
+## Script Size Policy (Hard Guardrail)
+
+This section mirrors the canonical policy in `docs/developer-guide/architecture.md`.
+
+- Canonical threshold for first-party source scripts:
+  - soft warning: **900 lines**
+  - hard limit: **1200 lines**
+- Scope:
+  - `synesyn_client/**/*.gd`
+  - `services/synesyn_hub/app/**/*.py`
+- If a file approaches the threshold, split by cohesive domain/module immediately.
+- Do not park large additions in already-large scripts "temporarily"; extract first, then add behavior.
+- Any exception must be explicitly documented in a plan/checklist with rationale and a split follow-up task.
+
+## Enforcement Integration
+
+- Before and after editing any `.gd`/`.py` file, run:
+  - `python utilities/checks/check_line_limits.py --path <relative_file>`
+- Before landing substantive changes, also run:
+  - `python utilities/checks/check_line_limits.py`
+- Treat hard-limit violations as blocking.
+- If a script is already violating the limit, changes to that script must include a reduction/split plan and avoid net growth unless required for a blocking fix.
+- If this rule and docs differ, follow `docs/developer-guide/architecture.md` and the checker output.
+
+## Safe Refactor Guardrails (Agent Must Follow)
+
+- Extract by cohesive domain/module; avoid one-helper-per-function sprawl.
+- Before creating a new script, first check whether moved code belongs in an existing script/module.
+- Create a new script only when no existing module is a good fit.
+- Place any new script in the most logical existing directory for that subsystem architecture.
+- Preserve behavior unless a behavior change is explicitly requested.
+- Run targeted verification of touched flows after extraction/refactor.
+- Reuse existing modules/helpers when possible; avoid copy/paste duplication.
+- Keep files in owning subsystem directories; do not create duplicate parallel directory structures.
+- If unsure about placement, prefer extending existing subsystem `internal/` helpers over creating new roots.
+
+## Extension Patterns
+
+- Add new UI screens by creating new scenes managed by the UIManager.
+- Add new game data by extending the DataManager or creating new Resource types.
+- Add new global events by defining new signals on the EventBus.
+
+## Error Handling
+
+- Use Godot's `assert()` for assumptions during development.
+- Use `push_error()` / `push_warning()` for logging issues during development.
+- Implement graceful error handling for user-facing issues (e.g., failed file loads, invalid input) using popups or dedicated UI elements. Consider using custom error types or codes if needed.
+
+## Performance Considerations
+
+- Defer computationally expensive operations (e.g., complex calculations, file I/O) using `call_deferred` or Threads if they might block the main thread and affect UI responsiveness.
+- Batch updates to UI or game state where possible instead of performing many small updates rapidly.
+- Cache frequently accessed but rarely changing data.
+- Use signals for event-driven logic rather than polling values in `_process`.
+
+IMPORTANT: Never remove or modify interface headers or ARCHITECTURE-BOUNDARY comments unless explicitly requested.
+- When making changes to a file, always retain these architectural markers unless specifically directed to modify them
+- If architectural boundaries must change, update both the code AND the corresponding documentation
+""" 
+
+IMPORTANT: Never remove or modify interface headers or ARCHITECTURE-BOUNDARY comments unless explicitly requested.

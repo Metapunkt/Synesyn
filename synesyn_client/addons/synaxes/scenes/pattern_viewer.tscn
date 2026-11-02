@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxe5ex0qp1g56"]
+
+[ext_resource type="Script" path="res://addons/synaxes/scripts/visualization/pattern_viewer.gd" id="1_8n0j2"]
+[ext_resource type="Script" path="res://addons/synaxes/scripts/pattern_space/simple_pattern_graph.gd" id="2_xsbrf"]
+
+[sub_resource type="StandardMaterial3D" id="ff0000"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="00ff00"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="0000ff"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="ffffff"]
+albedo_color = Color(1, 1, 1, 1)
+
+[node name="PatternViewer" type="Node3D"]
+script = ExtResource("1_8n0j2")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+current = true
+fov = 60.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 5, 0)
+shadow_enabled = true
+
+[node name="PatternContainer" type="Node3D" parent="."]
+
+[node name="PatternGraph" type="Node" parent="."]
+script = ExtResource("2_xsbrf")
+
+[node name="DebugInfo" type="Label" parent="."]
+offset_right = 200.0
+offset_bottom = 60.0
+text = "Patterns: 0
+Selected: 0
+FPS: 0"
+
+[node name="GridHelper" type="GridMap" parent="."]
+
+[node name="AxisHelper" type="Node3D" parent="."]
+
+[node name="XAxis" type="CSGCylinder3D" parent="AxisHelper"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
+radius = 0.03
+height = 1.0
+sides = 8
+material = SubResource("ff0000")
+
+[node name="YAxis" type="CSGCylinder3D" parent="AxisHelper"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+radius = 0.03
+height = 1.0
+sides = 8
+material = SubResource("00ff00")
+
+[node name="ZAxis" type="CSGCylinder3D" parent="AxisHelper"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.5)
+radius = 0.03
+height = 1.0
+sides = 8
+material = SubResource("0000ff")
+
+[node name="OriginHelper" type="CSGSphere3D" parent="AxisHelper"]
+radius = 0.05
+material = SubResource("ffffff")

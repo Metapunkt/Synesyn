@@ -1,0 +1,64 @@
+{
+  "content": {
+    "nodes": [
+      {
+        "content": "# test2\nThis stack includes the following sources:\n- code_architecture_1 (ID: code_architecture_1)\n- readmereadme (ID: readmereadme)\n- remote_readme_2 (ID: remote_readme_2_remote_152)\n- sample_source (ID: sample_source)\n- test1 (ID: test1)",
+        "node_id": "1766609203.92_792449_node",
+        "position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "relationships": {
+          "children": [],
+          "dependencies": [],
+          "parents": []
+        }
+      }
+    ]
+  },
+  "format_version": "1.0.0",
+  "meta": {
+    "ai_context": {
+      "include_unwired_nodes": false,
+      "is_active": false,
+      "is_stack": true,
+      "metaprompt": false,
+      "model_metadata": {
+
+      },
+      "stack_sources": [
+        {
+          "id": "code_architecture_1",
+          "name": "code_architecture_1",
+          "path": "res://addons/syntree/docs/architecture.gd"
+        },
+        {
+          "id": "readmereadme",
+          "name": "readmereadme",
+          "path": "res://addons/syntree/README.md"
+        },
+        {
+          "id": "remote_readme_2_remote_152",
+          "name": "remote_readme_2",
+          "path": "https://raw.githubusercontent.com/BI-DS/DRE7053/master/README.md"
+        },
+        {
+          "id": "sample_source",
+          "name": "sample_source",
+          "path": "res://addons/syntree/README.md"
+        },
+        {
+          "id": "test1",
+          "name": "test1",
+          "path": "res://addons/syntree/config.cfg"
+        }
+      ]
+    },
+    "author": "SynTree User",
+    "created": "2025-12-24T21:46:43",
+    "modified": "2025-12-24T21:46:43",
+    "name": "test2",
+    "path": "res://addons/syntree/content_source_lists/test2.json",
+    "source_id": "1766609203.92_792449"
+  }
+}

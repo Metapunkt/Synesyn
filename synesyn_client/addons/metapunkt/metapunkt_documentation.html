@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metapunkt - Complete Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #8e44ad;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+        
+        .affordances-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        
+        .affordances-section h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .affordances-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .affordance-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .affordance-item strong {
+            color: #f39c12;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        
+        .affordance-item ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .affordance-item li {
+            margin-bottom: 8px;
+        }
+        
+        .conclusion-section {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .conclusion-section h3 {
+            color: #fff;
+            margin-top: 0;
+        }
+        
+        .conclusion-section ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .conclusion-section li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        
+        .affordances-section code {
+            background-color: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        
+        pre {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .quick-start {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .api-section {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .feature-card h4 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .warning {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Metapunkt - Complete Documentation</h1>
+        
+        <div class="affordances-section">
+            <h2>LimboAI + Metapunkt System Affordances</h2>
+            <p>Because every agent is a behavior-tree node with access to services (memory, tools, sensors, dispatcher, audit, etc.), you can bolt on new capabilities without touching the language-model prompt itself.</p>
+            <p>Below are the most useful affordances you now have—and concrete examples of what each enables.</p>
+            
+            <div class="affordances-list">
+                <div class="affordance-item">
+                    <strong>1. Behavior-tree control over LLM output</strong>
+                    <ul>
+                        <li>Branch, loop, or short-circuit based on any BlackBoard value (mood, battery, user flags).</li>
+                        <li><strong>Example:</strong> have the agent switch from "teaching" to "question-asking" once it detects user boredom.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>2. Multi-agent orchestration with shared short-term memory</strong>
+                    <ul>
+                        <li>Dynamically spawn extra specialists (e.g., a fact-checker agent) when conversation veers into uncertain territory.</li>
+                        <li>Run structured debates or brainstorming sessions and fuse the answers.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>3. Action-dispatcher tool calls</strong>
+                    <ul>
+                        <li>Agents can trigger arbitrary Godot or HTTP tools mid-conversation: grab weather, query a database, control in-game objects.</li>
+                        <li>Lets you demo LLM-driven game AI ("describe the room then actually open the door").</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>4. Plug-and-play task modules</strong>
+                    <ul>
+                        <li>Drop a new <code>*.gd</code> task into <code>limboai_tasks/</code> (e.g., "Detect Profanity Task") and reference it in the BT; agents inherit it instantly.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>5. Memory tiers (short-term, long-term, audit)</strong>
+                    <ul>
+                        <li>Persist key facts between game sessions or across entirely separate scenes.</li>
+                        <li><strong>Example:</strong> "NPC remembers that the player lied yesterday and reacts differently today."</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>6. Sensor interface & environment events</strong>
+                    <ul>
+                        <li>Feed real-time world data (position, health, camera hits) into the BlackBoard; LLM can comment or act on it.</li>
+                        <li>Perfect for immersive NPCs that react to what the player is actually doing.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>7. Cost / token governance via Payments client</strong>
+                    <ul>
+                        <li>Throttle or deny expensive model calls at runtime, switch to a cheaper model for background reflection, or use summarization to trim context.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>8. Thread-isolated SynTree calls</strong>
+                    <ul>
+                        <li>Each agent already uses a unique <code>thread_name</code>, which means you can maintain multiple parallel sub-conversations (private thoughts vs. spoken words) safely.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>9. Introspection & self-evaluation loops</strong>
+                    <ul>
+                        <li>Add a BT branch that runs "CriticTask" after every 3 turns: agent critiques its last answer and stores a "self-score" to bias future tone.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>10. Auditable event stream</strong>
+                    <ul>
+                        <li>Every tool call, memory write, and generated message is logged. Great for analytics dashboards, moderation, or replay-and-debug.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>11. Hot-swap personas at runtime</strong>
+                    <ul>
+                        <li>Because persona is just a property under <code>AgentDefinition</code>, you can morph character personality on a trigger (e.g., "player gave the NPC a gift → switch to friendly persona resource").</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>12. External knowledge injection</strong>
+                    <ul>
+                        <li>A new Tool can fetch vector-DB passages or game-lore YAML, then stuff results into short-term memory before the next LLM tick—achieving retrieval-augmented generation without rewiring prompts.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>13. Time-driven or event-driven speech</strong>
+                    <ul>
+                        <li>The <code>should_speak</code> flag plus timers already give you turn-taking; expand that so agents speak only when they detect proximity or when the player waves.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>14. Role-based security & capability caps</strong>
+                    <ul>
+                        <li>Want a "rogue" agent that can read but not write memory? Just wrap its BT with permission-check decorators.</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-item">
+                    <strong>15. Cross-scene persistence via Godot Resources</strong>
+                    <ul>
+                        <li>Save an <code>AgentInstance</code> as a <code>.tres</code>; reload it in a totally different minigame with its memories intact.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="conclusion-section">
+                <h3>The Complete Picture</h3>
+                <p>Put simply: <strong>LimboAI</strong> supplies deterministic control flow & services, <strong>Metapunkt</strong> wires that to powerful tools, and the <strong>LLM</strong> supplies the language.</p>
+                
+                <p>Mix those three knobs and you can graduate from "chatting NPC" to:</p>
+                <ul>
+                    <li><strong>Societies of NPCs</strong> that plan the economy while the player sleeps.</li>
+                    <li><strong>A guided-tour agent</strong> that walks around a level, triggering doors, lights, and narration.</li>
+                    <li><strong>Real-time design assistant</strong> that prototypes levels inside Godot by issuing engine commands.</li>
+                    <li><strong>Educational dialogue</strong> where a tutor spawns a "quiz-maker" sub-agent and a "score-keeper" agent.</li>
+                </ul>
+                
+                <p><strong>Whatever conversational mechanic you imagine, you now have the scaffold to bolt it on—without prompt spaghetti.</strong></p>
+            </div>
+        </div>
+
+        <h1>Metapunkt - SLOP-Native AI Agent Orchestrator</h1>
+
+        <p>Metapunkt is a sophisticated AI agent orchestration system for Godot that implements the SLOP (Simple Low-Overhead Protocol) for managing AI agents with different roles, capabilities, and decision-making systems.</p>
+
+        <h2>Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>Multi-Agent Orchestration</h4>
+                <p>Run multiple AI agents with different roles simultaneously</p>
+            </div>
+            <div class="feature-card">
+                <h4>SLOP Protocol</h4>
+                <p>HTTP-based communication for external agent interaction</p>
+            </div>
+            <div class="feature-card">
+                <h4>LimboAI Integration</h4>
+                <p>Behavior trees and state machines for agent decision logic</p>
+            </div>
+            <div class="feature-card">
+                <h4>Tool Integration</h4>
+                <p>Modular tool system including SynTree AI assistant integration</p>
+            </div>
+            <div class="feature-card">
+                <h4>Role-Based Permissions</h4>
+                <p>Agents can have specific roles with restricted capabilities</p>
+            </div>
+            <div class="feature-card">
+                <h4>Persistent State</h4>
+                <p>Resource-based configuration and state management</p>
+            </div>
+        </div>
+
+        <h2>Quick Start</h2>
+        <div class="quick-start">
+            <h3>1. Enable the Plugin</h3>
+            <p>Enable "Metapunkt" in Project Settings → Plugins</p>
+
+            <h3>2. Create an Agent Definition</h3>
+            <pre><code># Create a new AgentDefinition resource
+var agent_def = AgentDefinition.new()
+agent_def.agent_id = "my_agent"
+agent_def.agent_name = "Agent-Helper"
+agent_def.persona = "A helpful assistant that focuses on development tasks"
+agent_def.role = "developer"
+agent_def.logic_type = "limboai"
+agent_def.required_tools = ["SynTree", "GodotUtils"]</code></pre>
+
+            <h3>3. Register and Spawn Agent</h3>
+            <pre><code># Register the agent definition
+AgentRegistry.register_agent_definition(agent_def)
+
+# Spawn an agent instance
+var agent = AgentManager.spawn_agent("my_agent")</code></pre>
+        </div>
+
+        <h2>Agent Roles</h2>
+
+        <h3>Developer Agents</h3>
+        <ul>
+            <li><strong>Agent-Alexander</strong>: General development agent inspired by Christopher Alexander</li>
+            <li>Focus on systematic thinking and pattern recognition</li>
+            <li>Can modify code, analyze projects, use SynTree AI capabilities</li>
+        </ul>
+
+        <h3>Roleplay Agents</h3>
+        <ul>
+            <li><strong>Agent-Chaplin</strong>: Character roleplay agent inspired by Charlie Chaplin</li>
+            <li>Focus on staying in character and providing engaging interactions</li>
+            <li>Read-only access, cannot modify codebase</li>
+        </ul>
+
+        <h2>Tool Integration</h2>
+
+        <h3>SynTree Integration</h3>
+        <p>Agents can access SynTree's AI capabilities:</p>
+        <pre><code># Chat with AI assistant
+var result = await agent.use_tool("SynTree", {
+    "operation": "chat",
+    "message": "Help me debug this function"
+})
+
+# Analyze code content
+var analysis = await agent.use_tool("SynTree", {
+    "operation": "analyze_content", 
+    "content": "func my_function():\n\tpass",
+    "type": "code"
+})</code></pre>
+
+        <h2>Architecture</h2>
+        <ul>
+            <li><strong>Core/</strong>: Agent management, orchestration, and decision logic</li>
+            <li><strong>Networking/</strong>: SLOP server for external communication</li>
+            <li><strong>TaskManager/</strong>: Asynchronous task execution system</li>
+            <li><strong>Integrations/</strong>: Tool interfaces (SynTree, GodotUtils, etc.)</li>
+        </ul>
+
+        <div class="api-section">
+            <h2>SLOP API</h2>
+            <p>Metapunkt exposes a REST API for external agent interaction:</p>
+            <pre><code># List available agents
+GET /agents
+
+# Execute agent action
+POST /agents/{agent_id}/execute
+{
+    "action": "use_tool",
+    "tool": "SynTree",
+    "args": {"operation": "chat", "message": "Hello"}
+}</code></pre>
+            <p>For more details, see the full documentation.</p>
+        </div>
+
+        <h2>Conversational Agents Quick-Start</h2>
+        <div class="success">
+            <p>The Chaplin UFO demo (<code>addons/test_chaplin_ufo_conversation.gd</code>) is a fully-working template you can copy. Below is the distilled recipe.</p>
+        </div>
+
+        <h3>1. Create Behaviour-Tree Asset</h3>
+        <p>Use LimboAI's editor to make a tree that triggers three custom tasks shipped in <code>addons/metapunkt/limboai_tasks/</code>:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>SimpleConversationTask</code></td>
+                    <td>Generate the next utterance through SynTree and write it to shared memory</td>
+                </tr>
+                <tr>
+                    <td><code>SetMemoryTask</code></td>
+                    <td>Flip <code>should_speak</code> flags to control turn-taking</td>
+                </tr>
+                <tr>
+                    <td><code>CheckMemoryCondition</code></td>
+                    <td>Guard-node that checks <code>should_speak</code> before speaking</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Save the tree as <code>res://addons/metapunkt/behavior_trees/your_conversation.tres</code>.</p>
+
+        <h3>2. Define Agents</h3>
+        <pre><code>var believer_def := AgentDefinition.new()
+believer_def.agent_id = "believer"
+believer_def.agent_name = "UFO Enthusiast"
+believer_def.persona = "An excitable stargazer convinced aliens visit Earth."
+believer_def.role = "roleplay"
+believer_def.logic_type = "limboai"
+believer_def.logic_config = {"path": "res://addons/metapunkt/behavior_trees/your_conversation.tres"}
+
+var skeptic_def := believer_def.duplicate()
+skeptic_def.agent_id  = "skeptic"
+skeptic_def.agent_name = "UFO Skeptic"
+skeptic_def.persona   = "A calm scientist demanding hard evidence."</code></pre>
+
+        <h3>3. Spawn Agents & Shared Memory</h3>
+        <pre><code>var believer  = await agent_registry.create_agent_from_definition(believer_def, "user")
+var skeptic   = await agent_registry.create_agent_from_definition(skeptic_def,  "user")
+
+# Conversation metadata
+short_term_memory.set_memory("conversation_log", [], "shared")
+short_term_memory.set_memory("should_speak", true,  believer.agent_id)  # believer starts
+short_term_memory.set_memory("should_speak", false, skeptic.agent_id)</code></pre>
+
+        <h3>4. Kick-off</h3>
+        <p>Just enable the agents' behaviour trees (<code>AgentManager</code> handles the tick loop). When <code>SimpleConversationTask</code> runs, it builds a prompt like:</p>
+        <pre><code>Your persona: A calm scientist demanding hard evidence.
+
+Recent conversation:
+&lt;previous messages&gt;
+
+Respond directly to your conversation partner …</code></pre>
+        <p>The task appends the generated text to <code>conversation_log</code> and flips the <code>should_speak</code> flags—giving you automatic turn-taking.</p>
+
+        <h3>5. Live Logging (UI optional)</h3>
+        <p><code>_process()</code> in the Chaplin demo shows how to stream new messages to a <code>RichTextLabel</code>. Remove the recap loop if you only want live output (already done).</p>
+
+        <h2>Service Reference Additions</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Path</th>
+                    <th>What it does</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ShortTermMemory</strong></td>
+                    <td><code>addons/metapunkt/Memory</code></td>
+                    <td>In-memory key/value store with per-agent or shared scopes</td>
+                </tr>
+                <tr>
+                    <td><strong>ActionDispatcher</strong></td>
+                    <td><code>addons/metapunkt/Core/ActionDispatcher</code></td>
+                    <td>Routes tool calls; SynTree, web requests, etc.</td>
+                </tr>
+                <tr>
+                    <td><strong>AuditLogger</strong></td>
+                    <td><code>addons/metapunkt/Audit</code></td>
+                    <td>Structured JSON log of <em>all</em> agent events</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>These are auto-wired by <code>_initialize_metapunkt()</code> in the demo scene; reuse that helper or copy the module-assembly code.</p>
+
+        <h2>Tips for Advanced Scenarios</h2>
+        <ul>
+            <li>Spawn a <strong>Critic</strong> agent that reads <code>conversation_log</code> every N turns and injects feedback.</li>
+            <li>Replace <code>SimpleConversationTask</code> with your own task that calls arbitrary REST APIs mid-sentence and feeds the result back to the LLM.</li>
+            <li>Gate expensive model calls by wrapping tasks in <code>CheckMemoryCondition</code> nodes that sniff a "budget_remaining" variable.</li>
+        </ul>
+    </div>
+</body>
+</html> 

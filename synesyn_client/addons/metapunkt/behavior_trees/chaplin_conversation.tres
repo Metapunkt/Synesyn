@@ -1,0 +1,19 @@
+[gd_resource type="BehaviorTree" load_steps=6 format=3 uid="uid://vuq8sv0bxn12"]
+
+[ext_resource type="Script" uid="uid://b370dnuato0dq" path="res://addons/metapunkt/limboai_tasks/SimpleConversationTask.gd" id="1_djtt7"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_dpvxh"]
+
+[sub_resource type="BTAction" id="BTAction_veyp0"]
+script = ExtResource("1_djtt7")
+
+[sub_resource type="BTSequence" id="BTSequence_1"]
+children = [SubResource("BTAction_veyp0")]
+
+[sub_resource type="BTSelector" id="BTSelector_1"]
+children = [SubResource("BTSequence_1")]
+
+[resource]
+description = "Chaplin UFO conversation behavior tree - Working version"
+blackboard_plan = SubResource("BlackboardPlan_dpvxh")
+root_task = SubResource("BTSelector_1")

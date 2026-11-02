@@ -1,0 +1,752 @@
+[gd_scene format=3 uid="uid://djcgihndf44c5"]
+
+[ext_resource type="PackedScene" uid="uid://bjwurygqr1gn7" path="res://ScenSyn/scenes/chat_system.tscn" id="1_4ysk6"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="1_gggqj"]
+[ext_resource type="Script" uid="uid://dl26rh5xnhpsd" path="res://ScenSyn/scripts/game_session.gd" id="2_te2n8"]
+[ext_resource type="Script" path="res://ScenSyn/scripts/core/menu_dismiss_catcher.gd" id="menu_dismiss_catcher"]
+[ext_resource type="Texture2D" uid="uid://ce7ju37d121lf" path="res://ScenSyn/icons/barUnder.png" id="3_ts7ec"]
+[ext_resource type="Texture2D" uid="uid://rhj3p0egid6k" path="res://ScenSyn/icons/down_arrow.png" id="4_8aym0"]
+[ext_resource type="Texture2D" uid="uid://cmrtmicdp2hou" path="res://ScenSyn/icons/barProgress.png" id="4_du6eh"]
+[ext_resource type="Script" uid="uid://djurs36x858y" path="res://ScenSyn/scenes/multiplayer_chat.gd" id="5_lfnu6"]
+[ext_resource type="Texture2D" uid="uid://cf1u2mawj1p6a" path="res://ScenSyn/scene_images/ScenSyn_logo_2.svg" id="6_e86nf"]
+[ext_resource type="PackedScene" uid="uid://drjupdyw6xi" path="res://ScenSyn/scenes/sustainability_meter.tscn" id="7_jqy7r"]
+[ext_resource type="PackedScene" uid="uid://6bphos48g2el" path="res://ScenSyn/scenes/FeedbackUI.tscn" id="8_e86nf"]
+[ext_resource type="Script" uid="uid://df6nhnlxqkp5f" path="res://ScenSyn/scripts/debug_tester.gd" id="8_ucl14"]
+[ext_resource type="Script" uid="uid://dgy8fxiw3rl8u" path="res://ScenSyn/scripts/networkscripts/Network.gd" id="9_amnxh"]
+[ext_resource type="PackedScene" uid="uid://b61ogmv77aye8" path="res://ScenSyn/scenes/services_panel.tscn" id="10_services_panel"]
+[ext_resource type="Script" uid="uid://wutbn2jfmerc" path="res://addons/syntree/harness/dev_harness_hooks.gd" id="11_dev_harness_hooks"]
+[ext_resource type="PackedScene" uid="uid://vpjspesvpg4s" path="res://ScenSyn/session_types/workshop_catalyst/workshop_catalyst_workspace_shell.tscn" id="12_workshop_workspace"]
+[ext_resource type="PackedScene" path="res://ScenSyn/session_types/workshop_catalyst/workshop_session_record_panel.tscn" id="13_workshop_record"]
+[ext_resource type="Texture2D" uid="uid://dud5k2m10kt5d" path="res://Synesyn_icons/synesyn-backgrounds/bg_scenario_card_orb.png" id="bg_orb_popup"]
+[ext_resource type="Texture2D" uid="uid://4bfmd57qglpj" path="res://Synesyn_icons/synesyn-button-icons/icon_hamburger_menu.svg" id="icon_ham_gs"]
+[ext_resource type="Texture2D" uid="uid://b3upe1x0nwkje" path="res://Synesyn_icons/synesyn-button-icons/icon_record_circle.svg" id="icon_record_gs"]
+[ext_resource type="Texture2D" uid="uid://32mqdoyl1y2k" path="res://Synesyn_icons/synesyn-button-icons/icon_send_paper_plane.svg" id="icon_send_gs"]
+[ext_resource type="Texture2D" uid="uid://vxtnvyujnma1" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="i_arrowleft"]
+[ext_resource type="Texture2D" uid="uid://cktgwbsicmy3" path="res://Synesyn_icons/synesyn-button-icons/icon_bookmark.svg" id="i_bookmark"]
+[ext_resource type="Texture2D" uid="uid://bhdwhgjhtngjl" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="i_closex"]
+[ext_resource type="Texture2D" uid="uid://cw6kigjo3xoap" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="i_exportdownload"]
+[ext_resource type="Texture2D" uid="uid://csyh6dxobf3wy" path="res://Synesyn_icons/synesyn-button-icons/icon_graph_scatter.svg" id="i_graphscatter"]
+[ext_resource type="Texture2D" uid="uid://bo6oa5xcetyar" path="res://Synesyn_icons/synesyn-button-icons/icon_grid_apps.svg" id="i_gridapps"]
+[ext_resource type="Texture2D" uid="uid://bld0eqg0n8nvu" path="res://Synesyn_icons/synesyn-button-icons/icon_info_circle.svg" id="i_infocircle"]
+[ext_resource type="Texture2D" uid="uid://fnb0wh5g671d" path="res://Synesyn_icons/synesyn-button-icons/icon_person_silhouette.svg" id="i_personsilhouet"]
+[ext_resource type="Texture2D" uid="uid://bsa643t3jm2bq" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="i_restartrefresh"]
+[ext_resource type="Texture2D" uid="uid://yevxmkuoakc" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="i_settingsgear"]
+[ext_resource type="Texture2D" uid="uid://jh1c45ljua0p" path="res://Synesyn_icons/synesyn-button-icons/icon_sparkle_ai.svg" id="i_sparkleai"]
+[ext_resource type="Texture2D" uid="uid://bf0pwskm0bof" path="res://Synesyn_icons/synesyn-button-icons/icon_stop_square.svg" id="i_stopsquare"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_w7bs8"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+color = Color(0.5, 0.5, 0.5, 1)
+thickness = 0
+
+[node name="Control" type="Control" unique_id=1761015760 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_gggqj")
+script = ExtResource("2_te2n8")
+metadata/theme_surface = "base"
+
+[node name="DevHarnessHooks" type="Node" parent="." unique_id=1437493779]
+script = ExtResource("11_dev_harness_hooks")
+hook_kind = "game_session"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1914688663]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.039, 0.055, 0.078, 1)
+
+[node name="ProgressBar" type="TextureProgressBar" parent="." unique_id=438113031]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -158.0
+offset_top = -47.0
+offset_right = -32.0
+offset_bottom = -14.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+nine_patch_stretch = true
+texture_under = ExtResource("3_ts7ec")
+texture_progress = ExtResource("4_du6eh")
+
+[node name="HamburgerMenuLayer" type="CanvasLayer" parent="." unique_id=1162333956]
+layer = 10
+
+[node name="HamburgerMenuBtn" type="Button" parent="HamburgerMenuLayer" unique_id=858119646 groups=["synesyn_themed"]]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -75.0
+offset_top = 15.0
+offset_right = -19.0
+offset_bottom = 71.0
+grow_horizontal = 0
+theme_type_variation = &"ButtonThemeToggle"
+icon = ExtResource("icon_ham_gs")
+metadata/theme_surface = "utility"
+
+[node name="HamburgerUIControls" type="Control" parent="HamburgerMenuLayer" unique_id=1787457134 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+metadata/theme_surface = "utility"
+
+[node name="HamburgerDismissCatcher" type="Control" parent="HamburgerMenuLayer/HamburgerUIControls"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("menu_dismiss_catcher")
+
+[node name="HamburgerSettingsPanel" type="PanelContainer" parent="HamburgerMenuLayer/HamburgerUIControls" unique_id=180266651]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 457.0
+offset_top = 75.0
+offset_right = 1007.0
+offset_bottom = 630.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel" unique_id=845838513]
+layout_mode = 2
+
+[node name="HamburgerSettingsScroll" type="ScrollContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer" unique_id=33749818]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HamburgerSettingsMargin" type="MarginContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll" unique_id=617792171]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="ViewSettingsTogglesVBox" type="VBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin" unique_id=1558345369]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ThemeToggleButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=-437675895]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Switch to Light Mode"
+icon = ExtResource("i_restartrefresh")
+
+[node name="SwitchToVisualModeBtn" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=1949256508]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Switch to Visual Mode"
+icon = ExtResource("i_gridapps")
+
+[node name="DualWindowToggle" type="CheckButton" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=951825363]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Dual Window Mode"
+
+[node name="SyntreeContextToggle" type="CheckButton" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=460087678]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Include SynTree content sources in ScenSyn prompts"
+
+[node name="SaveRecordingsToggle" type="CheckButton" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=1212100167]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Save STT recordings (requires consent)"
+
+[node name="VolumeRow" type="HBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=1904412211]
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox/VolumeRow" unique_id=1904412212]
+layout_mode = 2
+text = "Volume"
+
+[node name="OutputVolumeSlider" type="HSlider" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox/VolumeRow" unique_id=1904412213]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+value = 100.0
+
+[node name="HamburgerSettingsVBox" type="VBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=729334776]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="ModelStatusLabel" type="Label" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=488611027]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Current AI model and voice provider. Change model via the Menu menu."
+mouse_filter = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+
+[node name="NavigationSeparator" type="HSeparator" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=847896648]
+layout_mode = 2
+
+[node name="ReviewStoryLogButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=1630701409]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the current session's exported story log transcript for review."
+text = "Review Story Log"
+icon = ExtResource("i_bookmark")
+
+[node name="ExportSessionButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=500608220]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open the folder containing this session's story log files (JSON and HTML)."
+text = "Open Session Logs Folder"
+icon = ExtResource("i_exportdownload")
+
+[node name="ServicesButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=1568053888]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Hub, AI model, voice, and workspace. Do this once before a live session."
+text = "Settings"
+icon = ExtResource("i_settingsgear")
+
+[node name="BackButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/VBoxContainer/HamburgerSettingsScroll/HamburgerSettingsMargin/ViewSettingsTogglesVBox" unique_id=285074706]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Return to ScenSyn landing scene"
+text = "Back"
+icon = ExtResource("i_arrowleft")
+
+[node name="RightRow" type="HBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls" unique_id=197758070]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fill" type="Control" parent="HamburgerMenuLayer/HamburgerUIControls/RightRow" unique_id=406731269]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=457421536]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="Player Chat" type="VBoxContainer" parent="MarginContainer" unique_id=2081940656]
+visible = false
+layout_mode = 2
+script = ExtResource("5_lfnu6")
+
+[node name="ChatDisplay" type="RichTextLabel" parent="MarginContainer/Player Chat" unique_id=1810942483]
+layout_mode = 2
+
+[node name="ShowPlayersButton" type="Button" parent="MarginContainer/Player Chat" unique_id=1676752143]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show Players"
+icon = ExtResource("i_personsilhouet")
+
+[node name="PlayerInfoLabel" type="Label" parent="MarginContainer/Player Chat" unique_id=636740212]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Player Name and Role"
+
+[node name="PlayerChat_InputField" type="LineEdit" parent="MarginContainer/Player Chat" unique_id=1067200]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Input Field"
+
+[node name="SendPlayerChatButton" type="Button" parent="MarginContainer/Player Chat" unique_id=1131447766]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MainVBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1891119737]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="VBoxContainer_UpperLabels" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer" unique_id=1640863742]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels" unique_id=1188745912]
+layout_mode = 2
+theme_override_constants/separation = 15
+theme_override_styles/separator = SubResource("StyleBoxLine_w7bs8")
+
+[node name="HBoxContainer_UpperLabels" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels" unique_id=186884492]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="VSeparator4" type="VSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=1982991611]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ScenSynLogo" type="TextureRect" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=164872057]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("6_e86nf")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=821120773]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=1614975308]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SessionTypeLabel_1" type="Label" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/VBoxContainer2" unique_id=1174817106]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 18
+text = "Workshop Catalyst"
+
+[node name="SessionTypeLabel_2" type="Label" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/VBoxContainer2" unique_id=459459507]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Brainstorming + decision dashboard"
+
+[node name="VSeparator3" type="VSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=2607595]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=1282568558]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ScenarioTitleLabel" type="Label" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/VBoxContainer" unique_id=1050872747]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
+theme_type_variation = &"LabelHeader"
+clip_text = false
+text = "Scenario Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="CharacterLabel" type="Label" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/VBoxContainer" unique_id=1332971702]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"LabelSection"
+clip_text = false
+text = "Character Label"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=1706917213]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="UpperLabelsSpacer" type="Control" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=667696319]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScenarioObjectiveBtn" type="CheckButton" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=1786043148]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+text = "Scenario"
+icon = ExtResource("i_infocircle")
+
+[node name="ScenarioObjectivePopup" type="PopupPanel" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels" unique_id=774819621 groups=["synesyn_themed"]]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 2
+size = Vector2i(600, 450)
+metadata/theme_surface = "base"
+
+[node name="OrbBg" type="TextureRect" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup" unique_id=774819629]
+modulate = Color(1, 1, 1, 0.22)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 588.0
+offset_bottom = 438.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("bg_orb_popup")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup" unique_id=1530984258]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 588.0
+offset_bottom = 438.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup/MarginContainer" unique_id=2073940074]
+custom_minimum_size = Vector2(450, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup/MarginContainer/ScrollContainer" unique_id=1259034021]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ScenarioObjectiveLabel" type="RichTextLabel" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup/MarginContainer/ScrollContainer/VBoxContainer" unique_id=576610838]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(450, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+bbcode_enabled = true
+text = "Objective Label"
+fit_content = true
+
+[node name="CancelPopupButton" type="Button" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels/HBoxContainer_UpperLabels/ScenarioObjectivePopup/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1036136569]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "  x  "
+icon = ExtResource("i_closex")
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/MainVBoxContainer/VBoxContainer_UpperLabels" unique_id=1845445292]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="WorkshopWorkspaceShell" parent="MarginContainer/MainVBoxContainer" unique_id=1559634756 instance=ExtResource("12_workshop_workspace")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/MainVBoxContainer" unique_id=2092097006]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="StoryLog" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer" unique_id=530582894]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Story LogContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog" unique_id=1218306750]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StoryLogSystem" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/Story LogContainer" unique_id=1607215872 instance=ExtResource("1_4ysk6")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/Story LogContainer" unique_id=1958844900]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="InputField" type="LineEdit" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/Story LogContainer" unique_id=1861995987]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Input Field"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/Story LogContainer" unique_id=1472877807]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog" unique_id=1898698484]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="SidePanelContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer" unique_id=2015106962]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StoryProgressLabel" type="Label" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer" unique_id=1994331367]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Story Progress: Setup (0%)"
+horizontal_alignment = 1
+
+[node name="StoryProgressBar" type="ProgressBar" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer" unique_id=1857610872]
+unique_name_in_owner = true
+layout_mode = 2
+show_percentage = false
+
+[node name="ShowSustainabilityMeterBtn" type="CheckButton" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer" unique_id=1702198654]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Sustainability Meter"
+icon = ExtResource("i_graphscatter")
+
+[node name="SustainabilityMeterContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer" unique_id=963384220]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SustainabilityMeter" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer/SustainabilityMeterContainer" unique_id=15325735 instance=ExtResource("7_jqy7r")]
+unique_name_in_owner = true
+layout_mode = 2
+layout_direction = 2
+
+[node name="FeedbackContainer" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer" unique_id=1196396406]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.62
+
+[node name="ShowFeedbackBtn" type="CheckButton" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer/FeedbackContainer" unique_id=571830534]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+text = "Influence Sliders"
+icon = ExtResource("i_sparkleai")
+
+[node name="FeedbackUI" parent="MarginContainer/MainVBoxContainer/TabContainer/StoryLog/MarginContainer/SidePanelContainer/FeedbackContainer" unique_id=1244580642 instance=ExtResource("8_e86nf")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="About" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer" unique_id=1804720148]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/About" unique_id=1468767838]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/About/ScrollContainer" unique_id=215500933]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="AboutTabLabel" type="RichTextLabel" parent="MarginContainer/MainVBoxContainer/TabContainer/About/ScrollContainer/MarginContainer" unique_id=1768992629]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[i]Loading scenario information...[/i]"
+fit_content = true
+
+[node name="How To" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer" unique_id=2095099755]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/How To" unique_id=2034187778]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/How To/ScrollContainer" unique_id=1718597528]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HowToTabLabel" type="RichTextLabel" parent="MarginContainer/MainVBoxContainer/TabContainer/How To/ScrollContainer/MarginContainer" unique_id=14935914]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[i]Loading how-to guidance...[/i]"
+fit_content = true
+
+[node name="Session Record" type="VBoxContainer" parent="MarginContainer/MainVBoxContainer/TabContainer" unique_id=-1193957195]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/Session Record" unique_id=-1193957194]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MainVBoxContainer/TabContainer/Session Record/ScrollContainer" unique_id=-1193957193]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="WorkshopSessionRecordPanel" parent="MarginContainer/MainVBoxContainer/TabContainer/Session Record/ScrollContainer/MarginContainer" unique_id=1196354577 instance=ExtResource("13_workshop_record")]
+layout_mode = 2
+
+[node name="ChatLogScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVBoxContainer" unique_id=1799813845]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChatLog" type="RichTextLabel" parent="MarginContainer/MainVBoxContainer/ChatLogScrollContainer" unique_id=658941618]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+bbcode_enabled = true
+selection_enabled = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer" unique_id=2124623085]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainVBoxContainer" unique_id=628319890]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer" unique_id=1601592562]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 100
+
+[node name="VoiceInputHBoxContainer" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer/HBoxContainer" unique_id=942833625]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RecordButton" type="Button" parent="MarginContainer/MainVBoxContainer/HBoxContainer/VoiceInputHBoxContainer" unique_id=1359983299]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+toggle_mode = true
+tooltip_text = "Hold or toggle to speak. Your words appear in the box for review, then Send."
+text = "Record"
+icon = ExtResource("icon_record_gs")
+
+[node name="AutoSendVoice" type="CheckButton" parent="MarginContainer/MainVBoxContainer/HBoxContainer/VoiceInputHBoxContainer" unique_id=2088426208]
+unique_name_in_owner = true
+layout_mode = 2
+text = "AutoSendVoice"
+
+[node name="AutoPlayerInput" type="CheckButton" parent="MarginContainer/MainVBoxContainer/HBoxContainer/VoiceInputHBoxContainer" unique_id=821757480]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Use live board input to auto-generate the player's line. Disable to type manually."
+text = "Auto Player Input"
+
+[node name="InputHBoxContainer" type="HBoxContainer" parent="MarginContainer/MainVBoxContainer/HBoxContainer" unique_id=1043191022]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="SendButton" type="Button" parent="MarginContainer/MainVBoxContainer/HBoxContainer/InputHBoxContainer" unique_id=11205683]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Send"
+icon = ExtResource("icon_send_gs")
+
+[node name="PhaseDisplayLabel" type="Label" parent="MarginContainer/MainVBoxContainer/HBoxContainer/InputHBoxContainer" unique_id=276051505]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Phase: Setup (0 turns)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollIndicator" type="TextureButton" parent="MarginContainer/MainVBoxContainer/HBoxContainer/InputHBoxContainer" unique_id=1431966351]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+texture_normal = ExtResource("4_8aym0")
+
+[node name="EndSessionButton" type="Button" parent="MarginContainer/MainVBoxContainer/HBoxContainer/InputHBoxContainer" unique_id=1973328405]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "End Session"
+icon = ExtResource("i_stopsquare")
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/MainVBoxContainer" unique_id=659823535]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GameSession" type="Node2D" parent="." unique_id=532487438]
+unique_name_in_owner = true
+
+[node name="DebugTester" type="Node" parent="." unique_id=1423956768]
+script = ExtResource("8_ucl14")
+
+[node name="ServicesPanel" parent="." unique_id=454790670 instance=ExtResource("10_services_panel")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Network" type="Node" parent="." unique_id=1797713505]
+unique_name_in_owner = true
+script = ExtResource("9_amnxh")

@@ -1,0 +1,18 @@
+{
+	"nodes": {
+		"basic 1": {
+			"content": "",
+			"is_metaprompt": true,
+			"is_root": true,
+			"metadata": {
+				"file_type": "gd"
+			},
+			"name": "basic 1",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/basic_usage.gd",
+			"type": "text"
+		}
+	},
+	"root_nodes": [
+		"basic 1"
+	]
+}

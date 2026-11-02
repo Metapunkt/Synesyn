@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwxkm3yjbk2yf"]
+
+[ext_resource type="Script" path="res://addons/syntree_voice/scripts/avatars/character_avatar.gd" id="1_0m7yj"]
+
+[node name="CharacterAvatar" type="Node3D"]
+script = ExtResource("1_0m7yj")
+character_name = "Test Character"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0) 

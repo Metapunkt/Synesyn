@@ -1,0 +1,139 @@
+{
+  "_note": "Produces the Workshop Catalyst images used by the root README and the docs site, so a screenshot can be regenerated rather than re-staged by hand. It is a real session: three facilitator turns against the Karlsruhe scenario, which is what fills the Thinking Map and the Review workspace. That costs model calls, so it is not part of any automated suite - run it deliberately when the UI has changed enough that the published images misrepresent it. The window is larger than the project default because the harness screenshots the viewport, and the default crops panel text. Two preconditions are the operator's, not the spec's: a model provider must be configured, and the workspace preset and rail collapse state come from synesyn_client.json, so an unexpected saved layout changes what the image shows - capture with the left rail expanded and the right one collapsed, since both open squeezes the map columns until their text truncates. The assertions are the multi-turn spec's, kept so a run that failed to produce content fails loudly instead of quietly yielding empty panels.",
+  "harness_timeout_sec": 560,
+  "harness_window_size": "1600x1120",
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "karlsruhe_library_future_design",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "type": "call_node_method",
+      "node_path": "%WorkshopWorkspaceShell/SessionHeader/HeaderRows/TopBar/WorkspaceToolbar/FullDashboardPresetButton",
+      "method": "emit_signal",
+      "args": [
+        "pressed"
+      ]
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "We are beginning the Karlsruhe Library of the Future design workshop. Let's start by agreeing on what a library of the future means for this session. What is the working definition we should use?",
+        "seconds": 120
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "Good. Given that definition, what is the single biggest gap in the existing Oststadt knowledge infrastructure that we need to address today?",
+        "seconds": 120
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "Can we try to name one concrete decision we could make in this room today that would close that gap, even partially?",
+        "seconds": 120
+      }
+    },
+    {
+      "type": "wait_frames",
+      "frames": 120
+    },
+    {
+      "type": "capture_screenshot",
+      "name": "workshop-catalyst-session"
+    },
+    {
+      "type": "call_node_method",
+      "node_path": "%WorkshopWorkspaceShell/SessionHeader/HeaderRows/TopBar/WorkspaceToolbar/MapPresetButton",
+      "method": "emit_signal",
+      "args": [
+        "pressed"
+      ]
+    },
+    {
+      "type": "wait_frames",
+      "frames": 120
+    },
+    {
+      "type": "capture_screenshot",
+      "name": "thinking-map"
+    },
+    {
+      "type": "call_node_method",
+      "node_path": "%WorkshopWorkspaceShell/DashboardBody/MainRegionSplit/CenterWorkspace/CenterVerticalSplit/CenterSecondaryPane/ThinkingMapPanel/ThinkingMapBox/WorkshopThinkingMap/MapToolbar/GraphViewButton",
+      "method": "emit_signal",
+      "args": [
+        "pressed"
+      ]
+    },
+    {
+      "type": "wait_frames",
+      "frames": 120
+    },
+    {
+      "type": "capture_screenshot",
+      "name": "thinking-map-graph"
+    },
+    {
+      "type": "call_node_method",
+      "node_path": "%WorkshopWorkspaceShell/SessionHeader/HeaderRows/TopBar/WorkspaceToolbar/ReviewPresetButton",
+      "method": "emit_signal",
+      "args": [
+        "pressed"
+      ]
+    },
+    {
+      "type": "wait_frames",
+      "frames": 120
+    },
+    {
+      "type": "capture_screenshot",
+      "name": "session-record"
+    }
+  ],
+  "wait_frames_after_post": 0,
+  "wait_time_sec_after_post": 0,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "name": "welcome-plus-three-facilitator-turns-at-minimum",
+      "type": "min_story_log",
+      "value": 4
+    },
+    {
+      "type": "scenario_contains",
+      "value": "karlsruhe"
+    },
+    {
+      "name": "all-three-turns-were-facilitator",
+      "type": "exact_sender_occurrences",
+      "sender": "Facilitator",
+      "value": 3
+    },
+    {
+      "name": "map-accumulated-across-turns",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.node_count",
+      "min": 3
+    },
+    {
+      "name": "typed-relations-accumulated",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.edge_count",
+      "min": 1
+    },
+    {
+      "type": "no_errors"
+    }
+  ]
+}

@@ -1,0 +1,1159 @@
+[gd_scene format=3 uid="uid://bnc44j4p830ca"]
+
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_0n00f"]
+[ext_resource type="Script" uid="uid://ctfdrt18b517p" path="res://addons/synaxes/scripts/visualization/pattern_viewer.gd" id="1_ruhwa"]
+[ext_resource type="Script" uid="uid://bjdpyqwl7rwux" path="res://addons/synaxes/scripts/runtime/synaxes_runtime_controller.gd" id="2_runtime"]
+[ext_resource type="Texture2D" uid="uid://d0tjnpyofb4eh" path="res://addons/synaxes/icons/synaxes_logo_mini.svg" id="3_7akoo"]
+[ext_resource type="Texture2D" uid="uid://37pusj3h7gcf" path="res://Synesyn_icons/synesyn-backgrounds/bg_synaxes_canvas.png" id="bg_synaxes_canvas"]
+[ext_resource type="Texture2D" uid="uid://cktgwbsicmy3" path="res://Synesyn_icons/synesyn-button-icons/icon_bookmark.svg" id="icon_bookmark"]
+[ext_resource type="Texture2D" uid="uid://wv8dychj6ynm" path="res://Synesyn_icons/synesyn-button-icons/icon_check_tick.svg" id="icon_check"]
+[ext_resource type="Texture2D" uid="uid://bhdwhgjhtngjl" path="res://Synesyn_icons/synesyn-button-icons/icon_close_x.svg" id="icon_clear"]
+[ext_resource type="Texture2D" uid="uid://jh1c45ljua0p" path="res://Synesyn_icons/synesyn-button-icons/icon_sparkle_ai.svg" id="icon_discover"]
+[ext_resource type="Texture2D" uid="uid://d3juab631j3jq" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_down.svg" id="icon_down"]
+[ext_resource type="Texture2D" uid="uid://3dsnqwk12y5k" path="res://Synesyn_icons/synesyn-button-icons/icon_focus_crosshair.svg" id="icon_focus"]
+[ext_resource type="Texture2D" uid="uid://csyh6dxobf3wy" path="res://Synesyn_icons/synesyn-button-icons/icon_graph_scatter.svg" id="icon_graph"]
+[ext_resource type="Texture2D" uid="uid://3blqk5ymwx0x" path="res://Synesyn_icons/synesyn-button-icons/icon_upload_arrow.svg" id="icon_import"]
+[ext_resource type="Texture2D" uid="uid://vxtnvyujnma1" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="icon_left"]
+[ext_resource type="Texture2D" uid="uid://bo6oa5xcetyar" path="res://Synesyn_icons/synesyn-button-icons/icon_grid_apps.svg" id="icon_panel"]
+[ext_resource type="Texture2D" uid="uid://bsa643t3jm2bq" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="icon_refresh"]
+[ext_resource type="Texture2D" uid="uid://bymkn153i0ppu" path="res://Synesyn_icons/synesyn-button-icons/icon_reset_view_frame.svg" id="icon_reset"]
+[ext_resource type="Texture2D" uid="uid://bnl5x0at6lx3n" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_right.svg" id="icon_right"]
+[ext_resource type="Texture2D" uid="uid://b7k7svki8n2qe" path="res://Synesyn_icons/synesyn-button-icons/icon_chevron_up.svg" id="icon_up"]
+[ext_resource type="Texture2D" uid="uid://bi5bdfhslf7vj" path="res://Synesyn_icons/synesyn-button-icons/icon_zoom_in.svg" id="icon_zoom_in"]
+[ext_resource type="Texture2D" uid="uid://bgn6u2xuyga3h" path="res://Synesyn_icons/synesyn-button-icons/icon_zoom_out.svg" id="icon_zoom_out"]
+[ext_resource type="Texture2D" uid="uid://wi055ilmfikf" path="res://Synesyn_icons/synesyn-button-icons/icon_plus.svg" id="i_plus"]
+
+[node name="SynaxesMain" type="Control" unique_id=1995221307 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_0n00f")
+script = ExtResource("2_runtime")
+metadata/theme_surface = "utility"
+
+[node name="Background" type="ColorRect" parent="." unique_id=156676250]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="CanvasBg" type="TextureRect" parent="." unique_id=156676251]
+visible = false
+modulate = Color(1, 1, 1, 0.18)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("bg_synaxes_canvas")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MainContainer" type="MarginContainer" parent="." unique_id=1001695518]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="OuterVBox" type="VBoxContainer" parent="MainContainer" unique_id=1579052246]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ToolbarRow" type="HBoxContainer" parent="MainContainer/OuterVBox" unique_id=1657655373]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="ToggleLeftPanel" type="Button" parent="MainContainer/OuterVBox/ToolbarRow" unique_id=768925520]
+layout_mode = 2
+tooltip_text = "Show or hide the left controls panel."
+theme_type_variation = &"ButtonThemeToggle"
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+button_pressed = true
+text = "Controls"
+icon = ExtResource("icon_panel")
+
+[node name="TogglePatternViewer" type="Button" parent="MainContainer/OuterVBox/ToolbarRow" unique_id=2083850264]
+layout_mode = 2
+tooltip_text = "Show or hide the 3D pattern viewer."
+theme_type_variation = &"ButtonThemeToggle"
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+button_pressed = true
+text = "Pattern Space"
+icon = ExtResource("icon_graph")
+
+[node name="ToggleBottomPanel" type="Button" parent="MainContainer/OuterVBox/ToolbarRow" unique_id=272814209]
+layout_mode = 2
+tooltip_text = "Show or hide the bottom panel (Pattern Overview, Imported Data, Closures tabs)."
+theme_type_variation = &"ButtonThemeToggle"
+theme_override_font_sizes/font_size = 12
+toggle_mode = true
+button_pressed = true
+text = "Details / Closures"
+icon = ExtResource("icon_panel")
+
+[node name="ToolbarSpacer" type="Control" parent="MainContainer/OuterVBox/ToolbarRow" unique_id=1985090450]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="MarginContainer" parent="MainContainer/OuterVBox" unique_id=1645121227]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MainContainer/OuterVBox/ScrollContainer" unique_id=1600869125]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(380)
+split_offset = 380
+
+[node name="TopSection" type="HSplitContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer" unique_id=1956939014]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(200)
+split_offset = 200
+
+[node name="LeftPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection" unique_id=662380877]
+clip_contents = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel" unique_id=100081728]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer" unique_id=640304749]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer2" unique_id=1858070044]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+texture = ExtResource("3_7akoo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer" unique_id=1972483944]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer" unique_id=1925201931]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer" unique_id=1956334419]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1242178468]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Sources"
+horizontal_alignment = 1
+
+[node name="SourceHint" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1530375693]
+layout_mode = 2
+theme_type_variation = &"LabelMeta"
+text = "Walk your material as a space and leave with a few closures you can stand behind. Import a demo source or a Hub context graph to begin."
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1499890939]
+layout_mode = 2
+
+[node name="SourceList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1153277932]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Choose where to load data from. Hub sources pull live data from the Hub Substrate. Test sources generate sample data for exploration."
+allow_reselect = true
+auto_height = true
+item_count = 3
+item_0/text = "Demo: Text Samples"
+item_1/text = "Demo: Semantic Samples"
+item_2/text = "Demo: Image Samples"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=294240105]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="RefreshButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1733771966]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Refresh available sources (checks Hub for new context graphs, embeddings, and ScenSyn sessions)."
+text = "Refresh"
+icon = ExtResource("icon_refresh")
+
+[node name="ImportButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/HBoxContainer" unique_id=1311021173]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Load data from the selected source. After import, click Discover Patterns to run analysis."
+text = "Import"
+icon = ExtResource("icon_import")
+
+[node name="ImportLatestContextGraphButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1311021174]
+visible = false
+layout_mode = 2
+tooltip_text = "Import the latest published Hub context graph. If several exist, a picker opens."
+text = "Import latest Hub context graph"
+icon = ExtResource("icon_import")
+
+[node name="HSeparator2" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2062224118]
+layout_mode = 2
+
+[node name="DiscoverSectionLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=500305533]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Discover"
+horizontal_alignment = 1
+
+[node name="ClustersLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=582310746]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Number of themes:"
+
+[node name="ClustersSlider" type="HSlider" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2072354322]
+layout_mode = 2
+tooltip_text = "Target number of groups to find. Lower values create broader themes; higher values find finer distinctions."
+min_value = 2.0
+max_value = 15.0
+value = 5.0
+
+[node name="ClustersValue" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1212442685]
+layout_mode = 2
+text = "5"
+horizontal_alignment = 1
+
+[node name="ThemesStatusLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1212442686]
+layout_mode = 2
+tooltip_text = "Local themes use built-in TF-IDF. Model themes send item text to the active SynTree embedding provider after disclosed opt-in."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 11
+text = "Themes: Local themes"
+horizontal_alignment = 1
+
+[node name="UseModelThemesButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1212442687]
+visible = false
+layout_mode = 2
+tooltip_text = "Disclosed opt-in: item text is sent to the named provider for embeddings. Remembered per provider. Default stays Local themes."
+text = "Use model themes — sends item text to provider"
+
+[node name="HSeparator4" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=942440387]
+layout_mode = 2
+
+[node name="DiscoverButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1206105228]
+layout_mode = 2
+tooltip_text = "Run pattern discovery on the imported data using the selected method and settings. Results appear in the 3D Pattern Space viewer and the Pattern Overview tab."
+text = "Discover Patterns"
+icon = ExtResource("icon_discover")
+
+[node name="ReloadLastAnalysisButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1206105229]
+layout_mode = 2
+tooltip_text = "Restore Pattern Space from the latest Hub analysis run (projection + clusters) without re-importing or re-running Discover."
+text = "Reload last analysis"
+icon = ExtResource("icon_discover")
+
+[node name="ClearButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1456113545]
+layout_mode = 2
+tooltip_text = "Remove all patterns from the viewer. Data stays imported - you can re-discover with different settings."
+text = "Clear Patterns"
+icon = ExtResource("icon_clear")
+
+[node name="AdvancedToggle" type="CheckButton" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1632074124]
+layout_mode = 2
+tooltip_text = "Show discovery method, dimensionality reduction, Hub jobs, and embedding controls."
+button_pressed = false
+text = "Advanced"
+
+[node name="AdvancedPanel" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1632074125]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DiscoveryMethodLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=1567956313]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Discovery Method:"
+
+[node name="DiscoveryMethod" type="OptionButton" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=1867980076]
+layout_mode = 2
+tooltip_text = "How patterns are found: Clustering groups similar items. Bridge Analysis finds connectors between clusters. Hub Identification finds central items. Custom Method is experimental."
+selected = 0
+item_count = 4
+popup/item_0/text = "Clustering"
+popup/item_0/id = 0
+popup/item_1/text = "Bridge Analysis"
+popup/item_1/id = 1
+popup/item_2/text = "Hub Identification"
+popup/item_2/id = 2
+popup/item_3/text = "Custom Method"
+popup/item_3/id = 3
+
+[node name="DimensionalityLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=1936911036]
+layout_mode = 2
+theme_type_variation = &"LabelField"
+text = "Dimensionality Reduction:"
+
+[node name="DimReductionMethod" type="OptionButton" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=2125049383]
+layout_mode = 2
+tooltip_text = "How vectors are projected to 3D: PCA is fast and linear. t-SNE preserves local clusters (slower). UMAP balances local and global structure."
+selected = 0
+item_count = 3
+popup/item_0/text = "PCA"
+popup/item_0/id = 0
+popup/item_1/text = "t-SNE"
+popup/item_1/id = 1
+popup/item_2/text = "UMAP"
+popup/item_2/id = 2
+
+[node name="UseHubJobs" type="CheckBox" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=329796240]
+layout_mode = 2
+tooltip_text = "When checked, pattern discovery runs on the Hub Substrate server instead of locally. Requires a running Hub. The selected dim-reduction method is sent to the server."
+text = "Use Hub Jobs (server-side)"
+
+[node name="UseHubEmbeddings" type="CheckBox" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=266768096]
+layout_mode = 2
+tooltip_text = "Prefer Model themes when an embed-capable SynTree model is active and you have consented for that provider. Never sends item text without disclosed opt-in. Default remains Local themes."
+text = "Prefer Model themes (when consented)"
+
+[node name="HSeparator_EmbedInfo" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=2117376446]
+layout_mode = 2
+
+[node name="EmbeddingTierLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=1779541012]
+layout_mode = 2
+tooltip_text = "Local themes = built-in TF-IDF. Model themes = SynTree provider embeddings after disclosed opt-in."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 11
+text = "Themes: Local themes"
+
+[node name="CacheStatsLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/LeftPanel/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/AdvancedPanel" unique_id=1265428670]
+layout_mode = 2
+tooltip_text = "Number of embedding vectors cached locally. Cached embeddings avoid repeated API calls for the same content."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 11
+text = "Cache: 0 entries"
+
+[node name="PatternViewerContainer" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection" unique_id=163318318]
+clip_contents = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer" unique_id=418272688]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PatternScroll" type="ScrollContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer" unique_id=1786325774]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll" unique_id=709474935]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=297763942]
+layout_mode = 2
+tooltip_text = "3D visualisation of discovered patterns. Each sphere represents a pattern; colour encodes cluster membership. Drag to rotate, scroll to zoom."
+mouse_filter = 0
+theme_type_variation = &"LabelSection"
+text = "Pattern Space"
+horizontal_alignment = 1
+
+[node name="StepSpineLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=1397275057]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "[Import] → Explore → Choose → Name → Commit"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PersistentStatusLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=1397275058]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Walk your material as a space and leave with a few closures you can stand behind. Import a demo source or a Hub context graph to begin."
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=1840771817]
+layout_mode = 2
+
+[node name="ViewerArea" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=451610063]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea" unique_id=149533819]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 13
+stretch = true
+
+[node name="PatternViewport" type="SubViewport" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer" unique_id=1672353929]
+handle_input_locally = false
+physics_object_picking = true
+physics_object_picking_sort = true
+gui_snap_controls_to_pixels = false
+size = Vector2i(493, 299)
+render_target_update_mode = 4
+
+[node name="PatternViewer" type="Node3D" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer/PatternViewport" unique_id=370686031]
+script = ExtResource("1_ruhwa")
+
+[node name="Camera3D" type="Camera3D" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer/PatternViewport/PatternViewer" unique_id=1928300106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="PatternGraph" type="Node3D" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer/PatternViewport/PatternViewer" unique_id=304253223]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer/PatternViewport/PatternViewer" unique_id=1952985916]
+transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 5, 0)
+shadow_enabled = true
+
+[node name="DebugInfo" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ViewerArea/SubViewportContainer/PatternViewport/PatternViewer" unique_id=1664016029]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Patterns: 0
+Selected: 0
+FPS: 60"
+
+[node name="ControlsPanel" type="PanelContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer" unique_id=1852174567]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel" unique_id=275241856]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer" unique_id=2042935677]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="ActionButtons" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer" unique_id=945965142]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 10
+
+[node name="ResetViewButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/ActionButtons" unique_id=1594009407]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Reset View"
+icon = ExtResource("icon_reset")
+
+[node name="FocusSelectionButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/ActionButtons" unique_id=1959795325]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Focus Selection"
+icon = ExtResource("icon_focus")
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer" unique_id=909900494]
+layout_mode = 2
+
+[node name="Controls" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer" unique_id=2094309540]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="RotateLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=1657201362]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Rotate:"
+
+[node name="RotateLeft" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=1946943434]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "<"
+icon = ExtResource("icon_left")
+
+[node name="RotateUp" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=1237396438]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "^"
+icon = ExtResource("icon_up")
+
+[node name="RotateDown" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=930406816]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "v"
+icon = ExtResource("icon_down")
+
+[node name="RotateRight" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=1955046663]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = ">"
+icon = ExtResource("icon_right")
+
+[node name="VSeparator" type="VSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=1614204088]
+layout_mode = 2
+
+[node name="ZoomLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=352969950]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Zoom:"
+
+[node name="ZoomIn" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=660716472]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "+"
+icon = ExtResource("icon_zoom_in")
+
+[node name="ZoomOut" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer/Controls" unique_id=677726807]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "-"
+icon = ExtResource("icon_zoom_out")
+
+[node name="ShortcutsInfo" type="RichTextLabel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/TopSection/PatternViewerContainer/MarginContainer/PatternScroll/VBoxContainer/ControlsPanel/MarginContainer/VBoxContainer" unique_id=1450374726]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 9
+bbcode_enabled = true
+text = "[center]WASD: Rotate - QE: Zoom - Arrows: Pan - Space: Reset - F: Focus[/center]"
+fit_content = true
+scroll_active = false
+
+[node name="BottomPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer" unique_id=1077449862]
+clip_contents = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel" unique_id=472601613]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer" unique_id=631578487]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer" unique_id=1463283003]
+layout_mode = 2
+theme_type_variation = &"LabelSection"
+text = "Pattern Details & Filtering"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer" unique_id=612078362]
+layout_mode = 2
+
+[node name="BottomTabs" type="TabContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer" unique_id=1197290571]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"ToolTabContainer"
+current_tab = 2
+
+[node name="Pattern Overview" type="Control" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs" unique_id=1889094497]
+visible = false
+clip_contents = true
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="OverviewPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview" unique_id=1327003643]
+clip_contents = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel" unique_id=1864990384]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel/MarginContainer" unique_id=2049176968]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel/MarginContainer/VBoxContainer" unique_id=1508450071]
+layout_mode = 2
+tooltip_text = "A flat summary of all discovered patterns. Click a row to select that pattern in the 3D viewer and pre-load it in the Closure Editor."
+mouse_filter = 0
+text = "Pattern Overview"
+horizontal_alignment = 1
+
+[node name="OverviewSummary" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel/MarginContainer/VBoxContainer" unique_id=492326678]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Run Discover Patterns to see results here."
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel/MarginContainer/VBoxContainer" unique_id=466125679]
+layout_mode = 2
+
+[node name="PatternOverviewList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Pattern Overview/OverviewPanel/MarginContainer/VBoxContainer" unique_id=546252523]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "All discovered patterns. Each row shows type, item count, confidence, and a content preview. Click a row to highlight it in Pattern Space and load it into the Closure Editor."
+allow_reselect = true
+
+[node name="Imported Data" type="Control" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs" unique_id=1059216053]
+visible = false
+clip_contents = true
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="FilterPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data" unique_id=634002200]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel" unique_id=2018518450]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer" unique_id=1726442244]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=1496620749]
+layout_mode = 2
+text = "Imported Data Preview"
+horizontal_alignment = 1
+
+[node name="ImportedDataHint" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=376865055]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Review what was imported. Deselect items you want to exclude, then click Discover Patterns. Only selected items will be analysed."
+autowrap_mode = 3
+
+[node name="ImportedDataSummary" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=946833864]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "No data imported yet."
+
+[node name="HSeparator" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=2117953821]
+layout_mode = 2
+
+[node name="SelectButtons" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=370598624]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SelectAllButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer/SelectButtons" unique_id=428608041]
+layout_mode = 2
+tooltip_text = "Select all imported items for pattern discovery."
+text = "Select All"
+icon = ExtResource("icon_check")
+
+[node name="DeselectAllButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer/SelectButtons" unique_id=1019444254]
+layout_mode = 2
+tooltip_text = "Deselect all items. You can then manually pick which ones to include."
+text = "Deselect All"
+icon = ExtResource("icon_clear")
+
+[node name="ImportedDataList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Imported Data/FilterPanel/MarginContainer/VBoxContainer" unique_id=1806920127]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "All items loaded from the selected source. Each item shows its content. Selected items (highlighted) will be included in pattern discovery."
+select_mode = 1
+allow_reselect = true
+
+[node name="Closures" type="Control" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs" unique_id=194975815]
+clip_contents = true
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ClosuresMarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures" unique_id=409361986]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PopupVBox" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer" unique_id=1731495853]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Header" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox" unique_id=1918748706]
+clip_contents = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Title" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/Header" unique_id=1454715296]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The Dream Inbox shows candidate patterns from the latest discovery run. Review each candidate and Accept, Defer, or Reject it. Accepted patterns can be committed as Closures - named, intentional groupings persisted to the Hub."
+mouse_filter = 0
+text = "Dream Inbox & Closures"
+vertical_alignment = 1
+
+[node name="ClosuresScroll" type="ScrollContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox" unique_id=322890755]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ClosuresRow" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll" unique_id=1706355390]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow" unique_id=679774874]
+custom_minimum_size = Vector2(760, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DreamInboxPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer" unique_id=1538098427]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.45
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel" unique_id=143213645]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer" unique_id=59349152]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer" unique_id=1566932736]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1659721223]
+layout_mode = 2
+text = "Dream Inbox (pattern proposals)"
+horizontal_alignment = 1
+
+[node name="DreamInboxHint" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1701507064]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Each item below is a pattern the engine found in your data. Confidence tells you how distinct and cohesive the group is. Select one, then Work on this to open the Closure Editor — or Defer / Reject."
+autowrap_mode = 3
+
+[node name="DreamInboxList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=880480256]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Pattern candidates from the latest discovery run, ranked by confidence. Select one to review it."
+allow_reselect = true
+
+[node name="DreamInboxButtons" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1909311576]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="WorkOnThisButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer/DreamInboxButtons" unique_id=985456044]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Open this pattern candidate in the Closure Editor so you can name it, set Orientation, and commit."
+text = "Work on this"
+icon = ExtResource("icon_check")
+
+[node name="DeferCandidateButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer/DreamInboxButtons" unique_id=985456045]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Set this candidate aside for later review. It stays in the inbox but is marked as deferred."
+text = "Defer"
+icon = ExtResource("icon_bookmark")
+
+[node name="RejectCandidateButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer/DreamInboxButtons" unique_id=1505466607]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Dismiss this candidate - it is not a meaningful pattern. Removes it from the inbox."
+text = "Reject"
+icon = ExtResource("icon_clear")
+
+[node name="HSeparator_SavedClosures" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1147391097]
+layout_mode = 2
+
+[node name="SavedClosuresLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1214330130]
+layout_mode = 2
+tooltip_text = "Closures you have previously committed to the Hub. A Closure is a named, confirmed interpretation of a pattern - your human judgment recorded as a permanent artifact."
+mouse_filter = 0
+text = "Saved Closures"
+horizontal_alignment = 1
+
+[node name="LoadSavedClosuresButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1727875778]
+layout_mode = 2
+tooltip_text = "Fetch previously committed Closures from the Hub (the local Synesyn server) and list them below. The Hub stores all your confirmed interpretations as permanent records."
+text = "Reload Saved Closures"
+icon = ExtResource("icon_refresh")
+
+[node name="CoverageLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1847203391]
+layout_mode = 2
+tooltip_text = "Closure Map coverage. Legend is filled in from the shared vocabulary when Saved Closures load."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 10
+text = "Coverage — reload Saved Closures to see A–D legend"
+autowrap_mode = 3
+
+[node name="SavedClosuresList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/DreamInboxPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2041058960]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Closures you have previously committed to the Hub. These are persisted, named groupings of patterns."
+allow_reselect = true
+
+[node name="ClosureEditorPanel" type="Panel" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer" unique_id=1158787915]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.55
+
+[node name="MarginContainer" type="MarginContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel" unique_id=299661857]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer" unique_id=1406789653]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer" unique_id=1255121454]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1508530398]
+layout_mode = 2
+tooltip_text = "A Closure is your confirmed interpretation of a pattern group. Give it a name, describe why it matters (your intent), and Commit to save it permanently to the Hub - with full provenance (who committed it, when, and from which patterns)."
+mouse_filter = 0
+text = "Closure Editor"
+horizontal_alignment = 1
+
+[node name="ClosureEditorHint" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=923409804]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "A Closure is your human-confirmed interpretation of a pattern. Name it, describe your intent (why this grouping matters), and Commit to save it to the Hub as a permanent record with full provenance."
+autowrap_mode = 3
+
+[node name="Grid" type="GridContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=287663129]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="NameLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1099594091]
+layout_mode = 2
+text = "Name"
+
+[node name="ClosureNameEdit" type="LineEdit" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1257038060]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "A short, descriptive name for this closure."
+placeholder_text = "e.g. Cultural narratives cluster"
+
+[node name="IntentLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1204033198]
+layout_mode = 2
+text = "Intent"
+
+[node name="ClosureIntentEdit" type="LineEdit" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1529459706]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Explain the purpose or meaning of this grouping. Recorded as provenance metadata in the Hub."
+placeholder_text = "Why this closure matters / what it's for"
+
+[node name="OrientationLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1623408811]
+layout_mode = 2
+tooltip_text = "Optional Closure Map orientation. Hover the dropdown, or any row in it, for what each quadrant means. Leave Untagged if unsure — commit still works."
+mouse_filter = 0
+text = "Orientation"
+
+[node name="OrientationOption" type="OptionButton" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1623408812]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Closure Map orientation (human judgment). Rows and help text are populated from the shared vocabulary at mount; nothing about the map is authored in this scene."
+selected = 0
+item_count = 0
+
+[node name="TimeStartLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=1177294927]
+layout_mode = 2
+tooltip_text = "Optional: if this closure only applies to events within a specific date range, set the start date here. Leave blank to include all events."
+mouse_filter = 0
+text = "From (optional)"
+
+[node name="TimeStartEdit" type="LineEdit" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=707561045]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional: if this closure only applies to events within a specific date range, set the start date here. Format: YYYY-MM-DD (e.g. 2025-12-20). Leave blank to include all events."
+placeholder_text = "YYYY-MM-DD (optional, see tooltip)"
+
+[node name="TimeEndLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=2131889476]
+layout_mode = 2
+tooltip_text = "Optional: if this closure only applies to events within a specific date range, set the end date here. Leave blank to include all events."
+mouse_filter = 0
+text = "Until (optional)"
+
+[node name="TimeEndEdit" type="LineEdit" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/Grid" unique_id=249631959]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Optional: if this closure only applies to events within a specific date range, set the end date here. Format: YYYY-MM-DD (e.g. 2026-01-15). Leave blank to include all events."
+placeholder_text = "YYYY-MM-DD (optional, see tooltip)"
+
+[node name="SelectedLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=985302705]
+layout_mode = 2
+tooltip_text = "Summary of the selected candidate: item count, linked patterns, and confidence level."
+mouse_filter = 0
+text = "Selected patterns: (none)"
+
+[node name="EditorPositionLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1158130402]
+layout_mode = 2
+tooltip_text = "3D position of this pattern in the reduced embedding space."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 10
+
+[node name="EditorRelatedLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=801038740]
+layout_mode = 2
+tooltip_text = "Other patterns related to this one (bridges, shared items, etc.)."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 10
+
+[node name="EditorProvenanceLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1074498984]
+layout_mode = 2
+tooltip_text = "Full audit trail: data source, embedding method, discovery settings, and Hub artifact IDs from this analysis run."
+mouse_filter = 0
+theme_override_font_sizes/font_size = 10
+autowrap_mode = 3
+
+[node name="CandidateItemsLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=360080710]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Items in this candidate (read through to decide):"
+
+[node name="CandidateItemsList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1064520724]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "The items in this candidate. Read through to judge if the grouping is meaningful. Select items that don't belong and click Remove."
+select_mode = 1
+allow_reselect = true
+
+[node name="RemoveItemButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1178159724]
+layout_mode = 2
+tooltip_text = "Remove the selected item from this candidate. Use this to curate the grouping before committing."
+text = "Remove Selected Item"
+icon = ExtResource("icon_clear")
+
+[node name="HSeparator_AddItems" type="HSeparator" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1319756422]
+layout_mode = 2
+
+[node name="AvailableItemsLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=2036188567]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Available items (not in this closure):"
+
+[node name="AvailableItemsList" type="ItemList" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=91716094]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "All imported items that are not currently in this candidate. Select one or more and click Add to include them in the closure."
+select_mode = 1
+allow_reselect = true
+
+[node name="AddItemButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=987386796]
+layout_mode = 2
+tooltip_text = "Add the selected items from the available list into this closure candidate."
+text = "Add Selected to Closure"
+icon = ExtResource("i_plus")
+
+[node name="CommitClosureButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1388219092]
+layout_mode = 2
+tooltip_text = "Persist this closure as a named artifact on the Hub Substrate with full provenance. This is a human-in-the-loop commit - the system suggests patterns, you decide what becomes a closure."
+text = "Commit Closure to Hub"
+icon = ExtResource("icon_check")
+
+[node name="ClosureStatusLabel" type="Label" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=204295404]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="PostCommitActions" type="HBoxContainer" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer" unique_id=204295405]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CommitAnotherButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/PostCommitActions" unique_id=204295406]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Clear the editor and pick another Dream Inbox candidate to commit."
+text = "Commit another"
+
+[node name="OpenSynPunktClosuresButton" type="Button" parent="MainContainer/OuterVBox/ScrollContainer/VSplitContainer/BottomPanel/MarginContainer/VBoxContainer/BottomTabs/Closures/ClosuresMarginContainer/PopupVBox/ClosuresScroll/ClosuresRow/HBoxContainer/ClosureEditorPanel/MarginContainer/ScrollContainer/VBoxContainer/PostCommitActions" unique_id=204295407]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Ask the host shell to open SynPunkt Closures (navigation signal)."
+text = "Open SynPunkt Closures"
+
+[node name="ModelThemesConsentDialog" type="ConfirmationDialog" parent="." unique_id=956195422]
+title = "Use model themes?"
+initial_position = 1
+size = Vector2i(480, 220)
+visible = false
+ok_button_text = "Use model themes"
+dialog_text = "Use model themes — sends item text to the active provider for embeddings. This is remembered for that provider. Default remains Local themes."
+
+[node name="SourcePickerPopup" type="Window" parent="." unique_id=956195421]
+title = "Select source to import"
+initial_position = 1
+size = Vector2i(520, 400)
+visible = false
+exclusive = true
+
+[node name="MarginContainer" type="MarginContainer" parent="SourcePickerPopup" unique_id=660059861]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SourcePickerPopup/MarginContainer" unique_id=26644334]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PickerHint" type="Label" parent="SourcePickerPopup/MarginContainer/VBoxContainer" unique_id=1154894147]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Select one or more items to import:"
+autowrap_mode = 3
+
+[node name="PickerList" type="ItemList" parent="SourcePickerPopup/MarginContainer/VBoxContainer" unique_id=272338161]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+allow_reselect = true
+
+[node name="ButtonRow" type="HBoxContainer" parent="SourcePickerPopup/MarginContainer/VBoxContainer" unique_id=1819660234]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="SelectAllPickerButton" type="Button" parent="SourcePickerPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=2122373375]
+layout_mode = 2
+text = "Select All"
+
+[node name="PickerConfirmButton" type="Button" parent="SourcePickerPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=974997188]
+layout_mode = 2
+text = "Import Selected"
+icon = ExtResource("icon_check")
+
+[node name="PickerCancelButton" type="Button" parent="SourcePickerPopup/MarginContainer/VBoxContainer/ButtonRow" unique_id=1437528404]
+layout_mode = 2
+text = "Cancel"
+icon = ExtResource("icon_clear")

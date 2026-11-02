@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="SemanticField" type="LineEdit"]
+custom_minimum_size = Vector2(220, 40)
+theme_type_variation = &"SynesynField"
+placeholder_text = "Enter text"
+metadata/synesyn_semantic_role = "field"

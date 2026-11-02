@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"UI Components": {
+			"id": "UI Components",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "UI Components",
+			"path": "res://addons/syntree/scripts/ui/content_graph/content_graph_node.gd",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"UI Components"
+	]
+}

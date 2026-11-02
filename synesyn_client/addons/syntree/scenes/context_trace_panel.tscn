@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_trace_panel.gd" id="1_trace"]
+
+[node name="ContextTrace" type="PanelContainer"]
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_trace")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Execution Trace"
+
+[node name="RefreshTraceButton" type="Button" parent="MarginContainer/VBoxContainer/HeaderRow"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Load the most recent completed chat context trace."
+text = "Refresh"
+
+[node name="TraceStatus" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="IncludedLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Included and traversal reason"
+
+[node name="IncludedNodes" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+
+[node name="OmittedLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Omitted and reason"
+
+[node name="OmittedNodes" type="ItemList" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="DetailsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Provenance and message references"
+
+[node name="TraceDetails" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+
+[node name="CompiledLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Compiled context used for this request (runtime only)"
+
+[node name="CompiledContext" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+editable = false
+wrap_mode = 1

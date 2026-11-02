@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="SynesynVisualProfileDefinition" format=3 uid="uid://cmhxt0iu4yqvx"]
+
+[ext_resource type="Script" uid="uid://dcwdwg6hrqqmi" path="res://addons/synesyn_visual_profiles/definitions/visual_profile_definition.gd" id="1_profile"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_light.tres" id="2_base_light"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="3_base_dark"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_light.tres" id="4_utility_light"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynUtility_contemporary_dark.tres" id="5_utility_dark"]
+[ext_resource type="Theme" uid="uid://fdiwuwpsmra2" path="res://ScenSyn/themes/SynesynConsole_light.tres" id="6_console_light"]
+[ext_resource type="Theme" uid="uid://db3kfwt7iksgg" path="res://ScenSyn/themes/SynesynConsole_contemporary_dark.tres" id="7_console_dark"]
+[ext_resource type="Theme" uid="uid://coqomkxh1jrey" path="res://ScenSyn/themes/SynesynTools_light.tres" id="8_tools_light"]
+[ext_resource type="Theme" uid="uid://bgsts7k74otc1" path="res://ScenSyn/themes/SynesynTools_contemporary_dark.tres" id="9_tools_dark"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = "synesyn_compatibility"
+profile_family = "synesyn"
+supported_capabilities = null
+supported_profile_modes = null
+required_semantic_roles = null
+base_light = ExtResource("2_base_light")
+base_dark = ExtResource("3_base_dark")
+utility_light = ExtResource("4_utility_light")
+utility_dark = ExtResource("5_utility_dark")
+console_light = ExtResource("6_console_light")
+console_dark = ExtResource("7_console_dark")
+tools_light = ExtResource("8_tools_light")
+tools_dark = ExtResource("9_tools_dark")
+semantic_colors_light = {
+"accent": Color(0.118, 0.451, 0.91, 1),
+"base": Color(0.965, 0.975, 0.992, 1),
+"committed": Color(0.149, 0.478, 0.271, 1),
+"danger": Color(0.706, 0.137, 0.094, 1),
+"deferred": Color(0.541, 0.353, 0.078, 1),
+"degraded": Color(0.631, 0.361, 0, 1),
+"muted": Color(0.396, 0.451, 0.541, 1),
+"proposed": Color(0.365, 0.615, 0.827, 1),
+"raised": Color(0.925, 0.945, 0.975, 1),
+"read_only": Color(0.396, 0.451, 0.541, 1),
+"rejected": Color(0.706, 0.137, 0.094, 1),
+"reviewed": Color(0.141, 0.42, 0.576, 1),
+"success": Color(0.149, 0.478, 0.271, 1),
+"surface": Color(1, 1, 1, 1),
+"unavailable": Color(0.545, 0.584, 0.647, 1),
+"warning": Color(0.631, 0.361, 0, 1)
+}
+semantic_colors_dark = {
+"accent": Color(0.28, 0.5, 0.78, 1),
+"base": Color(0.039, 0.055, 0.078, 1),
+"committed": Color(0.357, 0.788, 0.549, 1),
+"danger": Color(1, 0.42, 0.42, 1),
+"deferred": Color(0.847, 0.659, 0.365, 1),
+"degraded": Color(0.941, 0.678, 0.306, 1),
+"muted": Color(0.48, 0.54, 0.62, 1),
+"proposed": Color(0.42, 0.58, 0.78, 1),
+"raised": Color(0.09, 0.125, 0.175, 1),
+"read_only": Color(0.48, 0.54, 0.62, 1),
+"rejected": Color(1, 0.42, 0.42, 1),
+"reviewed": Color(0.4, 0.62, 0.76, 1),
+"success": Color(0.357, 0.788, 0.549, 1),
+"surface": Color(0.06, 0.085, 0.12, 1),
+"unavailable": Color(0.4, 0.45, 0.52, 1),
+"warning": Color(0.941, 0.678, 0.306, 1)
+}
+semantic_colors_projector = {
+"accent": Color(0.55, 0.72, 1, 1),
+"base": Color(0.02, 0.025, 0.04, 1),
+"committed": Color(0.45, 0.9, 0.62, 1),
+"danger": Color(1, 0.5, 0.5, 1),
+"deferred": Color(0.95, 0.75, 0.4, 1),
+"degraded": Color(1, 0.75, 0.35, 1),
+"muted": Color(0.72, 0.76, 0.84, 1),
+"proposed": Color(0.68, 0.845, 1.0, 1),
+"raised": Color(0.12, 0.14, 0.2, 1),
+"read_only": Color(0.72, 0.76, 0.84, 1),
+"rejected": Color(1, 0.5, 0.5, 1),
+"reviewed": Color(0.55, 0.85, 1, 1),
+"success": Color(0.45, 0.9, 0.62, 1),
+"surface": Color(0.07, 0.08, 0.12, 1),
+"unavailable": Color(0.55, 0.58, 0.65, 1),
+"warning": Color(1, 0.75, 0.35, 1)
+}
+semantic_colors_high_contrast = {
+"accent": Color(0, 0.8, 1, 1),
+"base": Color(0, 0, 0, 1),
+"committed": Color(0, 1, 0.4, 1),
+"danger": Color(1, 0.2, 0.2, 1),
+"deferred": Color(1, 0.8, 0, 1),
+"degraded": Color(1, 0.8, 0, 1),
+"muted": Color(0.82, 0.82, 0.82, 1),
+"proposed": Color(0.6, 0.778, 1.0, 1),
+"raised": Color(0.12, 0.12, 0.12, 1),
+"read_only": Color(0.82, 0.82, 0.82, 1),
+"rejected": Color(1, 0.2, 0.2, 1),
+"reviewed": Color(0.2, 0.8, 1, 1),
+"success": Color(0, 1, 0.4, 1),
+"surface": Color(0.05, 0.05, 0.05, 1),
+"unavailable": Color(0.65, 0.65, 0.65, 1),
+"warning": Color(1, 0.8, 0, 1)
+}
+radius_roles = {
+"control": 10,
+"card": 10,
+"dialog": 14
+}

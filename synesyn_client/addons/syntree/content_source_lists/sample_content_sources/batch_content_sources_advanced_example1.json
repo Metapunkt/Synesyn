@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"batch_content_sources_advanced_example1": {
+			"id": "batch_content_sources_advanced_example1",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "batch_content_sources_advanced_example1",
+			"path": "res://addons/syntree/content_source_lists/batch_content_sources/advanced_example1.gd",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"batch_content_sources_advanced_example1"
+	]
+}

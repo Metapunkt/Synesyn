@@ -1,0 +1,11 @@
+[gd_resource type="BehaviorTree" load_steps=3 format=3 uid="uid://simple_test_tree"]
+
+[ext_resource type="Script" path="res://addons/metapunkt/limboai_tasks/DebugTask.gd" id="1_debug"]
+
+[sub_resource type="BTTask" id="debug_task"]
+script = ExtResource("1_debug")
+debug_message = "Simple Test"
+
+[resource]
+description = "Simple test behavior tree"
+root_task = SubResource("debug_task") 

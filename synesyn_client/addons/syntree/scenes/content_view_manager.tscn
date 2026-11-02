@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg4jwspsh04x7"]
+
+[ext_resource type="Theme" uid="uid://drtps1mi85dcr" path="res://addons/synesyn_core/themes/SynesynUtility_contemporary_dark.tres" id="1_36xyt"]
+[ext_resource type="Script" uid="uid://cy6cs3c05sboe" path="res://addons/syntree/scripts/ui/content_view_manager.gd" id="1_rbe21"]
+
+[node name="ContentViewManager" type="Control" groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+theme = ExtResource("1_36xyt")
+script = ExtResource("1_rbe21")
+
+metadata/theme_surface = "utility"
+[node name="ViewManagerContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 952.0
+grow_vertical = 0
+size_flags_horizontal = 6
+size_flags_vertical = 10
+theme_override_constants/separation = 10
+
+[node name="ListViewButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "List View"
+
+[node name="HierarchyViewButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "View Source"
+
+[node name="GraphViewButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+disabled = true
+text = "Context Graph"
+
+[node name="ContentSourceMenuButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Select a content source and click here for it's context menu"
+text = "Menu SourceMenu"
+
+[node name="MenuButton2" type="TextureButton" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SearchBox" type="LineEdit" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FilterButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Filter"
+
+[node name="StatsButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stats"
+
+[node name="RefreshButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
+
+[node name="DeleteButton" type="Button" parent="ViewManagerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"
+
+[node name="Button3" type="Button" parent="ViewManagerContainer"]
+layout_mode = 2
+text = "Button"
+
+[node name="Button4" type="Button" parent="ViewManagerContainer"]
+layout_mode = 2
+text = "Button"

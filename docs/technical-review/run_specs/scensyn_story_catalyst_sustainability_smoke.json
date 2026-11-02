@@ -1,0 +1,37 @@
+{
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "hello_trondheim",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "What sustainability concern should this group address first, and why?",
+        "seconds": 55
+      }
+    }
+  ],
+  "wait_frames_after_post": 60,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "type": "min_story_log",
+      "value": 3
+    },
+    {
+      "type": "scenario_contains",
+      "value": "hello trondheim"
+    },
+    {
+      "type": "no_errors"
+    }
+  ]
+}

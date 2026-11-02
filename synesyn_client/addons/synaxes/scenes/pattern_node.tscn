@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_k1x2w"]
+radius = 0.5
+
+[node name="PatternNode" type="Node3D"]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+radius = 0.5
+radial_segments = 16
+rings = 8
+
+[node name="PatternBody" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PatternBody"]
+shape = SubResource("SphereShape3D_k1x2w")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+billboard = 1
+text = "Pattern"
+font_size = 16
+outline_size = 2 

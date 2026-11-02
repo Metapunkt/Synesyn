@@ -1,0 +1,12 @@
+{
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "actions": [],
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 256000
+}

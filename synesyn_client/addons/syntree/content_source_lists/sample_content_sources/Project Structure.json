@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Project Structure": {
+			"id": "Project Structure",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Project Structure",
+			"path": "res://addons/syntree/scripts/syntree_panel.gd",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"Project Structure"
+	]
+}

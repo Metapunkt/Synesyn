@@ -1,0 +1,61 @@
+name: Infrastructure gap
+description: Building on Synesyn forced you to work around the platform.
+labels: ["infrastructure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most valuable kind of report the project can receive.
+
+        ScenSyn and ReadyMade are meant to be examples of what the infrastructure
+        is for, not the point of it. So if building your own application made you
+        reach across a boundary, copy code out of an addon, or work around a
+        missing extension point, that is a defect in the infrastructure — not
+        something you did wrong.
+
+        Background: [building on Synesyn](../../docs/developer-guide/building-on-synesyn.md)
+        and [ADR 0017](../../docs/architectural-decisions/0017-synesyn-core-shared-library-addon.md).
+
+  - type: textarea
+    id: building
+    attributes:
+      label: What you were building
+      description: Enough about your application for the gap to make sense.
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What you had to do instead
+      description: |
+        The interesting part. Did you copy a script out of an addon? Depend on an
+        application autoload from addon code? Fork a scene to change one thing?
+        Reimplement something the platform nearly does?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Which layer is missing something
+      options:
+        - synesyn_core (shared library)
+        - SynTree
+        - SynAxes
+        - SynPunkt
+        - Metapunkt (agent orchestration)
+        - SynTree Voice
+        - ScenSyn session-type or collection registration
+        - The hub API
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: wanted
+    attributes:
+      label: What would have made it unnecessary
+      description: |
+        A signal, a configuration hook, a documented contract, a smaller class to
+        subclass. A rough sketch is fine — you are closer to the problem than we are.

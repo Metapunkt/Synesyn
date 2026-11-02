@@ -1,0 +1,220 @@
+[gd_resource type="SpriteFrames" load_steps=41 format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-idle/frame_00001_.png" id="1_f6jb4"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-idle/frame_00002_.png" id="2_tmy6l"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-idle/frame_00003_.png" id="3_05jjn"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-idle/frame_00004_.png" id="4_2jan0"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-talking/frame_00001_.png" id="5_bbcgq"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-talking/frame_00002_.png" id="6_ou7jy"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-talking/frame_00003_.png" id="7_cati4"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/angry-talking/frame_00004_.png" id="8_oupoh"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-idle/frame_00001_.png" id="9_as1f0"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-idle/frame_00002_.png" id="10_27376"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-idle/frame_00003_.png" id="11_jl7dw"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-idle/frame_00004_.png" id="12_ng5a1"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-talking/frame_00001_.png" id="13_y5iia"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-talking/frame_00002_.png" id="14_06473"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-talking/frame_00003_.png" id="15_aq71q"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/happy-talking/frame_00004_.png" id="16_s117m"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/idle/frame_00001_.png" id="17_4rnk4"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/idle/frame_00002_.png" id="18_s2rgl"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/idle/frame_00003_.png" id="19_75nyc"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/idle/frame_00004_.png" id="20_s3xal"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-idle/frame_00001_.png" id="21_rh4i6"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-idle/frame_00002_.png" id="22_10uwm"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-idle/frame_00003_.png" id="23_jyb66"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-idle/frame_00004_.png" id="24_mymve"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-talking/frame_00001_.png" id="25_5u0tv"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-talking/frame_00002_.png" id="26_0bcpm"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-talking/frame_00003_.png" id="27_m32rq"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/sad-talking/frame_00004_.png" id="28_lp55s"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-idle/frame_00001_.png" id="29_t27dk"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-idle/frame_00002_.png" id="30_mipnh"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-idle/frame_00003_.png" id="31_mc67l"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-idle/frame_00004_.png" id="32_ewhx1"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-talking/frame_00001_.png" id="33_d5y2r"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-talking/frame_00002_.png" id="34_0top7"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-talking/frame_00003_.png" id="35_xgn8n"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/surprised-talking/frame_00004_.png" id="36_a6gl3"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/talking/frame_00001_.png" id="37_lkkqo"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/talking/frame_00002_.png" id="38_4oa5m"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/talking/frame_00003_.png" id="39_m18xt"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/stochastic_dreams/the_narrator/talking/frame_00004_.png" id="40_i2lnq"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_f6jb4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tmy6l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_05jjn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2jan0")
+}],
+"loop": true,
+"name": &"angry-idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_bbcgq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ou7jy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_cati4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_oupoh")
+}],
+"loop": true,
+"name": &"angry-talking",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_as1f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_27376")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_jl7dw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ng5a1")
+}],
+"loop": true,
+"name": &"happy-idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_y5iia")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_06473")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_aq71q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_s117m")
+}],
+"loop": true,
+"name": &"happy-talking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_4rnk4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_s2rgl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_75nyc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_s3xal")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_rh4i6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_10uwm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_jyb66")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_mymve")
+}],
+"loop": true,
+"name": &"sad-idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_5u0tv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_0bcpm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_m32rq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_lp55s")
+}],
+"loop": true,
+"name": &"sad-talking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_t27dk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_mipnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_mc67l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_ewhx1")
+}],
+"loop": true,
+"name": &"surprised-idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_d5y2r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_0top7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_xgn8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_a6gl3")
+}],
+"loop": true,
+"name": &"surprised-talking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_lkkqo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_4oa5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_m18xt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_i2lnq")
+}],
+"loop": true,
+"name": &"talking",
+"speed": 5.0
+}]

@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/syntree/scripts/ui/content_graph/context_layout_panel.gd" id="1_layout"]
+
+[node name="ContextLayouts" type="PanelContainer"]
+custom_minimum_size = Vector2(290, 300)
+layout_mode = 2
+script = ExtResource("1_layout")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Named Layouts"
+
+[node name="Explanation" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Layouts are local visual preferences. Saving one does not create or change a semantic graph artifact/version."
+autowrap_mode = 2
+
+[node name="LayoutSelector" type="OptionButton" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Choose a local visual layout."
+
+[node name="LayoutNameEdit" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Layout name"
+
+[node name="SaveLayoutButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save visual layout"
+
+[node name="LoadLayoutButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load selected layout"
+
+[node name="DeleteLayoutButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete selected layout"
+
+[node name="LayoutStatus" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

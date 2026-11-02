@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Code Examples": {
+			"id": "Code Examples",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Code Examples",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/basic_usage.gd",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"Code Examples"
+	]
+}

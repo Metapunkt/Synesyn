@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[node name="WorkshopComparePathCard" type="PanelContainer"]
+custom_minimum_size = Vector2(310, 390)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CardFields" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PathTitle" type="LineEdit" parent="CardFields"]
+layout_mode = 2
+placeholder_text = "Path title"
+
+[node name="DoNothingLabel" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Explicit do-nothing path — not neutral or risk-free"
+autowrap_mode = 2
+
+[node name="OutcomesLabel" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Expected outcomes (one per line)"
+
+[node name="OutcomesEdit" type="TextEdit" parent="CardFields"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="RiskLabel" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Biggest risk"
+
+[node name="BiggestRiskEdit" type="TextEdit" parent="CardFields"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="AssumptionsLabel" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Assumptions (one per line)"
+
+[node name="AssumptionsEdit" type="TextEdit" parent="CardFields"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="UncertaintyEdit" type="LineEdit" parent="CardFields"]
+layout_mode = 2
+placeholder_text = "Uncertainty"
+
+[node name="TimeHorizonEdit" type="LineEdit" parent="CardFields"]
+layout_mode = 2
+placeholder_text = "Time horizon"
+
+[node name="EvidenceStatus" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Evidence: none — no supporting references"
+autowrap_mode = 2
+
+[node name="EvidenceReferences" type="RichTextLabel" parent="CardFields"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+fit_content = true
+text = "No supporting references."
+
+[node name="ReviewState" type="Label" parent="CardFields"]
+layout_mode = 2
+text = "Suggested"
+
+[node name="ReviewActions" type="HBoxContainer" parent="CardFields"]
+layout_mode = 2
+
+[node name="AcceptButton" type="Button" parent="CardFields/ReviewActions"]
+layout_mode = 2
+text = "Accept"
+
+[node name="EditButton" type="Button" parent="CardFields/ReviewActions"]
+layout_mode = 2
+text = "Accept edits"
+
+[node name="RejectButton" type="Button" parent="CardFields/ReviewActions"]
+layout_mode = 2
+text = "Reject"
+
+[node name="DeferButton" type="Button" parent="CardFields/ReviewActions"]
+layout_mode = 2
+text = "Defer"
+
+[node name="SelectionActions" type="HBoxContainer" parent="CardFields"]
+layout_mode = 2
+
+[node name="SelectButton" type="Button" parent="CardFields/SelectionActions"]
+layout_mode = 2
+text = "Select this path"
+
+[node name="CombineToggle" type="CheckButton" parent="CardFields/SelectionActions"]
+layout_mode = 2
+text = "Include in combination"

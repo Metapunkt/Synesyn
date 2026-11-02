@@ -1,0 +1,85 @@
+{
+    "nodes": {
+        "345678_3456789012": {
+            "id": "345678_3456789012",
+            "name": "Code Examples",
+            "path": "res://examples/basic_usage.gd",
+            "type": "container",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "from_port": 0,
+                            "node": "345679_3456789013",
+                            "to_port": 0,
+                            "type": "default"
+                        },
+                        {
+                            "from_port": 1,
+                            "node": "345680_3456789014",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ]
+                },
+                "graph_position": {
+                    "x": -300,
+                    "y": -100
+                }
+            }
+        },
+        "345679_3456789013": {
+            "id": "345679_3456789013",
+            "name": "Basic Example",
+            "path": "res://examples/basic_example.gd",
+            "type": "leaf",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 0,
+                            "node": "345678_3456789012",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": []
+                },
+                "graph_position": {
+                    "x": 0,
+                    "y": -150
+                }
+            }
+        },
+        "345680_3456789014": {
+            "id": "345680_3456789014",
+            "name": "Advanced Example",
+            "path": "res://examples/advanced_example.gd",
+            "type": "leaf",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 1,
+                            "node": "345678_3456789012",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": []
+                },
+                "graph_position": {
+                    "x": 0,
+                    "y": -50
+                }
+            }
+        }
+    },
+    "root_nodes": [
+        "345678_3456789012"
+    ]
+} 

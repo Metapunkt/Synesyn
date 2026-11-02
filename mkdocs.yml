@@ -1,0 +1,189 @@
+# Documentation site configuration.
+#
+# The site is generated from docs/ so there is a single source of truth: the same
+# files are read on GitHub and served here. Nothing is authored for the site alone.
+#
+# Preview locally:
+#   pip install -r utilities/docs/requirements.txt
+#   mkdocs serve
+#
+# Publishing is deliberately dormant. GitHub Pages cannot serve a private
+# repository on the free organisation plan, and on paid plans the site would be
+# public by default, so the deploy job in .github/workflows/docs.yml stays off
+# until the repository itself is public. See utilities/docs/README.md.
+
+site_name: Synesyn
+copyright: >-
+  © 2025 “Synesyn” by Ayodele Arigbabu, Norwegian University of Science and Technology.
+  Documentation is CC BY-SA 4.0.
+site_description: >-
+  Local-first, artifact-centric platform for groups to reason with AI about possible
+  futures, drawing them out of material they already hold and building up a
+  traceable record from one session to the next.
+site_url: https://metapunkt.github.io/Synesyn/
+
+repo_url: https://github.com/Metapunkt/Synesyn
+repo_name: Metapunkt/Synesyn
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.smartsymbols
+
+# Maintainer notes and templates that belong in the tree rather than in the
+# reader-facing navigation.
+not_in_nav: |
+  assets/screenshots/CAPTURE_GUIDE.md
+  product-requirements/_template.md
+
+# Surface documentation rot as build warnings, so --strict in CI fails on it.
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+plugins:
+  - search
+
+nav:
+  - "Synesyn": README.md
+  - "Using Synesyn":
+      - "Overview": user-guide/README.md
+      - "Getting started": user-guide/getting-started.md
+      - "Facilitator workflow (Sense → Structure → Synthesize → Stage)": user-guide/facilitator-workflow.md
+      - "ScenSyn — the session runtime": user-guide/scensyn.md
+      - "Workshop Catalyst Facilitator Manual": user-guide/workshop-catalyst-facilitator-manual.md
+      - "Story Catalyst": user-guide/story-catalyst.md
+      - "Story Catalyst authoring (Open Play)": user-guide/story-catalyst-authoring.md
+      - "Story Stage sprite packs": user-guide/story-stage-sprites.md
+      - "Concepts": user-guide/concepts.md
+      - "Privacy and data": user-guide/privacy-and-data.md
+      - "Troubleshooting": user-guide/troubleshooting.md
+      - "Metapunkt — Orchestrator & Agent Coordination": user-guide/metapunkt.md
+      - "SynAxes — default path": user-guide/synaxes.md
+      - "SynPunkt": user-guide/synpunkt.md
+      - "Glossary": concepts/glossary.md
+  - "Developing":
+      - "Overview": developer-guide/README.md
+      - "Local development": developer-guide/local-dev.md
+      - "Architecture (high-level)": developer-guide/architecture.md
+      - "Building on Synesyn": developer-guide/building-on-synesyn.md
+      - "Story Stage functional specification": developer-guide/story-stage-functional-specification.md
+      - "Code map (what to read first)": developer-guide/code-map.md
+      - "Hub API": developer-guide/hub-api.md
+      - "Artifacts and schemas": developer-guide/artifacts-and-schemas.md
+      - "AI Orchestration (SynTree) + Packs (Metapunkt) + Godot Dev Agent": developer-guide/ai-orchestration-and-godot-dev-agent.md
+      - "DevAgent CLI — for Cursor/agents (no editor required)": developer-guide/devagent-cli-for-agents.md
+      - "Workshop Catalyst Scenario authoring": developer-guide/workshop-scenario-authoring.md
+      - "System map": SYSTEM_MAP.md
+      - "Verification":
+          - "Harness run specs": technical-review/run_specs/README.md
+  - "Reference":
+      - "Concepts":
+          - "Overview": concepts/README.md
+          - "Glossary": concepts/glossary.md
+          - "The Closure Map": concepts/closure-map.md
+      - "Product requirements":
+          - "Overview": product-requirements/README.md
+          - "ReadyMade edit session": product-requirements/PRD-READYMADE-EDIT-SESSION.md
+          - "ScenSyn story session": product-requirements/PRD-SCENSYN-STORY-SESSION.md
+          - "Workshop Catalyst facilitation": product-requirements/PRD-SCENSYN-WORKSHOP-CATALYST.md
+          - "SynAxes Closure Map orientation tags and coverage": product-requirements/PRD-SYNAXES-CLOSURE-MAP-ORIENTATION.md
+          - "SynAxes navigable default path (latent reality → holds)": product-requirements/PRD-SYNAXES-NAVIGABLE-DEFAULT-PATH.md
+          - "SynTree Context Graph": product-requirements/PRD-SYNTREE-CONTEXT-GRAPH.md
+          - "Workshop Catalyst Closure Audit stage": product-requirements/PRD-WORKSHOP-CATALYST-CLOSURE-AUDIT.md
+      - "Implementation contracts":
+          - "Overview": implementation_docs/README.md
+          - "STFX Memory Capability Spec": implementation_docs/STFX_Memory_Capability_Spec.md
+          - "Human Agency UX Contract (Synesyn / Latent Reality)": implementation_docs/Human_Agency_UX_Contract.md
+          - "LatentSubstrate — Data Model & Provenance Rules (v0)": implementation_docs/LatentSubstrate_Data_Model.md
+          - "Synesyn — Local Deployment Runbook (One‑Zip, No‑CLI)": implementation_docs/Local_Deployment_Runbook.md
+          - "Metapunkt ↔ Synesyn Hub integration (v1)": implementation_docs/Metapunkt_Hub_Integration.md
+          - "Metapunkt synterfaces and bindings": implementation_docs/Metapunkt_Synterfaces_and_Bindings.md
+          - "ScenSyn Scenario Continuity Contract": implementation_docs/ScenSyn_Scenario_Continuity_Contract.md
+          - "SynAxes embeddings pipeline (v1 plan)": implementation_docs/SynAxes_Embeddings_Pipeline.md
+          - "SynTree as a Synesyn runtime module": implementation_docs/SynTree_as_a_Synesyn_runtime_module.md
+          - "Synesyn Hub — API Specification (Local-first, v0)": implementation_docs/Synesyn_Hub_API_Spec.md
+          - "Synesyn Platform — Technical Implementation Architecture (Authoritative)": implementation_docs/Synesyn_Platform_Technical_Architecture.md
+      - "Architectural decisions":
+          - "Overview": architectural-decisions/README.md
+          - "0001 — Adopt Architecture Decision Records": architectural-decisions/0001-adopt-architecture-decision-records.md
+          - "0002 — Separate hub dev/test dependencies into requirements-dev.txt": architectural-decisions/0002-separate-hub-dev-dependencies.md
+          - "0003 — Scoping of agent infrastructure (rules, skills, sub-agents)": architectural-decisions/0003-agent-infrastructure-scoping.md
+          - "0004 — Line-limit hard-violation remediation strategy": architectural-decisions/0004-line-limit-remediation-strategy.md
+          - "0005 — Split HubSubstrateClient into a transport base + endpoint facade": architectural-decisions/0005-hub-client-transport-facade-split.md
+          - "0006 — Self-validating JSON harness specs": architectural-decisions/0006-self-validating-json-harness-specs.md
+          - "0007 — Documentation governance and product requirements": architectural-decisions/0007-documentation-governance-and-product-requirements.md
+          - "0008 — Shared Graph Workspace with product-owned adapters": architectural-decisions/0008-shared-graph-workspace-product-adapters.md
+          - "0009 — Workshop Catalyst session model, synthesis, and workspaces": architectural-decisions/0009-workshop-catalyst-session-synthesis-and-workspaces.md
+          - "0010 — Shared spatial UI and semantic visual system": architectural-decisions/0010-shared-spatial-ui-and-visual-system.md
+          - "0011 — Workshop spatial slice uses a cube topology": architectural-decisions/0011-workshop-spatial-cube-topology.md
+          - "0012 — Workshop Catalyst facilitation method: four lenses, six cross-checks": architectural-decisions/0012-workshop-catalyst-facilitation-method.md
+          - "0013 — Workshop Catalyst multi-instance identity and facilitator claim": architectural-decisions/0013-workshop-catalyst-multi-instance-identity.md
+          - "0014 — Documents/Synesyn as the user-visible storage root": architectural-decisions/0014-documents-synesyn-user-storage-root.md
+          - "0015 — SynAxes V2: Closure Map orientation (Distal / Deep / Proxistance)": architectural-decisions/0015-synaxes-v2-closure-map-orientation.md
+          - "0016 — Open Closure admissibility gate in STFX Store (+ SynAxes import)": architectural-decisions/0016-open-closure-store-admissibility-gate.md
+          - "0017 — Shared library addon `synesyn_core` (drop-in boundary)": architectural-decisions/0017-synesyn-core-shared-library-addon.md
+          - "0018 — Hub deployment path contract (one location, one resolver)": architectural-decisions/0018-hub-deployment-path-contract.md
+          - "0019 — Thinking Map human authorship: propose vs commit": architectural-decisions/0019-thinking-map-human-authorship.md
+          - "0020 — Thinking Map and Closure Map boundary: the audit is a stage, not an ontology": architectural-decisions/0020-thinking-map-closure-map-boundary.md
+          - "0021 — Hub bundle composition and process lifecycle": architectural-decisions/0021-hub-bundle-composition-and-process-lifecycle.md
+          - "0022 — Scenario sharing bundles, and library parity for Workshop Catalyst": architectural-decisions/0022-scenario-sharing-bundle-format.md
+          - "0023 — Client directory renamed to `synesyn_client`, and `synesyn/` is the repository root": architectural-decisions/0023-client-directory-rename-and-repository-root.md
+          - "0024 — ReadyMade's Found Concepts vocabulary, and why its source texts are not distributed": architectural-decisions/0024-readymade-found-concepts-vocabulary.md
+          - "0025 — `docs/` publishes explanation; work tracking moves to `implementation_tracking/`": architectural-decisions/0025-documentation-publication-boundary.md
+          - "0026 — Session captures move to `ui.workshop_closure`": architectural-decisions/0026-closure-artifact-type-split.md
+          - "0027 — A scenario declares the stage features it wants": architectural-decisions/0027-scenario-declares-its-stage-features.md
+          - "0028 — Internal calls get a low reasoning budget": architectural-decisions/0028-internal-calls-get-a-low-reasoning-budget.md
+          - "0029 — Story Stage is a host-driven component": architectural-decisions/0029-story-stage-is-a-host-driven-component.md
+          - "0030 — Story Stage motion and imagery layers": architectural-decisions/0030-story-stage-motion-and-imagery-layers.md
+          - "0031 — A spoken line carries the voice it was resolved with": architectural-decisions/0031-spoken-line-carries-its-resolved-voice.md
+          - "0032 — Rename `artrhythmetic_*` kernel, memory, and store to `stfx`": architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md

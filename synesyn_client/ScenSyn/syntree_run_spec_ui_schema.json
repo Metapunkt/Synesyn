@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "name": "ScenSyn Run Spec UI",
+  "fields": [
+    {
+      "id": "scenario",
+      "label": "Scenario",
+      "type": "string",
+      "json_path": "state.scenario",
+      "help": "Optional. Scenario/theme identifier for ScenSyn (e.g. stochastic_dreams). Leave empty to keep the current scenario.",
+      "placeholder": "(optional) e.g. stochastic_dreams",
+      "clear_on_empty": true,
+      "default": ""
+    },
+    {
+      "id": "auto_player_input",
+      "label": "Auto player input",
+      "type": "bool",
+      "json_path": "state.toggles.auto_player_input",
+      "help": "If enabled, ScenSyn will simulate player input automatically during the harness run.",
+      "clear_on_empty": false,
+      "default": false
+    },
+    {
+      "id": "tts_emitter",
+      "label": "TTS emitter",
+      "type": "enum",
+      "json_path": "state.tts_emitter",
+      "help": "Select which TTS emitter to use during the run. “(unchanged)” means do not modify current selection.",
+      "clear_on_empty": true,
+      "default": "",
+      "options": [
+        { "label": "(unchanged)", "value": "" },
+        { "label": "story_stage", "value": "story_stage" },
+        { "label": "story_log", "value": "story_log" }
+      ]
+    }
+  ]
+}
+

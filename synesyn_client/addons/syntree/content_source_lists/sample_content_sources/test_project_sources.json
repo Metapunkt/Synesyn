@@ -1,0 +1,55 @@
+{
+    "nodes": {
+        "123456_1234567890": {
+            "id": "123456_1234567890",
+            "name": "Project Structure",
+            "path": "res://addons/syntree/scripts/syntree_panel.gd",
+            "type": "container",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [],
+                    "outputs": [
+                        {
+                            "from_port": 0,
+                            "node": "123457_1234567891",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ]
+                },
+                "graph_position": {
+                    "x": -340,
+                    "y": 0
+                }
+            }
+        },
+        "123457_1234567891": {
+            "id": "123457_1234567891",
+            "name": "UI Components",
+            "path": "res://addons/syntree/scripts/ui/content_graph/content_graph_node.gd",
+            "type": "leaf",
+            "is_metaprompt": false,
+            "metadata": {
+                "connections": {
+                    "inputs": [
+                        {
+                            "from_port": 0,
+                            "node": "123456_1234567890",
+                            "to_port": 0,
+                            "type": "default"
+                        }
+                    ],
+                    "outputs": []
+                },
+                "graph_position": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        }
+    },
+    "root_nodes": [
+        "123456_1234567890"
+    ]
+} 

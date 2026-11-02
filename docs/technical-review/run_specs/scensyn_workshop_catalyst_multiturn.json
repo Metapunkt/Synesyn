@@ -1,0 +1,98 @@
+{
+  "_note": "Three facilitator turns. Because the Session Record narrative is recalled via /synthesis rather than broadcast (ADR 0009, 2026-08-03), the story log should contain exactly the welcome plus three facilitator turns and no assistant sender at all. Evidence that each turn ran comes from the accumulating Thinking Map and the cached narrative in the workshop_catalyst snapshot block. Each turn waits 120s, matching the smoke spec: the snapshot assertions read state that the specialist pass writes, so a wait shorter than the model's latency makes them report zeros that look like a product failure rather than a timeout. Raise both specs together, never one alone. Raised from 60s on 2026-09-06 after the smoke spec failed twice consecutively on latency alone; see that spec's note for the diagnosis. That raise made three 120s waits exceed the harness's own 250s process budget, so this spec reported 'Godot process timed out' regardless of product health; harness_timeout_sec above carries the budget with the spec so the two cannot drift apart again. Do NOT assert session_record_text_length here: that field holds the LATEST turn's cached narrative, and a turn which surfaces no new claims legitimately replaces it with the 127-character NO_CLAIMS_TEXT from workshop_session_record_pulse.gd. By the third question the specialists have usually already extracted the main claims, so the assertion failed on a correctly working session. Multi-turn evidence has to come from state that accumulates (node_count, edge_count) or that is present either way (the pulse); the prose-length check belongs in the single-turn smoke spec, where the narrative is always fresh. The orientation assertion is the ADR 0020 regression guarantee: the Closure Audit is opt-in, so a session that never opens it must record no quadrant tags. On 2026-09-18 the story-log check changed from exact_story_log=4 to min_story_log=4 for the same reason as the smoke spec: the Narrator posts hub-lifecycle notices such as 'Hub back online' on any cold run, so an exact total measured the environment rather than the product. Nothing is lost, because the exact_sender_occurrences and exact_unique_senders assertions below already pin the facts the total was standing in for - three facilitator turns and no broadcast assistant sender.",
+  "harness_timeout_sec": 480,
+  "scene_path": "res://ScenSyn/scenes/game_session.tscn",
+  "state": {
+    "scenario": "karlsruhe_library_future_design",
+    "toggles": {
+      "auto_player_input": false
+    }
+  },
+  "action_libraries": [
+    "scensyn_action_library.json"
+  ],
+  "actions": [],
+  "post_actions": [
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "We are beginning the Karlsruhe Library of the Future design workshop. Let's start by agreeing on what a library of the future means for this session. What is the working definition we should use?",
+        "seconds": 120
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "Good. Given that definition, what is the single biggest gap in the existing Oststadt knowledge infrastructure that we need to address today?",
+        "seconds": 120
+      }
+    },
+    {
+      "use": "send_user_message_and_wait",
+      "with": {
+        "message": "Can we try to name one concrete decision we could make in this room today that would close that gap, even partially?",
+        "seconds": 120
+      }
+    }
+  ],
+  "wait_frames_after_post": 0,
+  "wait_time_sec_after_post": 0,
+  "logs_since_msec": 0,
+  "godot_log_tail_bytes": 512000,
+  "assertions": [
+    {
+      "name": "welcome-plus-three-facilitator-turns-at-minimum",
+      "type": "min_story_log",
+      "value": 4
+    },
+    {
+      "type": "scenario_contains",
+      "value": "karlsruhe"
+    },
+    {
+      "name": "no-broadcast-assistant-sender",
+      "type": "exact_unique_senders",
+      "value": 0,
+      "exclude_system": false,
+      "exclude_senders": [
+        "Facilitator",
+        "Facilitator Note",
+        "Narrator",
+        "Unknown Peer"
+      ]
+    },
+    {
+      "name": "all-three-turns-were-facilitator",
+      "type": "exact_sender_occurrences",
+      "sender": "Facilitator",
+      "value": 3
+    },
+    {
+      "name": "specialist-pass-reported-on-final-turn",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.session_record_pulse",
+      "contains": "Session Record"
+    },
+    {
+      "name": "map-accumulated-across-turns",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.node_count",
+      "min": 3
+    },
+    {
+      "name": "typed-relations-accumulated",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.edge_count",
+      "min": 1
+    },
+    {
+      "name": "unaudited-session-records-no-orientation",
+      "type": "snapshot_field",
+      "path": "workshop_catalyst.thinking_map.oriented_count",
+      "equals": 0
+    },
+    {
+      "type": "no_errors"
+    }
+  ]
+}

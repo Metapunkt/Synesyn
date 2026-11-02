@@ -1,0 +1,20 @@
+{
+  "fixture_version": 1,
+  "records": [
+    {
+      "id": "fixture-a",
+      "label": "Observed condition",
+      "provenance_refs": ["event:fixture-a"]
+    },
+    {
+      "id": "fixture-b",
+      "label": "Potential consequence",
+      "provenance_refs": ["trace:fixture-b"]
+    }
+  ],
+  "edge": {
+    "id": "fixture-edge",
+    "from": "fixture-a",
+    "to": "fixture-b"
+  }
+}

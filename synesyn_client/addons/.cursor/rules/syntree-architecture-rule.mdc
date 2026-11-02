@@ -1,0 +1,116 @@
+---
+description: Definitive architectural guidelines for the SynTree Godot plugin, based on a Resource/Service/View pattern.
+globs: 
+alwaysApply: false
+---
+
+# SynTree Architecture: Resource-Based Framework
+
+## Context
+
+SynTree uses a Resource-based architecture to ensure stability, clear state management, and maintainability, moving away from complex signal chains.
+
+## Core Resource Types
+
+(Held within `SyntreeResources.tres`)
+
+### ContentStateResource
+The primary resource managing the state of content sources. It delegates detailed storage and file I/O to a nested `ContentSourceResource`.
+- **Responsibilities:** Provides unified API for source data access, state management (active, metaprompt), loading/saving/deleting sources, node-to-source mapping, filesystem synchronization (`initialize_content_sources`), remote data processing (`add_or_update_source_data`).
+- **Metadata:** Tracks `source_origin` ("file" or "remote").
+
+### ViewStateResource
+Manages UI view state:
+- Current view mode (LIST, HIERARCHY, GRAPH)
+- Currently selected source(s) (`selected_source_ids`, `current_source_id`)
+- Current chat thread ID (`current_thread_id`)
+- View state history for navigation.
+- Synchronization (`sync_selections_with_available`).
+
+### GraphStateResource
+Manages graph view specific state:
+- Node positions, zoom, scroll state (Implementation details may vary).
+
+## Core Service Types
+
+### ContentService
+Handles business logic related to content sources:
+- Creating new source metadata files from local paths (`create_source_from_file`).
+- Creating source stacks from active sources (`create_source_stack`).
+- (Potentially) Orchestrating complex source processing or validation.
+- Interacts with `ContentStateResource`.
+
+### ConversationManager
+Manages chat threads, interaction history, and communication with the selected AI model via `AIModelManager`.
+
+### AIModelManager
+Manages available AI models, API keys, and provides a consistent interface for making AI calls.
+
+### ContentPersistenceService
+(Lower-level service, used by others) Handles the direct reading/writing of specific file types (like conversation history). *Note: `ContentSourceResource` handles its own `.json` persistence.*
+
+### NotificationManager (Utility)
+Provides a centralized way to display user feedback (errors, warnings, success messages).
+
+## Core UI Components / Views
+
+### SyntreePanel
+Main plugin UI container, coordination hub. Connects UI actions to `ContentBus` or Services. Sets up managers and views.
+
+### ContentViewManager
+Manages the switching between the List, Hierarchy, and Graph views within the `TabContainer`.
+
+### ContentListView / ContentHierarchyView / ContentGraph
+Display sources/nodes based on the current state in the Resources. Read data from `ContentStateResource`.
+
+### ContentSourceItem / ContentSourceGraphNode
+Individual UI representations of sources or nodes. Display data and state flags. Forward user interactions (checkboxes, buttons) to `ContentBus`.
+
+### Dialogs (FilterPopup, StatsPopup, ContentSourceDialog, etc.)
+Handle specific user interactions like filtering, viewing stats, or adding new sources. Emit signals with user input or requests.
+
+## Communication Pattern
+
+[User Action (UI)] -> [SyntreePanel/Dialog Handler] -> [ContentBus OR Service]
+|
+V
+[Resource(s)] -> changed signal
+|
+V
+[UI Components Update Rendering]
+
+- **UI -> Backend:** User actions in Views trigger methods primarily on `ContentBus` (for state changes like selection, view mode) or specific `Services` (for operations like creating a source, sending a chat message).
+- **Backend -> UI:** UI components listen to signals from `ContentBus` (which relays Resource `changed` signals or specific events like `remote_source_processed`) to refresh their display.
+- **Direct Modification:** Views **never** modify Resources directly. Services are the primary actors that modify Resource state.
+- **`ContentBus` Role:** Acts as a central hub for requesting state changes (`request_view_change`, `request_source_deletion`, `request_load_source_from_url`), accessing resource getters (`get_content_state_resource`, etc.), and relaying key resource state change signals (`source_added`, `source_deleted`, `view_state_changed`, etc.). Also handles the `HTTPRequest` node for URL loading.
+
+## Persistence Model
+
+- The main state resources (`ContentStateResource`, `ViewStateResource`, `GraphStateResource`) are nested within `SyntreeResources`, which is saved/loaded as `syntree_resources.tres`.
+- Individual content source definitions (`.json` files containing `meta` and empty `content`) are managed by `ContentSourceResource` within `ContentStateResource`. It handles saving new definitions and deleting corresponding files.
+- `ContentStateResource.initialize_content_sources` synchronizes the in-memory state with the `.json` files on disk.
+- Conversation history is handled separately by `ConversationManager` and `ContentPersistenceService`.
+
+## Implementation Guidelines
+
+### Resource Management
+- Resources are the single source of truth for their respective states.
+- Resources emit specific signals (relayed by `ContentBus`) or a general `changed` signal when modified.
+- Use the getters provided by `ContentBus` to access shared resource instances.
+
+### Service Design
+- Services contain business logic.
+- Services interact with Resources to read/modify state.
+- Services can be called from UI handlers (e.g., button presses).
+
+### View Principles
+- Views read data primarily from Resources (via `ContentBus` getters).
+- Views trigger actions by calling methods on `ContentBus` or Services.
+- Views update reactively based on signals relayed by `ContentBus`.
+
+## Testing Approach
+
+- Resources: Unit test state changes, validation, and serialization.
+- Services: Unit test business logic using mock Resources if necessary.
+- Views: Test rendering logic and signal connections.
+- End-to-end: Test full workflows through the UI.

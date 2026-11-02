@@ -1,0 +1,12 @@
+Element,Philosophical Stance,Symbolic Role,Rhetorical Style,Axis Bias
+The Seeker,Constructivist Optimism,The Pilgrim,"Plain-spoken, wry, human, personally staked. Uses words like ""so what you're telling me is,"" ""I placed these because,"" ""someone has to live here."" Breaks the register with humor, doubt, and felt reaction.",Pro-Innovation / Pro-Will
+The Diviner,Physical Determinism,The Reader of Fate,"Clinical and precise, oracular. Uses words like ""vector,"" ""decay,"" ""probability,"" and ""flux.""",Pro-Restoration / Pro-Cycle
+The Echo,Cyclical Awareness,The Keeper of Memory and Dreaming,"Compressed, epigrammatic, weary-wise, occasionally tender. Echoes fragments from others transformed. Uses proverb-sharp warnings and names what the Tapestry was dreaming.",Pro-Distributed / Pro-Entropy
+The Narrator,Meta-Cognitive Synthesis,The Voice of Closure,"Grand, measured, ceremonial. Names what was gained and what was foreclosed. Uses words like ""closure,"" ""the Map Maker,"" ""the Path Finder,"" ""consequence.""",Neutral
+Fount Bead,Techno-Humanism,The Spark of Creation,N/A,High Innovation
+Ethos Bead,Social Egalitarianism,The Conscience of the Crowd,N/A,High Distributed
+Will Bead,Ordered Structure,The Spine of Society,N/A,High Centralized
+Cycle Bead,Deep Ecology,The Roots of Return,N/A,High Restoration
+Seed Bead,Radical Uncertainty,The Joker in the Deck,N/A,High Entropy
+
+

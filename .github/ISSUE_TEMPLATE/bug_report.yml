@@ -1,0 +1,81 @@
+name: Bug report
+description: Something behaves differently from how it is documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: this is research software from a funded pilot, and the
+        documentation is honest about what is unfinished. If the behaviour is
+        listed as a known limit on the relevant page, an issue is not needed.
+
+        **Please do not paste API keys, participant names or session content.**
+        Redact before you post.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options:
+        - ScenSyn — Workshop Catalyst
+        - ScenSyn — Story Catalyst
+        - ScenSyn — shared runtime (Story Log, Story Stage, voice)
+        - ReadyMade
+        - Synesyn Tools shell
+        - An addon (SynTree, SynAxes, SynPunkt, Metapunkt, synesyn_core)
+        - The hub
+        - Utilities (harness, checks, content packs)
+        - Documentation
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: godot
+    attributes:
+      label: Godot version
+      placeholder: "4.7.1-rc2"
+
+  - type: dropdown
+    id: hub
+    attributes:
+      label: Was the hub running?
+      description: Most client features work without it, so this narrows things quickly.
+      options:
+        - "Yes"
+        - "No"
+        - "Don't know"
+
+  - type: input
+    id: provider
+    attributes:
+      label: Model provider
+      description: Provider and model, if a session was involved.
+      placeholder: "Anthropic, claude-sonnet / Ollama, llama3.2 / none"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: |
+        Hub logs are in `Documents/Synesyn/<workspace>/logs/`. Godot prints client
+        errors to its Output panel. Paste only the relevant lines, redacted.
+      render: text
+
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have removed keys, tokens, participant names and session content
+          required: true
+        - label: I checked the known limits on the page documenting this feature
+          required: false

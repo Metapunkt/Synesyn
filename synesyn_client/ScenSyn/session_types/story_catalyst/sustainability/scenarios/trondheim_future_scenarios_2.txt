@@ -1,0 +1,62 @@
+[INSTRUCTIONS]
+Create a new scenario set in Trondheim, Norway, 15-50 years in the future. The scenario should:
+1. Focus on themes of social progress, ecological science fiction, techno-humanist utopias/dystopias, or a combination thereof.
+2. Include secondary themes such as horror, humor, or absurdism if appropriate.
+3. Present a unique challenge or situation that players must navigate.
+4. Provide 12 character options relevant to the scenario.
+
+Use the following format:
+[SCENARIO]
+name: [Distinctive name for the scenario]
+setting: Trondheim, Norway, [year] - [Brief description of the city's state]
+objective: [Clear goal or challenge for the players]
+
+[Brief paragraph describing the scenario in more detail]
+
+[CHARACTERS]
+[Character Name] | [Role/Occupation] | [Brief description]
+[Repeat for all 12 characters]
+
+Examples:
+
+[SCENARIO]
+name: The Great Power Struggle
+setting: Trondheim, Norway, 2038 - A city grappling with severe energy shortages
+objective: Balance the city's energy needs while addressing social and ecological concerns
+
+[CHARACTERS]
+Marina Solberg | Marine Biologist | Expert in sustainable aquaculture practices
+Erik Larsen | Salmon Industry CEO | Influential figure in the city's economy
+Astrid Olsen | Green Energy Engineer | Innovator in renewable energy solutions
+Nikolai Iversen | City Council Member | Politician navigating the crisis
+Ingrid Haugen | Community Organizer | Grassroots activist for energy equity
+Lars Pedersen | Deep-sea Tech Worker | Specialist in offshore energy projects
+
+[SCENARIO]
+name: The Tides of Change
+setting: Trondheim, Norway, 2060 - A city affected by a bizarre windmill-induced condition
+objective: Investigate the syndrome and decide the future course for humanity
+
+[CHARACTERS]
+Dr. Kari Johansen | Neurologist | Leading researcher on the Shellfish Syndrome
+Finn Eriksen | Fisherman | Witness to the early stages of the syndrome
+Sofie Andersen | Wind Farm Engineer | Expert on windmill technology and its effects
+Professor Leif Bergström | Marine Ecologist | Studying the syndrome's impact on sea life
+Helena Nilsen | Government Official | Tasked with managing the crisis
+Oskar Thorsen | Affected Citizen | In advanced stages of the Shellfish Syndrome
+
+[SCENARIO]
+name: Frequencies of Fate
+setting: Trondheim, Norway, 2045 - A city experiencing unexplained behavioral changes
+objective: Uncover the truth behind the windmill-induced syndrome and find a solution
+
+[CHARACTERS]
+Dr. Emma Larsson | Epidemiologist | Leading the investigation into the syndrome
+Magnus Haugen | Wind Energy Lobbyist | Advocating for continued windmill expansion
+Ida Svendsen | Acoustics Engineer | Studying the effects of low-frequency noise
+Viktor Olsen | Investigative Journalist | Uncovering the scope of the syndrome
+Linnea Berg | Psychologist | Analyzing the behavioral changes in affected individuals
+Aksel Johansen | Local Farmer | Witnessing the syndrome's effects on livestock
+
+[NEW_SCENARIO]
+Using the format and examples above, create a new scenario set in future Trondheim. Ensure it has a unique premise, clear objective, and 12 diverse characters relevant to the situation. The scenario should explore themes of social progress, ecological changes, or technological advancements, with potential elements of utopia/dystopia.

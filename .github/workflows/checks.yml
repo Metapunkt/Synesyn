@@ -1,0 +1,53 @@
+name: Checks
+
+# Policy checks and hub tests. Unlike the docs workflow, this is not path-filtered:
+# moving a script breaks paths written in documentation, so the check has to run on
+# code changes too, not only documentation ones.
+#
+# The Godot harness specs are not run here. They need a Godot binary and a live
+# session, which is not free on a hosted runner; they run locally and are described
+# in CONTRIBUTING.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: services/synesyn_hub/requirements-dev.txt
+
+      - name: Documented paths still exist
+        run: python utilities/checks/check_doc_paths.py
+
+      - name: Addons do not reach into application autoloads
+        run: python utilities/checks/check_addon_autoloads.py
+
+      # Advisory, deliberately. The ratchet currently reports eight baselined
+      # files that have grown, the largest by ~98 lines, against six that shrank.
+      # That debt is known and scheduled rather than fixed in passing, and it
+      # predates this workflow, so it is surfaced on every run without blocking.
+      # When the drift is cleared, drop continue-on-error and this comment.
+      - name: Line-limit ratchet (advisory)
+        continue-on-error: true
+        run: python utilities/checks/check_line_limits.py --check-baseline
+
+      - name: Install hub test dependencies
+        working-directory: services/synesyn_hub
+        run: pip install -r requirements-dev.txt
+
+      - name: Hub tests
+        working-directory: services/synesyn_hub
+        run: python -m pytest tests/ -q

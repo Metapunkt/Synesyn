@@ -1,0 +1,40 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bfaqs0yavcjdg"]
+
+[ext_resource type="Script" path="res://readymade/data/workplan.gd" id="1_xleia"]
+[ext_resource type="Script" path="res://readymade/data/workplan_task.gd" id="2_2xou5"]
+
+[sub_resource type="Resource" id="Resource_wrtbk"]
+script = ExtResource("2_2xou5")
+core_idea = "Sprint brief: \"Boosted Inference vs. Stochastic Parrots\""
+cosmic_instrument = "HF"
+format = "Outline"
+channel = "Internal"
+notes = "Sets the script skeleton for the week's main video."
+status = "To Do"
+deliverable_path = ""
+
+[sub_resource type="Resource" id="Resource_0a21h"]
+script = ExtResource("2_2xou5")
+core_idea = "Video: \"Why 3+1 Dims = 4-Item Mind?\""
+cosmic_instrument = "AH"
+format = "10 min avatar video"
+channel = "YouTube"
+notes = "Main deliverable for the week. Drive to Discord #start-here."
+status = "To Do"
+deliverable_path = ""
+
+[sub_resource type="Resource" id="Resource_23p6r"]
+script = ExtResource("2_2xou5")
+core_idea = "Carousel: \"Magic Number 4\" explainer"
+cosmic_instrument = "IR"
+format = "IG carousel, FB post"
+channel = "Instagram, FB"
+notes = "Link back to the main YouTube video."
+status = "To Do"
+deliverable_path = "" 
+
+[resource]
+script = ExtResource("1_xleia")
+months = {
+"Month 1": [SubResource("Resource_wrtbk"), SubResource("Resource_0a21h"), SubResource("Resource_23p6r")]
+}

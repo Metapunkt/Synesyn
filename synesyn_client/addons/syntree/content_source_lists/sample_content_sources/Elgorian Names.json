@@ -1,0 +1,24 @@
+{
+	"nodes": {
+		"Elgorian Names": {
+			"id": "Elgorian Names",
+			"is_metaprompt": false,
+			"metadata": {
+				"connections": {
+					"inputs": [],
+					"outputs": []
+				},
+				"graph_position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"name": "Elgorian Names",
+			"path": "res://addons/syntree/content_source_lists/example_content_sources/ElgorianNames.txt",
+			"type": "file"
+		}
+	},
+	"root_nodes": [
+		"Elgorian Names"
+	]
+}

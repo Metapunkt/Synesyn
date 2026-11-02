@@ -1,0 +1,340 @@
+[gd_scene format=3 uid="uid://bduuhgk5huddi"]
+
+[ext_resource type="Script" uid="uid://xli0qcshi283" path="res://ScenSyn/scripts/main_menu.gd" id="1_f8csw"]
+[ext_resource type="Texture2D" uid="uid://bd1vbasjawg1b" path="res://ScenSyn/scene_images/ScenSyn_logo_1.png" id="2_tq4oy"]
+[ext_resource type="Texture2D" uid="uid://dct6k3x6o2a22" path="res://ScenSyn/scene_images/ScenSyn_logo_2.png" id="3_incqu"]
+[ext_resource type="Texture2D" uid="uid://cdcc3j7m7phss" path="res://ScenSyn/scene_images/ScenSyn_logo_3.png" id="4_yeuqo"]
+[ext_resource type="PackedScene" uid="uid://cv5ulx0mk23h4" path="res://ScenSyn/scenes/game_mode_popup.tscn" id="7_plxgo"]
+[ext_resource type="Script" uid="uid://dgy8fxiw3rl8u" path="res://ScenSyn/scripts/networkscripts/Network.gd" id="8_6xnow"]
+[ext_resource type="PackedScene" uid="uid://b61ogmv77aye8" path="res://ScenSyn/scenes/services_panel.tscn" id="9_services"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="10_contemp"]
+[ext_resource type="Texture2D" uid="uid://s5hbxliaa0w8" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="11_play"]
+[ext_resource type="Texture2D" uid="uid://bo6oa5xcetyar" path="res://Synesyn_icons/synesyn-button-icons/icon_grid_apps.svg" id="12_grid"]
+[ext_resource type="Texture2D" uid="uid://yevxmkuoakc" path="res://Synesyn_icons/synesyn-button-icons/icon_settings_gear.svg" id="13_gear"]
+[ext_resource type="Texture2D" uid="uid://4bfmd57qglpj" path="res://Synesyn_icons/synesyn-button-icons/icon_hamburger_menu.svg" id="14_ham"]
+[ext_resource type="Texture2D" uid="uid://ckvi6oki28bgk" path="res://Synesyn_icons/synesyn-backgrounds/bg_main_home.png" id="15_bg"]
+[ext_resource type="Texture2D" uid="uid://5k8mbx6bfbgh" path="res://ScenSyn/scene_images/ScenSyn_logo_2_white.svg" id="16_logo_white"]
+[ext_resource type="Texture2D" uid="uid://vxtnvyujnma1" path="res://Synesyn_icons/synesyn-button-icons/icon_arrow_left.svg" id="i_arrowleft"]
+[ext_resource type="Texture2D" uid="uid://bsa643t3jm2bq" path="res://Synesyn_icons/synesyn-button-icons/icon_restart_refresh.svg" id="i_restartrefresh"]
+[ext_resource type="Script" uid="uid://clhki0c521du0" path="res://ScenSyn/scripts/core/menu_dismiss_catcher.gd" id="menu_dismiss_catcher"]
+
+[node name="MainMenu" type="Control" unique_id=1304901548 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("10_contemp")
+script = ExtResource("1_f8csw")
+metadata/theme_surface = "base"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1788726132]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039, 0.055, 0.078, 1)
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1788726133]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("15_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1715419069]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -165.0
+offset_right = 150.0
+offset_bottom = 165.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ScenSynLogo4" type="TextureRect" parent="VBoxContainer" unique_id=1529496340]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("16_logo_white")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1062951760]
+layout_mode = 2
+text = "Scenario Synthesis Engine"
+horizontal_alignment = 1
+
+[node name="CopyrightLabel" type="Label" parent="VBoxContainer" unique_id=1062951761]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.39, 0.56, 0.55)
+theme_override_font_sizes/font_size = 11
+text = "v0.0.3  © 2026 Ayodele Arigbabu | metapunkt.org | NTNU"
+horizontal_alignment = 1
+
+[node name="ScenSynLogo1" type="Sprite2D" parent="." unique_id=502786099]
+visible = false
+position = Vector2(566, 306)
+texture = ExtResource("2_tq4oy")
+
+[node name="ScenSynLogo2" type="Sprite2D" parent="." unique_id=1018677433]
+visible = false
+position = Vector2(1998, 442)
+texture = ExtResource("3_incqu")
+
+[node name="ScenSynLogo3" type="Sprite2D" parent="." unique_id=1184427787]
+visible = false
+position = Vector2(588, 295)
+texture = ExtResource("4_yeuqo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1445975272]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -149.5
+offset_top = -73.0
+offset_right = 149.5
+offset_bottom = -39.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="NewGameButton" type="Button" parent="HBoxContainer" unique_id=2110931630]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New Game"
+
+[node name="ContinueGameButton" type="Button" parent="HBoxContainer" unique_id=759309093]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+text = "Continue Game"
+
+[node name="SettingsButton" type="Button" parent="HBoxContainer" unique_id=1593752482]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Settings"
+
+[node name="NextButton" type="Button" parent="HBoxContainer" unique_id=1784767608]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Next"
+
+[node name="PreviousButton" type="Button" parent="HBoxContainer" unique_id=828303616]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Previous"
+
+[node name="FinishButton" type="Button" parent="HBoxContainer" unique_id=926418750]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Exit Session"
+
+[node name="BuildScenarioButton" type="Button" parent="HBoxContainer" unique_id=1881244717]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "BuildScenario"
+
+[node name="PlayableScenariosButton" type="Button" parent="HBoxContainer" unique_id=1515940847]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Start a workshop or story session. Choose a scenario, then begin."
+theme_type_variation = &"PrimaryButton"
+text = "Play A Scenario"
+icon = ExtResource("11_play")
+
+[node name="ToolsButton" type="Button" parent="HBoxContainer" unique_id=1539356944]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Advanced workspace: Settings, analysis, and research tools. Not needed to start a session."
+text = "Tools"
+icon = ExtResource("12_grid")
+
+[node name="ServicesMenuButton" type="Button" parent="HBoxContainer" unique_id=1867716695]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "Hub, AI model, voice, and workspace. Open from the hamburger menu or Tools."
+text = "Settings"
+icon = ExtResource("13_gear")
+
+[node name="ItemList" type="ItemList" parent="." unique_id=500486905]
+visible = false
+layout_mode = 0
+offset_right = 196.0
+offset_bottom = 120.0
+item_count = 4
+item_0/text = "1"
+item_1/text = "2"
+item_2/text = "3"
+item_3/text = "4"
+
+[node name="GameModePopup" parent="." unique_id=296742456 instance=ExtResource("7_plxgo")]
+unique_name_in_owner = true
+
+[node name="Network" type="Node" parent="." unique_id=1177108801]
+unique_name_in_owner = true
+script = ExtResource("8_6xnow")
+
+[node name="ReadinessBanner" type="PanelContainer" parent="." unique_id=1493330957]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -132.0
+offset_right = 340.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"SynesynSurfacePanel"
+
+[node name="ReadinessRow" type="HBoxContainer" parent="ReadinessBanner" unique_id=1058904377]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ReadinessSpacer" type="Control" parent="ReadinessBanner/ReadinessRow" unique_id=1957078986]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ReadinessLabel" type="Label" parent="ReadinessBanner/ReadinessRow" unique_id=1957078985]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LabelMeta"
+text = "Checking Hub and AI model setup…"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OpenSettingsButton" type="Button" parent="ReadinessBanner/ReadinessRow" unique_id=1321024909]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Open Settings to check Hub, AI model, and voice setup."
+text = "Open Settings"
+icon = ExtResource("13_gear")
+
+[node name="HamburgerMenuLayer" type="CanvasLayer" parent="." unique_id=1502233129]
+layer = 10
+
+[node name="HamburgerMenuBtn" type="Button" parent="HamburgerMenuLayer" unique_id=1584377761 groups=["synesyn_themed"]]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -68.0
+offset_top = 26.0
+offset_right = -28.0
+offset_bottom = 66.0
+grow_horizontal = 0
+theme = ExtResource("10_contemp")
+icon = ExtResource("14_ham")
+metadata/theme_surface = "base"
+
+[node name="HamburgerUIControls" type="Control" parent="HamburgerMenuLayer" unique_id=157867598 groups=["synesyn_themed"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("10_contemp")
+metadata/theme_surface = "base"
+
+[node name="HamburgerDismissCatcher" type="Control" parent="HamburgerMenuLayer/HamburgerUIControls" unique_id=1845556947]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("menu_dismiss_catcher")
+
+[node name="HamburgerSettingsPanel" type="PanelContainer" parent="HamburgerMenuLayer/HamburgerUIControls" unique_id=25360177]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 797.0
+offset_top = 75.0
+offset_right = 1121.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel" unique_id=366109256]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="SettingsVBox" type="VBoxContainer" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer" unique_id=77845876]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ServicesButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox" unique_id=1125166245]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Hub, AI model, voice, and workspace. Do this once before a live session."
+text = "Settings"
+icon = ExtResource("13_gear")
+
+[node name="ThemeToggleButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox" unique_id=1125166246]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Switch between light and dark mode (applies app-wide)"
+text = "Switch to Light Mode"
+icon = ExtResource("i_restartrefresh")
+
+[node name="NavigationSeparator" type="HSeparator" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox" unique_id=1438978461]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="HamburgerMenuLayer/HamburgerUIControls/HamburgerSettingsPanel/MarginContainer/SettingsVBox" unique_id=1757117814]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Return to Synesyn Launcher"
+text = "Back"
+icon = ExtResource("i_arrowleft")
+
+[node name="ServicesPanel" parent="." unique_id=793421679 instance=ExtResource("9_services")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1

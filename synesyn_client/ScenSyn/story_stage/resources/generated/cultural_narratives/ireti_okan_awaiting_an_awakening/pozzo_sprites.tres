@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/idle/0.png" id="1_hcaf5"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/idle/1.png" id="2_2k1jl"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/idle/2.png" id="3_6f363"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/talking/0.png" id="4_ic3n7"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/talking/1.png" id="5_2ditl"]
+[ext_resource type="Texture2D" path="res://ScenSyn/story_stage/sprites/cultural_narratives/ireti_okan_awaiting_an_awakening/pozzo/talking/2.png" id="6_3pekk"]
+
+[resource]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hcaf5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_2k1jl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6f363")
+}],
+"loop": 2,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ic3n7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_2ditl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_3pekk")
+}],
+"loop": 2,
+"name": &"talking",
+"speed": 5.0
+}]

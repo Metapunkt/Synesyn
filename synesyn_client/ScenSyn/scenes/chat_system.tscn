@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://bjwurygqr1gn7"]
+
+[ext_resource type="Script" uid="uid://dae3qa8xjwpjn" path="res://ScenSyn/scripts/story_log_system.gd" id="1_5r8yd"]
+[ext_resource type="Theme" path="res://ScenSyn/themes/SynesynBase_contemporary_dark.tres" id="1_hriwp"]
+[ext_resource type="Script" uid="uid://dgy8fxiw3rl8u" path="res://ScenSyn/scripts/networkscripts/Network.gd" id="2_0tarx"]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_send_paper_plane.svg" id="icon_send_cs"]
+
+[node name="ChatSystem" type="Control" unique_id=1054169621 groups=["synesyn_themed"]]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_hriwp")
+script = ExtResource("1_5r8yd")
+
+metadata/theme_surface = "base"
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1364868868]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.513726, 0.513726, 0.513726, 0.454902)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1544399530]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=600162687]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/VBoxContainer" unique_id=1381386958]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer/PanelContainer" unique_id=1275456808]
+layout_mode = 2
+
+[node name="DummyRichTextLabel" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/PanelContainer/MarginContainer" unique_id=1641444161]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 200)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=550715443]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -59.0
+offset_top = -48.0
+offset_right = 59.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=955383863]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Text Input"
+
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=880346374]
+layout_mode = 2
+text = "Send"
+icon = ExtResource("icon_send_cs")
+
+[node name="Timer" type="Timer" parent="." unique_id=415870373]
+
+[node name="Network" type="Node" parent="." unique_id=56825623]
+unique_name_in_owner = true
+script = ExtResource("2_0tarx")

@@ -1,0 +1,166 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-backgrounds/bg_workshop_panel.png" id="1_bg"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_play_triangle.svg" id="2_play"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_pause_bars.svg" id="3_pause"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_next_stage_arrow.svg" id="4_next"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_timer_clock.svg" id="5_timer"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_note_document.svg" id="6_note"]
+[ext_resource type="Texture2D" path="res://Synesyn_icons/synesyn-button-icons/icon_export_download.svg" id="7_export"]
+
+[node name="WorkshopCatalystSettingsPanel" type="Node"]
+
+[node name="WorkshopCatalystBg" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(1, 1, 1, 0.2)
+
+[node name="SettingsContent" type="VBoxContainer" parent="."]
+theme_override_constants/separation = 4
+
+[node name="HeaderLabel" type="Label" parent="SettingsContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Workshop Catalyst"
+
+[node name="StageLabel" type="Label" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Stage: (not initialized)"
+autowrap_mode = 2
+
+[node name="SessionStatusLabel" type="Label" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Session: (not initialized)"
+autowrap_mode = 2
+
+[node name="TimeLabel" type="Label" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Time: --:--"
+
+[node name="SessionControls" type="HBoxContainer" parent="SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DurationLabel" type="Label" parent="SettingsContent/SessionControls"]
+layout_mode = 2
+text = "Session Duration"
+
+[node name="SessionDurationOption" type="OptionButton" parent="SettingsContent/SessionControls"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MultiDayToggle" type="CheckButton" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Part of multi-day session"
+
+[node name="TimerControls" type="HBoxContainer" parent="SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StartButton" type="Button" parent="SettingsContent/TimerControls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start"
+icon = ExtResource("2_play")
+
+[node name="PauseButton" type="Button" parent="SettingsContent/TimerControls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pause"
+icon = ExtResource("3_pause")
+
+[node name="NextStageButton" type="Button" parent="SettingsContent/TimerControls"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Advance the agenda. If there was discussion, this also asks the AI to suggest Session Record items. Suggestions are not committed until you accept them."
+text = "Next Stage"
+icon = ExtResource("4_next")
+
+[node name="AddFiveMinutesButton" type="Button" parent="SettingsContent/TimerControls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+5m"
+icon = ExtResource("5_timer")
+
+[node name="AddTenMinutesButton" type="Button" parent="SettingsContent/TimerControls"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+10m"
+icon = ExtResource("5_timer")
+
+[node name="AddNoteToggle" type="CheckButton" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Next message will be saved as a facilitator note and will not trigger an assistant response."
+text = "Next input is note only"
+
+[node name="UpdateBucketsButton" type="Button" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Summarize the recent transcript into workshop buckets (ideas/constraints/risks/decisions/open questions/next steps)."
+text = "Update Workshop Notes"
+icon = ExtResource("6_note")
+
+[node name="ExportSummaryButton" type="Button" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Write a markdown summary file next to the story log (no AI call)."
+text = "Export Workshop Summary"
+icon = ExtResource("7_export")
+
+[node name="ExportDecisionRecordButton" type="Button" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Write a clean, human-readable decision record (decisions, risks, deferred questions only)."
+text = "Export Decision Record"
+icon = ExtResource("7_export")
+
+[node name="InjectStressButton" type="Button" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Post this stage's stress injection scenario text as a Facilitator Note. Only active during Stress Injection stages."
+disabled = true
+text = "Inject Stress"
+
+[node name="CommandsToggle" type="CheckButton" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Show Facilitator Commands"
+
+[node name="CommandsLabel" type="RichTextLabel" parent="SettingsContent"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+bbcode_enabled = true
+text = "[b]Facilitator Commands[/b] (type in the input field):\n[b]/decide [text][/b] — force-capture a decision\n[b]/risk [text][/b] — force-capture a named risk\n[b]/defer [text][/b] — force-capture a deferred question\n[b]/vote[/b] — open a vote on the current proposal\n[b]/synthesis[/b] — recall the latest Session Record narrative (it no longer posts automatically every turn — watch the status bar for a one-line pulse instead)\n[b]/note [text][/b] — post a facilitator note (no AI response)\n\nToggle [b]Next input is note only[/b] above to send any message as a note without triggering an assistant response."
+fit_content = true
+
+[node name="ActionStatusLabel" type="Label" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.9, 0.5, 1)
+autowrap_mode = 2
+
+[node name="SendAsFacilitatorToggle" type="CheckButton" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When enabled, your messages are sent as 'Facilitator', the Workshop human runtime identity."
+text = "Send as Facilitator (visible to AI)"
+
+[node name="ModeStatusLabel" type="Label" parent="SettingsContent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Input Mode: normal"
+autowrap_mode = 2

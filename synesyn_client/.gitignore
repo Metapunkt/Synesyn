@@ -1,0 +1,6 @@
+# Godot engine cache, regenerated when the project is opened.
+.godot/
+
+# Everything else is handled by the repository-root .gitignore, which can
+# express paths this file cannot reach. A parent-relative pattern such as
+# `../docs/...` is silently ignored by Git, so those rules live at the root.
