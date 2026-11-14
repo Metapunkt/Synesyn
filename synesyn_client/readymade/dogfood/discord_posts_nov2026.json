@@ -146,7 +146,7 @@
     "channel": "#general",
     "theme": "Friday roundup",
     "title": "Friday roundup — 0.1.0, closures, pendulum",
-    "draft": "**Friday roundup — 0.1.0, closures, pendulum**\n\nThis week: Synesyn 0.1.0 in `#synesyn`; Open Closure as discursive research in `#kernel_inference`; Lubi Board / Dream Box / Chaos Engine from the Research Catalogue in `#stochastic_dreams`. One open slot held for live updates.\n\nOpen questions:\n- Prefer next week’s theory weight in `#mapping_latent_reality` or more installation close-reading in `#stochastic_dreams`?\n- Any Open Closure demos (`closure_router/demos.py`) people want to walk through together?\n\nWeekend: optional light only.",
+    "draft": "**Friday roundup — 0.1.0, closures, pendulum**\n\nThis week: Synesyn 0.1.0 in `#synesyn`; Open Closure as discursive research in `#kernel_inference`; Lubi Board / Dream Box / Chaos Engine from the Research Catalogue in `#stochastic_dreams`. One open slot held for live updates.\n\nOpen questions:\n- Prefer next week’s theory weight in `#mapping_latent_reality` or more installation close-reading in `#stochastic_dreams`?\n- Any [Open Closure demos](https://github.com/Metapunkt/Open_Closure/blob/main/closure_router/demos.py) people want to walk through together?\n\nWeekend: optional light only.",
     "source": "docs/community/discord_content_plan_2026-11.md",
     "status": "draft",
     "image": "docs/assets/screenshots/story-stage.png",

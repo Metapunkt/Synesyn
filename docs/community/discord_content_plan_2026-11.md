@@ -265,7 +265,7 @@ This week: Synesyn 0.1.0 in `#synesyn`; Open Closure as discursive research in `
 
 Open questions:
 - Prefer next week’s theory weight in `#mapping_latent_reality` or more installation close-reading in `#stochastic_dreams`?
-- Any Open Closure demos (`closure_router/demos.py`) people want to walk through together?
+- Any [Open Closure demos](https://github.com/Metapunkt/Open_Closure/blob/main/closure_router/demos.py) people want to walk through together?
 
 Weekend: optional light only.
 
