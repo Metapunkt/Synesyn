@@ -95,7 +95,8 @@ func _ensure_main_tab_hit_targets() -> void:
 	if main_tab_container == null:
 		return
 	main_tab_container.clip_tabs = false
-	main_tab_container.tab_alignment = TabContainer.ALIGNMENT_LEFT
+	# Godot 4 TabContainer.tab_alignment uses TabBar alignment ints (0=left).
+	main_tab_container.tab_alignment = 0
 	main_tab_container.add_theme_font_size_override("font_size", 15)
 	var tab_bar: TabBar = main_tab_container.get_tab_bar()
 	if tab_bar == null:
