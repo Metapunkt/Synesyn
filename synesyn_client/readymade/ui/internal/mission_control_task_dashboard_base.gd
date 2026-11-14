@@ -439,8 +439,12 @@ func _on_workplan_loaded():
 	_setup_calendar()
 	_update_calendar()
 	
-	# Load completed tasks into content viewer
-	var content_viewer_node = $HSplitContainer/MainTabContainer/ContentViewer/ContentMarginContainer/ContentViewer_tab
+	# Load completed tasks into content viewer.
+	# Use the @onready ref — structural tabs reparent MainTabContainer under
+	# MainTabsColumn, so a late $HSplitContainer/MainTabContainer/... lookup fails.
+	var content_viewer_node: Control = content_viewer
+	if content_viewer_node == null:
+		content_viewer_node = find_child("ContentViewer_tab", true, false) as Control
 	print("MissionControl: Content viewer node found: ", content_viewer_node != null)
 	if content_viewer_node and content_viewer_node.has_method("load_completed_tasks"):
 		var all_tasks = workplan_obj.get_all_tasks()

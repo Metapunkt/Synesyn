@@ -431,7 +431,7 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="PriorityFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 clip_text = true
 text_overrun_behavior = 3
