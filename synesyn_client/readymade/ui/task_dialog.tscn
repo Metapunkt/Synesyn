@@ -65,6 +65,49 @@ placeholder_text = "Enter the core concept or idea for this content..."
 [node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
+[node name="CosmicContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="CosmicLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+text = "🔭 Cosmic Instrument(s) - Select prompting techniques:"
+
+[node name="CosmicGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RolePlayCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "RP — Role Play (Dimensional Shifter)"
+
+[node name="HypotheticalCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "HF — Hypothetical Framings (Reality Benders)"
+
+[node name="IterativeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "IR — Iterative Refinement (Gravitational Drift)"
+
+[node name="AbductiveCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "AH — Abductive Hypothesis Generation (Quantum Reasoning)"
+
+[node name="CosmicOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+
+[node name="CosmicOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+text = "Other:"
+
+[node name="CosmicOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Specify other cosmic instrument..."
+editable = false
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
 [node name="FormatsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
@@ -130,7 +173,7 @@ size_flags_horizontal = 3
 placeholder_text = "Specify other format..."
 editable = false
 
-[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
 [node name="ChannelsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
@@ -192,49 +235,6 @@ text = "Other:"
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Specify other channel..."
-editable = false
-
-[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
-layout_mode = 2
-
-[node name="CosmicContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
-layout_mode = 2
-
-[node name="CosmicLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-text = "🔭 Cosmic Instrument(s) - Select prompting techniques:"
-
-[node name="CosmicGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="RolePlayCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Role Play (Dimensional Shifter)"
-
-[node name="HypotheticalCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Hypothetical Framings (Reality Benders)"
-
-[node name="IterativeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Iterative Refinement (Gravitational Drift)"
-
-[node name="AbductiveCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Abductive Hypothesis Generation (Quantum Reasoning)"
-
-[node name="CosmicOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-
-[node name="CosmicOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
-layout_mode = 2
-text = "Other:"
-
-[node name="CosmicOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Specify other cosmic instrument..."
 editable = false
 
 [node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]

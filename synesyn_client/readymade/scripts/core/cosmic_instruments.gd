@@ -104,6 +104,14 @@ static func display_name(raw: String) -> String:
 	return raw.strip_edges()
 
 
+static func labeled_display(raw: String) -> String:
+	"""Return 'CODE — Canonical Name' for pickers and summaries."""
+	var code: String = canonicalize(raw)
+	if code.is_empty():
+		return raw.strip_edges()
+	return "%s — %s" % [code, display_name(code)]
+
+
 static func matches(raw: String, expected_code: String) -> bool:
 	"""True when raw resolves to the expected ADR 0024 code."""
 	return canonicalize(raw) == expected_code.to_upper().strip_edges()

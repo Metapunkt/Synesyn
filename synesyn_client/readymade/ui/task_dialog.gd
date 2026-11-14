@@ -195,6 +195,16 @@ func _setup_ui():
 		priority_option.add_item("Medium (1)")
 		priority_option.add_item("High (2)")
 		priority_option.add_item("Critical (3)")
+
+	# Keep cosmic picker labels in sync with CosmicInstruments.labeled_display.
+	if roleplay_check:
+		roleplay_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_RP)
+	if hypothetical_check:
+		hypothetical_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_HF)
+	if iterative_check:
+		iterative_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_IR)
+	if abductive_check:
+		abductive_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_AH)
 	
 	# Initially disable "Other" text fields
 	if format_other_edit:

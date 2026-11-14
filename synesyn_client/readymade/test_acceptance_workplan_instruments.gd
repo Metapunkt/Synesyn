@@ -80,6 +80,14 @@ func _test_instrument_mapping() -> void:
 		CosmicInstruments.display_name("RP") == CosmicInstruments.NAME_RP,
 		"display_name(RP) is canonical long name"
 	)
+	_expect(
+		CosmicInstruments.labeled_display("RP") == "RP — " + CosmicInstruments.NAME_RP,
+		"labeled_display(RP) includes code and canonical name"
+	)
+	_expect(
+		CosmicInstruments.labeled_display("HF").begins_with("HF — "),
+		"labeled_display(HF) begins with HF —"
+	)
 
 
 func _test_backend_unavailable_message_and_fail_task() -> void:
