@@ -693,6 +693,8 @@ func _show_task_template_selector():
 	var dialog = AcceptDialog.new()
 	dialog.title = "Select Task Template"
 	dialog.size = Vector2(500, 400)
+	# Custom Cancel/Custom/Create buttons own the actions — hide AcceptDialog's OK.
+	dialog.dialog_hide_on_ok = false
 	
 	var vbox = VBoxContainer.new()
 	dialog.add_child(vbox)
@@ -765,6 +767,9 @@ func _show_task_template_selector():
 	)
 	
 	add_child(dialog)
+	var ok_btn: Button = dialog.get_ok_button()
+	if ok_btn != null:
+		ok_btn.visible = false
 	dialog.popup_centered()
 	print("MissionControl: Template selector opened with ", templates.size(), " templates")
 

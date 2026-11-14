@@ -5,6 +5,9 @@ func _show_workplan_manager_dialog():
 	"""Create and show the workplan manager dialog"""
 	var dialog = _create_workplan_manager_dialog()
 	add_child(dialog)
+	var ok_btn: Button = dialog.get_ok_button()
+	if ok_btn != null:
+		ok_btn.visible = false
 	dialog.popup_centered(Vector2(600, 400))
 
 func _create_workplan_manager_dialog() -> AcceptDialog:
@@ -75,6 +78,9 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	export_button.text = "Export Workplan"
 	export_button.pressed.connect(_on_export_workplan_pressed.bind(dialog, workplan_list))
 	io_container.add_child(export_button)
+
+	# Close is available via window X; hide the redundant AcceptDialog OK in _show_*.
+	dialog.dialog_hide_on_ok = false
 	
 	return dialog
 
