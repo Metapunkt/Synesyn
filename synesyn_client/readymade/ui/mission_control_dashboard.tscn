@@ -472,15 +472,18 @@ metadata/_tab_index = 2
 
 [node name="CalendarMarginContainer" type="MarginContainer" parent="HSplitContainer/MainTabContainer/Calendar"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="CalendarVBoxContainer" type="VBoxContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
 
 [node name="CalendarHeaderContainer" type="VBoxContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer"]
 layout_mode = 2
@@ -524,12 +527,17 @@ layout_mode = 2
 
 [node name="CalendarScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="CalendarGrid" type="GridContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer/CalendarScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
 columns = 7
 
 [node name="Scratchpad" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]

@@ -72,6 +72,7 @@ func _build_calendar_grid():
 		var header = Label.new()
 		header.text = day_name
 		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		header.add_theme_color_override("font_color", Color.GRAY)
 		header.add_theme_font_size_override("font_size", 12)
 		calendar_grid.add_child(header)
@@ -86,7 +87,9 @@ func _build_calendar_grid():
 	# Add empty cells for days before the first day of the month
 	for i in range(first_weekday):
 		var empty_cell = Control.new()
-		empty_cell.custom_minimum_size = Vector2(120, 100)
+		# Keep mins low so 7 weekday columns fit at 1152x648 without horizontal scroll.
+		empty_cell.custom_minimum_size = Vector2(72, 72)
+		empty_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		calendar_grid.add_child(empty_cell)
 	
 	# Add day cells
@@ -104,7 +107,9 @@ func _create_day_cell(day: int) -> Control:
 	"""Create a day cell for the calendar"""
 	var cell = PanelContainer.new()
 	cell.name = "DayCell_%d" % day
-	cell.custom_minimum_size = Vector2(120, 100)
+	cell.custom_minimum_size = Vector2(72, 72)
+	cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cell.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
 	# Add drop functionality feedback (drop logic is handled in global _input)
 	cell.mouse_entered.connect(_on_day_cell_mouse_entered.bind(day))
@@ -129,13 +134,14 @@ func _create_day_cell(day: int) -> Control:
 	
 	vbox.add_child(day_label)
 	
-	# Add a ScrollContainer to handle task overflow
+	# Clip overflow inside the cell — avoid nested scrollbars that force outer scroll.
 	var scroll_container = ScrollContainer.new()
 	scroll_container.name = "ScrollContainer" # Explicitly set the name
 	scroll_container.mouse_filter = MOUSE_FILTER_PASS # CRUCIAL: Allow clicks to pass through to content
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	vbox.add_child(scroll_container)
 
 	# Task container now goes inside the ScrollContainer
