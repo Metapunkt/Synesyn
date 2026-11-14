@@ -14,6 +14,7 @@ extends PanelContainer
 @onready var review_button = $MarginContainer/VBoxContainer/ActionButtons/ReviewButton
 @onready var complete_button = $MarginContainer/VBoxContainer/ActionButtons/CompleteButton
 @onready var edit_button = $MarginContainer/VBoxContainer/ActionButtons/EditButton
+@onready var copy_markdown_button = $MarginContainer/VBoxContainer/ActionButtons/CopyMarkdownButton
 @onready var delete_button = $MarginContainer/VBoxContainer/ActionButtons/DeleteButton
 
 var current_task: WorkplanTask
@@ -39,6 +40,8 @@ func _ready():
 		complete_button.pressed.connect(_on_complete_pressed)
 	if edit_button:
 		edit_button.pressed.connect(_on_edit_pressed)
+	if copy_markdown_button:
+		copy_markdown_button.pressed.connect(_on_copy_markdown_pressed)
 	if delete_button:
 		delete_button.pressed.connect(_on_delete_pressed)
 	if completion_checkbox:
@@ -164,6 +167,18 @@ func _on_complete_pressed():
 
 func _on_edit_pressed():
 	task_action_requested.emit("edit", current_task)
+
+func _on_copy_markdown_pressed():
+	if current_task == null:
+		return
+	const MarkdownScript = preload("res://readymade/scripts/workplan_task_markdown.gd")
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	var copied: String = MarkdownScript.copy_to_clipboard(current_task, workplan)
+	print("WorkplanTaskCard: copied %d chars of Markdown" % copied.length())
+	task_action_requested.emit("copy_markdown", current_task)
 
 func _on_delete_pressed():
 	task_action_requested.emit("delete", current_task)

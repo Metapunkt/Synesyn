@@ -93,6 +93,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Edit Task"
 
+[node name="CopyMarkdownButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Copy as Markdown"
+tooltip_text = "Copy this task as Markdown for chat/community paste"
+
 [node name="DeleteButton" type="Button" parent="MarginContainer/VBoxContainer/ActionButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
