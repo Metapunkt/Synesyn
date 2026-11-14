@@ -50,8 +50,10 @@ Godot version, so a mismatched build fails to load rather than degrading.
 
 The first time you open `synesyn_client/` in Godot (or run
 `godot --headless --path synesyn_client --import`), Godot imports assets and
-registers GDExtensions, writing `.godot/` (including `extension_list.cfg`).
-That cache is local — do not commit it.
+registers GDExtensions. LimboAI is discovered from
+`addons/limboai/bin/limboai.gdextension` — there is no `[gdextension]` section
+in `project.godot` for that. Godot writes `.godot/` (including
+`extension_list.cfg`); that cache is local — do not commit it.
 
 On that first open you may see transient errors such as
 `Could not find base class "BTPlayer"` / `BTTask` / `BTAction`, or
