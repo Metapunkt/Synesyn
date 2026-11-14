@@ -11,6 +11,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	_test_instrument_mapping()
+	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
@@ -76,14 +77,70 @@ func _test_instrument_mapping() -> void:
 	)
 
 
-func _test_workplan_save_load_and_legacy_migration() -> void:
-	print("-- workplan save/load + legacy migration --")
-
-	# Isolate under a temp storage root. Autoloads may already have created
-	# WorkplanManager against the default Documents path; re-point and re-run
-	# migration after seeding the legacy file.
-	var temp_root: String = OS.get_user_data_dir().path_join("_readymade_acceptance_tmp")
+func _test_top_level_readymade_path_and_migration() -> void:
+	print("-- top-level Documents/Synesyn/readymade/ path + nested migration --")
+	var temp_root: String = OS.get_user_data_dir().path_join("_readymade_path_migration_tmp")
 	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+	RuntimeConfig.reset_readymade_migration_guard_for_tests()
+
+	var data_dir: String = RuntimeConfig.get_readymade_data_dir()
+	var output_dir: String = RuntimeConfig.get_readymade_output_dir()
+	var workplans_dir: String = RuntimeConfig.get_workplans_dir()
+	_expect(data_dir.ends_with("/readymade/") or data_dir.ends_with("\\readymade\\") or data_dir.ends_with("/readymade"), "get_readymade_data_dir ends with /readymade/")
+	_expect("/synesyn/readymade" not in data_dir.replace("\\", "/") and "\\synesyn\\readymade" not in data_dir, "data dir is not nested under synesyn/readymade")
+	_expect(output_dir.begins_with(data_dir.rstrip("/\\")) or data_dir.rstrip("/\\") in output_dir.replace("\\", "/"), "output dir is under readymade data dir")
+	_expect("workplans" in workplans_dir, "workplans dir name present")
+	_expect(workplans_dir.replace("\\", "/").begins_with(data_dir.replace("\\", "/").rstrip("/")), "workplans live under readymade/")
+
+	# Seed nested legacy tree: synesyn/readymade/output/marker.md and a workplan file
+	var nested_root: String = RuntimeConfig.get_legacy_readymade_data_dir()
+	var nested_output: String = nested_root.path_join("output")
+	DirAccess.make_dir_recursive_absolute(nested_output)
+	var nested_marker: String = nested_output.path_join("legacy_marker.md")
+	var marker_file: FileAccess = FileAccess.open(nested_marker, FileAccess.WRITE)
+	_expect(marker_file != null, "seed nested legacy marker")
+	if marker_file:
+		marker_file.store_string("# legacy nested content\n")
+		marker_file.close()
+
+	var nested_workplans: String = RuntimeConfig.get_legacy_workplans_dir()
+	DirAccess.make_dir_recursive_absolute(nested_workplans)
+	var nested_wp: String = nested_workplans.path_join("nested_plan.tres")
+	var plan := Workplan.new()
+	plan.name = "Nested Plan"
+	ResourceSaver.save(plan, nested_wp)
+
+	# Newer file already at destination must not be overwritten
+	var new_output: String = RuntimeConfig.get_readymade_output_dir()
+	DirAccess.make_dir_recursive_absolute(new_output)
+	var protected: String = new_output.path_join("legacy_marker.md")
+	var protected_body: String = "# keep me — newer at dest\n"
+	var protected_file: FileAccess = FileAccess.open(protected, FileAccess.WRITE)
+	if protected_file:
+		protected_file.store_string(protected_body)
+		protected_file.close()
+
+	RuntimeConfig.reset_readymade_migration_guard_for_tests()
+	RuntimeConfig.migrate_readymade_storage_if_needed()
+
+	var migrated_marker: String = new_output.path_join("legacy_marker.md")
+	_expect(FileAccess.file_exists(migrated_marker), "nested output marker present after migration")
+	if FileAccess.file_exists(migrated_marker):
+		var read_back: FileAccess = FileAccess.open(migrated_marker, FileAccess.READ)
+		var body: String = read_back.get_as_text() if read_back else ""
+		if read_back:
+			read_back.close()
+		_expect(body == protected_body, "migration does not overwrite newer dest file")
+
+	var migrated_wp: String = RuntimeConfig.get_workplans_dir().path_join("nested_plan.tres")
+	_expect(FileAccess.file_exists(migrated_wp) or ResourceLoader.exists(migrated_wp), "nested workplans migrated into readymade/workplans/")
+
+	_restore_storage_root(previous_root)
+	_wipe_dir(temp_root)
+
+
+func _push_temp_storage_root(temp_root: String) -> String:
 	var previous_root: String = ""
 	var cfg: Dictionary = RuntimeConfig.load_config()
 	if typeof(cfg.get("storage", {})) == TYPE_DICTIONARY:
@@ -92,6 +149,31 @@ func _test_workplan_save_load_and_legacy_migration() -> void:
 		cfg["storage"] = {}
 	(cfg["storage"] as Dictionary)["root_dir"] = temp_root
 	RuntimeConfig.save_config(cfg)
+	return previous_root
+
+
+func _restore_storage_root(previous_root: String) -> void:
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	if not cfg.has("storage") or typeof(cfg["storage"]) != TYPE_DICTIONARY:
+		cfg["storage"] = {}
+	if previous_root.strip_edges().is_empty():
+		(cfg["storage"] as Dictionary).erase("root_dir")
+	else:
+		(cfg["storage"] as Dictionary)["root_dir"] = previous_root
+	RuntimeConfig.save_config(cfg)
+	RuntimeConfig.reset_readymade_migration_guard_for_tests()
+
+
+func _test_workplan_save_load_and_legacy_migration() -> void:
+	print("-- workplan save/load + legacy migration --")
+
+	# Isolate under a temp storage root. Autoloads may already have created
+	# WorkplanManager against the default Documents path; re-point and re-run
+	# migration after seeding the legacy file.
+	var temp_root: String = OS.get_user_data_dir().path_join("_readymade_acceptance_tmp")
+	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+	RuntimeConfig.reset_readymade_migration_guard_for_tests()
 
 	var workplans_dir: String = RuntimeConfig.get_workplans_dir()
 	var legacy_path: String = Workplan.legacy_persist_path()
@@ -191,11 +273,7 @@ func _test_workplan_save_load_and_legacy_migration() -> void:
 	if created_manager and is_instance_valid(manager):
 		manager.queue_free()
 		await get_tree().process_frame
-	if previous_root.strip_edges().is_empty():
-		(cfg["storage"] as Dictionary).erase("root_dir")
-	else:
-		(cfg["storage"] as Dictionary)["root_dir"] = previous_root
-	RuntimeConfig.save_config(cfg)
+	_restore_storage_root(previous_root)
 	_wipe_dir(temp_root)
 
 

@@ -38,7 +38,7 @@ func _ready():
 	print("   ✅ Completed: ", completed_tasks)
 	print("   📝 Pending: ", pending_tasks)
 	
-	# Test persistence — WorkplanManager under Documents/Synesyn/.../workplans/
+	# Test persistence — WorkplanManager under Documents/Synesyn/readymade/workplans/
 	print("\n💾 PERSISTENCE TEST:")
 	var manager = get_node_or_null("/root/WorkplanManager")
 	if manager == null and orchestrator.has_method("get_workplan_manager"):

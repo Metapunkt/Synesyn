@@ -68,14 +68,17 @@ func _migrate_legacy_single_workplan_file() -> void:
 		return
 
 	var legacy_documents: String = Workplan.legacy_persist_path()
-	# Prefer Documents legacy; also accept pre-ADR-0014 user:// copy.
+	var nested_legacy: String = Workplan.nested_legacy_persist_path()
+	# Prefer top-level ReadyMade path; also accept nested synesyn/readymade/ and user://.
 	RuntimeConfig.migrate_binary_file_if_needed(
-		legacy_documents, ["user://workplan_data.tres"]
+		legacy_documents, [nested_legacy, "user://workplan_data.tres"]
 	)
 
 	var source_path: String = ""
 	if FileAccess.file_exists(legacy_documents) or ResourceLoader.exists(legacy_documents):
 		source_path = legacy_documents
+	elif FileAccess.file_exists(nested_legacy) or ResourceLoader.exists(nested_legacy):
+		source_path = nested_legacy
 	elif FileAccess.file_exists("user://workplan_data.tres"):
 		source_path = "user://workplan_data.tres"
 

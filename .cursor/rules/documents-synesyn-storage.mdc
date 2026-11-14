@@ -25,3 +25,7 @@ Explorer):
 
 Example Open Play library location:
 `C:/Users/<you>/Documents/Synesyn/scensyn/story_catalyst/open_play/scenarios/`
+
+Example ReadyMade location (top-level app folder, parallel to `scensyn/`):
+`C:/Users/<you>/Documents/Synesyn/readymade/` — workplans under `workplans/`,
+drafts/output under `output/`. Not `.../synesyn/readymade/`.

@@ -6,11 +6,17 @@ class_name Workplan extends Resource
 @export var description: String = ""
 @export var created_date: String = ""
 
-## Legacy dual-write path (Documents/.../readymade/workplan_data.tres).
-## Persistence is owned by WorkplanManager under Documents/.../workplans/.
+## Legacy dual-write path under the ReadyMade app folder
+## (Documents/Synesyn/readymade/workplan_data.tres after the top-level move).
+## Persistence is owned by WorkplanManager under readymade/workplans/.
 ## Kept only so callers and migration helpers can resolve the old location.
 static func legacy_persist_path() -> String:
 	return RuntimeConfig.get_readymade_data_dir().path_join("workplan_data.tres")
+
+
+## Nested pre-move path: Documents/Synesyn/synesyn/readymade/workplan_data.tres
+static func nested_legacy_persist_path() -> String:
+	return RuntimeConfig.get_legacy_readymade_data_dir().path_join("workplan_data.tres")
 
 func _init():
 	if created_date.is_empty():

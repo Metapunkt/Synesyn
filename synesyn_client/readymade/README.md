@@ -17,7 +17,7 @@ ReadyMade is designed as a clean, self-contained system that sits on top of the 
 
 ## 3. Key Components
 
-- **`WorkplanManager`** (via `ReadyMadeOrchestrator`): Owns persistence under `Documents/Synesyn/.../workplans/`. Bundled `data/workplan.tres` is sample data only; the legacy single-file `workplan_data.tres` is migrated once into that directory.
+- **`WorkplanManager`** (via `ReadyMadeOrchestrator`): Owns persistence under `Documents/Synesyn/readymade/workplans/` (ReadyMade's top-level app folder, parallel to `scensyn/`). Bundled `data/workplan.tres` is sample data only; legacy `synesyn/readymade/` and single-file `workplan_data.tres` are migrated once into that tree.
 - **`scripts/singletons/ReadyMadeOrchestrator.gd`**: The global controller that connects to WorkplanManager and provides functions for accessing and modifying the active workplan.
 - **`ui/mission_control_dashboard.tscn`**: The main user interface for the human operator. It visualizes the data from `workplan.tres` and will serve as the primary interaction point with the system.
 - **`readymade_main.tscn`**: The main scene and entry point for the ReadyMade application.

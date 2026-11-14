@@ -126,7 +126,9 @@ static func get_packs_dir() -> String:
 
 
 static func get_workplans_dir() -> String:
-	return get_synesyn_module_dir().path_join("workplans") + "/"
+	## ReadyMade workplans live under the ReadyMade app folder (not synesyn/).
+	migrate_readymade_storage_if_needed()
+	return get_readymade_data_dir().path_join("workplans") + "/"
 
 
 static func get_metapunkt_data_dir() -> String:
@@ -149,13 +151,61 @@ static func get_syntree_resources_path() -> String:
 	return get_synesyn_module_dir().path_join("syntree_resources.tres")
 
 
+## Documents/Synesyn/readymade/ — ReadyMade app data (mirrors ScenSyn's scensyn/ layout).
+## Not under synesyn/readymade/; that nested path is legacy and migrated once.
+static var _readymade_storage_migrated: bool = false
+
 static func get_readymade_data_dir() -> String:
-	return get_synesyn_module_dir().path_join("readymade") + "/"
+	migrate_readymade_storage_if_needed()
+	var base: String = get_storage_root_dir()
+	if base.strip_edges().is_empty():
+		return ProjectSettings.globalize_path("user://readymade/")
+	return base.path_join("readymade") + "/"
 
 
 static func get_readymade_output_dir() -> String:
-	"""User-visible ReadyMade generated markdown (Documents/Synesyn/.../readymade/output/)."""
+	"""User-visible ReadyMade generated markdown (Documents/Synesyn/readymade/output/)."""
 	return get_readymade_data_dir().path_join("output") + "/"
+
+
+## Pre-migration nested path: Documents/Synesyn/synesyn/readymade/
+static func get_legacy_readymade_data_dir() -> String:
+	var base: String = get_storage_root_dir()
+	if base.strip_edges().is_empty():
+		return ProjectSettings.globalize_path("user://synesyn/readymade/")
+	return get_synesyn_module_dir().path_join("readymade") + "/"
+
+
+## Pre-migration workplans path: Documents/Synesyn/synesyn/workplans/
+static func get_legacy_workplans_dir() -> String:
+	return get_synesyn_module_dir().path_join("workplans") + "/"
+
+
+## Test/harness helper: allow migration to run again after isolating storage.
+static func reset_readymade_migration_guard_for_tests() -> void:
+	_readymade_storage_migrated = false
+
+
+## One-time copy of nested synesyn/readymade/ (and synesyn/workplans/) into the
+## top-level ReadyMade folder. Never overwrites files that already exist at dest.
+static func migrate_readymade_storage_if_needed() -> void:
+	if _readymade_storage_migrated:
+		return
+	_readymade_storage_migrated = true
+
+	var base: String = get_storage_root_dir()
+	var new_root: String
+	if base.strip_edges().is_empty():
+		new_root = ProjectSettings.globalize_path("user://readymade/")
+	else:
+		new_root = base.path_join("readymade") + "/"
+
+	var legacy_root: String = get_legacy_readymade_data_dir()
+	migrate_directory_contents_if_needed(new_root, [legacy_root])
+
+	# Workplans previously lived beside the nested folder under synesyn/.
+	var new_workplans: String = new_root.path_join("workplans") + "/"
+	migrate_directory_contents_if_needed(new_workplans, [get_legacy_workplans_dir()])
 
 
 ## Visual system assets (ComfyUI workflows, presets, prompt scaffolding).
@@ -219,6 +269,49 @@ static func migrate_binary_file_if_needed(dest_path: String, legacy_paths: Array
 		dest_file.store_buffer(bytes)
 		dest_file.close()
 		return
+
+
+## Recursively copy files from each legacy directory into dest_dir once.
+## Existing destination files are never overwritten (newer/local wins).
+static func migrate_directory_contents_if_needed(dest_dir: String, legacy_dirs: Array) -> void:
+	var dest_root: String = dest_dir.strip_edges()
+	if dest_root.is_empty():
+		return
+	for legacy_any: Variant in legacy_dirs:
+		var legacy_root: String = String(legacy_any).strip_edges()
+		if legacy_root.is_empty():
+			continue
+		if not DirAccess.dir_exists_absolute(legacy_root):
+			# Also accept Godot user:// roots that need globalize.
+			var globalized: String = ProjectSettings.globalize_path(legacy_root)
+			if globalized != legacy_root and DirAccess.dir_exists_absolute(globalized):
+				legacy_root = globalized
+			else:
+				continue
+		_migrate_directory_recursive(legacy_root, dest_root, legacy_root)
+
+
+static func _migrate_directory_recursive(src_dir: String, dest_root: String, legacy_root: String) -> void:
+	var dir: DirAccess = DirAccess.open(src_dir)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var entry: String = dir.get_next()
+	while not entry.is_empty():
+		if entry == "." or entry == "..":
+			entry = dir.get_next()
+			continue
+		var src_path: String = src_dir.path_join(entry)
+		var rel: String = src_path.trim_prefix(legacy_root).lstrip("/\\")
+		var dest_path: String = dest_root.path_join(rel)
+		if dir.current_is_dir():
+			DirAccess.make_dir_recursive_absolute(dest_path)
+			_migrate_directory_recursive(src_path, dest_root, legacy_root)
+		else:
+			# Reuse the file helper so we never clobber an existing dest.
+			migrate_binary_file_if_needed(dest_path, [src_path])
+		entry = dir.get_next()
+	dir.list_dir_end()
 
 
 static func default_config() -> Dictionary:
