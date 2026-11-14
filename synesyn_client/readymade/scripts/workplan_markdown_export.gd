@@ -1,6 +1,6 @@
 extends RefCounted
 class_name WorkplanMarkdownExport
-## Pure helpers to render a Workplan as Anya-friendly markdown (day-by-day posts).
+## Pure helpers to render a Workplan as day-by-day markdown for content handoff.
 
 
 static func render(workplan: Resource) -> String:

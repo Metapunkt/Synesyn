@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://readymade_dogfood_discord"]
-
-[ext_resource type="Script" path="res://readymade/test_dogfood_discord_content_plan.gd" id="1_dogfood"]
-
-[node name="TestDogfoodDiscordContentPlan" type="Node"]
-script = ExtResource("1_dogfood")

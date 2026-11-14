@@ -1,11 +1,11 @@
 extends Node
-## Dogfood walkthrough: Anya Discord content plan inside ReadyMade.
+## Dogfood walkthrough: fictional community content plan inside ReadyMade.
 ## Creates a workplan, tasks with publish dates/channels, scratchpad notes,
 ## markdown export, and a friction log. Exits 0 on success.
 
-const POSTS_PATH := "res://readymade/dogfood/discord_posts_nov2026.json"
-const WORKPLAN_NAME := "Anya Discord Nov–Dec 2026"
-const FRICTION_PATH_REL := "dogfood_friction_discord_plan.json"
+const POSTS_PATH := "res://readymade/dogfood/example_community_posts.json"
+const WORKPLAN_NAME := "Example Art Collective Nov–Dec 2026"
+const FRICTION_PATH_REL := "dogfood_friction_content_plan.json"
 
 var _failures: int = 0
 var _checks: int = 0
@@ -13,7 +13,7 @@ var _friction: Array = []
 
 
 func _ready() -> void:
-	print("=== ReadyMade dogfood: Discord content plan ===")
+	print("=== ReadyMade dogfood: example community content plan ===")
 	await get_tree().process_frame
 	await get_tree().process_frame
 
@@ -35,7 +35,7 @@ func _ready() -> void:
 	_log_friction(
 		"bulk_entry",
 		"high",
-		"No CSV/JSON bulk import in UI — dogfood loads fixture via script. Entering 26 dated posts by hand would be prohibitive."
+		"No CSV/JSON bulk import in UI — dogfood loads fixture via script. Entering ~25 dated posts by hand would be prohibitive."
 	)
 	_log_friction(
 		"recurring_tasks",
@@ -45,7 +45,7 @@ func _ready() -> void:
 	_log_friction(
 		"discord_subchannels",
 		"medium",
-		"Fixed: workplan custom_channels (add/rename/remove) merge into the task dialog; Metapunkt Latent Space list is dogfood example data only, not a product mode."
+		"Fixed: workplan custom_channels (add/rename/remove) merge into the task dialog; org-specific destination lists are user data, not a product mode."
 	)
 	_log_friction(
 		"markdown_export",
@@ -60,7 +60,7 @@ func _ready() -> void:
 	_log_friction(
 		"channel_cap_warnings",
 		"low",
-		"No warning when a channel exceeds ~2 posts/week — planner must track Anya's rhythm manually."
+		"No warning when a channel exceeds ~2 posts/week — planner must track rhythm manually."
 	)
 	_log_friction(
 		"search_filter_campaign",
@@ -77,7 +77,7 @@ func _ready() -> void:
 
 	var created: bool = manager.create_new_workplan(
 		WORKPLAN_NAME,
-		"Dogfood: Anya Discord plan (example custom channels). Europe/Oslo ~11:00 weekdays. Rhythm confirmed."
+		"Dogfood: Example Art Collective content plan (fictional). Europe/Oslo ~11:00 weekdays."
 	)
 	_expect(created, "create_new_workplan")
 	var workplan: Workplan = manager.get_current_workplan() as Workplan
@@ -89,17 +89,15 @@ func _ready() -> void:
 	# Example destinations only — never shipped as ModeManager defaults.
 	var example_channels: Array[String] = [
 		"#general",
-		"#forward_remembrance",
-		"#metapunkt",
-		"#synesyn",
-		"#stochastic_dreams",
-		"#latent_reality",
-		"#kernel_inference",
-		"#mapping_latent_reality",
+		"#studio-notes",
+		"#reading-group",
+		"#open-studio",
+		"#exhibitions",
 	]
 	_expect(manager.set_custom_channels(example_channels), "set example custom_channels on workplan")
 	_expect(manager.get_custom_channels().size() == example_channels.size(), "example custom_channels loaded")
-	_expect(not ModeManager.get_available_modes().has("metapunkt_discord"), "no metapunkt_discord product mode")
+	_expect(ModeManager.get_available_modes().size() == 3, "only three generic product modes")
+	_expect(ModeManager.get_available_modes().has("social_media"), "social_media mode present")
 
 	var draft_count: int = 0
 	var placeholder_count: int = 0
@@ -118,8 +116,8 @@ func _ready() -> void:
 		task.scheduled_date = String(post.get("date", ""))
 		task.deadline = String(post.get("date", ""))
 		task.content_theme = String(post.get("theme", ""))
-		task.campaign_tag = "anya-discord-2026-11"
-		task.target_audience = "Metapunkt Discord / Latent Space"
+		task.campaign_tag = "example-collective-2026-11"
+		task.target_audience = "Example Art Collective"
 		task.generated_content = String(post.get("draft", ""))
 		task.core_idea = String(post.get("theme", ""))
 		var status_str: String = String(post.get("status", "draft"))
@@ -170,50 +168,38 @@ func _ready() -> void:
 		% [draft_count, placeholder_count, open_slot_count, needs_approval_count]
 	)
 
-	# Scratchpad brainstorm notes via real Scratchpad scene path.
 	await _exercise_scratchpad()
 
-	# Templates: note friction if template picker is exclusive-dialog heavy (already fixed).
 	_log_friction(
 		"templates_for_discord",
 		"low",
 		"No Discord-specific content template; used generated_content field as draft body instead."
 	)
 
-	# Markdown export — the planner handoff path.
 	var export_dir: String = RuntimeConfig.get_readymade_data_dir().path_join("exports")
 	DirAccess.make_dir_recursive_absolute(export_dir)
-	var export_path: String = export_dir.path_join("anya_discord_nov2026.md")
+	var export_path: String = export_dir.path_join("example_collective_nov2026.md")
 	var exported: bool = manager.export_workplan_as_markdown(WORKPLAN_NAME, export_path)
 	_expect(exported, "export_workplan_as_markdown")
 	_expect(FileAccess.file_exists(export_path), "markdown export file exists")
 	if FileAccess.file_exists(export_path):
 		var md: String = FileAccess.get_file_as_string(export_path)
-		_expect(md.find("#metapunkt") >= 0, "export mentions #metapunkt")
+		_expect(md.find("#general") >= 0, "export mentions #general")
 		_expect(md.find("open_slot") >= 0, "export carries open_slot plan status")
 		_expect(md.find("needs_approval") >= 0, "export carries needs_approval for welcome")
-		_expect(md.find("Welcome to the maze") >= 0, "pinned welcome post present")
-		_expect(md.find("Galleri KiT") >= 0 or md.find("researchcatalogue") >= 0, "export retains Stochastic Dreams catalogue material")
-		_expect(md.find("The futures we can still choose") >= 0, "Nov 16 #metapunkt substance opener present")
-		_expect(md.find("The system proposes; a person closes") >= 0, "Nov 23 Thinking Map rewrite present")
-		_expect(md.find("#synesyn") >= 0 and md.find("do-nothing path") >= 0, "Dec 12 moved to #synesyn")
-		_expect(md.find("open-core") >= 0, "open-core foresight framing present")
-		_expect(md.find("2023") >= 0 and md.find("2027") >= 0, "Forward Remembrance 2023–2027 framing present")
-		_expect(md.find("Professor Alexandra Murray-Leslie") >= 0 and md.find("Annett Busch") >= 0, "RC curator credit present")
-		_expect(md.find("kernel-inference.com") >= 0, "Kernel Inference journal links present")
-		_expect(md.find("#mapping_latent_reality") >= 0 and md.find("Open Closure") >= 0, "Open Closure on mapping channel")
-		_expect(md.find("media.researchcatalogue.net") >= 0, "RC direct image URLs present")
-		_expect(md.find("metapunkt.org") >= 0, "metapunkt.org citations present")
-		_expect(md.find("This week in the maze") >= 0, "Friday postcard framing present")
-		_expect(md.find("Artrithmetic") >= 0, "Okediji Artrithmetic credit retained")
+		_expect(md.find("Welcome to the collective") >= 0, "pinned welcome post present")
+		_expect(md.find("Starting from the scrap pile") >= 0, "month opener present")
+		_expect(md.find("The system proposes; a person closes") >= 0, "process-rule draft present")
+		_expect(md.find("#studio-notes") >= 0 and md.find("do-nothing path") >= 0, "weekend still present")
+		_expect(md.find("This week in the studio map") >= 0, "Friday postcard framing present")
+		_expect(md.find("#reading-group") >= 0, "reading-group channel present")
 		_log_friction(
 			"bulk_revise",
 			"high",
-			"Anya voice-pass rewrote ~20 drafts; ReadyMade has no bulk re-import/update of existing tasks from JSON — fixture rewritten outside the UI and dogfood recreates the workplan."
+			"ReadyMade has no bulk re-import/update of existing tasks from JSON — fixture rewritten outside the UI and dogfood recreates the workplan."
 		)
 		print("Dogfood: exported markdown to ", export_path)
 
-	# Also write friction log beside ReadyMade data.
 	var friction_path: String = RuntimeConfig.get_readymade_data_dir().path_join(FRICTION_PATH_REL)
 	DirAccess.make_dir_recursive_absolute(friction_path.get_base_dir())
 	var friction_doc := {
@@ -223,7 +209,6 @@ func _ready() -> void:
 		"placeholders": placeholder_count,
 		"open_slots": open_slot_count,
 		"export_path": export_path,
-		"research_catalogue": "https://www.researchcatalogue.net/view/4351440/4351445/document",
 		"friction": _friction,
 	}
 	var ff := FileAccess.open(friction_path, FileAccess.WRITE)
@@ -234,7 +219,6 @@ func _ready() -> void:
 	else:
 		_expect(false, "write friction log")
 
-	# Calendar path: ensure tasks with publish_date are visible to get_all_tasks ordering helpers.
 	const MarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
 	var sorted_tasks: Array = MarkdownExportScript._collect_sorted_tasks(workplan)
 	_expect(sorted_tasks.size() == posts.size(), "markdown export sort sees all tasks")
@@ -261,17 +245,13 @@ func _exercise_scratchpad() -> void:
 	_expect(text_edit != null, "scratchpad TextEdit found")
 	if text_edit:
 		text_edit.text = (
-			"Anya Discord brainstorm (ReadyMade scratchpad)\n"
-			+ "- Channels: Latent Space only; never #anya_workspace / #ask-anya; #start-here static.\n"
-			+ "- Rhythm CONFIRMED: Europe/Oslo 11:00 weekdays; weekend light; ≤2/channel/week; Friday #general.\n"
-			+ "- 1–2 open_slot weekdays/week for timely Ayodele/Anya updates; nothing else pre-scheduled.\n"
-			+ "- STFX always credits Moyo Okediji Artrithmetic.\n"
-			+ "- Open Closure: discursive research in motion; no reveal countdown.\n"
-			+ "- Stochastic Dreams exhibition: Research Catalogue https://www.researchcatalogue.net/view/4351440/4351445/document\n"
-			+ "- Synesyn 0.1.0 announced Nov 14; MIT; no tag yet.\n"
+			"Example Art Collective brainstorm (ReadyMade scratchpad)\n"
+			+ "- Channels: #general #studio-notes #reading-group #open-studio #exhibitions\n"
+			+ "- Rhythm: Europe/Oslo 11:00 weekdays; weekend light; ≤2/channel/week; Friday #general.\n"
+			+ "- Open slots for timely updates; nothing else pre-scheduled beyond the fixture.\n"
 		)
 		var save_path: String = RuntimeConfig.get_readymade_data_dir().path_join(
-			"scratchpad/anya_discord_brainstorm.md"
+			"scratchpad/example_collective_brainstorm.md"
 		)
 		DirAccess.make_dir_recursive_absolute(save_path.get_base_dir())
 		var sf := FileAccess.open(save_path, FileAccess.WRITE)
@@ -299,15 +279,14 @@ func _load_posts() -> Array:
 
 
 func _month_key(date_str: String) -> String:
-	# 2026-11-16 → "2026-11"
 	if date_str.length() >= 7:
 		return date_str.substr(0, 7)
 	return "undated"
 
 
-func _log_friction(id_str: String, severity: String, detail: String) -> void:
-	_friction.append({"id": id_str, "severity": severity, "detail": detail})
-	print("FRICTION [%s] %s: %s" % [severity, id_str, detail])
+func _log_friction(friction_id: String, severity: String, detail: String) -> void:
+	_friction.append({"id": friction_id, "severity": severity, "detail": detail})
+	print("FRICTION [%s] %s: %s" % [severity, friction_id, detail])
 
 
 func _expect(condition: bool, label: String) -> void:

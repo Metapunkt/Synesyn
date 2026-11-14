@@ -99,32 +99,28 @@ func _test_instrument_mapping() -> void:
 
 
 func _test_custom_channels_and_no_org_presets() -> void:
-	print("-- custom channels + no org-specific product presets --")
+	print("-- custom channels + no server-channel product presets --")
 	_expect(ModeManager != null, "ModeManager available")
 	if ModeManager != null:
-		_expect(
-			not ModeManager.get_available_modes().has("metapunkt_discord"),
-			"metapunkt_discord mode removed from product"
-		)
-		for mode_id in ModeManager.get_available_modes():
+		var mode_ids: Array[String] = ModeManager.get_available_modes()
+		_expect(mode_ids.size() == 3, "exactly three generic product modes")
+		_expect(mode_ids.has("social_media"), "social_media mode present")
+		_expect(mode_ids.has("creative_writing"), "creative_writing mode present")
+		_expect(mode_ids.has("academic_writing"), "academic_writing mode present")
+		for mode_id in mode_ids:
 			var mode_cfg = ModeManager.get_mode_config(mode_id)
 			_expect(mode_cfg != null, "mode config loads: %s" % mode_id)
 			if mode_cfg == null:
 				continue
 			for channel_label in mode_cfg.channels:
-				var lower_ch: String = String(channel_label).to_lower()
 				_expect(
-					not lower_ch.begins_with("#forward_"),
-					"mode %s has no Latent Space preset (%s)" % [mode_id, channel_label]
-				)
-				_expect(
-					lower_ch.find("metapunkt") < 0 and lower_ch.find("latent") < 0,
-					"mode %s channel is org-neutral (%s)" % [mode_id, channel_label]
+					not String(channel_label).begins_with("#"),
+					"mode %s uses platform venues, not #channel presets (%s)" % [mode_id, channel_label]
 				)
 
 	_expect(
-		_product_scripts_free_of_org_channel_presets(),
-		"product scripts have no Metapunkt/Latent Space channel presets"
+		_product_scripts_free_of_hash_channel_presets(),
+		"product scripts have no hardcoded #channel destination lists"
 	)
 
 	var manager: Node = get_node_or_null("/root/WorkplanManager")
@@ -193,20 +189,10 @@ func _test_custom_channels_and_no_org_presets() -> void:
 		manager.delete_workplan(probe_name)
 
 
-func _product_scripts_free_of_org_channel_presets() -> bool:
-	"""Grep-style assert: shipped ReadyMade product scripts must not embed org channel lists."""
-	var forbidden: Array[String] = [
-		"metapunkt_discord",
-		"Metapunkt Discord",
-		"Latent Space",
-		"#forward_remembrance",
-		"#stochastic_dreams",
-		"#kernel_inference",
-		"#mapping_latent_reality",
-		"#latent_reality",
-		"#anya_workspace",
-		"#ask-anya",
-	]
+func _product_scripts_free_of_hash_channel_presets() -> bool:
+	"""Grep-style assert: shipped product scripts must not embed Discord-style #channel lists.
+	User destinations belong on Workplan.custom_channels, not ModeManager defaults.
+	"""
 	var roots: Array[String] = [
 		"res://readymade/scripts",
 		"res://readymade/ui",
@@ -216,15 +202,15 @@ func _product_scripts_free_of_org_channel_presets() -> bool:
 	]
 	var dirty: Array[String] = []
 	for root_path in roots:
-		_scan_product_dir_for_forbidden(root_path, forbidden, dirty)
+		_scan_product_dir_for_hash_channels(root_path, dirty)
 	if not dirty.is_empty():
 		for hit in dirty:
-			push_error("org preset leak: " + hit)
+			push_error("hash-channel preset leak: " + hit)
 		return false
 	return true
 
 
-func _scan_product_dir_for_forbidden(dir_path: String, forbidden: Array[String], dirty: Array[String]) -> void:
+func _scan_product_dir_for_hash_channels(dir_path: String, dirty: Array[String]) -> void:
 	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return
@@ -236,19 +222,27 @@ func _scan_product_dir_for_forbidden(dir_path: String, forbidden: Array[String],
 			continue
 		var full: String = dir_path.path_join(entry)
 		if dir.current_is_dir():
-			# Skip non-product trees that may document examples.
 			if entry == "dogfood" or entry.begins_with("test"):
 				entry = dir.get_next()
 				continue
-			_scan_product_dir_for_forbidden(full, forbidden, dirty)
+			_scan_product_dir_for_hash_channels(full, dirty)
 		elif entry.ends_with(".gd") or entry.ends_with(".tscn"):
 			if entry.begins_with("test_") or entry.find("dogfood") >= 0:
 				entry = dir.get_next()
 				continue
+			# mode_manager.gd is the canonical place mode venue lists live.
+			if entry != "mode_manager.gd":
+				entry = dir.get_next()
+				continue
 			var body: String = FileAccess.get_file_as_string(full)
-			for needle in forbidden:
-				if body.find(needle) >= 0:
-					dirty.append("%s contains '%s'" % [full, needle])
+			# Quoted Discord-style destinations in mode defaults, e.g. "#general".
+			var search_from: int = 0
+			while true:
+				var idx: int = body.find("\"#", search_from)
+				if idx < 0:
+					break
+				dirty.append("%s contains quoted #channel preset at offset %d" % [full, idx])
+				search_from = idx + 2
 		entry = dir.get_next()
 	dir.list_dir_end()
 
