@@ -587,13 +587,15 @@ func _show_task_template_selector():
 	
 	var cancel_button = Button.new()
 	cancel_button.text = "Cancel"
-	cancel_button.pressed.connect(func(): dialog.queue_free())
+	cancel_button.pressed.connect(func():
+		_close_template_selector(dialog)
+	)
 	button_container.add_child(cancel_button)
 	
 	var custom_button = Button.new()
 	custom_button.text = "Custom Task"
-	custom_button.pressed.connect(func(): 
-		dialog.queue_free()
+	custom_button.pressed.connect(func():
+		await _close_template_selector(dialog)
 		_show_default_task_dialog()
 	)
 	button_container.add_child(custom_button)
@@ -607,7 +609,7 @@ func _show_task_template_selector():
 			return
 		
 		var template_id = template_list.get_item_metadata(selected_items[0])
-		dialog.queue_free()
+		await _close_template_selector(dialog)
 		_create_task_from_template(template_id)
 	)
 	button_container.add_child(create_button)
@@ -615,7 +617,7 @@ func _show_task_template_selector():
 	# Double-click to create
 	template_list.item_activated.connect(func(index: int):
 		var template_id = template_list.get_item_metadata(index)
-		dialog.queue_free()
+		await _close_template_selector(dialog)
 		_create_task_from_template(template_id)
 	)
 	
@@ -623,9 +625,20 @@ func _show_task_template_selector():
 	dialog.popup_centered()
 	print("MissionControl: Template selector opened with ", templates.size(), " templates")
 
+
+func _close_template_selector(dialog: Window) -> void:
+	"""Hide and free the template dialog before opening another exclusive Window."""
+	if dialog == null or not is_instance_valid(dialog):
+		return
+	# Hide first so Godot releases exclusive-child ownership before TaskDialog pops.
+	dialog.hide()
+	dialog.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+
 func _show_default_task_dialog():
 	"""Show the default task creation dialog"""
-	if task_dialog and task_dialog.has_method("show_add_dialog"):
+	if task_dialog and is_instance_valid(task_dialog) and task_dialog.has_method("show_add_dialog"):
 		task_dialog.show_add_dialog()
 		print("MissionControl: Opening default task creation dialog")
 	else:
@@ -644,7 +657,7 @@ func _create_task_from_template(template_id: String):
 	print("MissionControl: Created task from template: ", task.title)
 	
 	# Show task dialog with pre-filled template data for customization
-	if task_dialog and task_dialog.has_method("show_edit_dialog"):
+	if task_dialog and is_instance_valid(task_dialog) and task_dialog.has_method("show_edit_dialog"):
 		task_dialog.show_edit_dialog(task)
 		print("MissionControl: Opening task customization dialog")
 	else:
