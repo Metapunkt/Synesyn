@@ -306,8 +306,13 @@ func clone() -> WorkplanTask:
 	new_task.duration_minutes = duration_minutes
 	new_task.campaign_tag = campaign_tag
 	new_task.recurring_pattern = recurring_pattern
+	new_task.recurring_weekdays = recurring_weekdays.duplicate()
+	new_task.recurring_end_date = recurring_end_date
 	new_task.content_theme = content_theme
 	new_task.target_audience = target_audience
+	new_task.content_status = get_content_status()
+	new_task.publish_time = publish_time
+	new_task.publish_timezone = publish_timezone
 	# Copy edit session data
 	new_task.edit_session_id = edit_session_id
 	new_task.referenced_documents = referenced_documents.duplicate(true)
@@ -316,7 +321,7 @@ func clone() -> WorkplanTask:
 	new_task.productivity_metrics = productivity_metrics.duplicate(true)
 	new_task.auto_generated = auto_generated
 	new_task.document_snapshots = document_snapshots.duplicate(true)
-	# Don't copy dates, status, or generated content
+	# Don't copy dates, workflow status, generated content, or task_id
 	return new_task
 
 # === PHASE 5.1: EDIT SESSION INTEGRATION METHODS ===

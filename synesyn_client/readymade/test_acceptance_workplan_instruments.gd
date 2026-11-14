@@ -27,6 +27,7 @@ func _ready() -> void:
 	await _test_workplan_save_load_and_legacy_migration()
 	await _test_workplan_markdown_export()
 	await _test_task_bulk_io()
+	_test_content_status_migration()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -1029,6 +1030,26 @@ func _test_task_bulk_io() -> void:
 
 	_restore_storage_root(previous_root)
 	_wipe_dir(temp_root)
+
+
+func _test_content_status_migration() -> void:
+	print("-- content_status migration + markdown --")
+	const MarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
+	var task := WorkplanTask.new()
+	task.title = "Legacy status in notes"
+	task.notes = "STATUS: needs_approval\nSOURCE: fixture"
+	task.content_status = "draft"
+	_expect(task.migrate_content_status_from_notes(), "migrate lifts STATUS from notes")
+	_expect(task.get_content_status() == "needs_approval", "content_status is needs_approval")
+	_expect(task.notes.find("STATUS:") < 0, "STATUS line stripped from notes")
+	_expect(
+		MarkdownExportScript.content_plan_status(task) == "needs_approval",
+		"markdown export uses content_status field"
+	)
+	task.set_content_status("open_slot")
+	_expect(task.get_content_status() == "open_slot", "set_content_status open_slot")
+	task.set_content_status("not_a_real_status")
+	_expect(task.get_content_status() == "draft", "invalid status falls back to draft")
 
 
 func _wipe_dir(path: String) -> void:

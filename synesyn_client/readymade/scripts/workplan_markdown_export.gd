@@ -67,22 +67,19 @@ static func render(workplan: Resource) -> String:
 static func content_plan_status(task: WorkplanTask) -> String:
 	if task == null:
 		return "draft"
-	var notes_l: String = task.notes.to_lower()
-	if notes_l.find("status: open_slot") >= 0:
-		return "open_slot"
-	if notes_l.find("status: needs_approval") >= 0:
-		return "needs_approval"
-	if notes_l.find("status: placeholder") >= 0:
-		return "placeholder"
-	if notes_l.find("status: draft") >= 0:
-		return "draft"
+	# Prefer first-class field; migrate legacy STATUS: notes once.
+	task.migrate_content_status_from_notes()
+	var field_status: String = task.get_content_status()
+	if field_status != "draft":
+		return field_status
+	# Heuristics only when still at default draft.
 	if task.title.findn("OPEN SLOT") >= 0:
 		return "open_slot"
 	if task.notes.findn("PLACEHOLDER") >= 0 or task.generated_content.findn("PLACEHOLDER") >= 0:
 		return "placeholder"
 	if task.title.findn("PLACEHOLDER") >= 0:
 		return "placeholder"
-	return "draft"
+	return field_status
 
 
 static func _collect_sorted_tasks(workplan: Resource) -> Array:

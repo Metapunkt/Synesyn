@@ -362,6 +362,17 @@ text = "1 Week"
 layout_mode = 2
 text = "1 Month"
 
+[node name="ContentStatusContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="ContentStatusLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer"]
+layout_mode = 2
+text = "📋 Content status:"
+
+[node name="ContentStatusOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="HSeparator6" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2
 

@@ -43,6 +43,7 @@ class_name TaskDialog
 @onready var deadline_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineRow/DeadlineEdit"
 @onready var scheduled_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow/ScheduledEdit"
 @onready var publish_date_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow/PublishEdit"
+@onready var content_status_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer/ContentStatusOption"
 @onready var recurring_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer/RecurringOption"
 @onready var duration_spin: SpinBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DurationContainer/DurationSpin"
 
@@ -79,6 +80,7 @@ var is_edit_mode: bool = false
 func _ready():
 	_setup_ui()
 	_setup_recurring_options()
+	_setup_content_status_options()
 	_collect_static_checkboxes()
 	_setup_mode_aware_options()
 	
@@ -89,6 +91,14 @@ func _ready():
 	# Connect filter toggle signals
 	format_filter_toggle.toggled.connect(_on_format_filter_toggled)
 	channel_filter_toggle.toggled.connect(_on_channel_filter_toggled)
+
+
+func _setup_content_status_options() -> void:
+	if content_status_option == null:
+		return
+	content_status_option.clear()
+	for status_id in WorkplanTask.CONTENT_STATUSES:
+		content_status_option.add_item(String(status_id))
 
 func _collect_static_checkboxes():
 	"""Collect static checkboxes for easy management"""
@@ -514,6 +524,8 @@ func _populate_fields(task: WorkplanTask):
 	publish_date_edit.text = task.publish_date
 	recurring_option.selected = _get_recurring_index(task.recurring_pattern)
 	duration_spin.value = task.duration_minutes
+	task.migrate_content_status_from_notes()
+	_set_content_status_selection(task.get_content_status())
 	
 	# Strategy fields
 	campaign_edit.text = task.campaign_tag
@@ -689,6 +701,22 @@ func _get_recurring_pattern() -> String:
 		4: return "Custom"
 		_: return "None"
 
+
+func _set_content_status_selection(status_id: String) -> void:
+	if content_status_option == null:
+		return
+	var cleaned: String = status_id.strip_edges().to_lower()
+	var idx: int = WorkplanTask.CONTENT_STATUSES.find(cleaned)
+	if idx < 0:
+		idx = 0
+	content_status_option.selected = idx
+
+
+func _get_selected_content_status() -> String:
+	if content_status_option == null or content_status_option.selected < 0:
+		return "draft"
+	return content_status_option.get_item_text(content_status_option.selected)
+
 func _on_confirmed():
 	"""Handle dialog confirmation"""
 	# Validate required fields
@@ -725,6 +753,7 @@ func _on_confirmed():
 	task.content_theme = theme_edit.text
 	task.target_audience = audience_edit.text
 	task.performance_notes = performance_edit.text
+	task.set_content_status(_get_selected_content_status())
 	
 	# Sync legacy properties for backward compatibility
 	task.sync_legacy_properties()

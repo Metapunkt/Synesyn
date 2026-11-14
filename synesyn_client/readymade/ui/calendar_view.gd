@@ -254,7 +254,9 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 	"""Create a small task indicator for calendar cells"""
 	var indicator = Label.new()
 	indicator.text = task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
-	indicator.tooltip_text = task.title
+	task.migrate_content_status_from_notes()
+	var plan_status: String = task.get_content_status()
+	indicator.tooltip_text = "%s [%s]" % [task.title, plan_status]
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
@@ -264,6 +266,12 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 		bg_color = Color.RED
 	elif task.status != "Done" and task.is_due_soon():
 		bg_color = Color.ORANGE
+	elif plan_status == "open_slot":
+		bg_color = Color(0.35, 0.35, 0.55)
+	elif plan_status == "needs_approval":
+		bg_color = Color(0.55, 0.4, 0.15)
+	elif plan_status == "placeholder":
+		bg_color = Color(0.4, 0.4, 0.4)
 	
 	indicator.add_theme_stylebox_override("normal", _create_colored_style(bg_color))
 	return indicator
@@ -491,8 +499,11 @@ func _create_task_detail_item(task: WorkplanTask) -> Control:
 	title.add_theme_font_size_override("font_size", 12)
 	item.add_child(title)
 	
+	task.migrate_content_status_from_notes()
 	var details = Label.new()
-	details.text = "%s | %s | %s" % [task.format, task.channel, task.status]
+	details.text = "%s | %s | %s | plan:%s" % [
+		task.format, task.channel, task.status, task.get_content_status()
+	]
 	details.add_theme_font_size_override("font_size", 10)
 	details.add_theme_color_override("font_color", Color.GRAY)
 	item.add_child(details)
