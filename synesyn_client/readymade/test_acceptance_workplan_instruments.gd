@@ -30,6 +30,7 @@ func _ready() -> void:
 	_test_content_status_migration()
 	_test_recurring_weekly_expand()
 	_test_calendar_filters()
+	_test_publish_timezone()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -1114,6 +1115,33 @@ func _test_calendar_filters() -> void:
 	_expect(cal.matches_filters(t2), "search finds studio")
 	_expect(not cal.matches_filters(t1), "search excludes roundup")
 	cal.queue_free()
+
+
+func _test_publish_timezone() -> void:
+	print("-- publish timezone --")
+	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+	const MarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
+	var workplan := Workplan.new()
+	workplan.name = "TZ Probe"
+	workplan.default_timezone = "Europe/Oslo"
+	var task := WorkplanTask.new()
+	task.title = "Timed post"
+	task.publish_date = "2026-11-10"
+	task.publish_time = "11:00"
+	_expect(
+		PublishTimeScript.effective_timezone(task, workplan) == "Europe/Oslo",
+		"inherits workplan default timezone"
+	)
+	task.publish_timezone = "America/New_York"
+	_expect(
+		PublishTimeScript.effective_timezone(task, workplan) == "America/New_York",
+		"task timezone overrides workplan"
+	)
+	var label: String = PublishTimeScript.format_publish_label(task, workplan)
+	_expect(label.find("11:00") >= 0 and label.find("America/New_York") >= 0, "label includes time+tz")
+	workplan.add_task_to_month("2026-11", task)
+	var md: String = MarkdownExportScript.render(workplan)
+	_expect(md.find("America/New_York") >= 0 or md.find("11:00") >= 0, "markdown export shows publish time")
 
 
 func _wipe_dir(path: String) -> void:

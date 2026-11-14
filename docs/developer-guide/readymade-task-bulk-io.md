@@ -20,6 +20,7 @@ In **Workplan Manager**:
 | `task_id` | recommended | Stable id. Match key for updates. Auto-assigned on export if missing. |
 | `publish_date` | for dating | `YYYY-MM-DD` |
 | `publish_time` | no | `HH:MM` local to the task/workplan timezone |
+| `publish_timezone` | no | IANA zone (e.g. `Europe/Oslo`); empty inherits workplan default |
 | `channel` | no | Destination label (e.g. `#general`, `YouTube`) |
 | `content_theme` | no | Theme / pillar |
 | `campaign_tag` | no | Campaign grouping |

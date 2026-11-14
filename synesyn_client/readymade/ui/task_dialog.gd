@@ -43,6 +43,8 @@ class_name TaskDialog
 @onready var deadline_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineRow/DeadlineEdit"
 @onready var scheduled_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow/ScheduledEdit"
 @onready var publish_date_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow/PublishEdit"
+@onready var publish_time_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow/PublishTimeEdit"
+@onready var publish_timezone_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow/PublishTimezoneEdit"
 @onready var content_status_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer/ContentStatusOption"
 @onready var recurring_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer/RecurringOption"
 @onready var weekday_mon: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayMon"
@@ -535,6 +537,10 @@ func _populate_fields(task: WorkplanTask):
 	deadline_edit.text = task.deadline
 	scheduled_edit.text = task.scheduled_date
 	publish_date_edit.text = task.publish_date
+	if publish_time_edit:
+		publish_time_edit.text = task.publish_time
+	if publish_timezone_edit:
+		publish_timezone_edit.text = task.publish_timezone
 	recurring_option.selected = _get_recurring_index(task.recurring_pattern)
 	duration_spin.value = task.duration_minutes
 	task.migrate_content_status_from_notes()
@@ -818,6 +824,10 @@ func _on_confirmed():
 	task.deadline = deadline_edit.text
 	task.scheduled_date = scheduled_edit.text
 	task.publish_date = publish_date_edit.text
+	if publish_time_edit:
+		task.publish_time = publish_time_edit.text.strip_edges()
+	if publish_timezone_edit:
+		task.publish_timezone = publish_timezone_edit.text.strip_edges()
 	task.recurring_pattern = _get_recurring_pattern()
 	task.recurring_weekdays = _get_selected_weekdays()
 	if recurring_end_edit:

@@ -593,6 +593,20 @@ func get_effective_channels() -> Array[String]:
 			combined.append(channel_label)
 	return combined
 
+
+func get_default_timezone() -> String:
+	if current_workplan == null:
+		return ""
+	return String(current_workplan.default_timezone)
+
+
+func set_default_timezone(timezone: String) -> bool:
+	if current_workplan == null:
+		return false
+	current_workplan.default_timezone = timezone.strip_edges()
+	save_current_workplan()
+	return true
+
 func _load_workplan_from_path(path: String) -> Workplan:
 	"""Load a workplan from a specific path.
 	ResourceLoader.exists() alone misses some absolute Documents paths;

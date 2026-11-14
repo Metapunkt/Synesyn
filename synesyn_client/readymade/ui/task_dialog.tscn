@@ -362,6 +362,27 @@ text = "1 Week"
 layout_mode = 2
 text = "1 Month"
 
+[node name="PublishTimeRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+
+[node name="PublishTimeLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+text = "Publish time:"
+
+[node name="PublishTimeEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "HH:MM"
+
+[node name="PublishTimezoneLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+text = "TZ:"
+
+[node name="PublishTimezoneEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "IANA (empty = workplan default)"
+
 [node name="ContentStatusContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2
 

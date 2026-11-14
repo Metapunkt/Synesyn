@@ -7,6 +7,7 @@ const COLUMNS: Array[String] = [
 	"task_id",
 	"publish_date",
 	"publish_time",
+	"publish_timezone",
 	"channel",
 	"content_theme",
 	"campaign_tag",
@@ -28,10 +29,12 @@ static func export_rows(workplan: Resource) -> Array:
 			continue
 		task.ensure_task_id()
 		task.migrate_content_status_from_notes()
+		var tz_label: String = task.publish_timezone
 		rows.append({
 			"task_id": task.task_id,
 			"publish_date": task.publish_date,
 			"publish_time": task.publish_time,
+			"publish_timezone": tz_label,
 			"channel": task.channel,
 			"content_theme": task.content_theme,
 			"campaign_tag": task.campaign_tag,
@@ -197,6 +200,7 @@ static func _apply_row_to_task(task: WorkplanTask, row: Dictionary, is_new: bool
 	task.title = String(row.get("title", ""))
 	task.publish_date = String(row.get("publish_date", ""))
 	task.publish_time = String(row.get("publish_time", ""))
+	task.publish_timezone = String(row.get("publish_timezone", ""))
 	task.channel = String(row.get("channel", ""))
 	if not task.channel.is_empty():
 		task.channels = [task.channel]

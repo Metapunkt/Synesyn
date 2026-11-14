@@ -8,6 +8,10 @@ class_name Workplan extends Resource
 ## User-defined destinations (Discord channels, blogs, etc.). Empty by default —
 ## never pre-filled with org-specific channel lists. Persisted with the workplan.
 @export var custom_channels: Array[String] = []
+## Default IANA timezone for publish times (e.g. Europe/Oslo). Empty = unset.
+@export var default_timezone: String = ""
+## Per-channel weekly cadence caps: { "#general": 2 }. Empty = no caps.
+@export var channel_cadence_caps: Dictionary = {}
 
 ## Legacy dual-write path under the ReadyMade app folder
 ## (Documents/Synesyn/readymade/workplan_data.tres after the top-level move).

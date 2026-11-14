@@ -52,6 +52,7 @@ static func render(workplan: Resource) -> String:
 		lines.append("- **Theme:** %s" % (task2.content_theme if not task2.content_theme.is_empty() else "(unset)"))
 		lines.append("- **Campaign:** %s" % (task2.campaign_tag if not task2.campaign_tag.is_empty() else "(none)"))
 		lines.append("- **Plan status:** %s" % content_plan_status(task2))
+		lines.append("- **Publish:** %s" % _publish_label(task2, workplan))
 		lines.append("- **Workflow:** %s" % task2.status)
 		if not task2.notes.is_empty():
 			lines.append("- **Notes / source:** %s" % task2.notes.replace("\n", " · "))
@@ -104,3 +105,11 @@ static func _primary_date(task: WorkplanTask) -> String:
 	if not task.deadline.is_empty():
 		return task.deadline
 	return "undated"
+
+
+static func _publish_label(task: WorkplanTask, workplan: Resource) -> String:
+	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+	var label: String = PublishTimeScript.format_publish_label(task, workplan)
+	if label.is_empty():
+		return "(unset)"
+	return label
