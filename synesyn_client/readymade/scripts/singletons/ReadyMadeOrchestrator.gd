@@ -143,6 +143,13 @@ func _ensure_plugin_manager():
 	else:
 		push_error("ReadyMadeOrchestrator: Failed to load PluginManager script.")
 
+func _date_offset_string(days_from_today: int) -> String:
+	"""Format YYYY-MM-DD relative to today so demo tasks land on the current calendar."""
+	var unix: int = int(Time.get_unix_time_from_system()) + (days_from_today * 86400)
+	var date_dict: Dictionary = Time.get_datetime_dict_from_unix_time(unix)
+	return "%04d-%02d-%02d" % [int(date_dict.year), int(date_dict.month), int(date_dict.day)]
+
+
 func _create_default_tasks():
 	"""Create default tasks if no saved workplan exists"""
 	if not workplan.months.has("Month 1"):
@@ -158,7 +165,8 @@ func _create_default_tasks():
 	task1.channel = "Discord"
 	task1.notes = "Sets the script skeleton for the week's main video."
 	task1.status = "To Do"
-	task1.deadline = "2025-01-10"
+	task1.deadline = _date_offset_string(5)
+	task1.scheduled_date = _date_offset_string(2)
 	month1_tasks.append(task1)
 
 	var task2 = WorkplanTask.new()
@@ -169,8 +177,9 @@ func _create_default_tasks():
 	task2.channel = "YouTube"
 	task2.notes = "Main deliverable for the week. Drive to Discord #start-here."
 	task2.status = "In Progress"
-	task2.deadline = "2025-01-08"
-	task2.start_date = "2025-01-02"
+	task2.deadline = _date_offset_string(3)
+	task2.start_date = _date_offset_string(0)
+	task2.scheduled_date = _date_offset_string(0)
 	month1_tasks.append(task2)
 
 	var task3 = WorkplanTask.new()
@@ -181,7 +190,8 @@ func _create_default_tasks():
 	task3.channel = "Instagram, Facebook"
 	task3.notes = "Link back to the main YouTube video."
 	task3.status = "Review"
-	task3.deadline = "2025-01-12"
+	task3.deadline = _date_offset_string(7)
+	task3.scheduled_date = _date_offset_string(4)
 	task3.generated_content = "# Magic Number 4 Carousel\n\n## Slide 1: Introduction\nThe magic number 4 appears everywhere in cognitive science...\n\n## Slide 2: Working Memory\nHuman working memory can hold approximately 4±1 items...\n\n## Slide 3: Applications\nThis principle applies to UI design, learning, and decision making..."
 	month1_tasks.append(task3)
 	
@@ -194,7 +204,9 @@ func _create_default_tasks():
 	task4.channel = "Blog"
 	task4.notes = "Background research for upcoming content."
 	task4.status = "Done"
-	task4.completion_date = "2025-01-01"
+	task4.completion_date = _date_offset_string(-2)
+	task4.deadline = _date_offset_string(-2)
+	task4.scheduled_date = _date_offset_string(-2)
 	task4.generated_content = "# AI Ethics for Content Creators\n\n## Introduction\nAs AI becomes increasingly integrated into content creation workflows, creators must navigate complex ethical considerations...\n\n## Key Principles\n1. Transparency about AI usage\n2. Respect for human creativity\n3. Avoiding bias amplification\n4. Protecting audience trust\n\n## Best Practices\n- Always disclose AI assistance\n- Review and edit AI-generated content\n- Maintain human oversight\n- Consider societal impact"
 	month1_tasks.append(task4)
 

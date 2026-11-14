@@ -19,6 +19,7 @@ var tasks: Array[WorkplanTask] = []
 var filtered_tasks: Array[WorkplanTask] = []
 var view_mode: String = "month"  # month, week, agenda
 var filter_mode: String = "all"  # all, channel, status, priority, overdue
+var _empty_state_banner: VBoxContainer = null
 
 func _ready():
 	_setup_ui()
@@ -129,9 +130,88 @@ func _draw_month_view():
 		calendar_grid.add_child(empty_cell)
 	
 	# Add day cells
+	var month_task_count := 0
 	for day in range(1, days_in_month + 1):
 		var day_cell = _create_day_cell(day)
 		calendar_grid.add_child(day_cell)
+		var day_date = "%04d-%02d-%02d" % [current_date.year, current_date.month, day]
+		month_task_count += _get_tasks_for_date(day_date).size()
+
+	_update_empty_state_banner(month_task_count)
+
+
+func _update_empty_state_banner(month_task_count: int) -> void:
+	"""Show a clear empty-state when this month has no scheduled tasks."""
+	if _empty_state_banner != null and is_instance_valid(_empty_state_banner):
+		_empty_state_banner.queue_free()
+		_empty_state_banner = null
+	if month_task_count > 0:
+		return
+
+	_empty_state_banner = VBoxContainer.new()
+	_empty_state_banner.name = "EmptyStateBanner"
+	var message := Label.new()
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if filtered_tasks.is_empty() and tasks.is_empty():
+		message.text = "No tasks yet. Create a task or load a workplan to see deadlines here."
+	else:
+		message.text = "No tasks scheduled in this month. Jump to a task date or return to today."
+	_empty_state_banner.add_child(message)
+
+	var actions := HBoxContainer.new()
+	var today_btn := Button.new()
+	today_btn.text = "Today"
+	today_btn.pressed.connect(_on_today_pressed)
+	actions.add_child(today_btn)
+
+	var next_btn := Button.new()
+	next_btn.text = "Jump to next task"
+	next_btn.pressed.connect(_jump_to_next_task_month)
+	var next_date: String = _find_next_task_date()
+	next_btn.disabled = next_date.is_empty()
+	actions.add_child(next_btn)
+	_empty_state_banner.add_child(actions)
+
+	# Prefer placing under the header if the scene has a VBox parent.
+	if month_label and month_label.get_parent() and month_label.get_parent().get_parent():
+		var outer: Node = month_label.get_parent().get_parent()
+		outer.add_child(_empty_state_banner)
+		outer.move_child(_empty_state_banner, mini(2, outer.get_child_count() - 1))
+	else:
+		add_child(_empty_state_banner)
+
+
+func _find_next_task_date() -> String:
+	"""Nearest future (or any) task display date, YYYY-MM-DD prefix."""
+	var today: String = Time.get_date_string_from_system()
+	var best_future: String = ""
+	var best_any: String = ""
+	for task in tasks:
+		var task_date: String = task.get_calendar_display_date()
+		if task_date.is_empty():
+			continue
+		var day_prefix: String = task_date.substr(0, mini(10, task_date.length()))
+		if best_any.is_empty() or day_prefix < best_any:
+			best_any = day_prefix
+		if day_prefix >= today and (best_future.is_empty() or day_prefix < best_future):
+			best_future = day_prefix
+	if not best_future.is_empty():
+		return best_future
+	return best_any
+
+
+func _jump_to_next_task_month() -> void:
+	var next_date: String = _find_next_task_date()
+	if next_date.is_empty() or next_date.length() < 7:
+		_on_today_pressed()
+		return
+	var parts: PackedStringArray = next_date.split("-")
+	if parts.size() < 2:
+		_on_today_pressed()
+		return
+	current_date.year = int(parts[0])
+	current_date.month = int(parts[1])
+	_refresh_calendar()
 
 func _create_day_cell(day: int) -> Control:
 	"""Create a calendar day cell with tasks"""

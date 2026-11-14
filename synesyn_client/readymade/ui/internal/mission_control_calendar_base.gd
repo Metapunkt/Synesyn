@@ -1,6 +1,8 @@
 extends "res://readymade/ui/internal/mission_control_task_list_base.gd"
 class_name MissionControlCalendarBase
 
+var _calendar_empty_banner: Control = null
+
 func _update_calendar():
 	"""Update calendar with current tasks"""
 	if not calendar_grid or calendar_day_cells.size() == 0:
@@ -214,6 +216,80 @@ func _populate_calendar_with_tasks():
 			expand_indicator.mouse_filter = MOUSE_FILTER_PASS
 			expand_indicator.gui_input.connect(func(event): _on_expand_indicator_clicked(event, day))
 			task_container.add_child(expand_indicator)
+
+	_update_calendar_empty_state(tasks_by_day.size(), all_tasks.size())
+
+
+func _update_calendar_empty_state(days_with_tasks: int, total_tasks: int) -> void:
+	"""Visible empty-state when the open month has no cards."""
+	if _calendar_empty_banner != null and is_instance_valid(_calendar_empty_banner):
+		_calendar_empty_banner.queue_free()
+		_calendar_empty_banner = null
+	if days_with_tasks > 0 or calendar_grid == null:
+		return
+
+	var banner := VBoxContainer.new()
+	banner.name = "CalendarEmptyState"
+	var message := Label.new()
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if total_tasks == 0:
+		message.text = "No tasks yet. Use New Task or Manage Workplans to get started."
+	else:
+		message.text = "No tasks in this month. Jump to the next scheduled task or return to Today."
+	banner.add_child(message)
+
+	var row := HBoxContainer.new()
+	var today_btn := Button.new()
+	today_btn.text = "Today"
+	today_btn.pressed.connect(_on_today_pressed)
+	row.add_child(today_btn)
+
+	var jump_btn := Button.new()
+	jump_btn.text = "Jump to next task"
+	jump_btn.pressed.connect(_jump_calendar_to_next_task)
+	jump_btn.disabled = total_tasks == 0
+	row.add_child(jump_btn)
+	banner.add_child(row)
+
+	var host: Node = calendar_grid.get_parent()
+	if host:
+		host.add_child(banner)
+		host.move_child(banner, 0)
+	_calendar_empty_banner = banner
+
+
+func _jump_calendar_to_next_task() -> void:
+	var workplan_obj = ReadyMadeOrchestrator.workplan if ReadyMadeOrchestrator else null
+	if workplan_obj == null:
+		_on_today_pressed()
+		return
+	var today: String = Time.get_date_string_from_system()
+	var best_future: String = ""
+	var best_any: String = ""
+	for task_any in workplan_obj.get_all_tasks():
+		var task: WorkplanTask = task_any as WorkplanTask
+		if task == null:
+			continue
+		for candidate in [task.scheduled_date, task.deadline, task.start_date]:
+			var date_str: String = String(candidate).substr(0, mini(10, String(candidate).length()))
+			if date_str.length() < 7:
+				continue
+			if best_any.is_empty() or date_str < best_any:
+				best_any = date_str
+			if date_str >= today and (best_future.is_empty() or date_str < best_future):
+				best_future = date_str
+	var target: String = best_future if not best_future.is_empty() else best_any
+	if target.is_empty():
+		_on_today_pressed()
+		return
+	var parts: PackedStringArray = target.split("-")
+	if parts.size() < 2:
+		_on_today_pressed()
+		return
+	current_calendar_year = int(parts[0])
+	current_calendar_month = int(parts[1])
+	_setup_month_year_selectors()
+	_build_calendar_grid()
 
 func _on_expand_indicator_clicked(event: InputEvent, day: int):
 	"""Handle clicks on the '+X more' label."""
