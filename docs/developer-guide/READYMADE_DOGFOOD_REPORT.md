@@ -8,10 +8,13 @@
 | Path | Result |
 | --- | --- |
 | Workplan create (`WorkplanManager.create_new_workplan`) | Worked. Named plan `Example Art Collective Nov–Dec 2026`. |
-| Custom channels API | `add` / `rename` / `remove` / `set` / `get_effective_channels`; empty default on new workplans. |
-| Task model fields (`publish_date`, `channel`, `content_theme`, `campaign_tag`, `generated_content`, `notes`) | Rich enough for Discord-style planning once filled; `STATUS:` in notes carries `draft` / `placeholder` / `open_slot` / `needs_approval`. |
-| Scratchpad scene load + save under `Documents/Synesyn/readymade/` | Worked headless for brainstorm constraints. |
-| Markdown export | `export_workplan_as_markdown` + export dialog `.md` filter. |
+| Custom channels API + Manage Channels UI | `add` / `rename` / `remove` / `move` / `set` / `get_effective_channels`; empty default on new workplans. |
+| Task model (`publish_date`/`time`/`timezone`, `content_status`, `campaign_tag`, …) | First-class content-plan fields; legacy `STATUS:` notes migrate. |
+| Bulk CSV/JSON import-export | Export → edit → re-import updates by `task_id` (fallback date+channel+title) with preview. |
+| Recurring weekly expand | Friday `#general` roundup expands into dated instances. |
+| Calendar filters / search | Channel, content status, campaign, theme + search box. |
+| Cadence caps | Per-channel max posts/week; non-blocking validation report. |
+| Scratchpad + Markdown / Copy as Markdown | Worked headless under `Documents/Synesyn/readymade/`. |
 
 Dogfood scene: `synesyn_client/readymade/test_dogfood_content_plan.tscn`  
 Fixture: `synesyn_client/readymade/dogfood/example_community_posts.json`  
@@ -22,40 +25,39 @@ Example destinations (fixture only): `#general`, `#studio-notes`, `#reading-grou
 | Before | After |
 | --- | --- |
 | Org-specific server channel presets baked into a product mode | **Removed** — modes only expose generic platform/venue defaults |
-| Destinations only via mode list / Other | **`Workplan.custom_channels`** — add / rename / remove / set; empty by default; persisted with the workplan |
-| Task dialog = mode channels only | Mode platforms **plus** current workplan custom destinations (`get_effective_channels`) |
+| Destinations only via mode list / Other | **`Workplan.custom_channels`** + Manage Channels UI |
+| Task dialog = mode channels only | Mode platforms **plus** current workplan custom destinations |
 
-Acceptance asserts custom-channel CRUD and that product mode defaults do not ship Discord-style `#channel` presets (user destinations belong on the workplan).
+Acceptance asserts custom-channel CRUD/reorder and that product mode defaults do not ship Discord-style `#channel` presets.
 
 ## Friction log
 
 | ID | Severity | Finding | Disposition |
 | --- | --- | --- | --- |
-| `bulk_entry` | **high** | No CSV/JSON bulk import in UI. ~25 dated rows cannot reasonably be entered by hand. | **Deferred** (feature). Dogfood loads fixture via script. |
-| `bulk_revise` | **high** | Draft rewrites need fixture re-import outside ReadyMade. | **Deferred**. |
-| `markdown_export` | **high** | Export was `.tres`-only — useless for community handoff. | **Fixed** — markdown exporter + dialog default `.md`. |
-| `discord_subchannels` | **medium** | Server channel names needed Other or a hardcoded mode. | **Fixed** — workplan `custom_channels`. |
-| `recurring_tasks` | **medium** | `recurring_pattern` on `WorkplanTask` but no UI to set/expand Friday `#general` roundups. | **Deferred**. |
-| `search_filter_campaign` | **medium** | Calendar channel filter TODO; `campaign_tag` / `content_theme` not first-class filters. | **Deferred**. |
-| `open_slot_ux` | **medium** | No first-class “open slot” task type; encoded via title/notes/`STATUS: open_slot`. | **Deferred**. |
-| `timezone_schedule` | **low** | Date strings only; local posting time stored in notes. | **Deferred**. |
-| `channel_cap_warnings` | **low** | No ≤2 posts/channel/week guard. | **Deferred**. |
-| `templates_for_discord` | **low** | No Discord post template; drafts in `generated_content`. | **Deferred**. |
+| `bulk_entry` | **high** | No CSV/JSON bulk import in UI. | **Fixed** — `WorkplanTaskBulkIO` + Import/Export Tasks. |
+| `bulk_revise` | **high** | Draft rewrites needed fixture re-import outside ReadyMade. | **Fixed** — update-by-`task_id` re-import with preview. |
+| `markdown_export` | **high** | Export was `.tres`-only. | **Fixed** — markdown exporter + `.md` dialog. |
+| `discord_subchannels` | **medium** | Server channel names needed Other or a hardcoded mode. | **Fixed** — `custom_channels` + Manage Channels. |
+| `recurring_tasks` | **medium** | `recurring_pattern` with no UI/expand. | **Fixed** — weekday + end date + expand. |
+| `search_filter_campaign` | **medium** | Calendar channel filter TODO. | **Fixed** — channel/status/campaign/theme + search. |
+| `open_slot_ux` | **medium** | No first-class content-plan status. | **Fixed** — `content_status` + migration. |
+| `timezone_schedule` | **low** | Date strings only. | **Fixed** — time + IANA zone + workplan default. |
+| `channel_cap_warnings` | **low** | No weekly channel-cap guard. | **Fixed** — caps + non-blocking warnings. |
+| `templates_for_discord` | **low** | No community post template / copy Markdown. | **Fixed** — Community Post template + Copy as Markdown. |
 
 ## Bugs / UX gaps fixed in this dogfood pass
 
-1. **Markdown workplan export** — `WorkplanMarkdownExport` + `WorkplanManager.export_workplan_as_markdown`; Plan status column from `STATUS:` notes (`draft` / `placeholder` / `open_slot` / `needs_approval`).
-2. **De-hardcoded destinations** — `Workplan.custom_channels` + manager CRUD; task dialog merges custom list. Acceptance: `_test_custom_channels_and_no_org_presets`.
+1. **Markdown workplan export** — day-by-day handoff with plan status and publish labels.
+2. **De-hardcoded destinations** — `Workplan.custom_channels` + manager CRUD + Manage Channels UI.
+3. **Bulk CSV/JSON task IO** — preview create/update/skip; schema in [readymade-task-bulk-io.md](readymade-task-bulk-io.md).
+4. **First-class `content_status`** — dialog, calendar, markdown; migrates `STATUS:` notes.
+5. **Recurring weekly expand**, calendar filters, timezone publish, cadence caps, Community Post + copy Markdown.
 
-## Larger ideas (do not build here)
+## Larger ideas (still out of scope)
 
-- Bulk import/export CSV ↔ workplan tasks (dates, channel, draft, status).
-- First-class `open_slot` / `placeholder` / `needs_approval` content-plan status on `WorkplanTask`.
-- Recurring task expander (weekly Friday roundup).
-- Timezone-aware publish datetime + weekly channel-cap warnings.
-- Campaign dashboard: posts/channel/week, open-slot debt, open-thread queue.
-- One-click “copy Discord markdown” from task card.
-- UI for managing custom channels (API exists; dialog still uses Other for ad-hoc one-offs).
+- Campaign dashboard: posts/channel/week charts, open-slot debt queue.
+- Multi-timezone conversion math (labels/store IANA; no offset arithmetic yet).
+- Drag-and-drop calendar reschedule.
 
 ## How to re-run
 

@@ -64,16 +64,20 @@ static func export_json(workplan: Resource) -> String:
 
 
 static func parse_csv(text: String) -> Array:
+	"""Parse CSV including quoted fields that contain newlines."""
 	var rows: Array = []
-	var lines: PackedStringArray = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
-	if lines.is_empty():
+	var normalized: String = text.replace("\r\n", "\n").replace("\r", "\n")
+	if normalized.strip_edges().is_empty():
 		return rows
-	var header_cells: PackedStringArray = _parse_csv_line(String(lines[0]))
+	var raw_rows: Array = _split_csv_records(normalized)
+	if raw_rows.is_empty():
+		return rows
+	var header_cells: PackedStringArray = _parse_csv_line(String(raw_rows[0]))
 	var header_map: Dictionary = {}
 	for i in range(header_cells.size()):
 		header_map[String(header_cells[i]).strip_edges().to_lower()] = i
-	for line_i in range(1, lines.size()):
-		var raw_line: String = String(lines[line_i]).strip_edges()
+	for row_i in range(1, raw_rows.size()):
+		var raw_line: String = String(raw_rows[row_i]).strip_edges()
 		if raw_line.is_empty():
 			continue
 		var cells: PackedStringArray = _parse_csv_line(raw_line)
@@ -86,6 +90,35 @@ static func parse_csv(text: String) -> Array:
 				row[col] = ""
 		rows.append(row)
 	return rows
+
+
+static func _split_csv_records(text: String) -> Array:
+	"""Split CSV text into records, respecting quoted newlines."""
+	var records: Array = []
+	var current: String = ""
+	var in_quotes: bool = false
+	var i: int = 0
+	while i < text.length():
+		var ch: String = text.substr(i, 1)
+		if ch == "\"":
+			current += ch
+			if in_quotes and i + 1 < text.length() and text.substr(i + 1, 1) == "\"":
+				current += "\""
+				i += 2
+				continue
+			in_quotes = not in_quotes
+			i += 1
+			continue
+		if ch == "\n" and not in_quotes:
+			records.append(current)
+			current = ""
+			i += 1
+			continue
+		current += ch
+		i += 1
+	if not current.is_empty():
+		records.append(current)
+	return records
 
 
 static func parse_json(text: String) -> Array:

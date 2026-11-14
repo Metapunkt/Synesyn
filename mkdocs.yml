@@ -110,6 +110,7 @@ nav:
       - "Metapunkt — Orchestrator & Agent Coordination": user-guide/metapunkt.md
       - "SynAxes — default path": user-guide/synaxes.md
       - "SynPunkt": user-guide/synpunkt.md
+      - "ReadyMade content planning": user-guide/readymade-content-planning.md
       - "Glossary": concepts/glossary.md
   - "Developing":
       - "Overview": developer-guide/README.md
