@@ -17,8 +17,8 @@ ReadyMade is designed as a clean, self-contained system that sits on top of the 
 
 ## 3. Key Components
 
-- **`data/workplan.tres`**: The single source of truth for the entire content strategy. This is a custom `Workplan` resource that contains an array of `WorkplanTask` resources for each month.
-- **`scripts/singletons/ReadyMadeOrchestrator.gd`**: The global controller that loads the workplan and provides functions for accessing and modifying it.
+- **`WorkplanManager`** (via `ReadyMadeOrchestrator`): Owns persistence under `Documents/Synesyn/.../workplans/`. Bundled `data/workplan.tres` is sample data only; the legacy single-file `workplan_data.tres` is migrated once into that directory.
+- **`scripts/singletons/ReadyMadeOrchestrator.gd`**: The global controller that connects to WorkplanManager and provides functions for accessing and modifying the active workplan.
 - **`ui/mission_control_dashboard.tscn`**: The main user interface for the human operator. It visualizes the data from `workplan.tres` and will serve as the primary interaction point with the system.
 - **`readymade_main.tscn`**: The main scene and entry point for the ReadyMade application.
 
@@ -157,7 +157,7 @@ The Strategy tab now provides mode-specific guidance:
 - **Save As**: `Ctrl+Shift+S` - Save selected tasks to a new file
 - **Open Task List**: `Ctrl+O` - Load task list (see Import Behavior below)
 - **Select All**: `Ctrl+A` - Toggle selection of all visible tasks
-- **View All Tasks**: `Ctrl+V` - Clear filters and show all workplan tasks
+- **View All Tasks**: `Ctrl+Shift+V` - Clear filters and show all workplan tasks
 
 **Task List Import Behavior:**
 When loading a task list in a different workplan:
@@ -194,7 +194,7 @@ When loading a task list in a different workplan:
 - `Ctrl+O` - Open Task List
 - `Ctrl+L` - New Task List
 - `Ctrl+A` - Select/Deselect All Tasks
-- `Ctrl+V` - View All Tasks (Clear Filter)
+- `Ctrl+Shift+V` - View All Tasks (Clear Filter; `Ctrl+V` remains paste)
 - `Ctrl+W` - Workplan Manager
 - `Ctrl+Q` - Stop Agent Processing
 - `F5` - Refresh Dashboard
@@ -242,10 +242,15 @@ You can open as many documents as you like. The session manager:
 
 ### Edit Modes
 
-Use the **Edit Mode** selector to switch the UI & agent prompts between:
-• **Drafting** – Focus on generating new content.
-• **Revising** – Emphasise structure, tone, and consistency checks.
-• **Proofreading** – Prioritise grammar, spelling, and citation validation.
+Use the **Edit Mode** selector to switch the UI and agent prompts across the six
+PRD edit modes (see `edit_metaprompts.gd` / DocumentSessionManager):
+
+• **Developmental** – Big-picture structure, pacing, and content gaps.
+• **Structural** – Organisation, transitions, and logical sequence.
+• **Content** – Clarity, accuracy, completeness, and evidence.
+• **Line** – Sentence structure, word choice, style, and readability.
+• **Copy** – Grammar, punctuation, spelling, and mechanical correctness.
+• **Proofreading** – Final pass for typos, formatting, and minor errors.
 
 ### Troubleshooting
 

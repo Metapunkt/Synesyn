@@ -25,7 +25,7 @@
 
 ### **Agent Processing**
 - [ ] **A1SynthesisEngine Execution**
-  - Start agent with "Start Agent" button (or Ctrl+S)
+  - Start agent with the "Start Agent" button (Ctrl+S saves a task list; it does not start the agent)
   - Monitor agent status in performance metrics
   - Verify task moves from "To Do" → "In Progress" → "Done"
   - Check generated content quality

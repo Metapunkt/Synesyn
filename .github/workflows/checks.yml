@@ -4,9 +4,9 @@ name: Checks
 # moving a script breaks paths written in documentation, so the check has to run on
 # code changes too, not only documentation ones.
 #
-# The Godot harness specs are not run here. They need a Godot binary and a live
-# session, which is not free on a hosted runner; they run locally and are described
-# in CONTRIBUTING.md.
+# ScenSyn harness specs are not run here (live hub session). ReadyMade has a
+# headless acceptance scene that only needs Godot + LimboAI binaries; that job
+# is wired below.
 
 on:
   push:
@@ -51,3 +51,34 @@ jobs:
       - name: Hub tests
         working-directory: services/synesyn_hub
         run: python -m pytest tests/ -q
+
+  readymade-acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7 (headless)
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/godot.zip \
+            "https://github.com/godotengine/godot-builds/releases/download/4.7-dev1/Godot_v4.7-dev1_linux.x86_64.zip"
+          sudo unzip -o /tmp/godot.zip -d /usr/local/bin
+          sudo mv /usr/local/bin/Godot_v4.7-dev1_linux.x86_64 /usr/local/bin/godot
+          sudo chmod +x /usr/local/bin/godot
+          godot --version
+
+      - name: Install LimboAI GDExtension binaries
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/limboai.zip \
+            "https://github.com/limbonaut/limboai/releases/download/v1.8.0/limboai%2Bv1.8.0.gdextension-4.6.zip"
+          unzip -o /tmp/limboai.zip -d /tmp/limboai
+          mkdir -p synesyn_client/addons/limboai/bin
+          cp -a /tmp/limboai/addons/limboai/bin/. synesyn_client/addons/limboai/bin/
+
+      - name: Import project + run ReadyMade acceptance
+        run: |
+          set -euo pipefail
+          godot --headless --path synesyn_client --import --quit-after 60
+          chmod +x utilities/checks/run_readymade_acceptance.sh
+          GODOT_BIN="$(command -v godot)" utilities/checks/run_readymade_acceptance.sh

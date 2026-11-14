@@ -7,6 +7,7 @@ func _ready():
 	var orchestrator = get_node_or_null("/root/ReadyMadeOrchestrator")
 	if not orchestrator:
 		print("❌ ReadyMadeOrchestrator not found!")
+		get_tree().quit(1)
 		return
 	
 	print("✅ ReadyMadeOrchestrator found")
@@ -14,6 +15,7 @@ func _ready():
 	# Test workplan loading
 	if not orchestrator.workplan:
 		print("❌ Workplan not loaded!")
+		get_tree().quit(1)
 		return
 	
 	print("✅ Workplan loaded")
@@ -28,13 +30,31 @@ func _ready():
 	print("   ✅ Completed: ", completed_tasks)
 	print("   📝 Pending: ", pending_tasks)
 	
-	# Test persistence
+	# Test persistence — WorkplanManager under Documents/Synesyn/.../workplans/
 	print("\n💾 PERSISTENCE TEST:")
-	var save_path = "user://workplan_data.tres"
-	if ResourceLoader.exists(save_path):
-		print("   ✅ Persistent workplan file exists")
+	var manager = get_node_or_null("/root/WorkplanManager")
+	if manager == null and orchestrator.has_method("get_workplan_manager"):
+		manager = orchestrator.get_workplan_manager()
+	var workplans_dir: String = RuntimeConfig.get_workplans_dir()
+	var found_store := false
+	if manager != null and not String(manager.current_workplan_path).is_empty():
+		found_store = FileAccess.file_exists(manager.current_workplan_path) or ResourceLoader.exists(manager.current_workplan_path)
+		print("   📂 Active workplan path: ", manager.current_workplan_path)
+	if not found_store and DirAccess.dir_exists_absolute(workplans_dir):
+		var dir := DirAccess.open(workplans_dir)
+		if dir:
+			dir.list_dir_begin()
+			var file_name := dir.get_next()
+			while file_name != "":
+				if file_name.ends_with(".tres"):
+					found_store = true
+					print("   ✅ Found workplan store file: ", workplans_dir.path_join(file_name))
+					break
+				file_name = dir.get_next()
+	if found_store:
+		print("   ✅ WorkplanManager store present under ", workplans_dir)
 	else:
-		print("   📝 No persistent workplan file (will be created)")
+		print("   📝 No workplan store file yet (will be created on first save) at ", workplans_dir)
 	
 	# Test enhanced AI prompting
 	print("\n🎨 AI ENHANCEMENT TEST:")
@@ -52,4 +72,4 @@ func _ready():
 	
 	# Exit after 2 seconds
 	await get_tree().create_timer(2.0).timeout
-	get_tree().quit() 
+	get_tree().quit(0)
