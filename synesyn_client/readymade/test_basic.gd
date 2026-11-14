@@ -11,6 +11,14 @@ func _ready():
 		return
 	
 	print("✅ ReadyMadeOrchestrator found")
+
+	# WorkplanManager is created deferred — wait briefly for the active workplan.
+	var waited := 0
+	while waited < 60 and (orchestrator.workplan == null):
+		await get_tree().process_frame
+		waited += 1
+	if orchestrator.workplan == null and orchestrator.has_signal("workplan_loaded"):
+		await orchestrator.workplan_loaded
 	
 	# Test workplan loading
 	if not orchestrator.workplan:
@@ -56,20 +64,16 @@ func _ready():
 	else:
 		print("   📝 No workplan store file yet (will be created on first save) at ", workplans_dir)
 	
-	# Test enhanced AI prompting
-	print("\n🎨 AI ENHANCEMENT TEST:")
-	var process_task = preload("res://readymade/scripts/bt_tasks/ProcessFoundConceptTask.gd").new()
-	
-	var test_prompt = process_task._build_inference_architect_metaprompt()
-	if "concrete" in test_prompt.to_lower() or "specific" in test_prompt.to_lower():
-		print("   ✅ Enhanced anti-slop prompting active")
+	# Instrument vocabulary (ADR 0024) — avoids instantiating LimboAI BTTask subclasses
+	print("\n🎨 INSTRUMENT VOCABULARY TEST:")
+	var mapped: String = CosmicInstruments.canonicalize("Role-Playing (Expert Analysis)")
+	if mapped == CosmicInstruments.CODE_RP:
+		print("   ✅ CosmicInstruments maps Role-Playing → RP")
 	else:
-		print("   ⚠️ Enhanced prompting may not be working")
-	
-	process_task.queue_free()
+		print("   ⚠️ CosmicInstruments mapping unexpected: ", mapped)
 	
 	print("\n🚀 Basic system test complete!")
 	
-	# Exit after 2 seconds
-	await get_tree().create_timer(2.0).timeout
+	# Exit after a short settle so deferred orchestrator setup finishes cleanly
+	await get_tree().create_timer(1.0).timeout
 	get_tree().quit(0)
