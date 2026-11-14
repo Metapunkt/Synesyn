@@ -365,8 +365,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("2_abcde")
-tab_alignment = 1
-current_tab = 2
+theme_override_font_sizes/font_size = 15
+tab_alignment = 0
+clip_tabs = false
+current_tab = 0
 
 [node name="Tasks" type="VBoxContainer" parent="HSplitContainer/MainTabContainer"]
 visible = false

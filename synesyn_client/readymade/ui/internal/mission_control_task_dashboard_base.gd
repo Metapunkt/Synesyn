@@ -86,6 +86,26 @@ func _connect_to_orchestrator():
 		await get_tree().create_timer(0.1).timeout
 		_connect_to_orchestrator()
 
+func _ensure_main_tab_hit_targets() -> void:
+	"""Enlarge MainTabContainer tab hit areas so clicks work reliably at 1152x648."""
+	if main_tab_container == null:
+		return
+	main_tab_container.clip_tabs = false
+	main_tab_container.tab_alignment = TabContainer.ALIGNMENT_LEFT
+	main_tab_container.add_theme_font_size_override("font_size", 15)
+	var tab_bar: TabBar = main_tab_container.get_tab_bar()
+	if tab_bar == null:
+		return
+	tab_bar.mouse_filter = Control.MOUSE_FILTER_STOP
+	tab_bar.custom_minimum_size = Vector2(0, 40)
+	tab_bar.add_theme_constant_override("h_separation", 8)
+	for tab_index in main_tab_container.get_tab_count():
+		# Keep titles short enough to remain fully clickable without overlapping neighbors.
+		var title: String = main_tab_container.get_tab_title(tab_index)
+		if title.length() > 0:
+			main_tab_container.set_tab_title(tab_index, title)
+
+
 func _setup_keyboard_shortcuts():
 	"""Setup keyboard shortcuts for common actions"""
 	# Make sure we can receive input
@@ -175,6 +195,7 @@ func _input(event):
 				get_viewport().set_input_as_handled()
 
 func _setup_ui():
+	_ensure_main_tab_hit_targets()
 	# Create task dialog
 	task_dialog = preload("res://readymade/ui/task_dialog.tscn").instantiate()
 	add_child(task_dialog)
