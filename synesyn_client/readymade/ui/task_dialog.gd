@@ -258,21 +258,19 @@ func _create_format_checkboxes():
 		format_checkboxes.append(checkbox)
 
 func _create_channel_checkboxes():
-	"""Create channel checkboxes based on current mode"""
+	"""Create channel checkboxes: mode platforms + workplan custom destinations"""
 	# Clear existing channel checkboxes
 	for checkbox in channel_checkboxes:
 		if checkbox and is_instance_valid(checkbox):
 			checkbox.queue_free()
 	channel_checkboxes.clear()
-	
-	# Get current mode channels
-	var channels = ModeManager.get_current_channels()
-	
-	# Create new channel checkboxes
+
+	var channels: Array[String] = _collect_effective_channels(false)
+
 	for channel_name in channels:
 		var checkbox = CheckBox.new()
 		checkbox.text = channel_name
-		checkbox.name = channel_name.replace(" ", "").replace("/", "") + "Check"
+		checkbox.name = channel_name.replace(" ", "").replace("/", "").replace("#", "") + "Check"
 		channels_grid.add_child(checkbox)
 		channel_checkboxes.append(checkbox)
 
@@ -304,31 +302,43 @@ func _create_all_format_checkboxes():
 		format_checkboxes.append(checkbox)
 
 func _create_all_channel_checkboxes():
-	"""Create channel checkboxes from ALL modes"""
+	"""Create channel checkboxes from ALL modes plus workplan custom destinations"""
 	# Clear existing channel checkboxes
 	for checkbox in channel_checkboxes:
 		if checkbox and is_instance_valid(checkbox):
 			checkbox.queue_free()
 	channel_checkboxes.clear()
-	
-	# Get channels from all modes
-	var all_channels: Array[String] = []
-	var all_modes = ModeManager.get_available_modes()
-	
-	for mode_id in all_modes:
-		var mode_config = ModeManager.get_mode_config(mode_id)
-		var mode_channels = mode_config.channels
-		for channel in mode_channels:
-			if not all_channels.has(channel):
-				all_channels.append(channel)
-	
-	# Create channel checkboxes for all options
+
+	var all_channels: Array[String] = _collect_effective_channels(true)
+
 	for channel_name in all_channels:
 		var checkbox = CheckBox.new()
 		checkbox.text = channel_name
-		checkbox.name = channel_name.replace(" ", "").replace("/", "") + "Check"
+		checkbox.name = channel_name.replace(" ", "").replace("/", "").replace("#", "") + "Check"
 		channels_grid.add_child(checkbox)
 		channel_checkboxes.append(checkbox)
+
+
+func _collect_effective_channels(from_all_modes: bool) -> Array[String]:
+	"""Merge mode platform venues with the current workplan's custom destinations."""
+	var combined: Array[String] = []
+	if ModeManager != null:
+		if from_all_modes:
+			for mode_id in ModeManager.get_available_modes():
+				var mode_config = ModeManager.get_mode_config(mode_id)
+				for channel_label in mode_config.channels:
+					if not combined.has(channel_label):
+						combined.append(channel_label)
+		else:
+			for channel_label in ModeManager.get_current_channels():
+				if not combined.has(channel_label):
+					combined.append(channel_label)
+	var workplan_manager: Node = get_node_or_null("/root/WorkplanManager")
+	if workplan_manager != null and workplan_manager.has_method("get_custom_channels"):
+		for channel_label in workplan_manager.get_custom_channels():
+			if not combined.has(channel_label):
+				combined.append(channel_label)
+	return combined
 
 func _on_mode_changed(_new_mode: String):
 	"""Handle mode change by recreating options"""

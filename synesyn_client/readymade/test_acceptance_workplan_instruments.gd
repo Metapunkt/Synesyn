@@ -12,7 +12,7 @@ func _ready() -> void:
 
 	_test_instrument_mapping()
 	_test_edit_metaprompts_typed_modes()
-	_test_metapunkt_discord_mode_channels()
+	_test_custom_channels_and_no_org_presets()
 	_test_backend_unavailable_message_and_fail_task()
 	_test_config_path_honors_storage_root_dir()
 	await _test_start_agent_batch_hub_gate()
@@ -98,34 +98,159 @@ func _test_instrument_mapping() -> void:
 	)
 
 
-func _test_metapunkt_discord_mode_channels() -> void:
-	print("-- Metapunkt Discord Latent Space mode --")
+func _test_custom_channels_and_no_org_presets() -> void:
+	print("-- custom channels + no org-specific product presets --")
 	_expect(ModeManager != null, "ModeManager available")
-	if ModeManager == null:
-		return
+	if ModeManager != null:
+		_expect(
+			not ModeManager.get_available_modes().has("metapunkt_discord"),
+			"metapunkt_discord mode removed from product"
+		)
+		for mode_id in ModeManager.get_available_modes():
+			var mode_cfg = ModeManager.get_mode_config(mode_id)
+			_expect(mode_cfg != null, "mode config loads: %s" % mode_id)
+			if mode_cfg == null:
+				continue
+			for channel_label in mode_cfg.channels:
+				var lower_ch: String = String(channel_label).to_lower()
+				_expect(
+					not lower_ch.begins_with("#forward_"),
+					"mode %s has no Latent Space preset (%s)" % [mode_id, channel_label]
+				)
+				_expect(
+					lower_ch.find("metapunkt") < 0 and lower_ch.find("latent") < 0,
+					"mode %s channel is org-neutral (%s)" % [mode_id, channel_label]
+				)
+
 	_expect(
-		ModeManager.get_available_modes().has("metapunkt_discord"),
-		"metapunkt_discord mode registered"
+		_product_scripts_free_of_org_channel_presets(),
+		"product scripts have no Metapunkt/Latent Space channel presets"
 	)
-	var cfg = ModeManager.get_mode_config("metapunkt_discord")
-	_expect(cfg != null, "metapunkt_discord config loads")
-	if cfg == null:
+
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	_expect(manager != null, "WorkplanManager for custom channels")
+	if manager == null:
 		return
-	var channels: Array[String] = cfg.channels
-	for required_channel in [
-		"#general",
+
+	var probe_name := "Custom Channels Probe"
+	if manager.available_workplans.has(probe_name):
+		manager.delete_workplan(probe_name)
+	var created: bool = manager.create_new_workplan(probe_name, "Custom channel CRUD probe")
+	_expect(created, "create custom-channel probe workplan")
+	var workplan: Workplan = manager.get_current_workplan() as Workplan
+	_expect(workplan != null, "probe workplan current")
+	if workplan == null:
+		return
+
+	_expect(workplan.custom_channels.is_empty(), "new workplan custom_channels defaults empty")
+	_expect(manager.get_custom_channels().is_empty(), "get_custom_channels empty by default")
+
+	_expect(manager.add_custom_channel("#alpha"), "add_custom_channel #alpha")
+	_expect(manager.add_custom_channel("#beta"), "add_custom_channel #beta")
+	_expect(not manager.add_custom_channel("#alpha"), "duplicate add_custom_channel rejected")
+	_expect(not manager.add_custom_channel("  "), "blank add_custom_channel rejected")
+	_expect(manager.get_custom_channels().has("#alpha"), "list includes #alpha")
+	_expect(manager.get_custom_channels().has("#beta"), "list includes #beta")
+
+	_expect(manager.rename_custom_channel("#beta", "#beta_renamed"), "rename_custom_channel")
+	_expect(manager.get_custom_channels().has("#beta_renamed"), "renamed channel present")
+	_expect(not manager.get_custom_channels().has("#beta"), "old channel name gone")
+
+	_expect(manager.remove_custom_channel("#alpha"), "remove_custom_channel #alpha")
+	_expect(not manager.get_custom_channels().has("#alpha"), "#alpha removed")
+	_expect(manager.get_custom_channels().size() == 1, "one custom channel remains")
+
+	_expect(manager.set_custom_channels(["#dest_one", "#dest_two", "#dest_one"]), "set_custom_channels dedupes")
+	var after_set: Array[String] = manager.get_custom_channels()
+	_expect(after_set.size() == 2, "set_custom_channels size 2 after dedupe")
+	_expect(after_set.has("#dest_one") and after_set.has("#dest_two"), "set_custom_channels values")
+
+	var effective: Array[String] = manager.get_effective_channels()
+	_expect(effective.has("#dest_one"), "get_effective_channels includes custom")
+	var mode_channels: Array[String] = ModeManager.get_current_channels()
+	_expect(not mode_channels.is_empty(), "current mode still exposes platform venues")
+	if not mode_channels.is_empty():
+		_expect(
+			effective.has(mode_channels[0]),
+			"get_effective_channels includes mode platform (%s)" % mode_channels[0]
+		)
+
+	manager.save_current_workplan()
+	var reloaded: Workplan = manager._load_workplan_from_path(manager.current_workplan_path) as Workplan
+	_expect(reloaded != null, "reload workplan with custom_channels")
+	if reloaded:
+		_expect(reloaded.custom_channels.has("#dest_one"), "custom_channels persist across save/load")
+		_expect(reloaded.custom_channels.has("#dest_two"), "custom_channels persist #dest_two")
+
+	if manager.available_workplans.has(probe_name):
+		# Switch away before delete when possible.
+		var others: Array = manager.get_available_workplans()
+		for other_name_any in others:
+			var other_name: String = String(other_name_any)
+			if other_name != probe_name:
+				manager.switch_to_workplan(other_name)
+				break
+		manager.delete_workplan(probe_name)
+
+
+func _product_scripts_free_of_org_channel_presets() -> bool:
+	"""Grep-style assert: shipped ReadyMade product scripts must not embed org channel lists."""
+	var forbidden: Array[String] = [
+		"metapunkt_discord",
+		"Metapunkt Discord",
+		"Latent Space",
 		"#forward_remembrance",
-		"#metapunkt",
-		"#synesyn",
 		"#stochastic_dreams",
-		"#latent_reality",
 		"#kernel_inference",
 		"#mapping_latent_reality",
-	]:
-		_expect(channels.has(required_channel), "mode includes %s" % required_channel)
-	_expect(not channels.has("#anya_workspace"), "mode excludes private #anya_workspace")
-	_expect(not channels.has("#ask-anya"), "mode excludes reactive #ask-anya")
-	_expect(not channels.has("#start-here"), "mode excludes static #start-here")
+		"#latent_reality",
+		"#anya_workspace",
+		"#ask-anya",
+	]
+	var roots: Array[String] = [
+		"res://readymade/scripts",
+		"res://readymade/ui",
+		"res://readymade/data",
+		"res://readymade/components",
+		"res://readymade/agents",
+	]
+	var dirty: Array[String] = []
+	for root_path in roots:
+		_scan_product_dir_for_forbidden(root_path, forbidden, dirty)
+	if not dirty.is_empty():
+		for hit in dirty:
+			push_error("org preset leak: " + hit)
+		return false
+	return true
+
+
+func _scan_product_dir_for_forbidden(dir_path: String, forbidden: Array[String], dirty: Array[String]) -> void:
+	var dir := DirAccess.open(dir_path)
+	if dir == null:
+		return
+	dir.list_dir_begin()
+	var entry: String = dir.get_next()
+	while not entry.is_empty():
+		if entry == "." or entry == "..":
+			entry = dir.get_next()
+			continue
+		var full: String = dir_path.path_join(entry)
+		if dir.current_is_dir():
+			# Skip non-product trees that may document examples.
+			if entry == "dogfood" or entry.begins_with("test"):
+				entry = dir.get_next()
+				continue
+			_scan_product_dir_for_forbidden(full, forbidden, dirty)
+		elif entry.ends_with(".gd") or entry.ends_with(".tscn"):
+			if entry.begins_with("test_") or entry.find("dogfood") >= 0:
+				entry = dir.get_next()
+				continue
+			var body: String = FileAccess.get_file_as_string(full)
+			for needle in forbidden:
+				if body.find(needle) >= 0:
+					dirty.append("%s contains '%s'" % [full, needle])
+		entry = dir.get_next()
+	dir.list_dir_end()
 
 
 func _test_backend_unavailable_message_and_fail_task() -> void:
@@ -761,8 +886,8 @@ func _test_workplan_markdown_export() -> void:
 	if workplan:
 		var task := WorkplanTask.new()
 		task.title = "PLACEHOLDER — sample"
-		task.channel = "#kernel_inference"
-		task.content_theme = "Open Closure"
+		task.channel = "#custom_dest_a"
+		task.content_theme = "Export probe"
 		task.publish_date = "2026-12-01"
 		task.campaign_tag = "probe"
 		task.generated_content = "**Sample**\n\nPLACEHOLDER body for export."
@@ -776,7 +901,7 @@ func _test_workplan_markdown_export() -> void:
 		_expect(FileAccess.file_exists(export_path), "markdown file written")
 		if FileAccess.file_exists(export_path):
 			var md: String = FileAccess.get_file_as_string(export_path)
-			_expect(md.find("#kernel_inference") >= 0, "markdown includes channel")
+			_expect(md.find("#custom_dest_a") >= 0, "markdown includes channel")
 			_expect(md.find("placeholder") >= 0, "markdown includes plan status placeholder")
 			_expect(md.find("Sample") >= 0 or md.find("PLACEHOLDER") >= 0, "markdown includes draft body")
 

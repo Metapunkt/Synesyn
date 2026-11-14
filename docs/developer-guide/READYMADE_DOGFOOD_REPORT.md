@@ -8,24 +8,37 @@
 
 | Guidance | How the plan reflects it |
 | --- | --- |
-| Stochastic Dreams documentation URL | Fetched successfully: [Research Catalogue document](https://www.researchcatalogue.net/view/4351440/4351445/document) (+ exposition abstract). Exhibition posts cite that URL and use only facts from those pages (Galleri KiT, Meta.Morf 2026, 9–21 Apr 2026, Lubi Board, Stochastic Dream Box, Chaos Engine pendulum, credits, title proposition). Earlier exhibition placeholders converted to drafts. |
-| Open Closure as research in motion | `#kernel_inference` posts are discursive / reflective; **no reveal countdown / TBD date**. |
-| Nothing scheduled beyond the rhythm | **1–2 `open_slot` weekdays per week** (five across the month) left empty for timely updates. |
-| Rhythm confirmed | Weekdays ≈11:00 Europe/Oslo; weekend light/optional; Friday `#general`; ≤≈2 posts/channel/week. |
+| Stochastic Dreams documentation URL | Fetched: [RC document](https://www.researchcatalogue.net/view/4351440/4351445/document), [About](https://www.researchcatalogue.net/view/document/4351440/about), [Gallery](https://www.researchcatalogue.net/view/document/4351440/gallery). Exhibition posts cite those pages. |
+| Curator credits | Exact RC About wording: *The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.* |
+| Exhibition images (18 Nov, 26 Nov, 5 Dec) | Direct RC media URLs in each post’s `image` field (exhibition photographs / tapestry turn render). |
+| Forward Remembrance horizon | Ongoing project **2023–2027**; May 2026 portfolio framing removed. |
+| Open-core / foresight framing | Softened to “an open-core approach to foresight tools”; no competitor claims; “paywalled foresight” dropped. |
+| Open Closure channel | Posts moved to `#mapping_latent_reality`. |
+| `#kernel_inference` | **Journal only.** Fetched [kernel-inference.com](https://kernel-inference.com/) (guidelines, papers, agents) and used those slots for journal posts. |
+| Accessibility | Technical terms get a first-use gloss + 1–3 https links; drafts stay under 2,000 characters. |
+| metapunkt.org | Fetched via `https://www.metapunkt.org/` (apex `metapunkt.org` TLS timed out once). Cited for opener, FR, retrospectives. |
+| Anya ops | Plan header: open-slot prompts ~1–2 days ahead; monthly metapunkt.org edit prompts. |
+| Rhythm | Weekdays ≈11:00 Europe/Oslo; weekend light/optional; Friday `#general`; ≤≈2 posts/channel/week. |
 
-## Anya voice-pass (14 Nov 2026)
+## Channels in ReadyMade (de-hardcoded)
 
-Folded Anya’s Section 5 replacements into the fixture and plan (verbatim drafts; schedule/caps/`@everyone` kept in header rules only; ADR/88b labels moved to Source/notes). Dec 12 moved to `#synesyn`. Ayodele-pending items carry **NEEDS CONFIRMATION** in notes (paywalled foresight; May 2026 portfolio date; curator credits; exhibition stills marked `image needed`).
+| Before | After |
+| --- | --- |
+| Built-in `metapunkt_discord` mode with Latent Space channel presets | **Removed** from `ModeManager` |
+| Destinations only via mode list / Other | **`Workplan.custom_channels`** — add / rename / remove / set; empty by default; persisted with the workplan |
+| Task dialog = mode channels only | Mode platforms **plus** current workplan custom destinations (`get_effective_channels`) |
+
+Metapunkt Latent Space names appear **only** as example data in the dogfood fixture/test when it calls `WorkplanManager.set_custom_channels(...)`. Acceptance asserts custom-channel CRUD and greps product scripts for Metapunkt/Latent Space channel presets.
 
 ## What worked
 
 | Path | Result |
 | --- | --- |
 | Workplan create (`WorkplanManager.create_new_workplan`) | Worked. Named plan `Anya Discord Nov–Dec 2026`. |
+| Custom channels API | `add` / `rename` / `remove` / `set` / `get_effective_channels`; empty default. |
 | Task model fields (`publish_date`, `channel`, `content_theme`, `campaign_tag`, `generated_content`, `notes`) | Rich enough for Discord planning once filled; `STATUS:` in notes carries `draft` / `placeholder` / `open_slot`. |
 | Scratchpad scene load + save under `Documents/Synesyn/readymade/` | Worked headless for brainstorm constraints. |
-| Markdown export (new) | `export_workplan_as_markdown` + export dialog `.md` filter. |
-| Mode: Metapunkt Discord (new) | Latent Space channel presets; excludes `#start-here`, `#anya_workspace`, `#ask-anya`. |
+| Markdown export | `export_workplan_as_markdown` + export dialog `.md` filter. |
 
 Dogfood scene: `synesyn_client/readymade/test_dogfood_discord_content_plan.tscn`  
 Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
@@ -35,12 +48,12 @@ Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
 | ID | Severity | Finding | Disposition |
 | --- | --- | --- | --- |
 | `bulk_entry` | **high** | No CSV/JSON bulk import in UI. ~26 dated rows cannot reasonably be entered by hand. | **Deferred** (feature). Dogfood loads fixture via script. |
-| `bulk_revise` | **high** | Voice-pass rewrote ~20 drafts. No UI path to re-import or bulk-update existing workplan tasks from JSON — had to rewrite the fixture outside ReadyMade and recreate the workplan in dogfood. | **Deferred**. |
+| `bulk_revise` | **high** | Voice-pass / Ayodele rewrites need fixture re-import outside ReadyMade. | **Deferred**. |
 | `markdown_export` | **high** | Export was `.tres`-only — useless for Discord handoff. | **Fixed** — markdown exporter + dialog default `.md`. |
-| `discord_subchannels` | **medium** | Single “Discord” checkbox; server channel names needed Other. | **Fixed (partial)** — `metapunkt_discord` mode with Latent Space channels. |
+| `discord_subchannels` | **medium** | Server channel names needed Other or a hardcoded mode. | **Fixed** — workplan `custom_channels` (org lists only in dogfood/examples). |
 | `recurring_tasks` | **medium** | `recurring_pattern` on `WorkplanTask` but no UI to set/expand Friday `#general` roundups. | **Deferred**. |
 | `search_filter_campaign` | **medium** | Calendar channel filter TODO; `campaign_tag` / `content_theme` not first-class filters. | **Deferred**. |
-| `open_slot_ux` | **medium** | No first-class “open slot” task type; encoded via title/notes/`STATUS: open_slot`. | **Deferred** (notes convention + export status column for now). |
+| `open_slot_ux` | **medium** | No first-class “open slot” task type; encoded via title/notes/`STATUS: open_slot`. | **Deferred**. |
 | `timezone_schedule` | **low** | Date strings only; Europe/Oslo 11:00 stored in notes. | **Deferred**. |
 | `channel_cap_warnings` | **low** | No ≤2 posts/channel/week guard. | **Deferred**. |
 | `templates_for_discord` | **low** | No Discord post template; drafts in `generated_content`. | **Deferred**. |
@@ -48,9 +61,9 @@ Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
 
 ## Bugs / UX gaps fixed this pass
 
-1. **Markdown workplan export** — `WorkplanMarkdownExport` + `WorkplanManager.export_workplan_as_markdown`; export dialog prefers `.md`. Acceptance: `_test_workplan_markdown_export`.
-2. **Metapunkt Discord mode** — Latent Space channel list. Acceptance: `_test_metapunkt_discord_mode_channels`.
-3. **Plan status in export** — `STATUS: draft|placeholder|open_slot` → Plan status column (distinct from workflow To Do/Done).
+1. **Markdown workplan export** — `WorkplanMarkdownExport` + `WorkplanManager.export_workplan_as_markdown`.
+2. **De-hardcoded destinations** — removed `metapunkt_discord`; `Workplan.custom_channels` + manager CRUD; task dialog merges custom list. Acceptance: `_test_custom_channels_and_no_org_presets`.
+3. **Plan status in export** — `STATUS: draft|placeholder|open_slot` → Plan status column.
 
 ## Larger ideas (do not build here)
 
@@ -60,6 +73,7 @@ Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
 - Timezone-aware publish datetime + weekly channel-cap warnings.
 - Campaign dashboard: posts/channel/week, open-slot debt, open-thread queue.
 - One-click “copy Discord markdown” from task card.
+- UI for managing custom channels (API exists; dialog still uses Other for ad-hoc one-offs).
 
 ## How to re-run
 
@@ -72,8 +86,13 @@ godot --headless --path synesyn_client \
   res://readymade/test_dogfood_discord_content_plan.tscn
 ```
 
-## Material honesty
+## Material honesty / fetch status
 
-- Stochastic Dreams **exhibition** facts come from the Research Catalogue pages above (fetch **succeeded**). Nov 18 / 26 / 5 Dec stay `draft` with **image needed** until actual stills are attached (not page URLs).
-- Open Closure: discursive only; no reveal date; “not a launch date” phrasing removed.
-- **NEEDS CONFIRMATION** (Ayodele): “paywalled foresight” (30 Nov); May 2026 portfolio date (7 Dec); curator credits Murray-Leslie / Busch; exhibition photo picks.
+| Source | Result |
+| --- | --- |
+| Research Catalogue document / About / Gallery | **Succeeded** — curator credit + media URLs used |
+| kernel-inference.com (home, guidelines, papers, agents) | **Succeeded** — journal posts cite these |
+| https://www.metapunkt.org/ (+ About / FR / Stories) | **Succeeded** |
+| https://metapunkt.org/ (apex, no www) | **Failed once** — TLS handshake timeout; use www |
+
+Open Closure remains discursive (no reveal date). Image fields hold direct RC media URLs (not bare page links).

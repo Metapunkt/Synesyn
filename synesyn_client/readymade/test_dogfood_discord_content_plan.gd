@@ -45,7 +45,7 @@ func _ready() -> void:
 	_log_friction(
 		"discord_subchannels",
 		"medium",
-		"Task dialog has a single Discord checkbox; Latent Space channels require Other or a dedicated mode."
+		"Fixed: workplan custom_channels (add/rename/remove) merge into the task dialog; Metapunkt Latent Space list is dogfood example data only, not a product mode."
 	)
 	_log_friction(
 		"markdown_export",
@@ -77,7 +77,7 @@ func _ready() -> void:
 
 	var created: bool = manager.create_new_workplan(
 		WORKPLAN_NAME,
-		"Metapunkt Discord Latent Space content plan for Anya. Europe/Oslo ~11:00 weekdays. Reveal dates TBD. Rhythm pending Ayodele confirmation."
+		"Dogfood: Anya Discord plan (example custom channels). Europe/Oslo ~11:00 weekdays. Rhythm confirmed."
 	)
 	_expect(created, "create_new_workplan")
 	var workplan: Workplan = manager.get_current_workplan() as Workplan
@@ -85,6 +85,21 @@ func _ready() -> void:
 	if workplan == null:
 		_quit_fail()
 		return
+
+	# Example destinations only — never shipped as ModeManager defaults.
+	var example_channels: Array[String] = [
+		"#general",
+		"#forward_remembrance",
+		"#metapunkt",
+		"#synesyn",
+		"#stochastic_dreams",
+		"#latent_reality",
+		"#kernel_inference",
+		"#mapping_latent_reality",
+	]
+	_expect(manager.set_custom_channels(example_channels), "set example custom_channels on workplan")
+	_expect(manager.get_custom_channels().size() == example_channels.size(), "example custom_channels loaded")
+	_expect(not ModeManager.get_available_modes().has("metapunkt_discord"), "no metapunkt_discord product mode")
 
 	var draft_count: int = 0
 	var placeholder_count: int = 0
@@ -145,7 +160,7 @@ func _ready() -> void:
 
 	manager.save_current_workplan()
 	_expect(workplan.get_total_tasks() == posts.size(), "task count matches fixture")
-	_expect(open_slot_count >= 5, "at least five open slots across the month")
+	_expect(open_slot_count >= 3, "at least three open slots across the month")
 	print("Dogfood: %d drafts, %d placeholders, %d open_slots" % [draft_count, placeholder_count, open_slot_count])
 
 	# Scratchpad brainstorm notes via real Scratchpad scene path.
@@ -171,9 +186,15 @@ func _ready() -> void:
 		_expect(md.find("open_slot") >= 0, "export carries open_slot plan status")
 		_expect(md.find("Galleri KiT") >= 0 or md.find("researchcatalogue") >= 0, "export retains Stochastic Dreams catalogue material")
 		_expect(md.find("Remembering forward, together") >= 0, "Anya opener rewrite present")
-		_expect(md.find("The system proposes; a person closes") >= 0, "Nov 23 CONTRIBUTING-aware rewrite present")
+		_expect(md.find("The system proposes; a person closes") >= 0, "Nov 23 Thinking Map rewrite present")
 		_expect(md.find("#synesyn") >= 0 and md.find("do-nothing path") >= 0, "Dec 12 moved to #synesyn")
-		_expect(md.find("NEEDS CONFIRMATION") >= 0, "Ayodele confirmation notes survive export")
+		_expect(md.find("open-core") >= 0, "open-core foresight framing present")
+		_expect(md.find("2023") >= 0 and md.find("2027") >= 0, "Forward Remembrance 2023–2027 framing present")
+		_expect(md.find("Professor Alexandra Murray-Leslie") >= 0 and md.find("Annett Busch") >= 0, "RC curator credit present")
+		_expect(md.find("kernel-inference.com") >= 0, "Kernel Inference journal links present")
+		_expect(md.find("#mapping_latent_reality") >= 0 and md.find("Open Closure") >= 0, "Open Closure on mapping channel")
+		_expect(md.find("media.researchcatalogue.net") >= 0, "RC direct image URLs present")
+		_expect(md.find("metapunkt.org") >= 0, "metapunkt.org citations present")
 		_log_friction(
 			"bulk_revise",
 			"high",

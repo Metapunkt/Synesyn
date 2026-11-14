@@ -5,6 +5,9 @@ class_name Workplan extends Resource
 @export var name: String = "Default Workplan"
 @export var description: String = ""
 @export var created_date: String = ""
+## User-defined destinations (Discord channels, blogs, etc.). Empty by default —
+## never pre-filled with org-specific channel lists. Persisted with the workplan.
+@export var custom_channels: Array[String] = []
 
 ## Legacy dual-write path under the ReadyMade app folder
 ## (Documents/Synesyn/readymade/workplan_data.tres after the top-level move).

@@ -420,6 +420,109 @@ func save_current_workplan():
 		else:
 			print("💾 Saved workplan: ", current_workplan_name)
 
+
+## --- Custom destinations (channels) stored on the workplan -------------------
+## Modes supply generic platform defaults only. Users add/rename/remove their
+## own destinations per workplan; the list starts empty (neutral default).
+
+func get_custom_channels() -> Array[String]:
+	"""Return a copy of the current workplan's custom destination list."""
+	var result: Array[String] = []
+	if current_workplan == null:
+		return result
+	for channel_label in current_workplan.custom_channels:
+		result.append(String(channel_label))
+	return result
+
+
+func set_custom_channels(channels: Array) -> bool:
+	"""Replace the custom destination list (deduped, trimmed). Empty is valid."""
+	if current_workplan == null:
+		push_error("WorkplanManager: No current workplan for set_custom_channels")
+		return false
+	var cleaned: Array[String] = []
+	for channel_any in channels:
+		var channel_label: String = String(channel_any).strip_edges()
+		if channel_label.is_empty():
+			continue
+		if not cleaned.has(channel_label):
+			cleaned.append(channel_label)
+	current_workplan.custom_channels = cleaned
+	save_current_workplan()
+	return true
+
+
+func add_custom_channel(channel_label: String) -> bool:
+	"""Add a user-defined destination. Returns false if empty or already present."""
+	if current_workplan == null:
+		push_error("WorkplanManager: No current workplan for add_custom_channel")
+		return false
+	var cleaned: String = channel_label.strip_edges()
+	if cleaned.is_empty():
+		return false
+	if current_workplan.custom_channels.has(cleaned):
+		return false
+	current_workplan.custom_channels.append(cleaned)
+	save_current_workplan()
+	return true
+
+
+func rename_custom_channel(old_label: String, new_label: String) -> bool:
+	"""Rename a custom destination. Updates matching task.channel / channels."""
+	if current_workplan == null:
+		return false
+	var old_clean: String = old_label.strip_edges()
+	var new_clean: String = new_label.strip_edges()
+	if old_clean.is_empty() or new_clean.is_empty():
+		return false
+	var idx: int = current_workplan.custom_channels.find(old_clean)
+	if idx < 0:
+		return false
+	if new_clean != old_clean and current_workplan.custom_channels.has(new_clean):
+		return false
+	current_workplan.custom_channels[idx] = new_clean
+	for task_any in current_workplan.get_all_tasks():
+		var task: WorkplanTask = task_any as WorkplanTask
+		if task == null:
+			continue
+		if task.channel == old_clean:
+			task.channel = new_clean
+		var updated_channels: Array[String] = []
+		for ch in task.channels:
+			if String(ch) == old_clean:
+				updated_channels.append(new_clean)
+			else:
+				updated_channels.append(String(ch))
+		task.channels = updated_channels
+	save_current_workplan()
+	return true
+
+
+func remove_custom_channel(channel_label: String) -> bool:
+	"""Remove a custom destination from the workplan list (tasks keep their values)."""
+	if current_workplan == null:
+		return false
+	var cleaned: String = channel_label.strip_edges()
+	var idx: int = current_workplan.custom_channels.find(cleaned)
+	if idx < 0:
+		return false
+	current_workplan.custom_channels.remove_at(idx)
+	save_current_workplan()
+	return true
+
+
+func get_effective_channels() -> Array[String]:
+	"""Mode platform defaults plus the current workplan's custom destinations."""
+	var combined: Array[String] = []
+	if ModeManager != null:
+		for channel_label in ModeManager.get_current_channels():
+			if not combined.has(channel_label):
+				combined.append(channel_label)
+	for channel_label in get_custom_channels():
+		if not combined.has(channel_label):
+			combined.append(channel_label)
+	return combined
+
 func _load_workplan_from_path(path: String) -> Workplan:
 	"""Load a workplan from a specific path.
 	ResourceLoader.exists() alone misses some absolute Documents paths;

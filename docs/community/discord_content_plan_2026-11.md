@@ -1,22 +1,31 @@
 # Discord content plan — Metapunkt Latent Space (16 Nov – 15 Dec 2026)
 
-Handoff for **Anya** (community agent). Revised after Anya’s 14 Nov 2026 review. Built as a ReadyMade workplan dogfood on branch `cursor/readymade-hardening-5f3a`.
+Handoff for **Anya** (community agent). Updated 14 Nov 2026 with Ayodele’s answers (open-core framing, Forward Remembrance 2023–2027, curator credits, RC images, Kernel Inference channel, accessibility glosses, metapunkt.org). Built as a ReadyMade workplan dogfood on branch `cursor/readymade-hardening-5f3a`.
+
+## Anya operating notes (internal — not for public posts)
+
+| Duty | Cadence | What to do |
+| --- | --- | --- |
+| **Open slots** | About **1–2 days before** each `open_slot` date | Proactively suggest a short, sourced idea to Ayodele, **or** check with him for material. If nothing arrives by the slot, leave silent — do not invent filler. |
+| **Website (metapunkt.org)** | At least **once a month** | Prompt Ayodele with suggested updates or edits to [metapunkt.org](https://www.metapunkt.org/) (home, Stories & Updates, About / Forward Remembrance, exhibition notes). Cite the page you want changed. |
+| **Channel discipline** | Ongoing | `#kernel_inference` is **only** for the [Kernel Inference Journal](https://kernel-inference.com/). Open Closure lives in `#mapping_latent_reality`. Never plan posts in `#anya_workspace`, `#ask-anya`, or `#start-here`. |
+| **Accessibility** | Every draft | First use of jargon gets a one-clause plain-language gloss; include 1–3 https links (GitHub, Research Catalogue, metapunkt.org, Kernel Inference, or a well-known explainer). Keep under 2,000 characters. |
 
 ## Server assumptions
 
-All post channels are under the **Latent Space** category:
+All post channels are under the **Latent Space** category. In ReadyMade these names are **example custom channels** on the dogfood workplan — not a shipped ModeManager preset.
 
 | Channel | Role in this plan |
 | --- | --- |
 | `#start-here` | Static — **no posts** |
 | `#general` | Friday weekly roundup + open questions |
-| `#forward_remembrance` | Archives ↔ speculative futures; STFX explainers; portfolio-adjacent |
-| `#metapunkt` | Mission (open instruments / method), community |
+| `#forward_remembrance` | Archives ↔ speculative futures; STFX; Forward Remembrance (2023–2027) |
+| `#metapunkt` | Mission / open-core method; community; metapunkt.org |
 | `#synesyn` | Synesyn platform notes and UI stills |
 | `#stochastic_dreams` | Exhibition and installation close-reading |
 | `#latent_reality` | GenAI / latent-space topics |
-| `#kernel_inference` | Open Closure; research notes |
-| `#mapping_latent_reality` | Academic/theoretical; Latent SEEDS |
+| `#kernel_inference` | **Kernel Inference Journal only** ([kernel-inference.com](https://kernel-inference.com/)) |
+| `#mapping_latent_reality` | Theory, Latent SEEDS, **Open Closure** |
 | `#anya_workspace` | Private — **never plan posts** |
 | `#ask-anya` | Reactive Q&A — **never plan posts** |
 
@@ -26,7 +35,7 @@ All post channels are under the **Latent Space** category:
 - **Weekdays:** one post ≈ **11:00**.
 - **Weekends:** at most one light post (image or question), or nothing.
 - **Cap:** ≈ **2 posts per channel per week**, plus `#general` every Friday.
-- **Open slots:** **1 open weekday per week** left empty for timely updates from Ayodele or Anya (`status: open_slot`). Do not mention open slots, caps, schedule, or “no @everyone” in public post bodies.
+- **Open slots:** weekdays left empty for timely updates (`status: open_slot`). Anya prompts Ayodele ~1–2 days ahead (see table above).
 - **Period:** Mon 16 Nov 2026 → Tue 15 Dec 2026.
 - **Roundups:** write `#general` on Friday morning from what actually went out; replace `[link]` with real message links.
 
@@ -36,23 +45,26 @@ All post channels are under the **Latent Space** category:
 - **80–200 words** on weekdays; weekend lights may be shorter; always under 2,000 characters.
 - Bold title line, markdown, at most one emoji (`🌀` or persona `🔬`).
 - Closing question where it fits; mark long explainers **open thread**.
-- Never `@everyone` or role pings (rule for Anya — do not restates in posts).
-- Every STFX explanation credits **Moyo Okediji’s *Artrithmetic*** as a lineage statement, not a compliance aside.
+- Never `@everyone` or role pings (rule for Anya — do not restate in posts).
+- Every STFX explanation credits **Moyo Okediji’s *Artrithmetic*** as a lineage statement.
 - Keep repo paths, ADR numbers, and note labels (**88b**, **Note 86**) in the **Source** / notes fields — not in post bodies.
-- Plan status: `draft`, `placeholder`, or `open_slot`. Items pending Ayodele carry **NEEDS CONFIRMATION** in notes.
-- **Open Closure** posts are reflective / discursive — not countdown teasers.
+- **Accessibility:** gloss jargon on first use; 1–3 newcomer links per technical post.
+- Plan status: `draft`, `placeholder`, or `open_slot`.
+- **Open Closure** posts are reflective / discursive in `#mapping_latent_reality` — not countdown teasers.
 
 ## Source spine
 
-| Topic | What we used | Gaps / confirmation |
+| Topic | What we used | Notes |
 | --- | --- | --- |
-| STFX | ADR 0032, STFX Memory spec, glossary | — |
-| Open Closure | Public README, consolidated summary (88b), note 90, note 86 | `89_Open_Closure_Pivot.md` still missing on public main |
-| Stochastic Dreams | [Research Catalogue](https://www.researchcatalogue.net/view/4351440/4351445/document) | Actual stills to download for 18 Nov, 26 Nov, 5 Dec; curator credit (Murray-Leslie / Busch) pending |
-| Latent SEEDS | Open Closure note 90; ADR 0016 (Store gate exists, opt-in/off) | — |
+| STFX | [ADR 0032](https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md), glossary, Memory spec | — |
+| Open Closure | Public README, 88b, note 90 | Lives in `#mapping_latent_reality`; `89_Open_Closure_Pivot.md` still missing on public main |
+| Stochastic Dreams | [RC document](https://www.researchcatalogue.net/view/4351440/4351445/document), [About](https://www.researchcatalogue.net/view/document/4351440/about), [Gallery](https://www.researchcatalogue.net/view/document/4351440/gallery) | Curator credit (exact from About): *The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.* Images for 18 Nov / 26 Nov / 5 Dec listed in posts |
+| Latent SEEDS | Open Closure note 90; ADR 0016 | — |
 | Synesyn | README, ADR 0019 Thinking Map, screenshots | — |
-| Metapunkt mission | Open Closure honesty + README provenance | **NEEDS CONFIRMATION:** “paywalled foresight” phrasing |
-| Forward Remembrance portfolio | RC About + community brief | **NEEDS CONFIRMATION:** May 2026 portfolio date |
+| Metapunkt mission | [metapunkt.org](https://www.metapunkt.org/), open-core framing | Softened from “paywalled foresight”; no competitor claims |
+| Forward Remembrance | [metapunkt.org/about/forward-remembrance](https://www.metapunkt.org/about/forward-remembrance), RC About | **Ongoing project 2023–2027** (not a May 2026 portfolio date) |
+| Kernel Inference | [kernel-inference.com](https://kernel-inference.com/), guidelines, papers, agents | Public journal material fetched successfully |
+| Studio retrospectives | [Stories & Updates](https://www.metapunkt.org/stories-updates) | Use for retrospective / trail posts |
 
 ## Calendar
 
@@ -65,8 +77,8 @@ All post channels are under the **Latent Space** category:
 | 2026-11-20 | `#general` | Friday roundup | draft |
 | 2026-11-21 | `#latent_reality` | Weekend light | draft |
 | 2026-11-23 | `#synesyn` | Thinking Map / facilitator authority | draft |
-| 2026-11-24 | `#kernel_inference` | Open Closure — discursive | draft |
-| 2026-11-25 | _(open)_ | Open slot | open_slot |
+| 2026-11-24 | `#kernel_inference` | Kernel Inference Journal | draft |
+| 2026-11-25 | `#mapping_latent_reality` | Open Closure — discursive | draft |
 | 2026-11-26 | `#stochastic_dreams` | Exhibition — apparatus & credits | draft |
 | 2026-11-27 | `#general` | Friday roundup | draft |
 | 2026-11-29 | `#synesyn` | Weekend light | draft |
@@ -76,9 +88,9 @@ All post channels are under the **Latent Space** category:
 | 2026-12-03 | `#forward_remembrance` | STFX Memory vs Store | draft |
 | 2026-12-04 | `#general` | Friday roundup | draft |
 | 2026-12-05 | `#stochastic_dreams` | Weekend light — gallery | draft |
-| 2026-12-07 | `#forward_remembrance` | Portfolio / doctoral context | draft |
-| 2026-12-08 | _(open)_ | Open slot | open_slot |
-| 2026-12-09 | `#kernel_inference` | Open Closure — discursive | draft |
+| 2026-12-07 | `#forward_remembrance` | Forward Remembrance ongoing project | draft |
+| 2026-12-08 | `#kernel_inference` | Kernel Inference — review agents | draft |
+| 2026-12-09 | `#mapping_latent_reality` | Open Closure — discursive | draft |
 | 2026-12-10 | `#latent_reality` | GenAI / artistic research | draft |
 | 2026-12-11 | `#general` | Friday roundup | draft |
 | 2026-12-12 | `#synesyn` | Weekend light | draft |
@@ -91,13 +103,13 @@ All post channels are under the **Latent Space** category:
 
 - **Theme:** Month opener / method
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Synesyn README (Metapunkt method / forward remembrance); Anya review 2026-11-14
+- **Source:** https://www.metapunkt.org/; https://www.metapunkt.org/about/forward-remembrance; Synesyn README
 
 **Remembering forward, together**
 
-Metapunkt begins from a wager: the futures we can imagine are shaped by the patterns we are able to remember. Synesyn's README names the method plainly: reading backward into the patterns held in data, and remembering forward into speculative futures. Forward remembrance, in short. Metapunkt is where that method is practised in the open, with instruments you can inspect, sessions you can trace, and disagreements you can have in public.
+Metapunkt begins from a wager: the futures we can imagine are shaped by the patterns we are able to remember. Synesyn's README names the method plainly: reading backward into the patterns held in data, and remembering forward into speculative futures — *forward remembrance*, reading the past so a different future can still be chosen. Metapunkt is where that method is practised in the open, with instruments you can inspect, sessions you can trace, and disagreements you can have in public.
 
-In the weeks ahead the channels here will carry more of the work itself: notes from *Stochastic Dreams*, the April installation at Galleri KiT; the thinking behind STFX and Latent SEEDS; Open Closure as a research question still being worked through; and Synesyn, the platform that holds much of it together. Each channel keeps its own register, so follow your curiosity.
+In the weeks ahead these channels will carry more of the work itself: notes from *Stochastic Dreams*; STFX and Latent SEEDS; Open Closure as a research question still being worked through; and Synesyn. Start at the studio site if you are new: <https://www.metapunkt.org/> · Forward Remembrance: <https://www.metapunkt.org/about/forward-remembrance>
 
 I'm Anya, an AI research persona authored by Ayodele, and I'll be guiding much of it. 🔬
 
@@ -109,16 +121,18 @@ What brought you to Metapunkt: a future you want to build, or a past you want to
 
 - **Theme:** STFX explainer
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md
+- **Source:** https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md
 - **Format note:** open thread
 
 **STFX: seed to field**
 
-🌀 STFX, Seed-to-Field Expansion, names a generative discipline: begin with a compact seed, expand it into a structured field, and let complement pairing, selection and provenance follow. In Synesyn the family appears as `stfx_core`, `stfx_memory` and `stfx_store`.
+🌀 **STFX** (Seed-to-Field Expansion) names a generative discipline: begin with a compact seed, expand it into a structured field, and let complement pairing, selection and provenance follow. In Synesyn the family appears as `stfx_core`, `stfx_memory` and `stfx_store`.
 
-The name has a history worth stating. Until the public release the work carried the working title *Artrhythmetic*, one syllable away from **Moyo Okediji's *Artrithmetic* (2026)**, the published visual framework it draws on. The rename removes that collision in prose, search and citation, and keeps the debt explicit rather than blurred. It also matches what the code already enforces: a culture-neutral kernel, with cultural lexicons such as Ifá Odù plugged in as a separate layer rather than fused into it.
+The name has a history worth stating. Until the public release the work carried the working title *Artrhythmetic*, one syllable away from **Moyo Okediji's *Artrithmetic* (2026)**, the published visual framework it draws on. The rename removes that collision in prose, search and citation, and keeps the debt explicit rather than blurred. It also matches what the code already enforces: a culture-neutral kernel, with cultural lexicons such as Ifá Odù plugged in as a separate layer.
 
 For this channel, STFX is one instrument for moving between archive and speculative future: a seed you can expand without pretending the field was already decided.
+
+Naming note: <https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md> · glossary: <https://github.com/Metapunkt/Synesyn/blob/main/docs/concepts/glossary.md>
 
 Where, in your own practice, does a seed stop being metaphor and become an address you can return to?
 
@@ -128,20 +142,20 @@ Where, in your own practice, does a seed stop being metaphor and become an addre
 
 - **Theme:** Exhibition — title & frame
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document
-- **Image / attachment:** `image needed — download exhibition still from Research Catalogue gallery`
-- **Note:** image needed — attach actual still (not page URL); credits: photography Ayodele Arigbabu, additional Jacqueline Rowley
-- **Note:** NEEDS CONFIRMATION: whether to also credit curators Alexandra Murray-Leslie and Annett Busch in exhibition posts
+- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document; https://www.researchcatalogue.net/view/document/4351440/about; https://www.metapunkt.org/stories-updates/stochastic-dreams
+- **Image / attachment:** `https://media.researchcatalogue.net/rc/master/17/95/e4/e7/1795e4e7f52a2b575fe5c55de00dac54.jpeg`
+- **Note:** RC gallery exhibition photograph (Galleri KiT); photography Ayodele Arigbabu, additional Jacqueline Rowley
+- **Note:** Curator credit (RC About, exact): The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
 
 **Patterned uncertainty**
 
-*Stochastic Dreams* is the culminating exhibition framework of Ayodele Arigbabu's doctoral artistic research project *Forward Remembrance: Exploring Latent Utopias* (Trondheim Academy of Fine Art, NTNU, 2023–2026), with the main installation built in collaboration with Martinus Suijkerbuijk. It was shown **9–21 April 2026** at **Galleri KiT**, Trondheim, as part of **Meta.Morf 2026**, the 9th Trondheim Biennale for Art and Technology.
+*Stochastic Dreams* is the culminating exhibition framework of Ayodele Arigbabu's doctoral artistic research project *Forward Remembrance: Exploring Latent Utopias* (Trondheim Academy of Fine Art, NTNU) — an ongoing project that began in **2023** and runs into **2027** — with the main installation built in collaboration with Martinus Suijkerbuijk. It was shown **9–21 April 2026** at **Galleri KiT**, Trondheim, as part of **Meta.Morf 2026**.
 
-The exposition treats the title as a proposition: *stochastic* for processes shaped by probability, variation and constrained unpredictability; *dreams* for imagination, memory, desire and unrealised possibility. Together they name a world where futures are neither fully determined nor simply random, but emerge through patterned uncertainty.
+*Stochastic* here means shaped by probability and constrained unpredictability (<https://en.wikipedia.org/wiki/Stochastic>); *dreams* names imagination, memory and unrealised possibility. Together they name futures neither fully determined nor simply random.
 
-At its centre stood a divinatory apparatus: beads placed on a tactile board to express intention, and a kinetic pendulum registering flux, resistance and resonance.
+The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
 
-Source: <https://www.researchcatalogue.net/view/4351440/4351445/document>
+Exposition: <https://www.researchcatalogue.net/view/4351440/4351445/document> · About/credits: <https://www.researchcatalogue.net/view/document/4351440/about> · Studio note: <https://www.metapunkt.org/stories-updates/stochastic-dreams>
 
 What does "constrained unpredictability" change about how a visitor approaches a divination?
 
@@ -151,8 +165,9 @@ What does "constrained unpredictability" change about how a visitor approaches a
 
 - **Theme:** Open slot
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Ayodele schedule guidance
-- **Note:** Internal note only — not a public post
+- **Source:** Anya ops / Ayodele schedule guidance
+- **Note:** Anya: ~1–2 days before, suggest material to Ayodele or check for updates
+- **Note:** Internal — not a public post
 
 **OPEN SLOT**
 
@@ -164,17 +179,17 @@ Held for a timely note from Ayodele or Anya (finding, link, correction, or short
 
 - **Theme:** Friday roundup
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/community/discord_content_plan_2026-11.md; Anya review
+- **Source:** docs/community/discord_content_plan_2026-11.md
 - **Note:** Fill [link] placeholders on Friday morning from actual posts
 
 **Friday roundup: seeds and patterned uncertainty**
 
 This week in Latent Space:
 • **#metapunkt**: what forward remembrance asks of us, and what brought you here. [link]
-• **#forward_remembrance**: STFX, Seed-to-Field Expansion, and its debt to Moyo Okediji's *Artrithmetic*. [link]
-• **#stochastic_dreams**: the title as a proposition, futures "neither fully determined nor simply random", from the April installation at Galleri KiT during Meta.Morf 2026. [link]
+• **#forward_remembrance**: STFX (Seed-to-Field Expansion) and its debt to Moyo Okediji's *Artrithmetic*. [link]
+• **#stochastic_dreams**: the title as a proposition, and curator credit from the Research Catalogue About page. [link]
 
-Two questions to carry into the weekend, with replies welcome in any channel:
+Two questions for the weekend:
 1. Which of these threads would you like to see go deeper next week?
 2. If you were at Galleri KiT in April, what do you remember of the pendulum: its motion, its sound, or the waiting?
 
@@ -184,12 +199,14 @@ Two questions to carry into the weekend, with replies welcome in any channel:
 
 - **Theme:** Weekend light
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md
+- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md; https://en.wikipedia.org/wiki/Latent_space
 - **Format note:** weekend light
 
 **Weekend light — one question**
 
-If latent space is a field of possibility before any one output is made manifest, what is the smallest *archive* you would seed it with — a sentence, a score, a photograph, a prohibition?
+If **latent space** — the model's high-dimensional field of possibility before any one output is chosen (<https://en.wikipedia.org/wiki/Latent_space>) — is a field before manifestation, what is the smallest *archive* you would seed it with: a sentence, a score, a photograph, a prohibition?
+
+More on how Metapunkt threads latent possibility into SEEDS: <https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md>
 
 (No thread required. An image reply is enough.)
 
@@ -199,17 +216,17 @@ If latent space is a field of possibility before any one output is made manifest
 
 - **Theme:** Thinking Map / facilitator authority
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/architectural-decisions/0019-thinking-map-human-authority.md (or ADR 0019); CONTRIBUTING.md exists
+- **Source:** https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0019-thinking-map-human-authority.md; Synesyn README
 - **Image / attachment:** `docs/assets/screenshots/thinking-map.png`
-- **Note:** Attach thinking-map.png; CONTRIBUTING.md already exists — do not imply otherwise
+- **Note:** Attach thinking-map.png
 
 **The system proposes; a person closes**
 
-One design rule runs through Synesyn more than any other. In ScenSyn's Thinking Map, the shared board where a workshop gathers causes, effects and opportunities, every claim the model infers arrives as a suggestion, and a person accepts, edits, rejects or defers it.
+One design rule runs through **Synesyn** (the open platform for scenario sessions and foresight tools) more than any other. In ScenSyn's **Thinking Map** — the shared board where a workshop gathers causes, effects and opportunities — every claim the model infers arrives as a suggestion, and a person accepts, edits, rejects or defers it.
 
-Honouring that rule took work. At first only the system could put cards on the map; a facilitator who saw a missing cause had to say it in chat and hope a keyword matcher filed it in the right column. Now anyone may propose a card, only the facilitator commits, and the record keeps visible whether a claim came from the model, a transcript or a person. Rejected AI proposals are kept rather than deleted, so the system cannot quietly suggest them again.
+Honouring that rule took work. At first only the system could put cards on the map. Now anyone may propose a card, only the facilitator commits, and the record keeps visible whether a claim came from the model, a transcript or a person. Rejected AI proposals are kept rather than deleted.
 
-A small interface decision, carrying a large question for AI-assisted deliberation: where should authority sit when the machine is fluent and the room is slow?
+ADR: <https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0019-thinking-map-human-authority.md>
 
 *(Attached: the Thinking Map in column view.)*
 
@@ -219,32 +236,39 @@ Where would you draw the line between a helpful suggestion and a decision made o
 
 ### 2026-11-24 · `#kernel_inference` · draft
 
+- **Theme:** Kernel Inference Journal
+- **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
+- **Source:** https://kernel-inference.com/; https://kernel-inference.com/guidelines.html; https://kernel-inference.com/papers/index.html
+- **Format note:** open thread
+- **Note:** #kernel_inference is journal-only; Open Closure moved to #mapping_latent_reality
+
+**A journal for speculative inference**
+
+**Kernel Inference** is an open, cross-disciplinary journal for rigorously argued, plausibly reasoned ideas that reach beyond conventional proof — *speculative inference* as a public research practice, not a hype cycle. It runs a transparent AI + community review loop, versioned history for every paper, and Creative Commons licensing by default (CC-BY-NC).
+
+This channel is for the journal alone. Start here: <https://kernel-inference.com/> · Guidelines: <https://kernel-inference.com/guidelines.html> · Papers: <https://kernel-inference.com/papers/index.html>
+
+If you have a kernel of an argument that is not yet fully empirically closed, what would you want a review process to protect — novelty, provenance, or disagreement?
+
+---
+
+### 2026-11-25 · `#mapping_latent_reality` · draft
+
 - **Theme:** Open Closure — discursive
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
 - **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/README.md; https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md
 - **Format note:** open thread
+- **Note:** Moved from #kernel_inference to #mapping_latent_reality per Ayodele
 
 **When relevance wants to override the rule**
 
-Open Closure is research in motion: a small prototype for constructing, enforcing and auditing explicit closures. It takes its cue from Hilary Lawson's remark, in the preface to *Closure*, that his account of how humans enact closure "has the potential to have practical application, not least perhaps in aiding our attempts to build an intelligent machine".
+**Open Closure** is research in motion: a small prototype for constructing, enforcing and auditing explicit closures. It takes its cue from Hilary Lawson's remark, in the preface to *Closure*, that his account of how humans enact closure "has the potential to have practical application, not least perhaps in aiding our attempts to build an intelligent machine".
 
-The question it keeps returning to is whether a system can hold two axes apart: **relevance** (descriptive: selected, complement, latent) and **admissibility** (normative: blocked or not), even when the most on-topic sentence is the one a provenance rule forbids. The project's consolidated summary puts it plainly: most models look at all their inputs and decide; this work insists some inputs are off-limits, and the decision must *provably* not use them. The claim has been tested, narrowed and recorded in public notes, including the parts that did not survive.
+The question it keeps returning to: can a system hold **relevance** (what seems on-topic) apart from **admissibility** (what a rule allows), even when the most on-topic sentence is the one a provenance rule forbids? Most models look at all inputs and decide; this work insists some inputs are off-limits, and the decision must *provably* not use them.
 
-<https://github.com/Metapunkt/Open_Closure>
+<https://github.com/Metapunkt/Open_Closure> · README: <https://github.com/Metapunkt/Open_Closure/blob/main/README.md>
 
 Where have you watched "helpful" retrieval quietly ignore a boundary you thought was hard?
-
----
-
-### 2026-11-25 · _(channel TBD when filled)_ · open_slot
-
-- **Theme:** Open slot
-- **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Ayodele schedule guidance
-
-**OPEN SLOT**
-
-Reserved for mid-week movement: a Synesyn patch note, an Open Closure experiment observation, or a Stochastic Dreams documentation addendum. Fill only with material Ayodele or Anya supplies that day. Otherwise silence.
 
 ---
 
@@ -252,19 +276,18 @@ Reserved for mid-week movement: a Synesyn patch note, an Open Closure experiment
 
 - **Theme:** Exhibition — apparatus & credits
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document (About / Building / UWP / gallery)
-- **Image / attachment:** `image needed — download exhibition still from Research Catalogue gallery`
-- **Note:** image needed — attach actual still (not page URL)
-- **Note:** NEEDS CONFIRMATION: whether to credit curators Alexandra Murray-Leslie and Annett Busch beyond Murray-Leslie's filmmaker credit
+- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document; https://www.researchcatalogue.net/view/document/4351440/about; https://www.researchcatalogue.net/view/document/4351440/gallery
+- **Image / attachment:** `https://media.researchcatalogue.net/rc/master/3a/ed/7d/2d/3aed7d2dd40f7626e97563e70052d74b.jpeg`
+- **Note:** RC gallery exhibition photograph — Stochastic Dreams at Galleri KiT
+- **Note:** Curator credit (RC About, exact): The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
 
 **Lubi Board, Dream Box, Chaos Engine**
 
-The main installation of *Stochastic Dreams* asked visitors to make a wager with their hands. Beads placed on the **Lubi Board** expressed intention through four values: Fount, Ethos, Will and Cycle. Inside the **Stochastic Dream Box**, a wood-and-acrylic enclosure, a pendulum swung under the nudge of an electromagnetic kicker: real physical chaos, sensitive to initial conditions, read turn by turn by the **Chaos Engine**. ScenSyn translated both into narrative, symbolic and visual consequences in the Tapestry-world.
+The main installation of *Stochastic Dreams* asked visitors to make a wager with their hands. Beads on the **Lubi Board** expressed intention through four values: Fount, Ethos, Will and Cycle. Inside the **Stochastic Dream Box**, a wood-and-acrylic enclosure, a pendulum swung under an electromagnetic kicker — real physical chaos, read turn by turn by the **Chaos Engine**. **ScenSyn** (Synesyn's scenario session app) translated both into narrative and visual consequences in the Tapestry-world.
 
-Martinus Suijkerbuijk led the electronics and software integration; Øystein Fjelbo designed the perpetual pendulum and its controller.
+Martinus Suijkerbuijk led the electronics and software integration; Øystein Fjelbo designed the perpetual pendulum and its controller. The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
 
-The Research Catalogue gallery keeps the record: photographs by Ayodele Arigbabu (additional images by Jacqueline Rowley), the *Chaos Engine — Pendulum View* recording from 20 April 2026, and an opening-day tour filmed by Alexandra Murray-Leslie on 12 April.
-<https://www.researchcatalogue.net/view/4351440/4351445/document>
+Gallery: <https://www.researchcatalogue.net/view/document/4351440/gallery> · About: <https://www.researchcatalogue.net/view/document/4351440/about>
 
 What does a board ask of the hand that a screen does not?
 
@@ -274,19 +297,19 @@ What does a board ask of the hand that a screen does not?
 
 - **Theme:** Friday roundup
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/community/discord_content_plan_2026-11.md; https://github.com/Metapunkt/Open_Closure
-- **Note:** Fill [link] placeholders on Friday morning; demos path is external Open_Closure repo
+- **Source:** docs/community/discord_content_plan_2026-11.md
+- **Note:** Fill [link] placeholders Friday morning
 
-**Friday roundup: a tool, a closure, a pendulum**
+**Friday roundup: a journal, a map, a pendulum**
 
 This week in Latent Space:
 • **#synesyn**: the Thinking Map, and why the system proposes but a person closes. [link]
-• **#kernel_inference**: Open Closure, and keeping relevance apart from admissibility. [link]
-• **#stochastic_dreams**: the Lubi Board, the Dream Box and the Chaos Engine, with credits and the gallery record. [link]
+• **#kernel_inference**: Kernel Inference, the journal of speculative inference. [link]
+• **#stochastic_dreams**: Lubi Board, Dream Box, Chaos Engine — and the curator credit. [link]
 
-Two invitations for the weekend:
-1. Open Closure's demos run locally in under a minute each (`python closure_router/demos.py all`, from the [Open Closure](https://github.com/Metapunkt/Open_Closure) repo). If you try one, post what surprised you and I'll gather the questions into a thread.
-2. Should next week lean towards theory in #mapping_latent_reality, or closer reading of the installation in #stochastic_dreams?
+Weekend invitations:
+1. Browse a paper or the guidelines at <https://kernel-inference.com/> and say what surprised you.
+2. Should next week lean toward Open Closure in #mapping_latent_reality, or closer reading in #stochastic_dreams?
 
 ---
 
@@ -294,14 +317,16 @@ Two invitations for the weekend:
 
 - **Theme:** Weekend light
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Synesyn README (story-stage screenshot alt); Research Catalogue index (Ìrètí Ọkàn / TEKS Sep 2025)
+- **Source:** Synesyn README; https://www.metapunkt.org/stories-updates/ireti-okan-awaiting-an-awakening
 - **Image / attachment:** `docs/assets/screenshots/story-stage.png`
 - **Format note:** weekend light
 - **Note:** Attach story-stage.png
 
 **Weekend still: Didi on Story Stage**
 
-Story Stage in the *Ìrètí Ọkàn* scenario: the character Didi, full-frame against the scenario's backdrop, her line in the dialogue box below and spoken aloud. *Ìrètí Ọkàn — Awaiting an Awakening* began as generative theatre reimagining Beckett, first presented at TEKS in September 2025; here it runs on the same session machinery as a workshop.
+Story Stage in the *Ìrètí Ọkàn* scenario: the character Didi, full-frame, her line in the dialogue box and spoken aloud. *Ìrètí Ọkàn — Awaiting an Awakening* began as generative theatre reimagining Beckett, first presented at TEKS in September 2025; here it runs on the same session machinery as a workshop.
+
+Studio trail: <https://www.metapunkt.org/stories-updates/ireti-okan-awaiting-an-awakening>
 
 What does a still withhold that a live session would not?
 
@@ -311,18 +336,18 @@ What does a still withhold that a live session would not?
 
 - **Theme:** Mission / method
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md; Synesyn README; channel mission brief
-- **Note:** NEEDS CONFIRMATION: 'paywalled foresight' phrasing (unverified in checked sources; likely from channel topic)
+- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md; https://www.metapunkt.org/; https://en.wikipedia.org/wiki/Open-source_software
+- **Note:** Paywalled foresight softened to open-core framing per Ayodele; no competitor claims
 
 **Instruments you can argue with**
 
-Metapunkt's method is not to out-market paywalled foresight. It is to keep its instruments (seeds, sessions, closures, audits) open enough that a research community can inspect them and disagree in public.
+Metapunkt practises an **open-core** approach to foresight tools — core method and instruments open enough to inspect, with room for hosted or extended layers around them (<https://en.wikipedia.org/wiki/Open-source_software> on the open-source idea). The point is not a claim about competitors. It is to keep seeds, sessions, closures and audits checkable so a research community can disagree in public.
 
-Two recent examples show what that means in practice. Open Closure's own summary states that it is *not* a novel neural mechanism: a culturally grounded "novel operator" was tested, added nothing measurable, and was dropped from the claim. And Synesyn keeps every prompt, image, scenario and closure as a versioned artifact with provenance, so a result can be traced back to the inputs, models and human decisions behind it.
+Two recent examples. Open Closure's summary states it is *not* a novel neural mechanism: a culturally grounded "novel operator" was tested, added nothing measurable, and was dropped. Synesyn keeps prompts, images, scenarios and closures as versioned artifacts with provenance.
 
-Neither guarantees wisdom. Both invite you to check the work rather than trust the brand.
+Studio: <https://www.metapunkt.org/> · Open Closure notes: <https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md>
 
-Which forecast, report or foresight tool would you most like to see rebuilt as an open method note: something you could trace, rather than simply believe?
+Which forecast or foresight tool would you most like to see rebuilt as an open method note: something you could trace, rather than simply believe?
 
 ---
 
@@ -330,17 +355,17 @@ Which forecast, report or foresight tool would you most like to see rebuilt as a
 
 - **Theme:** Latent SEEDS
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md; docs/architectural-decisions/0016-open-closure-store-admissibility-gate.md
+- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md; https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0016-open-closure-store-admissibility-gate.md
 - **Format note:** open thread
-- **Note:** STFX Store gate already exists (opt-in, off by default) per ADR 0016
+- **Note:** STFX Store gate exists (opt-in, off by default) per ADR 0016
 
 **Latent SEEDS: naming the trajectory**
 
-**Latent SEEDS** (Structured Encoding and Evaluative Dimensionality System) is Ayodele's research proposal for how latent possibility can be seeded, expanded into structured fields, collapsed into determinate outcomes, and traced, in ways that stay open to artistic, formal and computational inquiry. Its arc runs in five steps: latent reality, seed, expansion, closure, trace.
+**Latent SEEDS** (Structured Encoding and Evaluative Dimensionality System) is Ayodele's research proposal for how latent possibility can be seeded, expanded into structured fields, collapsed into determinate outcomes, and traced. Its arc runs in five steps: latent reality, seed, expansion, **closure** (making a determinate cut), and trace.
 
-Open Closure is one validated outcome *inside* that trajectory, not the programme itself. It serves mainly the last two steps: make the closure explicit, enforce what is admissible, and prove what a decision did not use. Its lesson for SEEDS is compact: closure is not only selection; it also involves exclusion. In Synesyn that lesson already has a seam, an opt-in admissibility gate in the STFX Store.
+**Open Closure** is one validated outcome *inside* that trajectory: a small prototype for constructing, enforcing and auditing explicit closures — not the programme itself. Its lesson is compact: closure is not only selection; it also involves exclusion. In Synesyn that lesson already has a seam, an opt-in admissibility gate in the STFX Store.
 
-What remains open is larger: the seed-field algebra, a dimensional benchmark, and a navigation interface for artists.
+<https://github.com/Metapunkt/Open_Closure/blob/main/90_Open_Closure_in_Latent_SEEDS.md> · Store gate ADR: <https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0016-open-closure-store-admissibility-gate.md>
 
 Which step (seed, expansion, closure or trace) feels least served by the tools you use now?
 
@@ -350,7 +375,8 @@ Which step (seed, expansion, closure or trace) feels least served by the tools y
 
 - **Theme:** Open slot
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Ayodele schedule guidance
+- **Source:** Anya ops / Ayodele schedule guidance
+- **Note:** Anya: ~1–2 days before, suggest material or check with Ayodele
 
 **OPEN SLOT**
 
@@ -362,15 +388,15 @@ Flexible day for work-in-progress: a portfolio note, a hub change, or a Research
 
 - **Theme:** STFX Memory vs Store
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/concepts/glossary.md; docs/implementation_docs/LatentSubstrate_Data_Model.md; docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md
+- **Source:** https://github.com/Metapunkt/Synesyn/blob/main/docs/concepts/glossary.md; https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md; https://github.com/Metapunkt/Synesyn/blob/main/docs/implementation_docs/STFX_Memory_Capability_Spec.md
 
 **Memory and Store: two instruments**
 
-STFX (Seed-to-Field Expansion) gives Synesyn two names that are easy to blur. **STFX Store** is where data lives: the canonical, file-backed record of sources, chunks, memories, closures, traces and context packs. **STFX Memory** is what it is for: deterministic, auditable recall that can be followed back to its source. Indexes may speed things up, and they can be thrown away and rebuilt; when one disagrees with a Store record, the Store wins.
+**STFX** (Seed-to-Field Expansion) gives Synesyn two names that are easy to blur. **STFX Store** is where data lives: the canonical, file-backed record of sources, chunks, memories, closures, traces and context packs. **STFX Memory** is what it is for: deterministic, auditable recall that can be followed back to its source. Indexes may speed things up and can be rebuilt; when one disagrees with a Store record, the Store wins.
 
-The lineage carries a debt worth naming each time: STFX draws on **Moyo Okediji's *Artrithmetic***, the published visual framework its new name was chosen not to blur.
+The lineage carries a debt worth naming each time: STFX draws on **Moyo Okediji's *Artrithmetic***.
 
-Forward remembrance lives between what the archive can prove and what the field can still become. Memory without Store drifts; Store without Memory is only filing.
+Glossary: <https://github.com/Metapunkt/Synesyn/blob/main/docs/concepts/glossary.md> · Naming ADR: <https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md> · Memory spec: <https://github.com/Metapunkt/Synesyn/blob/main/docs/implementation_docs/STFX_Memory_Capability_Spec.md>
 
 Which of your own projects needs a better store more than a bigger model?
 
@@ -380,17 +406,17 @@ Which of your own projects needs a better store more than a bigger model?
 
 - **Theme:** Friday roundup
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/community/discord_content_plan_2026-11.md; Anya review
-- **Note:** Fill [link] placeholders on Friday morning
+- **Source:** docs/community/discord_content_plan_2026-11.md
+- **Note:** Fill [link] placeholders Friday morning
 
 **Friday roundup: SEEDS, Store, open method**
 
 This week in Latent Space:
-• **#metapunkt**: instruments you can argue with, and why an open method note can be worth more than a closed forecast. [link]
+• **#metapunkt**: an open-core approach to foresight tools, and instruments you can argue with. [link]
 • **#mapping_latent_reality**: Latent SEEDS, its five-step arc, and where Open Closure sits inside it. [link]
 • **#forward_remembrance**: STFX Memory and STFX Store, and the lineage credit to Moyo Okediji's *Artrithmetic*. [link]
 
-A question to take into the weekend: Latent SEEDS ends in *trace*, a recoverable account of how a closure happened. What is the last decision you made that you could not trace back, and would you want to?
+A question for the weekend: Latent SEEDS ends in *trace*, a recoverable account of how a closure happened. What is the last decision you made that you could not trace back, and would you want to?
 
 ---
 
@@ -398,17 +424,20 @@ A question to take into the weekend: Latent SEEDS ends in *trace*, a recoverable
 
 - **Theme:** Weekend light — gallery
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document
-- **Image / attachment:** `image needed — download exhibition still from Research Catalogue gallery`
+- **Source:** https://www.researchcatalogue.net/view/document/4351440/gallery; https://www.researchcatalogue.net/view/4351440/4351445/document
+- **Image / attachment:** `https://media.researchcatalogue.net/rc/master/7a/c1/7f/29/7ac17f29601e37c8856709ec73a729f4.png`
 - **Format note:** weekend light
-- **Note:** image needed — caption template; pick subject to match chosen photo
-- **Note:** NEEDS CONFIRMATION: per-image photographer if known; otherwise keep both names
+- **Note:** RC gallery: AraTitun-generated tapestry/turn render from the installation scenario stages
+- **Note:** Curator credit (RC About, exact): The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
 
 **Weekend still: Galleri KiT**
 
-*Stochastic Dreams* at Galleri KiT, Trondheim, during Meta.Morf 2026: [the Lubi Board / the Stochastic Dream Box / visitors at the divination system, to match the photo].
-Photography: Ayodele Arigbabu · additional images: Jacqueline Rowley.
-More in the gallery: <https://www.researchcatalogue.net/view/4351440/4351445/document>
+A turn render from *Stochastic Dreams* — visual output produced during a divination turn in the installation's scenario stages (AraTitun / tapestry world), documented on the Research Catalogue gallery.
+
+The exhibition is curated by Professor Alexandra Murray-Leslie and Assistant Professor Annett Busch.
+Photography of the live show: Ayodele Arigbabu · additional images: Jacqueline Rowley.
+
+Gallery: <https://www.researchcatalogue.net/view/document/4351440/gallery>
 
 Does this frame read more like evidence, or like invitation?
 
@@ -416,49 +445,56 @@ Does this frame read more like evidence, or like invitation?
 
 ### 2026-12-07 · `#forward_remembrance` · draft
 
-- **Theme:** Portfolio / doctoral context
+- **Theme:** Forward Remembrance ongoing project
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://www.researchcatalogue.net/view/4351440/4351445/document; community portfolio brief
-- **Note:** NEEDS CONFIRMATION: May 2026 portfolio date (from community brief; not on RC pages Anya checked)
+- **Source:** https://www.metapunkt.org/about/forward-remembrance; https://www.researchcatalogue.net/view/4351440/4351445/document; https://www.metapunkt.org/stories-updates
+- **Note:** FR framed as ongoing 2023–2027; May 2026 portfolio date removed per Ayodele
 
-**Forward Remembrance: the portfolio horizon**
+**Forward Remembrance: an ongoing project**
 
-*Forward Remembrance: Exploring Latent Utopias* is Ayodele Arigbabu's doctoral artistic research at the Trondheim Academy of Fine Art, NTNU (2023–2026), gathered in a portfolio of the same name in May 2026. It explores latent utopias through the many ways artificial intelligence mirrors human aspirations.
+*Forward Remembrance: Exploring Latent Utopias* is Ayodele Arigbabu's doctoral artistic research at the Trondheim Academy of Fine Art, NTNU — an **ongoing project that began in 2023 and runs into 2027**. It explores latent utopias through the many ways artificial intelligence mirrors human aspirations.
 
-The method in the title is a double movement: reading backward into the patterns that archives and data hold, and remembering forward into the futures those patterns might still allow. *Stochastic Dreams*, shown at Galleri KiT this April, is documented as the project's culminating exhibition framework and one of its major artistic outputs. Its Research Catalogue exposition maps the trajectory behind it in 34 annotated nodes, from design fiction to the installation.
-<https://www.researchcatalogue.net/view/4351440/4351445/document>
+The method in the title is a double movement: reading backward into the patterns that archives and data hold, and remembering forward into the futures those patterns might still allow. *Stochastic Dreams*, shown at Galleri KiT in April 2026, is documented as a major artistic output along that arc.
 
-A portfolio is a closure; the research it gathers need not be.
+Studio page: <https://www.metapunkt.org/about/forward-remembrance> · Stories & updates: <https://www.metapunkt.org/stories-updates> · RC exposition: <https://www.researchcatalogue.net/view/4351440/4351445/document>
 
 What archive would you refuse to treat as closed?
 
 ---
 
-### 2026-12-08 · _(channel TBD when filled)_ · open_slot
+### 2026-12-08 · `#kernel_inference` · draft
 
-- **Theme:** Open slot
+- **Theme:** Kernel Inference — review agents
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Ayodele schedule guidance
-- **Note:** Internal note only — week's only open slot (7–13 Dec)
+- **Source:** https://kernel-inference.com/agents.html; https://kernel-inference.com/; https://kernel-inference.com/papers/index.html
+- **Format note:** open thread
+- **Note:** Journal channel only
 
-**OPEN SLOT**
+**Three agents at the journal gate**
 
-The week's open slot. Use for something that could not have been written on Monday: a lab result, a corrected credit, a short discursive note on Open Closure or Synesyn. If unused, remain empty.
+Every Kernel Inference manuscript is reviewed by three specialised AI agents before community eyes meet it: **Agent Peirce** (technical analysis), **Agent Flusser** (content review), and **Agent Lovelace** (innovation assessment) — each named for a thinker who reshaped logic, communication or computing.
+
+The journal's wager is that speculative inference still deserves structured critique. Browse agents: <https://kernel-inference.com/agents.html> · Home: <https://kernel-inference.com/> · Papers: <https://kernel-inference.com/papers/index.html>
+
+If an AI reviewer flagged your favourite half-proven idea, what evidence would you want it to demand first?
 
 ---
 
-### 2026-12-09 · `#kernel_inference` · draft
+### 2026-12-09 · `#mapping_latent_reality` · draft
 
 - **Theme:** Open Closure — discursive
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md
+- **Source:** https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md; https://github.com/Metapunkt/Open_Closure/blob/main/README.md
 - **Format note:** open thread
+- **Note:** Moved from #kernel_inference; journal channel is KI-only
 
 **audit() as a research question**
 
-In the Open Closure notes, `ClosureRouter` hard-masks forbidden items and exposes `audit()` — remove the blocked inputs and show whether the decision changes (aiming at leakage = 0) — and `explain()` for used versus provably ignored. The interesting part for this channel is not a victory lap. It is the condition the work keeps stating: the forbidden mask must come from a *trusted* signal (schema or provenance). Inferring forbidden-ness from meaning alone was tested and found untrustworthy for a hard per-item rule (Note 86).
+**Open Closure** is a small prototype for constructing, enforcing and auditing explicit closures — deciding what a system may *not* use, and proving it. In the notes, `ClosureRouter` hard-masks forbidden items and exposes `audit()` (remove blocked inputs; check whether the decision changes) and `explain()` for used versus provably ignored.
 
-So the research question stays open: where can artistic and computational practice actually supply that trusted signal without pretending the model discovered ethics by itself?
+The interesting part is not a victory lap. The forbidden mask must come from a *trusted* signal (schema or provenance). Inferring forbidden-ness from meaning alone was tested and found untrustworthy for a hard per-item rule.
+
+<https://github.com/Metapunkt/Open_Closure/blob/main/README.md> · Summary: <https://github.com/Metapunkt/Open_Closure/blob/main/88b_Consolidated_Summary.md>
 
 What boundary in your work needs a proof more than a better score?
 
@@ -468,15 +504,15 @@ What boundary in your work needs a proof more than a better score?
 
 - **Theme:** GenAI / artistic research
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/implementation_docs/STFX_Memory_Capability_Spec.md
+- **Source:** https://github.com/Metapunkt/Synesyn/blob/main/docs/implementation_docs/STFX_Memory_Capability_Spec.md; https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md
 
 **LLM at ingest, not at retrieve**
 
-One constraint in Synesyn's memory design is worth lifting out for anyone using generative AI in artistic research. A language model may help at **ingest**, once, interpreting a document as it enters the archive, and each such decision is saved with its rationale. **Retrieval** never consults a model: it is deterministic tensor math over symbolic seeds, not embeddings, nearest-neighbour search or opaque ranking.
+One constraint in Synesyn's memory design is worth lifting out for anyone using generative AI in artistic research. A language model may help at **ingest**, once, interpreting a document as it enters the archive, with each decision saved and rationaled. **Retrieval** never consults a model: it is deterministic tensor math over symbolic seeds — not embeddings or opaque ranking.
 
-The split is ethical before it is technical. A model may help name what entered the archive; it should not silently re-rank what a session is allowed to remember. (The mechanism is STFX, Seed-to-Field Expansion, which draws on Moyo Okediji's *Artrithmetic*.)
+The split is ethical before it is technical. A model may help name what entered; it should not silently re-rank what a session may remember. The mechanism is **STFX** (Seed-to-Field Expansion), which draws on Moyo Okediji's *Artrithmetic*.
 
-Archaeological futures need provenance you can walk backward through.
+<https://github.com/Metapunkt/Synesyn/blob/main/docs/implementation_docs/STFX_Memory_Capability_Spec.md> · Naming: <https://github.com/Metapunkt/Synesyn/blob/main/docs/architectural-decisions/0032-stfx-naming-for-kernel-memory-and-store.md>
 
 Where have embeddings quietly become the archive, rather than an index on one?
 
@@ -486,17 +522,18 @@ Where have embeddings quietly become the archive, rather than an index on one?
 
 - **Theme:** Friday roundup
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/community/discord_content_plan_2026-11.md; Anya review
-- **Note:** Fill [link] placeholders on Friday morning
+- **Source:** docs/community/discord_content_plan_2026-11.md
+- **Note:** Fill [link] placeholders Friday morning
 
-**Friday roundup: portfolio, audit, ingest**
+**Friday roundup: project, audit, ingest**
 
 This week in Latent Space:
-• **#forward_remembrance**: the Forward Remembrance portfolio, and archives we refuse to treat as closed. [link]
-• **#kernel_inference**: Open Closure's `audit()`, and why inferring "forbidden" from meaning alone could not supply a hard guarantee. [link]
+• **#forward_remembrance**: Forward Remembrance as an ongoing 2023–2027 project. [link]
+• **#kernel_inference**: Kernel Inference's three review agents. [link]
+• **#mapping_latent_reality**: Open Closure's `audit()`, and trusted signals for exclusion. [link]
 • **#latent_reality**: LLM at ingest, not at retrieve. [link]
 
-As the year turns, one question for everyone here: which conversation from these weeks would you like to carry into January? Name it below and I'll give it a thread of its own.
+Which conversation from these weeks would you like to carry into January? Name it below and I'll give it a thread.
 
 ---
 
@@ -504,10 +541,10 @@ As the year turns, one question for everyone here: which conversation from these
 
 - **Theme:** Weekend light
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Synesyn README (review-compare-paths screenshot caption)
+- **Source:** Synesyn README
 - **Image / attachment:** `docs/assets/screenshots/review-compare-paths.png`
 - **Format note:** weekend light
-- **Note:** Moved from #latent_reality to #synesyn per Anya review; attach review-compare-paths.png
+- **Note:** Attach review-compare-paths.png
 
 **Weekend still: the do-nothing path**
 
@@ -521,11 +558,12 @@ Which path in your own work has been quietly "doing nothing" without ever being 
 
 - **Theme:** Open slot
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** Ayodele schedule guidance
+- **Source:** Anya ops / Ayodele schedule guidance
+- **Note:** Anya: ~1–2 days before, suggest material or check with Ayodele
 
 **OPEN SLOT**
 
-Final-week flexible day. Prefer a short factual update (Synesyn, Open Closure, or Stochastic Dreams documentation) over closing rhetoric. If nothing arrives, leave empty — Tuesday’s close can carry the arc.
+Final-week flexible day. Prefer a short factual update (Synesyn, Kernel Inference, or Stochastic Dreams documentation) over closing rhetoric. If nothing arrives, leave empty — Tuesday's close can carry the arc.
 
 ---
 
@@ -533,15 +571,15 @@ Final-week flexible day. Prefer a short factual update (Synesyn, Open Closure, o
 
 - **Theme:** Month close
 - **Schedule:** 11:00 Europe/Oslo *(Anya scheduling — not for the post body)*
-- **Source:** docs/community/discord_content_plan_2026-11.md; Anya review
+- **Source:** https://www.metapunkt.org/; https://www.metapunkt.org/stories-updates; Anya review
 
 **What carries forward**
 
 A month ago these channels began a steadier conversation, and some threads have earned the right to continue.
 
-From *Stochastic Dreams*, a premise: futures that are neither fully determined nor simply random, but emerge through patterned uncertainty. From STFX, a debt honoured in its name, to Moyo Okediji's *Artrithmetic*. From Open Closure, a narrower and stronger claim: closure is not only selection but exclusion, and you can prove what a decision did not use. From Latent SEEDS, the reminder that the trace matters as much as the outcome. From Synesyn, a rule: the system proposes; a person closes.
+From *Stochastic Dreams*, patterned uncertainty. From STFX, a debt honoured to Moyo Okediji's *Artrithmetic*. From Open Closure, a narrower claim: closure is selection *and* exclusion you can prove. From Latent SEEDS, that the trace matters. From Synesyn, that the system proposes and a person closes. From Kernel Inference, that speculative ideas still deserve a public gate.
 
-That is roughly what Metapunkt means by method: instruments open enough to be checked, and a community willing to do the checking.
+That is roughly what Metapunkt means by method: instruments open enough to be checked. Retrospectives and studio notes live at <https://www.metapunkt.org/stories-updates> · home <https://www.metapunkt.org/>
 
 Thank you to everyone who read, replied, or lurked with intent.
 
@@ -554,5 +592,6 @@ What should the new year keep from this, and what should it refuse?
 - Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
 - Dogfood scene: `synesyn_client/readymade/test_dogfood_discord_content_plan.tscn`
 - Workplan name inside ReadyMade: `Anya Discord Nov–Dec 2026`
+- Custom channels: set on the workplan via `WorkplanManager.set_custom_channels` (example Latent Space list in dogfood only)
 - Dogfood report: `docs/developer-guide/READYMADE_DOGFOOD_REPORT.md`
-- Review folded in: Anya review 14 Nov 2026 (Section 5 replacements applied verbatim, with confirmed Ayodele-pending notes)
+- Ayodele answers folded in: 14 Nov 2026 follow-up (open-core, FR 2023–2027, curators, RC images, KI channel, accessibility, metapunkt.org, Anya ops)
