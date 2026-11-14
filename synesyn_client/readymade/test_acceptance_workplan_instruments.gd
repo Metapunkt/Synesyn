@@ -16,6 +16,7 @@ func _ready() -> void:
 	_test_config_path_honors_storage_root_dir()
 	await _test_start_agent_batch_hub_gate()
 	await _test_workplan_manager_ready_before_ui()
+	await _test_main_tab_center_mouse_clicks()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -166,6 +167,46 @@ func _test_start_agent_batch_hub_gate() -> void:
 			_expect(not ("ReadyMadeOrchestrator is missing" in notice), "does not show false orchestrator-missing message")
 	if orch.backend_unavailable.is_connected(on_unavailable):
 		orch.backend_unavailable.disconnect(on_unavailable)
+
+
+func _test_main_tab_center_mouse_clicks() -> void:
+	print("-- Main tab center mouse clicks --")
+	var scene: PackedScene = load("res://readymade/ui/mission_control_dashboard.tscn")
+	_expect(scene != null, "mission control dashboard scene loads")
+	if scene == null:
+		return
+	var dash: Node = scene.instantiate()
+	_expect(dash != null, "mission control dashboard instantiates")
+	if dash == null:
+		return
+	add_child(dash)
+	# Drive a few frames so TabBar lays out at a known window size.
+	get_window().size = Vector2i(1152, 648)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_expect(dash.has_method("simulate_main_tab_center_click"), "simulate_main_tab_center_click API present")
+	_expect(dash.has_method("_ensure_main_tab_hit_targets"), "tab hit-target helper present")
+	if dash.has_method("_ensure_main_tab_hit_targets"):
+		dash._ensure_main_tab_hit_targets()
+	var tab_container: TabContainer = dash.get("main_tab_container")
+	_expect(tab_container != null, "main_tab_container present")
+	if tab_container == null or not dash.has_method("simulate_main_tab_center_click"):
+		dash.queue_free()
+		await get_tree().process_frame
+		return
+	var tab_count: int = tab_container.get_tab_count()
+	_expect(tab_count >= 3, "at least Tasks/Content/Calendar tabs present (got %d)" % tab_count)
+	for tab_index in range(tab_count):
+		var switched: bool = await dash.simulate_main_tab_center_click(tab_index)
+		_expect(
+			switched and tab_container.current_tab == tab_index,
+			"mouse click at center switches to tab %d (%s)" % [
+				tab_index, tab_container.get_tab_title(tab_index)
+			]
+		)
+	dash.queue_free()
+	await get_tree().process_frame
 
 
 func _test_workplan_manager_ready_before_ui() -> void:

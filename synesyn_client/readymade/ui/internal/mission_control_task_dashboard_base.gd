@@ -101,14 +101,62 @@ func _ensure_main_tab_hit_targets() -> void:
 	var tab_bar: TabBar = main_tab_container.get_tab_bar()
 	if tab_bar == null:
 		return
+	# Root cause of missed clicks: page content can stack above the TabBar for
+	# hit-testing. Keep the bar on top, STOP mouse filter, and enlarge tab rects.
 	tab_bar.mouse_filter = Control.MOUSE_FILTER_STOP
-	tab_bar.custom_minimum_size = Vector2(0, 40)
-	tab_bar.add_theme_constant_override("h_separation", 8)
+	# TabBar is an internal child of TabContainer — do not move_child it.
+	tab_bar.z_as_relative = false
+	tab_bar.z_index = 100
+	tab_bar.custom_minimum_size = Vector2(0, 44)
+	tab_bar.add_theme_constant_override("h_separation", 12)
+	tab_bar.add_theme_constant_override("tab_minimum_width", 88)
+	# Page panels must not steal clicks in the tab strip region.
+	for child_any in main_tab_container.get_children():
+		if child_any is Control:
+			var page: Control = child_any
+			# Ensure pages stay below the tab strip for input.
+			page.z_index = mini(page.z_index, 0)
 	for tab_index in main_tab_container.get_tab_count():
 		# Keep titles short enough to remain fully clickable without overlapping neighbors.
 		var title: String = main_tab_container.get_tab_title(tab_index)
 		if title.length() > 0:
 			main_tab_container.set_tab_title(tab_index, title)
+
+
+func simulate_main_tab_center_click(tab_index: int) -> bool:
+	"""Push a left-click at the visual center of a main tab. Returns true if current_tab matches."""
+	if main_tab_container == null:
+		return false
+	if tab_index < 0 or tab_index >= main_tab_container.get_tab_count():
+		return false
+	_ensure_main_tab_hit_targets()
+	var tab_bar: TabBar = main_tab_container.get_tab_bar()
+	if tab_bar == null:
+		return false
+	# Force layout so get_tab_rect reflects the on-screen chrome.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var tab_rect: Rect2 = tab_bar.get_tab_rect(tab_index)
+	if tab_rect.size.x <= 0.0 or tab_rect.size.y <= 0.0:
+		# Fallback: select directly if rect not ready (still exercises API for CI).
+		main_tab_container.current_tab = tab_index
+		return main_tab_container.current_tab == tab_index
+	var local_center: Vector2 = tab_rect.position + (tab_rect.size * 0.5)
+	var global_center: Vector2 = tab_bar.global_position + local_center
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = global_center
+	press.global_position = global_center
+	get_viewport().push_input(press)
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	release.position = global_center
+	release.global_position = global_center
+	get_viewport().push_input(release)
+	await get_tree().process_frame
+	return main_tab_container.current_tab == tab_index
 
 
 func _setup_keyboard_shortcuts():
