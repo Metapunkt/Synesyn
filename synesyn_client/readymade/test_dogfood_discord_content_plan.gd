@@ -119,6 +119,12 @@ func _ready() -> void:
 			notes_parts.append("OPEN_THREAD: yes")
 		if bool(post.get("weekend_light", false)):
 			notes_parts.append("WEEKEND_LIGHT: yes")
+		var plan_notes_any: Variant = post.get("plan_notes", [])
+		if typeof(plan_notes_any) == TYPE_ARRAY:
+			for note_any in plan_notes_any:
+				var note_line: String = String(note_any).strip_edges()
+				if not note_line.is_empty():
+					notes_parts.append(note_line)
 		task.notes = "\n".join(notes_parts)
 		task.status = "To Do"
 		if status_str == "placeholder":
@@ -164,6 +170,15 @@ func _ready() -> void:
 		_expect(md.find("#metapunkt") >= 0, "export mentions #metapunkt")
 		_expect(md.find("open_slot") >= 0, "export carries open_slot plan status")
 		_expect(md.find("Galleri KiT") >= 0 or md.find("researchcatalogue") >= 0, "export retains Stochastic Dreams catalogue material")
+		_expect(md.find("Remembering forward, together") >= 0, "Anya opener rewrite present")
+		_expect(md.find("The system proposes; a person closes") >= 0, "Nov 23 CONTRIBUTING-aware rewrite present")
+		_expect(md.find("#synesyn") >= 0 and md.find("do-nothing path") >= 0, "Dec 12 moved to #synesyn")
+		_expect(md.find("NEEDS CONFIRMATION") >= 0, "Ayodele confirmation notes survive export")
+		_log_friction(
+			"bulk_revise",
+			"high",
+			"Anya voice-pass rewrote ~20 drafts; ReadyMade has no bulk re-import/update of existing tasks from JSON — fixture rewritten outside the UI and dogfood recreates the workplan."
+		)
 		print("Dogfood: exported markdown to ", export_path)
 
 	# Also write friction log beside ReadyMade data.

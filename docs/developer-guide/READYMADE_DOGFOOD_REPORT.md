@@ -13,6 +13,10 @@
 | Nothing scheduled beyond the rhythm | **1–2 `open_slot` weekdays per week** (five across the month) left empty for timely updates. |
 | Rhythm confirmed | Weekdays ≈11:00 Europe/Oslo; weekend light/optional; Friday `#general`; ≤≈2 posts/channel/week. |
 
+## Anya voice-pass (14 Nov 2026)
+
+Folded Anya’s Section 5 replacements into the fixture and plan (verbatim drafts; schedule/caps/`@everyone` kept in header rules only; ADR/88b labels moved to Source/notes). Dec 12 moved to `#synesyn`. Ayodele-pending items carry **NEEDS CONFIRMATION** in notes (paywalled foresight; May 2026 portfolio date; curator credits; exhibition stills marked `image needed`).
+
 ## What worked
 
 | Path | Result |
@@ -31,6 +35,7 @@ Fixture: `synesyn_client/readymade/dogfood/discord_posts_nov2026.json`
 | ID | Severity | Finding | Disposition |
 | --- | --- | --- | --- |
 | `bulk_entry` | **high** | No CSV/JSON bulk import in UI. ~26 dated rows cannot reasonably be entered by hand. | **Deferred** (feature). Dogfood loads fixture via script. |
+| `bulk_revise` | **high** | Voice-pass rewrote ~20 drafts. No UI path to re-import or bulk-update existing workplan tasks from JSON — had to rewrite the fixture outside ReadyMade and recreate the workplan in dogfood. | **Deferred**. |
 | `markdown_export` | **high** | Export was `.tres`-only — useless for Discord handoff. | **Fixed** — markdown exporter + dialog default `.md`. |
 | `discord_subchannels` | **medium** | Single “Discord” checkbox; server channel names needed Other. | **Fixed (partial)** — `metapunkt_discord` mode with Latent Space channels. |
 | `recurring_tasks` | **medium** | `recurring_pattern` on `WorkplanTask` but no UI to set/expand Friday `#general` roundups. | **Deferred**. |
@@ -69,6 +74,6 @@ godot --headless --path synesyn_client \
 
 ## Material honesty
 
-- Stochastic Dreams **exhibition** facts come from the Research Catalogue pages above (fetch **succeeded**). Image suggestions point at that gallery URL rather than inventing filenames.
-- Open Closure: discursive only; no reveal date.
-- Unconfirmed Synesyn tag / contributor call / Latent SEEDS “reveal” are **not** pre-scheduled — use open slots if material arrives.
+- Stochastic Dreams **exhibition** facts come from the Research Catalogue pages above (fetch **succeeded**). Nov 18 / 26 / 5 Dec stay `draft` with **image needed** until actual stills are attached (not page URLs).
+- Open Closure: discursive only; no reveal date; “not a launch date” phrasing removed.
+- **NEEDS CONFIRMATION** (Ayodele): “paywalled foresight” (30 Nov); May 2026 portfolio date (7 Dec); curator credits Murray-Leslie / Busch; exhibition photo picks.
