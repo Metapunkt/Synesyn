@@ -53,10 +53,7 @@ func _bind_workplan_manager() -> void:
 		workplan_manager.workplan_changed.connect(_on_workplan_changed)
 	workplan = workplan_manager.get_current_workplan()
 	print("🗂️ Connected to WorkplanManager, current workplan: ", workplan_manager.get_current_workplan_name())
-	if workplan and workplan.get_total_tasks() == 0:
-		print("ReadyMade Orchestrator: Creating default workplan tasks.")
-		_create_default_tasks()
-		workplan_manager.save_current_workplan()
+	_maybe_offer_first_launch_workplan_choice()
 	_workplan_manager_ready = true
 	workplan_manager_ready.emit()
 	workplan_loaded.emit()
@@ -160,8 +157,104 @@ func _date_offset_string(days_from_today: int) -> String:
 	return "%04d-%02d-%02d" % [int(date_dict.year), int(date_dict.month), int(date_dict.day)]
 
 
+func _is_headless_runtime() -> bool:
+	return DisplayServer.get_name() == "headless" or OS.has_feature("headless")
+
+
+func _get_readymade_app_config() -> Dictionary:
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	if not cfg.has("apps") or typeof(cfg["apps"]) != TYPE_DICTIONARY:
+		cfg["apps"] = {}
+	var apps: Dictionary = cfg["apps"]
+	if not apps.has("readymade") or typeof(apps["readymade"]) != TYPE_DICTIONARY:
+		apps["readymade"] = {}
+	return apps["readymade"]
+
+
+func _save_readymade_app_config(readymade_cfg: Dictionary) -> void:
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	if not cfg.has("apps") or typeof(cfg["apps"]) != TYPE_DICTIONARY:
+		cfg["apps"] = {}
+	(cfg["apps"] as Dictionary)["readymade"] = readymade_cfg
+	RuntimeConfig.save_config(cfg)
+
+
+func get_first_launch_workplan_choice() -> String:
+	"""Return remembered first-launch choice: sample | empty | '' if unset."""
+	var readymade_cfg: Dictionary = _get_readymade_app_config()
+	return String(readymade_cfg.get("first_launch_workplan", "")).strip_edges()
+
+
+func set_first_launch_workplan_choice(choice: String) -> void:
+	"""Persist first-launch sample/empty choice so later launches do not re-seed."""
+	var normalized: String = choice.strip_edges().to_lower()
+	if normalized != "sample" and normalized != "empty":
+		return
+	var readymade_cfg: Dictionary = _get_readymade_app_config()
+	readymade_cfg["first_launch_workplan"] = normalized
+	_save_readymade_app_config(readymade_cfg)
+
+
+func _maybe_offer_first_launch_workplan_choice() -> void:
+	"""On first launch with an empty workplan, offer sample vs blank slate once."""
+	if workplan == null:
+		return
+	var choice: String = get_first_launch_workplan_choice()
+	if choice == "empty":
+		print("ReadyMade Orchestrator: first-launch choice is empty — not seeding demo tasks.")
+		return
+	if choice == "sample":
+		# Remembered sample: only seed when the workplan is still empty AND we have
+		# never completed the initial seed (handled by seeding only from the chooser).
+		print("ReadyMade Orchestrator: first-launch choice is sample — leaving current tasks as-is.")
+		return
+	# Unset: if the workplan already has tasks (legacy installs), remember sample and stop.
+	if workplan.get_total_tasks() > 0:
+		set_first_launch_workplan_choice("sample")
+		return
+	if _is_headless_runtime():
+		# Non-interactive CI / acceptance: blank slate, never re-prompt.
+		set_first_launch_workplan_choice("empty")
+		print("ReadyMade Orchestrator: headless first launch → empty workplan (no demo seed).")
+		return
+	call_deferred("_prompt_first_launch_workplan_choice")
+
+
+func _prompt_first_launch_workplan_choice() -> void:
+	"""Modal chooser: Start with sample workplan vs Start empty."""
+	if get_first_launch_workplan_choice() != "":
+		return
+	var dialog := ConfirmationDialog.new()
+	dialog.title = "Welcome to ReadyMade"
+	dialog.dialog_text = "How would you like to start?\n\nYou can explore a sample workplan, or begin with a blank slate."
+	dialog.ok_button_text = "Start with sample workplan"
+	dialog.cancel_button_text = "Start empty"
+	dialog.confirmed.connect(func() -> void:
+		_apply_first_launch_workplan_choice("sample")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func() -> void:
+		_apply_first_launch_workplan_choice("empty")
+		dialog.queue_free()
+	)
+	get_tree().root.add_child(dialog)
+	dialog.popup_centered()
+
+
+func _apply_first_launch_workplan_choice(choice: String) -> void:
+	set_first_launch_workplan_choice(choice)
+	if choice == "sample" and workplan and workplan.get_total_tasks() == 0:
+		print("ReadyMade Orchestrator: Creating sample workplan tasks.")
+		_create_default_tasks()
+		if workplan_manager:
+			workplan_manager.save_current_workplan()
+		workplan_loaded.emit()
+	else:
+		print("ReadyMade Orchestrator: Starting with an empty workplan.")
+
+
 func _create_default_tasks():
-	"""Create default tasks if no saved workplan exists"""
+	"""Create default/sample tasks for a new workplan"""
 	if not workplan.months.has("Month 1"):
 		workplan.months["Month 1"] = []
 	

@@ -17,6 +17,7 @@ func _ready() -> void:
 	await _test_start_agent_batch_hub_gate()
 	await _test_workplan_manager_ready_before_ui()
 	await _test_main_tab_center_mouse_clicks()
+	_test_first_launch_workplan_choice_api()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -207,6 +208,31 @@ func _test_main_tab_center_mouse_clicks() -> void:
 		)
 	dash.queue_free()
 	await get_tree().process_frame
+
+
+func _test_first_launch_workplan_choice_api() -> void:
+	print("-- first-launch sample vs empty choice --")
+	var orch: Node = get_node_or_null("/root/ReadyMadeOrchestrator")
+	_expect(orch != null, "orchestrator present for first-launch choice")
+	if orch == null:
+		return
+	_expect(orch.has_method("get_first_launch_workplan_choice"), "get_first_launch_workplan_choice API")
+	_expect(orch.has_method("set_first_launch_workplan_choice"), "set_first_launch_workplan_choice API")
+	var previous: String = orch.get_first_launch_workplan_choice()
+	orch.set_first_launch_workplan_choice("empty")
+	_expect(orch.get_first_launch_workplan_choice() == "empty", "persists empty choice")
+	orch.set_first_launch_workplan_choice("sample")
+	_expect(orch.get_first_launch_workplan_choice() == "sample", "persists sample choice")
+	# Restore prior value (or clear by writing empty string via config).
+	if previous.strip_edges().is_empty():
+		var cfg: Dictionary = RuntimeConfig.load_config()
+		if typeof(cfg.get("apps", {})) == TYPE_DICTIONARY:
+			var apps: Dictionary = cfg["apps"]
+			if typeof(apps.get("readymade", {})) == TYPE_DICTIONARY:
+				(apps["readymade"] as Dictionary).erase("first_launch_workplan")
+				RuntimeConfig.save_config(cfg)
+	else:
+		orch.set_first_launch_workplan_choice(previous)
 
 
 func _test_workplan_manager_ready_before_ui() -> void:
