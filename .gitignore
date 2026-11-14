@@ -69,6 +69,13 @@ synesyn_client/addons/syntree_voice/recordings/
 
 # Agent-generated file backups.
 synesyn_client/_agent_backups/
+*.backup
+
+# ReadyMade A1 generated markdown. Canonical runtime path is Documents/Synesyn
+# via RuntimeConfig.get_readymade_output_dir(); anything under the in-tree
+# placeholder is residue and must not be committed.
+synesyn_client/readymade/output/*
+!synesyn_client/readymade/output/README.md
 
 # ------------------------------------------------------ third-party binaries
 # LimboAI is a GDExtension: its bin/ directory holds ~130 MB of precompiled
