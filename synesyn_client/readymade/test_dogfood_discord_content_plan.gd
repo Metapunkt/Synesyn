@@ -104,6 +104,7 @@ func _ready() -> void:
 	var draft_count: int = 0
 	var placeholder_count: int = 0
 	var open_slot_count: int = 0
+	var needs_approval_count: int = 0
 	for post_any in posts:
 		var post: Dictionary = post_any
 		var task := WorkplanTask.new()
@@ -155,13 +156,19 @@ func _ready() -> void:
 			placeholder_count += 1
 		elif status_str == "open_slot":
 			open_slot_count += 1
+		elif status_str == "needs_approval":
+			needs_approval_count += 1
 		else:
 			draft_count += 1
 
 	manager.save_current_workplan()
 	_expect(workplan.get_total_tasks() == posts.size(), "task count matches fixture")
 	_expect(open_slot_count >= 3, "at least three open slots across the month")
-	print("Dogfood: %d drafts, %d placeholders, %d open_slots" % [draft_count, placeholder_count, open_slot_count])
+	_expect(needs_approval_count >= 1, "welcome post needs_approval present")
+	print(
+		"Dogfood: %d drafts, %d placeholders, %d open_slots, %d needs_approval"
+		% [draft_count, placeholder_count, open_slot_count, needs_approval_count]
+	)
 
 	# Scratchpad brainstorm notes via real Scratchpad scene path.
 	await _exercise_scratchpad()
@@ -184,8 +191,10 @@ func _ready() -> void:
 		var md: String = FileAccess.get_file_as_string(export_path)
 		_expect(md.find("#metapunkt") >= 0, "export mentions #metapunkt")
 		_expect(md.find("open_slot") >= 0, "export carries open_slot plan status")
+		_expect(md.find("needs_approval") >= 0, "export carries needs_approval for welcome")
+		_expect(md.find("Welcome to the maze") >= 0, "pinned welcome post present")
 		_expect(md.find("Galleri KiT") >= 0 or md.find("researchcatalogue") >= 0, "export retains Stochastic Dreams catalogue material")
-		_expect(md.find("Remembering forward, together") >= 0, "Anya opener rewrite present")
+		_expect(md.find("The futures we can still choose") >= 0, "Nov 16 #metapunkt substance opener present")
 		_expect(md.find("The system proposes; a person closes") >= 0, "Nov 23 Thinking Map rewrite present")
 		_expect(md.find("#synesyn") >= 0 and md.find("do-nothing path") >= 0, "Dec 12 moved to #synesyn")
 		_expect(md.find("open-core") >= 0, "open-core foresight framing present")
@@ -195,6 +204,8 @@ func _ready() -> void:
 		_expect(md.find("#mapping_latent_reality") >= 0 and md.find("Open Closure") >= 0, "Open Closure on mapping channel")
 		_expect(md.find("media.researchcatalogue.net") >= 0, "RC direct image URLs present")
 		_expect(md.find("metapunkt.org") >= 0, "metapunkt.org citations present")
+		_expect(md.find("This week in the maze") >= 0, "Friday postcard framing present")
+		_expect(md.find("Artrithmetic") >= 0, "Okediji Artrithmetic credit retained")
 		_log_friction(
 			"bulk_revise",
 			"high",

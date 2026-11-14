@@ -70,6 +70,8 @@ static func content_plan_status(task: WorkplanTask) -> String:
 	var notes_l: String = task.notes.to_lower()
 	if notes_l.find("status: open_slot") >= 0:
 		return "open_slot"
+	if notes_l.find("status: needs_approval") >= 0:
+		return "needs_approval"
 	if notes_l.find("status: placeholder") >= 0:
 		return "placeholder"
 	if notes_l.find("status: draft") >= 0:

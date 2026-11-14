@@ -4,6 +4,10 @@
 **Scenario:** Plan Metapunkt Discord (Latent Space) posts for **16 Nov – 15 Dec 2026** inside ReadyMade, as Anya would.  
 **Deliverable plan:** [`docs/community/discord_content_plan_2026-11.md`](../community/discord_content_plan_2026-11.md)
 
+## Tone pass (Anya / Ayodele social invite)
+
+Welcome pinned in `#general` (`needs_approval`, verbatim from the shared welcome draft). Nov 16 `#metapunkt` opener goes straight into substance (no second Anya intro). Public drafts use warm / curious / lightly playful voice: concrete hooks, gloss-after-jargon, newcomer questions, we/you, “Ayodele may well chime in…”, Friday “This week in the maze…” postcards, and at-least-every-other Anya reply invites.
+
 ## Content guidance applied (Ayodele)
 
 | Guidance | How the plan reflects it |
