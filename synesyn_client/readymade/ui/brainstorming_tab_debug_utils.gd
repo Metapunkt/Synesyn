@@ -224,7 +224,7 @@ static func debug_layout_issues(owner) -> void:
 		"HSplitContainer",
 		"HSplitContainer/LeftPanelContainer",
 		"HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer",
-		"HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/BrainstormingContainer",
+		"HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/BrainstormingContainer",
 		"HSplitContainer/MainTabContainer",
 	]:
 		var node = mission_control.get_node_or_null(node_path)
@@ -268,7 +268,7 @@ static func force_visibility_fix(owner) -> void:
 	if left_panel:
 		left_panel.visible = true
 		left_panel.custom_minimum_size = Vector2(350, 600)
-	var brainstorm_container = mission_control.get_node_or_null("HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/BrainstormingContainer")
+	var brainstorm_container = mission_control.get_node_or_null("HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/BrainstormingContainer")
 	if brainstorm_container:
 		brainstorm_container.visible = true
 		brainstorm_container.custom_minimum_size = Vector2(350, 400)
