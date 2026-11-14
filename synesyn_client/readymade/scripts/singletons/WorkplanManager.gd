@@ -18,6 +18,7 @@ func _ready():
 	workplans_directory = RuntimeConfig.get_workplans_dir()
 	_ensure_workplans_directory()
 	_migrate_legacy_workplans()
+	_migrate_legacy_single_workplan_file()
 	_load_workplan_registry()
 	_load_default_workplan()
 
@@ -58,6 +59,46 @@ func _migrate_legacy_workplans() -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
+
+func _migrate_legacy_single_workplan_file() -> void:
+	"""Import the old dual-write workplan_data.tres into workplans/ once."""
+	var dest_file_name: String = "default_workplan.tres"
+	var dest_path: String = workplans_directory.path_join(dest_file_name)
+	if FileAccess.file_exists(dest_path) or ResourceLoader.exists(dest_path):
+		return
+
+	var legacy_documents: String = Workplan.legacy_persist_path()
+	# Prefer Documents legacy; also accept pre-ADR-0014 user:// copy.
+	RuntimeConfig.migrate_binary_file_if_needed(
+		legacy_documents, ["user://workplan_data.tres"]
+	)
+
+	var source_path: String = ""
+	if FileAccess.file_exists(legacy_documents) or ResourceLoader.exists(legacy_documents):
+		source_path = legacy_documents
+	elif FileAccess.file_exists("user://workplan_data.tres"):
+		source_path = "user://workplan_data.tres"
+
+	if source_path.is_empty():
+		return
+
+	var loaded: Workplan = _load_workplan_from_path(source_path)
+	if loaded == null:
+		# Binary copy fallback when ResourceLoader cannot interpret the path yet.
+		RuntimeConfig.migrate_binary_file_if_needed(dest_path, [source_path])
+		if FileAccess.file_exists(dest_path) or ResourceLoader.exists(dest_path):
+			print("📦 Migrated legacy workplan_data.tres → ", dest_path)
+		return
+
+	if loaded.name.strip_edges().is_empty():
+		loaded.name = "Default Workplan"
+	DirAccess.make_dir_recursive_absolute(workplans_directory)
+	var error: Error = ResourceSaver.save(loaded, dest_path)
+	if error == OK:
+		print("📦 Migrated legacy workplan_data.tres → ", dest_path)
+	else:
+		push_warning("WorkplanManager: Failed to migrate legacy workplan: " + str(error))
+
 func _load_workplan_registry():
 	"""Load the list of available workplans"""
 	available_workplans.clear()
@@ -69,8 +110,11 @@ func _load_workplan_registry():
 		
 		while file_name != "":
 			if file_name.ends_with(".tres"):
-				var workplan_name = file_name.get_basename()
-				var workplan_path = workplans_directory + file_name
+				var workplan_path: String = workplans_directory.path_join(file_name)
+				var loaded: Workplan = _load_workplan_from_path(workplan_path)
+				var workplan_name: String = file_name.get_basename()
+				if loaded != null and not String(loaded.name).strip_edges().is_empty():
+					workplan_name = loaded.name
 				available_workplans[workplan_name] = workplan_path
 				print("📋 Found workplan: ", workplan_name, " at ", workplan_path)
 			file_name = dir.get_next()
@@ -135,7 +179,7 @@ func create_new_workplan(workplan_name: String, description: String = "") -> boo
 	new_workplan.created_date = Time.get_datetime_string_from_system()
 	
 	var file_name = _sanitize_filename(workplan_name) + ".tres"
-	var workplan_path = workplans_directory + file_name
+	var workplan_path: String = workplans_directory.path_join(file_name)
 	
 	# Save the new workplan
 	var error = ResourceSaver.save(new_workplan, workplan_path)
@@ -177,7 +221,7 @@ func duplicate_workplan(source_name: String, new_name: String) -> bool:
 	new_workplan.created_date = Time.get_datetime_string_from_system()
 	
 	var file_name = _sanitize_filename(new_name) + ".tres"
-	var workplan_path = workplans_directory + file_name
+	var workplan_path: String = workplans_directory.path_join(file_name)
 	
 	# Save the duplicate
 	var error = ResourceSaver.save(new_workplan, workplan_path)
@@ -245,7 +289,7 @@ func rename_workplan(old_name: String, new_name: String) -> bool:
 	# Update workplan name and save to new path
 	workplan.name = new_name
 	var new_file_name = _sanitize_filename(new_name) + ".tres"
-	var new_path = workplans_directory + new_file_name
+	var new_path: String = workplans_directory.path_join(new_file_name)
 	
 	var error = ResourceSaver.save(workplan, new_path)
 	if error != OK:
@@ -315,7 +359,7 @@ func import_workplan(import_path: String, new_name: String = "") -> bool:
 	workplan.name = final_name
 	
 	var file_name = _sanitize_filename(final_name) + ".tres"
-	var workplan_path = workplans_directory + file_name
+	var workplan_path: String = workplans_directory.path_join(file_name)
 	
 	var error = ResourceSaver.save(workplan, workplan_path)
 	if error != OK:
@@ -332,6 +376,7 @@ func import_workplan(import_path: String, new_name: String = "") -> bool:
 func save_current_workplan():
 	"""Save the current workplan to disk"""
 	if current_workplan and not current_workplan_path.is_empty():
+		DirAccess.make_dir_recursive_absolute(current_workplan_path.get_base_dir())
 		var error = ResourceSaver.save(current_workplan, current_workplan_path)
 		if error != OK:
 			push_error("WorkplanManager: Failed to save current workplan: " + str(error))
@@ -339,13 +384,40 @@ func save_current_workplan():
 			print("💾 Saved workplan: ", current_workplan_name)
 
 func _load_workplan_from_path(path: String) -> Workplan:
-	"""Load a workplan from a specific path"""
-	if not ResourceLoader.exists(path):
+	"""Load a workplan from a specific path.
+	ResourceLoader.exists() alone misses some absolute Documents paths;
+	FileAccess.file_exists is the fallback the dual-store bug lacked.
+	"""
+	if path.strip_edges().is_empty():
 		return null
-	
-	var workplan = ResourceLoader.load(path) as Workplan
+	var path_exists: bool = ResourceLoader.exists(path) or FileAccess.file_exists(path)
+	if not path_exists:
+		return null
+
+	var workplan: Workplan = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as Workplan
 	if workplan:
 		print("📂 Loaded workplan from: ", path)
+		return workplan
+
+	# Last-resort: open as bytes and ask ResourceLoader again after a binary copy
+	# into a temporary user:// path (helps when the absolute path is not imported).
+	var tmp_path: String = "user://_workplan_load_fallback.tres"
+	var src: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if src == null:
+		push_warning("WorkplanManager: File exists but could not open: " + path)
+		return null
+	var bytes: PackedByteArray = src.get_buffer(src.get_length())
+	src.close()
+	var dest: FileAccess = FileAccess.open(tmp_path, FileAccess.WRITE)
+	if dest == null:
+		return null
+	dest.store_buffer(bytes)
+	dest.close()
+	workplan = ResourceLoader.load(tmp_path, "", ResourceLoader.CACHE_MODE_IGNORE) as Workplan
+	if workplan:
+		print("📂 Loaded workplan via FileAccess fallback from: ", path)
+	else:
+		push_warning("WorkplanManager: Failed to deserialize workplan: " + path)
 	return workplan
 
 func _sanitize_filename(raw_name: String) -> String:
