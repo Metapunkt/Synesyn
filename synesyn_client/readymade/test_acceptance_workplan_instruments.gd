@@ -13,6 +13,7 @@ func _ready() -> void:
 	_test_instrument_mapping()
 	_test_edit_metaprompts_typed_modes()
 	_test_backend_unavailable_message_and_fail_task()
+	_test_config_path_honors_storage_root_dir()
 	await _test_start_agent_batch_hub_gate()
 	await _test_workplan_manager_ready_before_ui()
 	await _test_top_level_readymade_path_and_migration()
@@ -97,6 +98,29 @@ func _test_backend_unavailable_message_and_fail_task() -> void:
 	failed_task.fail_task("probe failure")
 	_expect(failed_task.status != "Done", "fail_task leaves status not Done")
 	_expect("AI GENERATION FAILED" in failed_task.notes or "probe failure" in failed_task.notes, "fail_task surfaces error in notes")
+
+
+func _test_config_path_honors_storage_root_dir() -> void:
+	print("-- config path honors storage.root_dir (hub dialog) --")
+	var temp_root: String = OS.get_user_data_dir().path_join("_config_path_root_dir_tmp")
+	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+
+	var expected: String = temp_root.path_join("synesyn").path_join("config").path_join("synesyn_client.json")
+	var resolved: String = RuntimeConfig.get_config_path_abs()
+	_expect(
+		resolved.replace("\\", "/") == expected.replace("\\", "/"),
+		"get_config_path_abs uses storage.root_dir (got %s)" % resolved
+	)
+	_expect(FileAccess.file_exists(expected), "config file written under storage.root_dir")
+
+	var orch = get_node_or_null("/root/ReadyMadeOrchestrator")
+	if orch and orch.has_method("build_backend_unavailable_message"):
+		var msg: String = orch.build_backend_unavailable_message("Hub offline for path test")
+		_expect(expected in msg or resolved in msg, "hub dialog message includes root_dir config path")
+
+	_restore_storage_root(previous_root)
+	_wipe_dir(temp_root)
 
 
 func _test_start_agent_batch_hub_gate() -> void:

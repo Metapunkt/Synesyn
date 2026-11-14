@@ -1,13 +1,19 @@
 extends RefCounted
 class_name RuntimeConfig
 
+## Guards get_config_path_abs ↔ load_config recursion while resolving storage.root_dir.
+static var _config_load_depth: int = 0
+
 static func get_config_path_abs() -> String:
-	# Example (Windows):
-	# C:/Users/<you>/Documents/Synesyn/synesyn/config/synesyn_client.json
-	var base := _default_storage_root_dir()
+	# Resolve the same way storage does: honor storage.root_dir when set, else
+	# Documents/Synesyn, else user://. During load_config we must not recurse.
+	var base: String = ""
+	if _config_load_depth == 0:
+		base = get_storage_root_dir()
+	if base.strip_edges().is_empty():
+		base = _default_storage_root_dir()
 	if base.strip_edges().is_empty():
 		# Best-effort fallback: if Documents isn't available, fall back to user://.
-		# (This still keeps a single config path in that environment.)
 		return ProjectSettings.globalize_path("user://synesyn_client.json")
 	return base.path_join("synesyn").path_join("config").path_join("synesyn_client.json")
 
@@ -18,6 +24,88 @@ static func _default_storage_root_dir() -> String:
 	if docs.strip_edges().is_empty():
 		return ""
 	return docs.path_join("Synesyn")
+
+
+static func _user_config_fallback_path() -> String:
+	return ProjectSettings.globalize_path("user://synesyn_client.json")
+
+
+static func _bootstrap_config_write_path() -> String:
+	"""Stable bootstrap location for config I/O (OS Documents when available, else user://)."""
+	var docs: String = _default_storage_root_dir()
+	if not docs.strip_edges().is_empty():
+		return docs.path_join("synesyn").path_join("config").path_join("synesyn_client.json")
+	return _user_config_fallback_path()
+
+
+static func _config_path_under_root(storage_root: String) -> String:
+	var root: String = storage_root.strip_edges()
+	if root.is_empty():
+		return _bootstrap_config_write_path()
+	return root.path_join("synesyn").path_join("config").path_join("synesyn_client.json")
+
+
+static func _storage_root_from_cfg(cfg: Dictionary) -> String:
+	var storage_any: Variant = cfg.get("storage", {})
+	if typeof(storage_any) != TYPE_DICTIONARY:
+		return ""
+	return String((storage_any as Dictionary).get("root_dir", "")).strip_edges()
+
+
+static func _read_config_dict_at(path_abs: String) -> Dictionary:
+	if path_abs.is_empty() or not FileAccess.file_exists(path_abs):
+		return {}
+	var f := FileAccess.open(path_abs, FileAccess.READ)
+	if not f:
+		return {}
+	var raw := f.get_as_text()
+	f.close()
+	if raw.strip_edges().is_empty():
+		return {}
+	var parsed_any: Variant = JSON.parse_string(raw)
+	if typeof(parsed_any) != TYPE_DICTIONARY:
+		return {}
+	return parsed_any as Dictionary
+
+
+static func _write_config_dict_at(path_abs: String, cfg: Dictionary) -> bool:
+	if path_abs.is_empty():
+		return false
+	var base_dir := path_abs.get_base_dir()
+	if not base_dir.is_empty():
+		DirAccess.make_dir_recursive_absolute(base_dir)
+	var f := FileAccess.open(path_abs, FileAccess.WRITE)
+	if not f:
+		return false
+	f.store_string(JSON.stringify(cfg, "\t"))
+	f.close()
+	return true
+
+
+static func _discover_readable_config_path() -> String:
+	"""Find an on-disk config file without calling get_storage_root_dir (avoids recursion)."""
+	var candidates: Array[String] = []
+	var docs: String = _default_storage_root_dir()
+	if not docs.strip_edges().is_empty():
+		candidates.append(
+			docs.path_join("synesyn").path_join("config").path_join("synesyn_client.json")
+		)
+	candidates.append(_user_config_fallback_path())
+	var bootstrap_hit: String = ""
+	for candidate in candidates:
+		if FileAccess.file_exists(candidate):
+			bootstrap_hit = candidate
+			break
+	if bootstrap_hit.is_empty():
+		return ""
+	# Prefer the config under storage.root_dir when bootstrap points there and the file exists.
+	var peeked: Dictionary = _read_config_dict_at(bootstrap_hit)
+	var configured_root: String = _storage_root_from_cfg(peeked)
+	if not configured_root.is_empty():
+		var under_root: String = _config_path_under_root(configured_root)
+		if FileAccess.file_exists(under_root):
+			return under_root
+	return bootstrap_hit
 
 
 ## Canonical local storage root (Documents/Synesyn by default, or storage.root_dir override).
@@ -450,44 +538,52 @@ static func get_scensyn_story_log_dir() -> String:
 	return base.path_join("scensyn").path_join("story_logs") + "/"
 
 static func load_config() -> Dictionary:
-	var new_path_abs := get_config_path_abs()
-	var has_new := (not new_path_abs.is_empty() and FileAccess.file_exists(new_path_abs))
-	if not has_new:
+	_config_load_depth += 1
+	var path_abs: String = _discover_readable_config_path()
+	if path_abs.is_empty():
+		# Nothing on disk yet — still allow get_config_path_abs() to prefer storage.root_dir later.
+		path_abs = get_config_path_abs()
+	var has_file := (not path_abs.is_empty() and FileAccess.file_exists(path_abs))
+	if not has_file:
+		_config_load_depth = maxi(_config_load_depth - 1, 0)
 		return default_config()
 
-	# Canonical Documents path only (no migration; fresh implementation).
-	var f := FileAccess.open(new_path_abs, FileAccess.READ)
+	var f := FileAccess.open(path_abs, FileAccess.READ)
 	if not f:
+		_config_load_depth = maxi(_config_load_depth - 1, 0)
 		return default_config()
 
 	var raw := f.get_as_text()
 	f.close()
 	if raw.strip_edges().is_empty():
+		_config_load_depth = maxi(_config_load_depth - 1, 0)
 		return default_config()
 
 	# Explicit typing to avoid "Variant inference" warnings (often treated as errors in strict setups).
 	var parsed_any: Variant = JSON.parse_string(raw)
 	if typeof(parsed_any) != TYPE_DICTIONARY:
+		_config_load_depth = maxi(_config_load_depth - 1, 0)
 		return default_config()
 	var parsed: Dictionary = parsed_any
 
 	# Shallow-merge onto defaults so new keys appear automatically
 	var cfg := default_config()
 	cfg.merge(parsed, true)
+	_config_load_depth = maxi(_config_load_depth - 1, 0)
 	return cfg
 
 static func save_config(cfg: Dictionary) -> bool:
-	var path_abs := get_config_path_abs()
-	if path_abs.is_empty():
-		path_abs = ProjectSettings.globalize_path("user://synesyn_client.json")
-	var base_dir := path_abs.get_base_dir()
-	if not base_dir.is_empty():
-		DirAccess.make_dir_recursive_absolute(base_dir)
-	var f := FileAccess.open(path_abs, FileAccess.WRITE)
-	if not f:
+	# Write under storage.root_dir when set (same tree as ReadyMade data); always keep a
+	# bootstrap copy at Documents/user:// so the next load can rediscover root_dir.
+	var configured_root: String = _storage_root_from_cfg(cfg)
+	var primary: String = _config_path_under_root(configured_root)
+	if primary.is_empty():
+		primary = _bootstrap_config_write_path()
+	if not _write_config_dict_at(primary, cfg):
 		return false
-	f.store_string(JSON.stringify(cfg, "\t"))
-	f.close()
+	var bootstrap: String = _bootstrap_config_write_path()
+	if bootstrap != primary:
+		_write_config_dict_at(bootstrap, cfg)
 	return true
 
 
