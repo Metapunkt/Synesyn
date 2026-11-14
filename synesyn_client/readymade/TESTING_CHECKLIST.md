@@ -25,10 +25,12 @@
 
 ### **Agent Processing**
 - [ ] **A1SynthesisEngine Execution**
-  - Start agent with the "Start Agent" button (Ctrl+S saves a task list; it does not start the agent)
+  - Draft with the "Draft To Do tasks" button (Ctrl+S saves a task list; it does not start drafting)
+  - Confirm only Draft or Stop is visible at a time (Stop while drafting; Draft when idle)
   - Monitor agent status in performance metrics
   - Verify task moves from "To Do" → "In Progress" → "Done"
   - Check generated content quality
+  - Confirm Ctrl+N (New Task) and Ctrl+Shift+V (View All Tasks) work even when focus is not on the left panel
 
 - [ ] **Error Recovery Testing**
   - Test with no AI service available

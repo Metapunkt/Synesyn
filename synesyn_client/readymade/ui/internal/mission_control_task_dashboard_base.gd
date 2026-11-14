@@ -11,6 +11,7 @@ func _ready() -> void:
 	
 	_setup_ui()
 	_setup_connections()
+	_setup_keyboard_shortcuts()
 	_setup_refresh_timer()
 
 func _connect_to_orchestrator():
@@ -161,8 +162,10 @@ func simulate_main_tab_center_click(tab_index: int) -> bool:
 
 func _setup_keyboard_shortcuts():
 	"""Setup keyboard shortcuts for common actions"""
-	# Make sure we can receive input
+	# Drag uses _input; app shortcuts use _unhandled_input so Ctrl+N / Ctrl+Shift+V
+	# work even when a non-text Control has focus.
 	set_process_input(true)
+	set_process_unhandled_input(true)
 
 func _is_text_input_focused() -> bool:
 	var focused: Control = get_viewport().gui_get_focus_owner()
@@ -171,84 +174,93 @@ func _is_text_input_focused() -> bool:
 	return focused is LineEdit or focused is TextEdit or focused is CodeEdit
 
 func _input(event):
-	"""Handle keyboard shortcuts and global mouse events for drag-drop."""
-	# --- Global Drag and Drop Handling ---
+	"""Global mouse events for calendar drag-drop (must run before GUI consumes release)."""
 	if dragging_task:
 		if event is InputEventMouseMotion:
-			# Highlight cell under mouse during drag
 			var _day = _get_day_under_mouse(event.position)
-			# This logic can be expanded to show a "ghost" of the card etc.
-			
 		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			# Handle drop when mouse is released
 			var drop_day = _get_day_under_mouse(event.position)
 			if drop_day > 0:
 				_handle_drop_on_day(drop_day)
 			else:
-				# If dropped outside a valid cell, just cancel the drag
 				_stop_drag()
 			get_viewport().set_input_as_handled()
 
-	# --- Keyboard Shortcut Handling ---
-	if event is InputEventKey and event.pressed:
-		# Leave clipboard / editing shortcuts (Ctrl+V paste, Ctrl+A select-all)
-		# for focused text fields such as Scratchpad and Brainstorming.
-		if _is_text_input_focused():
-			return
 
-		# Check for Ctrl+key combinations
-		if event.ctrl_pressed:
-			match event.keycode:
-				KEY_N:  # Ctrl+N - New Task
-					_on_add_task_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_R:  # Ctrl+R - Refresh
-					_on_refresh_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_S:  # Ctrl+S - Save Task List
-					if not event.shift_pressed:
-						_on_save_task_list_pressed()
-					else:  # Ctrl+Shift+S - Save As
-						_on_save_as_task_list_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_O:  # Ctrl+O - Open Task List
-					_on_open_task_list_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_Q:  # Ctrl+Q - Stop Agent
-					_on_stop_agent_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_L:  # Ctrl+L - New Task List
-					_on_new_task_list_pressed()
-					get_viewport().set_input_as_handled()
-				KEY_A:  # Ctrl+A - Toggle Select/Deselect All
-					if main_tab_container.current_tab == 0:  # Only in Tasks tab
-						_on_select_all_pressed()
-						get_viewport().set_input_as_handled()
-				KEY_V:  # Ctrl+Shift+V - View All Tasks (Ctrl+V is paste)
-					if event.shift_pressed:
-						_on_view_all_tasks_pressed()
-						get_viewport().set_input_as_handled()
-				KEY_W:  # Ctrl+W - Workplan Manager
-					_on_workplan_manager_pressed()
-					get_viewport().set_input_as_handled()
-		
-		# Check for Ctrl+Shift combinations
-		if event.ctrl_pressed and event.shift_pressed:
-			match event.keycode:
-				KEY_R:  # Ctrl+Shift+R - Reset Workplan (for testing)
+func _unhandled_input(event):
+	"""Window-level shortcuts regardless of which non-text control has focus."""
+	if not (event is InputEventKey and event.pressed):
+		return
+	# Leave clipboard / editing shortcuts for focused text fields.
+	if _is_text_input_focused():
+		return
+
+	if event.ctrl_pressed:
+		match event.keycode:
+			KEY_N:  # Ctrl+N - New Task
+				_on_add_task_pressed()
+				get_viewport().set_input_as_handled()
+			KEY_R:  # Ctrl+R - Refresh / Ctrl+Shift+R reset
+				if event.shift_pressed:
 					if ReadyMadeOrchestrator:
 						ReadyMadeOrchestrator.reset_workplan()
 						print("MissionControl: 🔄 Workplan reset to defaults")
-					get_viewport().set_input_as_handled()
-		
-		# Function keys
-		match event.keycode:
-			KEY_F5:  # F5 - Refresh
-				_on_refresh_pressed()
+				else:
+					_on_refresh_pressed()
 				get_viewport().set_input_as_handled()
+			KEY_S:  # Ctrl+S - Save Task List / Ctrl+Shift+S Save As
+				if not event.shift_pressed:
+					_on_save_task_list_pressed()
+				else:
+					_on_save_as_task_list_pressed()
+				get_viewport().set_input_as_handled()
+			KEY_O:  # Ctrl+O - Open Task List
+				_on_open_task_list_pressed()
+				get_viewport().set_input_as_handled()
+			KEY_Q:  # Ctrl+Q - Stop drafting
+				_on_stop_agent_pressed()
+				get_viewport().set_input_as_handled()
+			KEY_L:  # Ctrl+L - New Task List
+				_on_new_task_list_pressed()
+				get_viewport().set_input_as_handled()
+			KEY_A:  # Ctrl+A - Toggle Select/Deselect All
+				if main_tab_container and main_tab_container.current_tab == 0:
+					_on_select_all_pressed()
+					get_viewport().set_input_as_handled()
+			KEY_V:  # Ctrl+Shift+V - View All Tasks (Ctrl+V is paste)
+				if event.shift_pressed:
+					_on_view_all_tasks_pressed()
+					get_viewport().set_input_as_handled()
+			KEY_W:  # Ctrl+W - Workplan Manager
+				_on_workplan_manager_pressed()
+				get_viewport().set_input_as_handled()
+
+	match event.keycode:
+		KEY_F5:  # F5 - Refresh
+			_on_refresh_pressed()
+			get_viewport().set_input_as_handled()
+
+func _update_draft_action_buttons() -> void:
+	"""Show Draft XOR Stop — only one visible; Stop stays hidden/disabled when idle."""
+	var is_drafting := false
+	var orch: Node = _resolve_readymade_orchestrator()
+	if orch != null:
+		var agent_node: Node = orch.get("a1_agent") as Node
+		if agent_node == null:
+			agent_node = get_node_or_null("/root/A1SynthesisEngine")
+		if agent_node != null:
+			is_drafting = bool(agent_node.get("processing_active"))
+	if start_agent_button:
+		start_agent_button.visible = not is_drafting
+		start_agent_button.disabled = false
+	if stop_agent_button:
+		stop_agent_button.visible = is_drafting
+		stop_agent_button.disabled = not is_drafting
+
 
 func _setup_ui():
 	_ensure_main_tab_hit_targets()
+	_update_draft_action_buttons()
 	# Create task dialog
 	task_dialog = preload("res://readymade/ui/task_dialog.tscn").instantiate()
 	add_child(task_dialog)
@@ -374,6 +386,7 @@ func _on_workplan_loaded():
 func _refresh_dashboard():
 	_update_task_list()
 	_update_statistics()
+	_update_draft_action_buttons()
 	# The calendar refresh can be intensive, so maybe call it selectively
 	_update_calendar()
 
@@ -761,7 +774,7 @@ func _resolve_readymade_orchestrator() -> Node:
 
 
 func _on_start_agent_pressed():
-	print("Start agent batch pressed.")
+	print("Draft To Do tasks pressed.")
 	var orchestrator_singleton: Node = _resolve_readymade_orchestrator()
 	if orchestrator_singleton == null:
 		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found on /root")
@@ -771,21 +784,22 @@ func _on_start_agent_pressed():
 			+ "1. Start the Synesyn hub (services/synesyn_hub), usually at http://127.0.0.1:17777.\n"
 			+ "2. Configure hub.base_url and model credentials in:\n   "
 			+ RuntimeConfig.get_config_path_abs()
-			+ "\n3. Restart ReadyMade, then use Start Agent Batch again.\n\n"
+			+ "\n3. Restart ReadyMade, then use Draft To Do tasks again.\n\n"
 			+ "Failed generation leaves the task not Done so you can retry."
 		)
 		return
 	if orchestrator_singleton.has_method("request_start_agent_batch"):
 		orchestrator_singleton.request_start_agent_batch()
+		_update_draft_action_buttons()
 		return
 	# Fallback: same hub dialog path used by drafting.
 	if orchestrator_singleton.has_method("notify_backend_unavailable"):
 		orchestrator_singleton.notify_backend_unavailable(
-			"Start Agent Batch is unavailable in this build."
+			"Draft To Do tasks is unavailable in this build."
 		)
 
 func _on_stop_agent_pressed():
-	print("Stop agent batch pressed.")
+	print("Stop drafting pressed.")
 	var orchestrator_singleton: Node = _resolve_readymade_orchestrator()
 	if orchestrator_singleton == null:
 		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found on /root")
@@ -795,9 +809,10 @@ func _on_stop_agent_pressed():
 		agent_node = get_node_or_null("/root/A1SynthesisEngine")
 	if agent_node != null and agent_node.has_method("stop_processing"):
 		agent_node.stop_processing()
-		print("MissionControl: ⏹️ Agent batch processing stopped")
+		print("MissionControl: ⏹️ Drafting stopped")
 	else:
 		print("MissionControl: ⚠️ A1 Agent not found")
+	_update_draft_action_buttons()
 
 func _on_task_saved(task: WorkplanTask):
 	if not orchestrator:

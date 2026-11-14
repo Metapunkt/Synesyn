@@ -196,14 +196,14 @@ When loading a task list in a different workplan:
 - `Ctrl+A` - Select/Deselect All Tasks
 - `Ctrl+Shift+V` - View All Tasks (Clear Filter; `Ctrl+V` remains paste)
 - `Ctrl+W` - Workplan Manager
-- `Ctrl+Q` - Stop Agent Processing
+- `Ctrl+Q` - Stop drafting
 - `F5` - Refresh Dashboard
 
 ### Agent Operations
 
 **AI Processing:**
-- **Start Agent**: Begin batch processing of all available tasks
-- **Stop Agent**: `Ctrl+Q` - Halt agent processing
+- **Draft To Do tasks**: Queue and draft every task currently in **To Do** status (requires Synesyn hub)
+- **Stop drafting**: `Ctrl+Q` — halt the active drafting run (only shown while drafting)
 - **Individual Task Processing**: Use "Start" button on specific tasks
 
 ### Content Viewer

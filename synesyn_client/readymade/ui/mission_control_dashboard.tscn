@@ -137,12 +137,14 @@ text = "✨ New Task"
 
 [node name="StartAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 layout_mode = 2
-text = "▶️ Start Agent Batch"
+tooltip_text = "Draft all To Do tasks with the A1 synthesis agent (requires Synesyn hub)"
+text = "▶️ Draft To Do tasks"
 
 [node name="StopAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 visible = false
 layout_mode = 2
-text = "⏹️ Stop Agent Batch"
+tooltip_text = "Stop the active drafting run"
+text = "⏹️ Stop drafting"
 
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
@@ -649,7 +651,7 @@ text = "Getting Started:
    Use the Workplan Manager (Ctrl+W) to create, switch between, or organize different content strategies. Each workplan can focus on different projects or time periods.
 
 4. 🤖 Process with AI
-   Click 'Start Agent Batch' to let AI agents handle research, content generation, and optimization. Monitor progress and stop processing anytime with Ctrl+Q.
+   Click 'Draft To Do tasks' to let AI agents draft research and content for queued To Do items. Monitor progress and stop drafting anytime with Ctrl+Q.
 
 5. 📊 Review & Refine
    Use the Content Viewer tab to review AI-generated content, make edits, and see mode-specific analytics like engagement metrics or citation counts.
@@ -673,7 +675,7 @@ text = "• Ctrl+N - New Task
 • Ctrl+O - Open Task List
 • Ctrl+W - Workplan Manager
 • Ctrl+R - Refresh Dashboard
-• Ctrl+Q - Stop Agent Processing
+• Ctrl+Q - Stop drafting
 • Ctrl+A - Select/Deselect All Tasks
 • F5 - Refresh Dashboard"
 autowrap_mode = 3

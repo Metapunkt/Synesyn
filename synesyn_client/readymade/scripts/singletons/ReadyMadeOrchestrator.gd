@@ -375,7 +375,7 @@ func build_backend_unavailable_message(reason: String = "") -> String:
 		+ "What to do:\n"
 		+ "1. Start the Synesyn hub (services/synesyn_hub), usually at http://127.0.0.1:17777.\n"
 		+ "2. Configure hub.base_url and model credentials in:\n   %s\n"
-		+ "3. Restart ReadyMade, then use Start Agent Batch again.\n\n"
+		+ "3. Restart ReadyMade, then use Draft To Do tasks again.\n\n"
 		+ "Failed generation leaves the task not Done so you can retry."
 	) % [detail, config_path]
 
@@ -433,7 +433,7 @@ func probe_hub_available(timeout_sec: float = 0.75) -> bool:
 
 func request_start_agent_batch() -> bool:
 	"""
-	Single entry for Start Agent Batch: require A1 + reachable hub, else emit the
+	Single entry for Draft To Do tasks: require A1 + reachable hub, else emit the
 	same AcceptDialog-backed backend_unavailable guidance used by drafting.
 	Returns true when batch processing was started.
 	"""
@@ -447,7 +447,7 @@ func request_start_agent_batch() -> bool:
 		if hub_url.is_empty():
 			hub_url = "http://127.0.0.1:17777"
 		notify_backend_unavailable(
-			"Synesyn hub is not reachable at %s. Start the hub before running Start Agent Batch." % hub_url
+			"Synesyn hub is not reachable at %s. Start the hub before running Draft To Do tasks." % hub_url
 		)
 		return false
 	if a1_agent.has_method("start_batch_processing"):
