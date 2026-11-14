@@ -51,9 +51,9 @@ Godot version, so a mismatched build fails to load rather than degrading.
 The first time you open `synesyn_client/` in Godot (or run
 `godot --headless --path synesyn_client --import`), Godot imports assets and
 registers GDExtensions. LimboAI is discovered from
-`addons/limboai/bin/limboai.gdextension` — there is no `[gdextension]` section
-in `project.godot` for that. Godot writes `.godot/` (including
-`extension_list.cfg`); that cache is local — do not commit it.
+`synesyn_client/addons/limboai/bin/limboai.gdextension` — there is no
+`[gdextension]` section in `project.godot` for that. Godot writes `.godot/`
+(including `extension_list.cfg`); that cache is local — do not commit it.
 
 On that first open you may see transient errors such as
 `Could not find base class "BTPlayer"` / `BTTask` / `BTAction`, or
@@ -68,10 +68,10 @@ to ignore): `Logging service not available`,
 `ContentListView: ContentStateResource not injected yet`. They come from
 autoload/plugin startup order, not from a broken LimboAI install.
 
-If `Could not find type "BTPlayer"` persists on
-`res://readymade/agents/a1_agent.gd` after reload, LimboAI did not register —
-confirm `addons/limboai/bin/limboai.gdextension` and the platform binary exist
-(see Recommended builds above).
+If `Could not find type "BTPlayer"` persists on the ReadyMade A1 agent script
+after reload, LimboAI did not register — confirm
+`synesyn_client/addons/limboai/bin/limboai.gdextension` and the platform binary
+exist (see Recommended builds above).
 
 ### Story Stage character art (optional)
 
