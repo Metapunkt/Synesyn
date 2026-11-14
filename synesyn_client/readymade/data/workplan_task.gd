@@ -68,6 +68,22 @@ func complete_task():
 	status = "Done"
 	completion_date = Time.get_datetime_string_from_system()
 
+func fail_task(error_message: String = "") -> void:
+	"""Mark a generation attempt as failed (not Done) and surface the error."""
+	status = "To Do"
+	completion_date = ""
+	var detail: String = error_message.strip_edges()
+	if detail.is_empty():
+		detail = "AI generation failed"
+	var marker: String = "[AI GENERATION FAILED]: " + detail
+	if generated_content.strip_edges().is_empty() or generated_content.begins_with("[PLACEHOLDER"):
+		generated_content = marker
+	if not marker in notes:
+		if notes.strip_edges().is_empty():
+			notes = marker
+		else:
+			notes += "\n\n" + marker
+
 func send_for_review():
 	"""Move task to review status"""
 	status = "Review"

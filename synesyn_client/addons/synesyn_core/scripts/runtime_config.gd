@@ -153,6 +153,11 @@ static func get_readymade_data_dir() -> String:
 	return get_synesyn_module_dir().path_join("readymade") + "/"
 
 
+static func get_readymade_output_dir() -> String:
+	"""User-visible ReadyMade generated markdown (Documents/Synesyn/.../readymade/output/)."""
+	return get_readymade_data_dir().path_join("output") + "/"
+
+
 ## Visual system assets (ComfyUI workflows, presets, prompt scaffolding).
 ## Honours a `render.visualsystem_dir` override so an existing checkout can be
 ## pointed at anywhere on disk; otherwise resolves under the storage root. The
