@@ -279,6 +279,92 @@ func build_backend_unavailable_message(reason: String = "") -> String:
 	) % [detail, config_path]
 
 
+func get_hub_base_url() -> String:
+	"""Resolve the configured Synesyn hub base URL."""
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	return str(ProviderModePolicy.get_hub_base_url(cfg)).strip_edges()
+
+
+func probe_hub_available(timeout_sec: float = 0.75) -> bool:
+	"""Best-effort TCP reachability check against hub.base_url (host:port)."""
+	var base_url: String = get_hub_base_url()
+	if base_url.is_empty():
+		return false
+	var host: String = "127.0.0.1"
+	var port: int = 17777
+	var cleaned: String = base_url
+	if cleaned.begins_with("http://"):
+		cleaned = cleaned.substr(7)
+	elif cleaned.begins_with("https://"):
+		cleaned = cleaned.substr(8)
+	cleaned = cleaned.split("/")[0]
+	if ":" in cleaned:
+		var parts: PackedStringArray = cleaned.split(":")
+		host = String(parts[0]).strip_edges()
+		port = int(parts[1])
+	else:
+		host = cleaned.strip_edges()
+	if host.is_empty():
+		host = "127.0.0.1"
+	if port <= 0:
+		port = 17777
+
+	var http := HTTPClient.new()
+	var connect_err: Error = http.connect_to_host(host, port)
+	if connect_err != OK:
+		return false
+	var started_ms: int = Time.get_ticks_msec()
+	var timeout_ms: int = int(timeout_sec * 1000.0)
+	while http.get_status() == HTTPClient.STATUS_CONNECTING or http.get_status() == HTTPClient.STATUS_RESOLVING:
+		http.poll()
+		if Time.get_ticks_msec() - started_ms > timeout_ms:
+			http.close()
+			return false
+		OS.delay_msec(10)
+	var status: int = http.get_status()
+	http.close()
+	return (
+		status == HTTPClient.STATUS_CONNECTED
+		or status == HTTPClient.STATUS_REQUESTING
+		or status == HTTPClient.STATUS_BODY
+	)
+
+
+func request_start_agent_batch() -> bool:
+	"""
+	Single entry for Start Agent Batch: require A1 + reachable hub, else emit the
+	same AcceptDialog-backed backend_unavailable guidance used by drafting.
+	Returns true when batch processing was started.
+	"""
+	if a1_agent == null:
+		a1_agent = get_node_or_null("/root/A1SynthesisEngine")
+	if a1_agent == null:
+		notify_backend_unavailable("A1 Synthesis Agent is not loaded, so drafting cannot start.")
+		return false
+	if not probe_hub_available():
+		var hub_url: String = get_hub_base_url()
+		if hub_url.is_empty():
+			hub_url = "http://127.0.0.1:17777"
+		notify_backend_unavailable(
+			"Synesyn hub is not reachable at %s. Start the hub before running Start Agent Batch." % hub_url
+		)
+		return false
+	if a1_agent.has_method("start_batch_processing"):
+		a1_agent.start_batch_processing()
+		print("ReadyMadeOrchestrator: 🚀 Agent batch processing started")
+		return true
+	if a1_agent.has_method("execute_all_tasks"):
+		a1_agent.execute_all_tasks()
+		print("ReadyMadeOrchestrator: 🚀 Agent processing all tasks")
+		return true
+	if a1_agent.has_method("execute_next_task"):
+		a1_agent.execute_next_task()
+		print("ReadyMadeOrchestrator: 🚀 Agent started (single task mode)")
+		return true
+	notify_backend_unavailable("A1 Synthesis Agent has no batch entry point.")
+	return false
+
+
 func notify_backend_unavailable(reason: String = "") -> void:
 	"""Surface a visible no-hub / no-AI empty state (UI listens on backend_unavailable)."""
 	var message: String = build_backend_unavailable_message(reason)

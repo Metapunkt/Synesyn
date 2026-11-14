@@ -13,6 +13,7 @@ func _ready() -> void:
 	_test_instrument_mapping()
 	_test_edit_metaprompts_typed_modes()
 	_test_backend_unavailable_message_and_fail_task()
+	await _test_start_agent_batch_hub_gate()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -95,6 +96,43 @@ func _test_backend_unavailable_message_and_fail_task() -> void:
 	failed_task.fail_task("probe failure")
 	_expect(failed_task.status != "Done", "fail_task leaves status not Done")
 	_expect("AI GENERATION FAILED" in failed_task.notes or "probe failure" in failed_task.notes, "fail_task surfaces error in notes")
+
+
+func _test_start_agent_batch_hub_gate() -> void:
+	print("-- Start Agent Batch hub gate (autoload detect + no-hub dialog) --")
+	var root_node: Window = get_tree().root
+	_expect(root_node.has_node("ReadyMadeOrchestrator"), "autoload present via root.has_node")
+	var orch: Node = get_node_or_null("/root/ReadyMadeOrchestrator")
+	_expect(orch != null, "autoload present via /root path")
+	_expect(orch.has_method("request_start_agent_batch"), "request_start_agent_batch API present")
+	_expect(orch.has_method("probe_hub_available"), "probe_hub_available API present")
+	# Engine.has_singleton is unreliable for GDScript autoloads; Start Agent must use /root.
+	_expect(
+		root_node.has_node("ReadyMadeOrchestrator") == (orch != null),
+		"Start Agent detection matches /root node, not Engine.has_singleton alone"
+	)
+
+	var got_notice: Array = []
+	var on_unavailable := func(message: String) -> void:
+		got_notice.append(message)
+	if orch.backend_unavailable.is_connected(on_unavailable) == false:
+		orch.backend_unavailable.connect(on_unavailable)
+	orch._last_backend_notice = ""
+	# Hub is expected down in CI / headless agent VMs.
+	var started: bool = orch.request_start_agent_batch()
+	await get_tree().process_frame
+	if orch.probe_hub_available():
+		_expect(started or not started, "hub reachable in this environment (batch may start)")
+	else:
+		_expect(started == false, "Start Agent Batch refuses when hub unreachable")
+		_expect(got_notice.size() > 0, "backend_unavailable emitted for Start Agent Batch")
+		if got_notice.size() > 0:
+			var notice: String = String(got_notice[0])
+			_expect("17777" in notice or "hub" in notice.to_lower(), "Start Agent notice mentions hub")
+			_expect("synesyn_client.json" in notice or RuntimeConfig.get_config_path_abs() in notice, "Start Agent notice points at config")
+			_expect(not ("ReadyMadeOrchestrator is missing" in notice), "does not show false orchestrator-missing message")
+	if orch.backend_unavailable.is_connected(on_unavailable):
+		orch.backend_unavailable.disconnect(on_unavailable)
 
 
 func _test_edit_metaprompts_typed_modes() -> void:

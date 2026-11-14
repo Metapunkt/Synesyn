@@ -665,46 +665,52 @@ func _on_backend_unavailable(message: String) -> void:
 	_show_error_dialog(message)
 
 
+func _resolve_readymade_orchestrator() -> Node:
+	"""Prefer the live /root autoload node over Engine.has_singleton (unreliable for GDScript)."""
+	var root_node: Node = get_tree().root if get_tree() else null
+	if root_node != null and root_node.has_node("ReadyMadeOrchestrator"):
+		return root_node.get_node("ReadyMadeOrchestrator")
+	return get_node_or_null("/root/ReadyMadeOrchestrator")
+
+
 func _on_start_agent_pressed():
 	print("Start agent batch pressed.")
-	if Engine.has_singleton("ReadyMadeOrchestrator"):
-		var orchestrator_singleton = ReadyMadeOrchestrator
-		if orchestrator_singleton.a1_agent:
-			# Start batch processing of all available tasks
-			if orchestrator_singleton.a1_agent.has_method("start_batch_processing"):
-				orchestrator_singleton.a1_agent.start_batch_processing()
-				print("MissionControl: 🚀 Agent batch processing started")
-			elif orchestrator_singleton.a1_agent.has_method("execute_all_tasks"):
-				orchestrator_singleton.a1_agent.execute_all_tasks()
-				print("MissionControl: 🚀 Agent processing all tasks")
-			else:
-				# Fallback: continuously execute tasks until queue is empty
-				orchestrator_singleton.a1_agent.execute_next_task()
-				print("MissionControl: 🚀 Agent started (single task mode - batch processing not available)")
-		else:
-			print("MissionControl: ⚠️ A1 Agent not found")
-			if orchestrator_singleton.has_method("notify_backend_unavailable"):
-				orchestrator_singleton.notify_backend_unavailable(
-					"A1 Synthesis Agent is not loaded, so drafting cannot start."
-				)
-	else:
-		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found")
+	var orchestrator_singleton: Node = _resolve_readymade_orchestrator()
+	if orchestrator_singleton == null:
+		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found on /root")
 		_show_error_dialog(
-			"ReadyMadeOrchestrator is missing. Restart the ReadyMade scene, then configure the hub in:\n"
+			"The AI backend (Synesyn hub / LLM) is not available.\n\n"
+			+ "What to do:\n"
+			+ "1. Start the Synesyn hub (services/synesyn_hub), usually at http://127.0.0.1:17777.\n"
+			+ "2. Configure hub.base_url and model credentials in:\n   "
 			+ RuntimeConfig.get_config_path_abs()
+			+ "\n3. Restart ReadyMade, then use Start Agent Batch again.\n\n"
+			+ "Failed generation leaves the task not Done so you can retry."
+		)
+		return
+	if orchestrator_singleton.has_method("request_start_agent_batch"):
+		orchestrator_singleton.request_start_agent_batch()
+		return
+	# Fallback: same hub dialog path used by drafting.
+	if orchestrator_singleton.has_method("notify_backend_unavailable"):
+		orchestrator_singleton.notify_backend_unavailable(
+			"Start Agent Batch is unavailable in this build."
 		)
 
 func _on_stop_agent_pressed():
 	print("Stop agent batch pressed.")
-	if Engine.has_singleton("ReadyMadeOrchestrator"):
-		var orchestrator_singleton = ReadyMadeOrchestrator
-		if orchestrator_singleton.a1_agent:
-			orchestrator_singleton.a1_agent.stop_processing()
-			print("MissionControl: ⏹️ Agent batch processing stopped")
-		else:
-			print("MissionControl: ⚠️ A1 Agent not found")
+	var orchestrator_singleton: Node = _resolve_readymade_orchestrator()
+	if orchestrator_singleton == null:
+		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found on /root")
+		return
+	var agent_node: Node = orchestrator_singleton.get("a1_agent") as Node
+	if agent_node == null:
+		agent_node = get_node_or_null("/root/A1SynthesisEngine")
+	if agent_node != null and agent_node.has_method("stop_processing"):
+		agent_node.stop_processing()
+		print("MissionControl: ⏹️ Agent batch processing stopped")
 	else:
-		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found")
+		print("MissionControl: ⚠️ A1 Agent not found")
 
 func _on_task_saved(task: WorkplanTask):
 	if not orchestrator:
