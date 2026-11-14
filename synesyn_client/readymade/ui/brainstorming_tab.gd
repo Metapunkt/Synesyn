@@ -32,7 +32,7 @@ func _on_tree_exited():
 @onready var export_button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportButton
 @onready var paste_button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/PasteButton
 @onready var toggle_chat_button: Button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/ToggleChatButton
-@onready var prompt_row: HBoxContainer = $MarginContainer/VBoxContainer/HBoxContainer
+@onready var prompt_row: Control = $MarginContainer/VBoxContainer/HBoxContainer
 @onready var status_label: Label = $StatusLabel
 
 # Context awareness UI components - will be created dynamically

@@ -134,12 +134,13 @@ func _setup_main_tabs_structural() -> void:
 	var external_bar := TabBar.new()
 	external_bar.name = "MainTabBar"
 	external_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	external_bar.clip_tabs = false
+	# Clip + scroll arrows when the window is narrower than all tab titles.
+	external_bar.clip_tabs = true
 	external_bar.tab_alignment = 0
 	external_bar.custom_minimum_size = Vector2(0, 44)
 	external_bar.add_theme_font_size_override("font_size", 15)
 	external_bar.add_theme_constant_override("h_separation", 12)
-	external_bar.add_theme_constant_override("tab_minimum_width", 88)
+	external_bar.add_theme_constant_override("tab_minimum_width", 72)
 	external_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	parent_node.remove_child(main_tab_container)

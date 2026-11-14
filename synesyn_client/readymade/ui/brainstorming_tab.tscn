@@ -3,43 +3,51 @@
 [ext_resource type="Script" uid="uid://cken1yf3ma805" path="res://readymade/ui/brainstorming_tab.gd" id="1_12345"]
 
 [node name="Brainstorming_tab" type="VBoxContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
+size_flags_horizontal = 3
 script = ExtResource("1_12345")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+clip_contents = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+clip_contents = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
 
 [node name="NewSessionButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
-text = "✨ New Session"
+tooltip_text = "Start a new brainstorming session"
+text = "✨ New"
 
 [node name="ImportButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
-text = "📥 Import Chat"
+tooltip_text = "Import chat history from JSON"
+text = "📥 Import"
 
 [node name="ExportButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
-text = "📤 Export Chat"
+tooltip_text = "Export chat history to JSON"
+text = "📤 Export"
 
 [node name="PasteButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2

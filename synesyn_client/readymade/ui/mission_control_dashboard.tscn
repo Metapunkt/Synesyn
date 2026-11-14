@@ -36,13 +36,15 @@ split_offset = 280
 dragger_visibility = 1
 
 [node name="LeftPanelContainer" type="PanelContainer" parent="HSplitContainer"]
-custom_minimum_size = Vector2(260, 0)
+clip_contents = true
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("2_abcde")
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/LeftPanelContainer"]
+clip_contents = true
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
@@ -50,6 +52,7 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="LeftColumnVBox" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -85,6 +88,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select your current work focus"
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="HSeparator_Mode" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
@@ -100,6 +104,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select your current workflow"
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="HSeparator_Workflow" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
@@ -119,6 +124,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select active workplan"
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="WorkplanManagerButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 layout_mode = 2
@@ -401,8 +407,11 @@ theme_type_variation = &"HeaderMedium"
 text = "📋 ACTIVE TASKS"
 horizontal_alignment = 1
 
-[node name="FilterSearchContainer" type="HBoxContainer" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer"]
+[node name="FilterSearchContainer" type="HFlowContainer" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 
 [node name="SelectAllButton" type="Button" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
 layout_mode = 2
@@ -410,24 +419,28 @@ tooltip_text = "Toggle between selecting all and deselecting all visible tasks"
 text = "☑️ Select All"
 
 [node name="SearchEdit" type="LineEdit" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "🔍 Search tasks..."
 
 [node name="StatusFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="PriorityFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="SortOption" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="RefreshButton" type="Button" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
 layout_mode = 2

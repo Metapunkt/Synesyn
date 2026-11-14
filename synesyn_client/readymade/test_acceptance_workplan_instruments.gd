@@ -17,6 +17,7 @@ func _ready() -> void:
 	await _test_start_agent_batch_hub_gate()
 	await _test_workplan_manager_ready_before_ui()
 	await _test_main_tab_center_mouse_clicks()
+	await _test_readymade_main_fills_viewport()
 	_test_first_launch_workplan_choice_api()
 	_test_path_getters_are_pure_and_migrations_explicit()
 	await _test_top_level_readymade_path_and_migration()
@@ -221,6 +222,59 @@ func _test_main_tab_center_mouse_clicks() -> void:
 				]
 			)
 	dash.queue_free()
+	await get_tree().process_frame
+
+
+func _test_readymade_main_fills_viewport() -> void:
+	print("-- ReadyMade main fills viewport (no letterbox / left clip) --")
+	var scene: PackedScene = load("res://readymade/readymade_main.tscn")
+	_expect(scene != null, "readymade_main.tscn loads")
+	if scene == null:
+		return
+	var root: Node = scene.instantiate()
+	_expect(root != null, "readymade_main instantiates")
+	if root == null:
+		return
+	add_child(root)
+	# Match the production bootstrap: real-pixel layout, no canvas_items crop.
+	var win: Window = get_window()
+	win.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	win.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+	win.content_scale_factor = 1.0
+
+	var sizes: Array[Vector2i] = [Vector2i(1152, 648), Vector2i(1366, 768), Vector2i(1920, 1080)]
+	for size_any in sizes:
+		var win_size: Vector2i = size_any
+		win.size = win_size
+		await get_tree().process_frame
+		await get_tree().process_frame
+		await get_tree().process_frame
+
+		var dash: Control = root.get_node_or_null("MissionControlDashboard") as Control
+		_expect(dash != null, "MissionControlDashboard present at %dx%d" % [win_size.x, win_size.y])
+		if dash == null:
+			continue
+
+		var vp_size: Vector2 = dash.get_viewport_rect().size
+		var dash_size: Vector2 = dash.size
+		_expect(
+			dash_size.x >= vp_size.x - 2.0 and dash_size.y >= vp_size.y - 2.0,
+			"dashboard fills viewport at %dx%d (dash=%.0fx%.0f vp=%.0fx%.0f)" % [
+				win_size.x, win_size.y, dash_size.x, dash_size.y, vp_size.x, vp_size.y
+			]
+		)
+
+		var left_panel: Control = dash.get_node_or_null("HSplitContainer/LeftPanelContainer") as Control
+		_expect(left_panel != null, "LeftPanelContainer present at %dx%d" % [win_size.x, win_size.y])
+		if left_panel != null:
+			var left_rect: Rect2 = left_panel.get_global_rect()
+			_expect(left_rect.position.x >= -1.0, "left panel not clipped past viewport left at %dx%d (x=%.1f)" % [win_size.x, win_size.y, left_rect.position.x])
+			_expect(left_rect.size.x >= 260.0, "left panel min width respected at %dx%d (w=%.0f)" % [win_size.x, win_size.y, left_rect.size.x])
+
+		var filter_row: Node = dash.find_child("FilterSearchContainer", true, false)
+		_expect(filter_row != null and filter_row is HFlowContainer, "FilterSearchContainer is HFlowContainer at %dx%d" % [win_size.x, win_size.y])
+
+	root.queue_free()
 	await get_tree().process_frame
 
 
