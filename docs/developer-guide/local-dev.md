@@ -1,14 +1,30 @@
 # Local development
 
+## Recommended builds
+
+Synesyn does **not** ship or bundle Godot or LimboAI. Both are open-source
+dependencies that each user installs themselves. The versions below are
+**recommended / tested-with** builds: what CI runs and what we recommend for
+local development. The single source of truth (including download URLs and
+SHA256 checksums) is
+[`utilities/checks/tool_versions.env`](https://github.com/Metapunkt/Synesyn/blob/main/utilities/checks/tool_versions.env).
+
+| Dependency | Recommended build | Official download |
+| --- | --- | --- |
+| Godot | **4.7.2-stable** (project declares `4.7`) | [Godot download](https://godotengine.org/download/) · [4.7.2-stable release](https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip) |
+| LimboAI | **v1.8.0**, GDExtension build labeled for Godot **4.6** (`limboai+v1.8.0.gdextension-4.6.zip`) | [LimboAI releases](https://github.com/limbonaut/limboai/releases) |
+
+The LimboAI 4.6 GDExtension build works under Godot 4.7.x. Upstream does not
+publish a `gdextension-4.7` zip yet; we stay on the GDExtension 4.6 artifact
+(not a custom LimboAI module editor).
+
 ## Prerequisites
 
-- **Godot 4.7.x.** The project declares `4.7`. CI pins **4.7.2-stable** (see
-  `utilities/checks/tool_versions.env`).
+- **Godot 4.7.x** — install the recommended build above yourself.
 - **Python 3.11** for the hub. `services/synesyn_hub/environment.yml` pins it.
-- **LimboAI v1.8.0 binaries**, which are not redistributed here. Install them
-  before opening the project — see below. CI downloads the same pin from
-  `utilities/checks/tool_versions.env` (GDExtension artifact labeled for Godot 4.6;
-  LimboAI does not currently ship a `gdextension-4.7` zip).
+- **LimboAI v1.8.0 binaries** — not redistributed in this repository. Install
+  them before opening the project — see below. CI uses the same recommended
+  build from `utilities/checks/tool_versions.env`.
 
 ### Installing LimboAI (required before the first open)
 
@@ -18,16 +34,17 @@ Android, all published upstream under MIT. That directory also holds
 `limboai.gdextension`, the descriptor Godot reads to register the extension, so
 without it the addon does not load and the project will not open cleanly.
 
-1. Download the release matching `synesyn_client/addons/limboai/version.txt`
-   (**v1.8.0**) for Godot 4.x from
+1. Download the recommended release matching
+   `synesyn_client/addons/limboai/version.txt` (**v1.8.0**) — the GDExtension
+   zip for Godot 4.6 — from
    [LimboAI releases](https://github.com/limbonaut/limboai/releases).
 2. Copy the `addons/limboai/bin/` directory from the archive into
    `synesyn_client/addons/limboai/bin/`.
 3. Confirm `synesyn_client/addons/limboai/bin/limboai.gdextension` exists, then
    open `synesyn_client/` in Godot.
 
-The pinned version matters: the GDExtension ABI is tied to the Godot version, so
-a mismatched build fails to load rather than degrading.
+Matching the recommended build matters: the GDExtension ABI is tied to the
+Godot version, so a mismatched build fails to load rather than degrading.
 
 ### Story Stage character art (optional)
 

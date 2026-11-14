@@ -11,10 +11,14 @@ Synesyn is research software from a funded pilot. Expect rough edges.
   `services/synesyn_hub/synesyn_hub.exe`.
 - **If you are running from source:** budget half an hour for the first setup.
   You will need:
-  - **Godot 4.7.x**, from [godotengine.org](https://godotengine.org/download).
-    The standard build is fine; you do not need the .NET version.
-  - **The LimboAI addon binaries**, which are excluded from this repository for
-    size reasons. One download and one copy — see
+  - **Godot 4.7.x** (recommended **4.7.2-stable**), from
+    [godotengine.org](https://godotengine.org/download). Synesyn does not ship
+    Godot; install it yourself. The standard build is fine; you do not need the
+    .NET version. See
+    [Recommended builds](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#recommended-builds).
+  - **The LimboAI addon binaries** (recommended **v1.8.0**, GDExtension for
+    Godot 4.6), which are excluded from this repository for size reasons —
+    Synesyn does not redistribute them. One download and one copy — see
     [installing LimboAI](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#installing-limboai-required-before-the-first-open).
     The project will not open cleanly without them.
   - **An API key for a language model**, or a local model. Nothing generative

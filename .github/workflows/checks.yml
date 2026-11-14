@@ -6,7 +6,8 @@ name: Checks
 #
 # ScenSyn harness specs are not run here (live hub session). ReadyMade has a
 # headless acceptance scene that only needs Godot + LimboAI binaries; that job
-# is wired below. Tool pins live in utilities/checks/tool_versions.env.
+# is wired below. Recommended / tested-with builds (not shipped by Synesyn)
+# live in utilities/checks/tool_versions.env — users install them themselves.
 
 on:
   push:
@@ -57,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Load tool version pins
+      - name: Load recommended tool versions
         id: pins
         run: |
           set -euo pipefail
@@ -74,20 +75,20 @@ jobs:
             echo "limboai_zip=${LIMBOAI_ZIP_NAME}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Install Godot (pinned)
+      - name: Install Godot (recommended / tested-with)
         run: |
           set -euo pipefail
           curl -fsSL -o /tmp/godot.zip "${{ steps.pins.outputs.godot_url }}"
           echo "${{ steps.pins.outputs.godot_sha256 }}  /tmp/godot.zip" | sha256sum -c -
           sudo unzip -o /tmp/godot.zip -d /usr/local/bin
-          # Stable linux zip ships Godot_vX.Y.Z-stable_linux.x86_64 (no .exe).
+          # Stable linux zip contains Godot_vX.Y.Z-stable_linux.x86_64 (no .exe).
           GODOT_BIN_NAME="$(basename "${{ steps.pins.outputs.godot_zip }}" .zip)"
           sudo mv "/usr/local/bin/${GODOT_BIN_NAME}" /usr/local/bin/godot
           sudo chmod +x /usr/local/bin/godot
           godot --version
-          echo "Pinned Godot: ${{ steps.pins.outputs.godot_version }}"
+          echo "Recommended Godot (CI tested-with): ${{ steps.pins.outputs.godot_version }}"
 
-      - name: Install LimboAI GDExtension binaries (pinned)
+      - name: Install LimboAI GDExtension (recommended / tested-with)
         run: |
           set -euo pipefail
           curl -fsSL -o /tmp/limboai.zip "${{ steps.pins.outputs.limboai_url }}"
@@ -96,7 +97,7 @@ jobs:
           mkdir -p synesyn_client/addons/limboai/bin
           cp -a /tmp/limboai/addons/limboai/bin/. synesyn_client/addons/limboai/bin/
           test -f synesyn_client/addons/limboai/bin/limboai.gdextension
-          echo "Pinned LimboAI: ${{ steps.pins.outputs.limboai_version }} (${{ steps.pins.outputs.limboai_zip }})"
+          echo "Recommended LimboAI (CI tested-with): ${{ steps.pins.outputs.limboai_version }} (${{ steps.pins.outputs.limboai_zip }})"
 
       - name: Import project + run ReadyMade acceptance
         run: |
