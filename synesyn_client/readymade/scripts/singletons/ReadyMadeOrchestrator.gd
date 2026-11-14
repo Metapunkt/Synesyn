@@ -4,11 +4,13 @@ extends Node
 const WorkplanTaskScript = preload("res://readymade/data/workplan_task.gd")
 
 signal workplan_loaded
+signal backend_unavailable(message: String)
 
 # Use WorkplanManager instead of direct workplan management
 var workplan_manager: Node
 var workplan: Workplan  # Current active workplan (for compatibility)
 var a1_agent: Node
+var _last_backend_notice: String = ""
 
 func _ready():
 	print("🚀 ReadyMadeOrchestrator is ready")
@@ -259,6 +261,32 @@ func save_workplan():
 	"""Manually save the workplan"""
 	if workplan_manager:
 		workplan_manager.save_current_workplan()
+
+
+func build_backend_unavailable_message(reason: String = "") -> String:
+	"""User-facing guidance when hub / LLM backend is missing."""
+	var config_path: String = RuntimeConfig.get_config_path_abs()
+	var detail: String = reason.strip_edges()
+	if detail.is_empty():
+		detail = "The AI backend (Synesyn hub / LLM) is not available."
+	return (
+		"%s\n\n"
+		+ "What to do:\n"
+		+ "1. Start the Synesyn hub (services/synesyn_hub), usually at http://127.0.0.1:17777.\n"
+		+ "2. Configure hub.base_url and model credentials in:\n   %s\n"
+		+ "3. Restart ReadyMade, then use Start Agent Batch again.\n\n"
+		+ "Failed generation leaves the task not Done so you can retry."
+	) % [detail, config_path]
+
+
+func notify_backend_unavailable(reason: String = "") -> void:
+	"""Surface a visible no-hub / no-AI empty state (UI listens on backend_unavailable)."""
+	var message: String = build_backend_unavailable_message(reason)
+	# Avoid spamming identical dialogs during batch retries.
+	if message == _last_backend_notice:
+		return
+	_last_backend_notice = message
+	backend_unavailable.emit(message)
 
 func reset_workplan():
 	"""Reset workplan to default tasks (useful for testing)"""

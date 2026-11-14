@@ -772,8 +772,15 @@ Failed at: %s""" % [
 
 	# Trigger persistence so the failed state and notes are saved
 	var orchestrator = blackboard.get_var("orchestrator")
+	if orchestrator == null:
+		var tree: SceneTree = Engine.get_main_loop() as SceneTree
+		if tree:
+			orchestrator = tree.root.get_node_or_null("ReadyMadeOrchestrator")
 	if orchestrator:
-		orchestrator.update_task(task)
+		if orchestrator.has_method("update_task"):
+			orchestrator.update_task(task)
+		if orchestrator.has_method("notify_backend_unavailable"):
+			orchestrator.notify_backend_unavailable(failure_detail)
 
 	processing_state = "failed"
 	task_completed = true

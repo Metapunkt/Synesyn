@@ -12,6 +12,7 @@ func _ready() -> void:
 
 	_test_instrument_mapping()
 	_test_edit_metaprompts_typed_modes()
+	_test_backend_unavailable_message_and_fail_task()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -76,6 +77,24 @@ func _test_instrument_mapping() -> void:
 		CosmicInstruments.display_name("RP") == CosmicInstruments.NAME_RP,
 		"display_name(RP) is canonical long name"
 	)
+
+
+func _test_backend_unavailable_message_and_fail_task() -> void:
+	print("-- backend unavailable message + fail_task --")
+	var orchestrator = get_node_or_null("/root/ReadyMadeOrchestrator")
+	_expect(orchestrator != null, "ReadyMadeOrchestrator present for backend message")
+	if orchestrator and orchestrator.has_method("build_backend_unavailable_message"):
+		var msg: String = orchestrator.build_backend_unavailable_message("Hub offline for test")
+		_expect("Hub offline for test" in msg, "message includes reason")
+		_expect("17777" in msg or "hub" in msg.to_lower(), "message mentions hub")
+		var config_path: String = RuntimeConfig.get_config_path_abs()
+		_expect(config_path in msg or "synesyn_client.json" in msg, "message points at config path")
+	var failed_task := WorkplanTask.new()
+	failed_task.title = "Fail Probe"
+	failed_task.status = "In Progress"
+	failed_task.fail_task("probe failure")
+	_expect(failed_task.status != "Done", "fail_task leaves status not Done")
+	_expect("AI GENERATION FAILED" in failed_task.notes or "probe failure" in failed_task.notes, "fail_task surfaces error in notes")
 
 
 func _test_edit_metaprompts_typed_modes() -> void:

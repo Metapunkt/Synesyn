@@ -228,6 +228,11 @@ func _setup_connections():
 	start_agent_button.pressed.connect(_on_start_agent_pressed)
 	stop_agent_button.pressed.connect(_on_stop_agent_pressed)
 	refresh_button.pressed.connect(_on_refresh_pressed)
+
+	# Visible no-hub / no-AI empty state (not console-only)
+	if ReadyMadeOrchestrator and ReadyMadeOrchestrator.has_signal("backend_unavailable"):
+		if not ReadyMadeOrchestrator.backend_unavailable.is_connected(_on_backend_unavailable):
+			ReadyMadeOrchestrator.backend_unavailable.connect(_on_backend_unavailable)
 	
 	# Task list management buttons
 	new_task_list_button.pressed.connect(_on_new_task_list_pressed)
@@ -655,6 +660,11 @@ func _show_info_dialog(message: String):
 func _on_refresh_pressed():
 	_refresh_dashboard()
 
+func _on_backend_unavailable(message: String) -> void:
+	"""Show actionable guidance when hub / LLM is missing."""
+	_show_error_dialog(message)
+
+
 func _on_start_agent_pressed():
 	print("Start agent batch pressed.")
 	if Engine.has_singleton("ReadyMadeOrchestrator"):
@@ -673,8 +683,16 @@ func _on_start_agent_pressed():
 				print("MissionControl: 🚀 Agent started (single task mode - batch processing not available)")
 		else:
 			print("MissionControl: ⚠️ A1 Agent not found")
+			if orchestrator_singleton.has_method("notify_backend_unavailable"):
+				orchestrator_singleton.notify_backend_unavailable(
+					"A1 Synthesis Agent is not loaded, so drafting cannot start."
+				)
 	else:
 		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found")
+		_show_error_dialog(
+			"ReadyMadeOrchestrator is missing. Restart the ReadyMade scene, then configure the hub in:\n"
+			+ RuntimeConfig.get_config_path_abs()
+		)
 
 func _on_stop_agent_pressed():
 	print("Stop agent batch pressed.")
