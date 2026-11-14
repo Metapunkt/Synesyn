@@ -70,7 +70,7 @@ enabled=PackedStringArray("res://addons/synesyn_core/plugin.cfg", "res://addons/
 
 [gdextension]
 
-#LimboAIprovidesBTTask/BTPlayer/BehaviorTree/Blackboardtypes#usedbyScenSyn,Metapunkt,andReadyMadebehavior-treescripts.limboai="res://addons/limboai/bin/limboai.gdextension"
+"#LimboAIprovidesBTTask/BTPlayer/BehaviorTree/BlackboardtypesusedbyScenSyn,#Metapunkt,andReadyMade.Godotdiscoversres://addons/limboai/bin/limboai.gdextension#andregenerates.godot/extension_list.cfgâdonotcommitorrelyonthatcache.#limboai"="res://addons/limboai/bin/limboai.gdextension"
 
 [input_devices]
 

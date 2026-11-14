@@ -99,9 +99,16 @@ jobs:
           test -f synesyn_client/addons/limboai/bin/limboai.gdextension
           echo "Recommended LimboAI (CI tested-with): ${{ steps.pins.outputs.limboai_version }} (${{ steps.pins.outputs.limboai_zip }})"
 
+      - name: Fresh-clone import smoke (LimboAI / parse errors)
+        run: |
+          set -euo pipefail
+          chmod +x utilities/checks/run_fresh_import_smoke.sh
+          GODOT_BIN="$(command -v godot)" utilities/checks/run_fresh_import_smoke.sh
+
       - name: Import project + run ReadyMade acceptance
         run: |
           set -euo pipefail
+          # .godot already built by fresh-import smoke; re-import is cheap/idempotent.
           godot --headless --path synesyn_client --import --quit-after 60
           chmod +x utilities/checks/run_readymade_acceptance.sh
           GODOT_BIN="$(command -v godot)" utilities/checks/run_readymade_acceptance.sh

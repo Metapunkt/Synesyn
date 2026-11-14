@@ -46,6 +46,31 @@ without it the addon does not load and the project will not open cleanly.
 Matching the recommended build matters: the GDExtension ABI is tied to the
 Godot version, so a mismatched build fails to load rather than degrading.
 
+### First launch (fresh clone)
+
+The first time you open `synesyn_client/` in Godot (or run
+`godot --headless --path synesyn_client --import`), Godot imports assets and
+registers GDExtensions, writing `.godot/` (including `extension_list.cfg`).
+That cache is local — do not commit it.
+
+On that first open you may see transient errors such as
+`Could not find base class "BTPlayer"` / `BTTask` / `BTAction`, or
+`Failed loading resource` for theme / JetBrains Mono fonts under the
+project's `theme/fonts` and `csr/thirdparty/fonts` folders. Those clear
+after the import finishes. Use **Project → Reload Current Project**, or
+run a headless import first, then open the editor again.
+
+Benign init-order warnings that can appear even after a healthy reload (safe
+to ignore): `Logging service not available`,
+`ContentBus: NotificationManager not found`, and
+`ContentListView: ContentStateResource not injected yet`. They come from
+autoload/plugin startup order, not from a broken LimboAI install.
+
+If `Could not find type "BTPlayer"` persists on
+`res://readymade/agents/a1_agent.gd` after reload, LimboAI did not register —
+confirm `addons/limboai/bin/limboai.gdextension` and the platform binary exist
+(see Recommended builds above).
+
 ### Story Stage character art (optional)
 
 `synesyn_client/ScenSyn/story_stage/sprites/` is excluded for the same reason at a

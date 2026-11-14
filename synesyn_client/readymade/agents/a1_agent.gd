@@ -3,10 +3,14 @@ extends Node
 class_name A1SynthesisEngine
 ## A1 Synthesis Engine Agent - Processes Found Concepts using LimboAI
 
-@onready var bt_player: BTPlayer = $BTPlayer
+# Typed as Node (not BTPlayer) so this script can parse before/without the
+# LimboAI GDExtension registering ClassDB types. The child is still a BTPlayer
+# when LimboAI is installed (see a1_synthesis_engine.tscn).
+@onready var bt_player: Node = get_node_or_null("BTPlayer")
 var current_task: WorkplanTask = null
 var processing_active: bool = false
 var completion_timer: Timer = null
+static var _limboai_missing_warned: bool = false
 
 # Enhanced robustness features
 var task_queue: Array[WorkplanTask] = []
@@ -31,6 +35,23 @@ signal task_completed(task: WorkplanTask, success: bool)
 signal processing_error(error_message: String)
 signal queue_status_changed(queue_size: int)
 
+func _limboai_bt_player_available() -> bool:
+	if bt_player == null or not is_instance_valid(bt_player):
+		bt_player = get_node_or_null("BTPlayer")
+	if bt_player != null and is_instance_valid(bt_player):
+		return true
+	if not ClassDB.class_exists("BTPlayer"):
+		if not _limboai_missing_warned:
+			_limboai_missing_warned = true
+			push_warning(
+				"A1SynthesisEngine: LimboAI GDExtension not loaded (BTPlayer missing). "
+				+ "Install the recommended LimboAI binaries — see docs/developer-guide/local-dev.md#recommended-builds. "
+				+ "Behavior-tree drafting is unavailable until then."
+			)
+		return false
+	return false
+
+
 func _ready():
 	print("A1 Synthesis Engine initializing...")
 	
@@ -38,7 +59,7 @@ func _ready():
 	if not is_inside_tree():
 		await tree_entered
 	
-	# Wait for BTPlayer to be fully initialized
+	# Wait for BTPlayer child to be fully initialized
 	if get_tree():
 		await get_tree().process_frame
 	
@@ -48,20 +69,24 @@ func _ready():
 		printerr("A1Agent: ReadyMadeOrchestrator singleton not found!")
 		return
 	
-	# Set up blackboard with orchestrator
-	if bt_player and bt_player.blackboard:
-		bt_player.blackboard.set_var("orchestrator", orchestrator)
+	if not _limboai_bt_player_available():
+		return
+	
+	# Set up blackboard with orchestrator (duck-typed LimboAI Blackboard)
+	var blackboard: Variant = bt_player.get("blackboard")
+	if blackboard != null and blackboard.has_method("set_var"):
+		blackboard.set_var("orchestrator", orchestrator)
 		print("A1Agent: Blackboard initialized with orchestrator")
 	else:
 		printerr("A1Agent: BTPlayer or blackboard not found!")
 		printerr("  bt_player: ", bt_player)
 		if bt_player:
-			printerr("  bt_player.blackboard: ", bt_player.blackboard)
+			printerr("  bt_player.blackboard: ", bt_player.get("blackboard"))
 
 func stop_processing():
 	"""Stop the behavior tree execution"""
-	if bt_player:
-		bt_player.set_active(false)
+	if bt_player and bt_player.has_method("set_active"):
+		bt_player.call("set_active", false)
 		print("A1Agent: Behavior tree stopped")
 	else:
 		printerr("A1Agent: BTPlayer not found!")
@@ -111,27 +136,29 @@ func _start_task_processing(task: WorkplanTask):
 	task_started.emit(task)
 	task_progress_updated.emit(task, 0.0, "Initializing...")
 	
-	if not bt_player:
-		_handle_processing_error("BTPlayer not found!", task)
+	if not _limboai_bt_player_available():
+		_handle_processing_error("BTPlayer not found (LimboAI missing or not loaded)!", task)
 		return
 	
 	# Ensure behavior tree is active but not running yet
-	bt_player.set_active(false)
+	if bt_player.has_method("set_active"):
+		bt_player.call("set_active", false)
 	
 	# Set blackboard variables with validation
-	if bt_player.blackboard:
+	var blackboard: Variant = bt_player.get("blackboard")
+	if blackboard != null and blackboard.has_method("set_var"):
 		var orchestrator = ReadyMadeOrchestrator
-		bt_player.blackboard.set_var("orchestrator", orchestrator)
-		bt_player.blackboard.set_var("current_task", task)
+		blackboard.set_var("orchestrator", orchestrator)
+		blackboard.set_var("current_task", task)
 		
 		# Add ModeManager for mode-aware prompting
 		if ModeManager:
-			bt_player.blackboard.set_var("mode_manager", ModeManager)
+			blackboard.set_var("mode_manager", ModeManager)
 		
 		# Verify the variables were set correctly
-		var check_orchestrator = bt_player.blackboard.get_var("orchestrator")
-		var check_task = bt_player.blackboard.get_var("current_task")
-		var check_mode_manager = bt_player.blackboard.get_var("mode_manager")
+		var check_orchestrator = blackboard.get_var("orchestrator")
+		var check_task = blackboard.get_var("current_task")
+		var check_mode_manager = blackboard.get_var("mode_manager")
 		
 		if not check_orchestrator or not check_task:
 			_handle_processing_error("Failed to set blackboard variables", task)
@@ -143,7 +170,8 @@ func _start_task_processing(task: WorkplanTask):
 		print("  - mode_manager: ", check_mode_manager != null, " (", check_mode_manager.get_current_mode() if check_mode_manager else "null", ")")
 		
 		# Start execution with timeout monitoring
-		bt_player.restart()
+		if bt_player.has_method("restart"):
+			bt_player.call("restart")
 		task_progress_updated.emit(task, 10.0, "Processing with AI...")
 		print("A1Agent: ✓ Behavior tree started with task: ", task.core_idea)
 		
@@ -290,7 +318,8 @@ func _finish_current_task():
 	
 	# Stop current behavior tree
 	if bt_player:
-		bt_player.set_active(false)
+		if bt_player.has_method("set_active"):
+			bt_player.call("set_active", false)
 	
 	# Clean up timer
 	if completion_timer:
@@ -349,8 +378,8 @@ func process_specific_task(task: WorkplanTask):
 		queue_status_changed.emit(task_queue.size())
 		
 		# Stop current processing
-		if bt_player:
-			bt_player.set_active(false)
+		if bt_player and bt_player.has_method("set_active"):
+			bt_player.call("set_active", false)
 		if completion_timer:
 			completion_timer.queue_free()
 			completion_timer = null

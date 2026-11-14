@@ -37,10 +37,18 @@ access. When running from source:
 
 1. Install the LimboAI binaries as linked above.
 2. Open `synesyn_client/` in Godot and let it import. The first import takes a
-   few minutes.
+   few minutes. On a fresh clone, transient `BTPlayer` / `BTTask` / font-load
+   errors during that first import are expected; use
+   **Project → Reload Current Project** (or run
+   `godot --headless --import` first). Details:
+   [First launch (fresh clone)](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#first-launch-fresh-clone).
 3. Set up model access (next section), or the session will start and then fail to
    respond.
 4. Press play.
+
+Warnings about `Logging service not available`, `NotificationManager not found`,
+or `ContentStateResource not injected yet` are benign init-order messages and
+can be ignored.
 
 The hub starts on its own if it is present and not already running, and adopts
 one that is already running rather than starting a second (ADR 0021). You only
