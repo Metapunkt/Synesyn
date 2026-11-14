@@ -582,6 +582,25 @@ func remove_custom_channel(channel_label: String) -> bool:
 	return true
 
 
+func move_custom_channel(from_index: int, to_index: int) -> bool:
+	"""Reorder a custom destination. Used by the Manage Channels UI."""
+	if current_workplan == null:
+		return false
+	var channels: Array[String] = current_workplan.custom_channels
+	if from_index < 0 or from_index >= channels.size():
+		return false
+	if to_index < 0 or to_index >= channels.size():
+		return false
+	if from_index == to_index:
+		return true
+	var label: String = channels[from_index]
+	channels.remove_at(from_index)
+	channels.insert(to_index, label)
+	current_workplan.custom_channels = channels
+	save_current_workplan()
+	return true
+
+
 func get_effective_channels() -> Array[String]:
 	"""Mode platform defaults plus the current workplan's custom destinations."""
 	var combined: Array[String] = []

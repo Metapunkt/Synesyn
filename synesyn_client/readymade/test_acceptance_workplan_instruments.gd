@@ -32,6 +32,7 @@ func _ready() -> void:
 	_test_calendar_filters()
 	_test_publish_timezone()
 	_test_cadence_caps()
+	_test_community_post_template_and_copy_markdown()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -166,6 +167,9 @@ func _test_custom_channels_and_no_org_presets() -> void:
 	var after_set: Array[String] = manager.get_custom_channels()
 	_expect(after_set.size() == 2, "set_custom_channels size 2 after dedupe")
 	_expect(after_set.has("#dest_one") and after_set.has("#dest_two"), "set_custom_channels values")
+	_expect(manager.move_custom_channel(0, 1), "move_custom_channel reorders")
+	var after_move: Array[String] = manager.get_custom_channels()
+	_expect(after_move.size() == 2 and after_move[0] == "#dest_two", "reorder puts #dest_two first")
 
 	var effective: Array[String] = manager.get_effective_channels()
 	_expect(effective.has("#dest_one"), "get_effective_channels includes custom")
@@ -1173,6 +1177,30 @@ func _test_cadence_caps() -> void:
 	t.title = "One"
 	light.months["2026-11"] = [t]
 	_expect(CadenceScript.validate(light).is_empty(), "under cap has no warnings")
+
+
+func _test_community_post_template_and_copy_markdown() -> void:
+	print("-- community post template + copy markdown --")
+	_expect(
+		FormatTemplates.get_all_formats().has("Community Post"),
+		"Community Post format template registered"
+	)
+	var tmpl: Dictionary = FormatTemplates.get_template("Community Post")
+	_expect(not tmpl.is_empty(), "Community Post template non-empty")
+	_expect(tmpl.get("structure", []).has("hook"), "Community Post has hook section")
+	const MarkdownScript = preload("res://readymade/scripts/workplan_task_markdown.gd")
+	var task := WorkplanTask.new()
+	task.title = "Friday roundup"
+	task.channel = "#general"
+	task.publish_date = "2026-11-14"
+	task.publish_time = "11:00"
+	task.publish_timezone = "Europe/Oslo"
+	task.generated_content = "This week in the studio map."
+	task.set_content_status("draft")
+	var md: String = MarkdownScript.to_clipboard_markdown(task)
+	_expect(md.find("Friday roundup") >= 0, "copy markdown includes title")
+	_expect(md.find("#general") >= 0, "copy markdown includes channel")
+	_expect(md.find("This week in the studio map") >= 0, "copy markdown includes draft")
 
 
 func _wipe_dir(path: String) -> void:

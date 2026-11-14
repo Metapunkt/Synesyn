@@ -473,30 +473,23 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 		var selected3 = list.get_selected_items()
 		if selected3.is_empty() or selected3[0] <= 0:
 			return
-		var channels: Array = workplan_manager.get_custom_channels()
 		var idx: int = selected3[0]
-		var tmp = channels[idx - 1]
-		channels[idx - 1] = channels[idx]
-		channels[idx] = tmp
-		workplan_manager.set_custom_channels(channels)
-		refresh.call()
-		list.select(idx - 1)
+		if workplan_manager.move_custom_channel(idx, idx - 1):
+			refresh.call()
+			list.select(idx - 1)
 	)
 	actions.add_child(up_btn)
 	var down_btn = Button.new()
 	down_btn.text = "↓"
 	down_btn.pressed.connect(func():
 		var selected4 = list.get_selected_items()
-		var channels2: Array = workplan_manager.get_custom_channels()
-		if selected4.is_empty() or selected4[0] >= channels2.size() - 1:
+		var channel_count: int = workplan_manager.get_custom_channels().size()
+		if selected4.is_empty() or selected4[0] >= channel_count - 1:
 			return
 		var idx2: int = selected4[0]
-		var tmp2 = channels2[idx2 + 1]
-		channels2[idx2 + 1] = channels2[idx2]
-		channels2[idx2] = tmp2
-		workplan_manager.set_custom_channels(channels2)
-		refresh.call()
-		list.select(idx2 + 1)
+		if workplan_manager.move_custom_channel(idx2, idx2 + 1):
+			refresh.call()
+			list.select(idx2 + 1)
 	)
 	actions.add_child(down_btn)
 	add_child(dialog)
