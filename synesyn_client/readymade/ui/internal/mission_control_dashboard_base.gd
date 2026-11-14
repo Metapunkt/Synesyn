@@ -61,6 +61,8 @@ var calendar_last_task_count: int = -1  # Track task count to avoid unnecessary 
 var max_cards_per_day: int = 4
 var dragging_task: WorkplanTask = null
 var drag_source_date_type: String = ""  # "start" or "deadline"
+var calendar_view_mode: String = "month"  # month | week | agenda
+var calendar_view_mode_button: OptionButton = null
 
 var workplan: Dictionary
 var task_card_scene = preload("res://readymade/components/workplan_task_card.tscn")

@@ -32,8 +32,39 @@ func _setup_calendar():
 	
 	# Setup month and year selectors
 	_setup_month_year_selectors()
+	_setup_calendar_view_mode_selector()
 	
 	# Build the calendar grid
+	_build_calendar_grid()
+
+
+func _setup_calendar_view_mode_selector() -> void:
+	"""Add Month/Week/Agenda switcher beside calendar navigation."""
+	if calendar_view_mode_button != null and is_instance_valid(calendar_view_mode_button):
+		return
+	if today_btn == null or today_btn.get_parent() == null:
+		return
+	calendar_view_mode_button = OptionButton.new()
+	calendar_view_mode_button.name = "CalendarViewModeButton"
+	calendar_view_mode_button.tooltip_text = "Switch calendar view"
+	calendar_view_mode_button.add_item("Month")
+	calendar_view_mode_button.add_item("Week")
+	calendar_view_mode_button.add_item("Agenda")
+	calendar_view_mode_button.selected = 0
+	calendar_view_mode_button.item_selected.connect(_on_calendar_view_mode_selected)
+	today_btn.get_parent().add_child(calendar_view_mode_button)
+	today_btn.get_parent().move_child(calendar_view_mode_button, today_btn.get_index() + 1)
+
+
+func _on_calendar_view_mode_selected(index: int) -> void:
+	match index:
+		1:
+			calendar_view_mode = "week"
+		2:
+			calendar_view_mode = "agenda"
+		_:
+			calendar_view_mode = "month"
+	calendar_last_task_count = -1
 	_build_calendar_grid()
 
 func _setup_month_year_selectors():
@@ -65,7 +96,15 @@ func _build_calendar_grid():
 	for child in calendar_grid.get_children():
 		child.queue_free()
 	calendar_day_cells.clear()
+
+	if calendar_view_mode == "week":
+		_build_week_calendar_grid()
+		return
+	if calendar_view_mode == "agenda":
+		_build_agenda_calendar_grid()
+		return
 	
+	calendar_grid.columns = 7
 	# Add day headers
 	var day_names = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 	for day_name in day_names:
@@ -102,6 +141,100 @@ func _build_calendar_grid():
 	
 	# Populate with tasks after a short delay to ensure nodes are in scene tree
 	call_deferred("_populate_calendar_with_tasks")
+
+
+func _build_week_calendar_grid() -> void:
+	"""Seven day columns for the week containing the currently selected month/day context."""
+	calendar_grid.columns = 7
+	var day_names = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+	for day_name in day_names:
+		var header = Label.new()
+		header.text = day_name
+		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		header.add_theme_color_override("font_color", Color.GRAY)
+		header.add_theme_font_size_override("font_size", 12)
+		calendar_grid.add_child(header)
+
+	var today: Dictionary = Time.get_datetime_dict_from_system()
+	var anchor_day: int = int(today.day)
+	if current_calendar_year != int(today.year) or current_calendar_month != int(today.month):
+		anchor_day = 1
+	var anchor := {
+		"year": current_calendar_year,
+		"month": current_calendar_month,
+		"day": anchor_day,
+		"hour": 0,
+		"minute": 0,
+		"second": 0,
+	}
+	var anchor_unix: int = int(Time.get_unix_time_from_datetime_dict(anchor))
+	var weekday: int = int(Time.get_datetime_dict_from_unix_time(anchor_unix).weekday)
+	var week_start_unix: int = anchor_unix - (weekday * 86400)
+	for offset in range(7):
+		var day_unix: int = week_start_unix + (offset * 86400)
+		var day_dict: Dictionary = Time.get_datetime_dict_from_unix_time(day_unix)
+		var day_num: int = int(day_dict.day)
+		# Reuse month cell renderer when the day belongs to the visible month.
+		if int(day_dict.year) == current_calendar_year and int(day_dict.month) == current_calendar_month:
+			var day_cell: Control = _create_day_cell(day_num)
+			calendar_grid.add_child(day_cell)
+			calendar_day_cells.append(day_cell)
+		else:
+			var filler := PanelContainer.new()
+			filler.custom_minimum_size = Vector2(72, 72)
+			filler.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			var lbl := Label.new()
+			lbl.text = str(day_num)
+			lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			lbl.add_theme_color_override("font_color", Color.GRAY)
+			filler.add_child(lbl)
+			calendar_grid.add_child(filler)
+	call_deferred("_populate_calendar_with_tasks")
+
+
+func _build_agenda_calendar_grid() -> void:
+	"""Chronological upcoming-task list grouped by date."""
+	calendar_grid.columns = 1
+	var workplan_obj = ReadyMadeOrchestrator.workplan if ReadyMadeOrchestrator else null
+	var all_tasks: Array = workplan_obj.get_all_tasks() if workplan_obj else []
+	var by_date: Dictionary = {}
+	for task_any in all_tasks:
+		var task: WorkplanTask = task_any as WorkplanTask
+		if task == null:
+			continue
+		var raw_date: String = task.get_calendar_display_date()
+		if raw_date.is_empty():
+			continue
+		var day_prefix: String = raw_date.substr(0, mini(10, raw_date.length()))
+		if not by_date.has(day_prefix):
+			by_date[day_prefix] = []
+		(by_date[day_prefix] as Array).append(task)
+	var dates: Array = by_date.keys()
+	dates.sort()
+	var today: String = Time.get_date_string_from_system()
+	var shown := 0
+	for date_any in dates:
+		var date_key: String = String(date_any)
+		if date_key < today:
+			continue
+		var header := Label.new()
+		header.text = date_key
+		header.add_theme_font_size_override("font_size", 14)
+		calendar_grid.add_child(header)
+		for task_any2 in by_date[date_key]:
+			var agenda_task: WorkplanTask = task_any2 as WorkplanTask
+			if agenda_task == null:
+				continue
+			var row := Label.new()
+			row.text = "• %s (%s)" % [agenda_task.title, agenda_task.status]
+			calendar_grid.add_child(row)
+			shown += 1
+	if shown == 0:
+		var empty := Label.new()
+		empty.text = "No upcoming tasks in the agenda."
+		calendar_grid.add_child(empty)
+
 
 func _create_day_cell(day: int) -> Control:
 	"""Create a day cell for the calendar"""

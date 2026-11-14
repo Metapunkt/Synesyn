@@ -279,14 +279,101 @@ func _get_tasks_for_date(date: String) -> Array[WorkplanTask]:
 	return day_tasks
 
 func _draw_week_view():
-	"""Draw the weekly calendar view"""
-	# TODO: Implement week view
-	month_label.text = "Week View - Coming Soon"
+	"""Draw a simple 7-day week columns view with tasks."""
+	calendar_grid.columns = 7
+	var week_start: Dictionary = _week_start_for_current_date()
+	var month_names = ["January", "February", "March", "April", "May", "June",
+					   "July", "August", "September", "October", "November", "December"]
+	month_label.text = "Week of %s %d, %d" % [
+		month_names[int(week_start.month) - 1], int(week_start.day), int(week_start.year)
+	]
+
+	var day_headers = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+	for header in day_headers:
+		var label = Label.new()
+		label.text = header
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_stylebox_override("normal", _create_header_style())
+		calendar_grid.add_child(label)
+
+	for offset in range(7):
+		var day_unix: int = int(Time.get_unix_time_from_datetime_dict(week_start)) + (offset * 86400)
+		var day_dict: Dictionary = Time.get_datetime_dict_from_unix_time(day_unix)
+		var day_date: String = "%04d-%02d-%02d" % [int(day_dict.year), int(day_dict.month), int(day_dict.day)]
+		var cell := VBoxContainer.new()
+		cell.custom_minimum_size = Vector2(100, 120)
+		cell.add_theme_stylebox_override("panel", _create_day_cell_style())
+		var day_label := Label.new()
+		day_label.text = "%d" % int(day_dict.day)
+		day_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cell.add_child(day_label)
+		var day_tasks: Array[WorkplanTask] = _get_tasks_for_date(day_date)
+		for task in day_tasks:
+			if cell.get_child_count() > 5:
+				var more_label := Label.new()
+				more_label.text = "+%d more" % (day_tasks.size() - 4)
+				more_label.add_theme_font_size_override("font_size", 10)
+				cell.add_child(more_label)
+				break
+			cell.add_child(_create_task_indicator(task))
+		calendar_grid.add_child(cell)
+
 
 func _draw_agenda_view():
-	"""Draw the agenda/list view"""
-	# TODO: Implement agenda view
-	month_label.text = "Agenda View - Coming Soon"
+	"""Draw a chronological agenda list grouped by date."""
+	calendar_grid.columns = 1
+	month_label.text = "Agenda"
+
+	var by_date: Dictionary = {}
+	for task in filtered_tasks:
+		var raw_date: String = task.get_calendar_display_date()
+		if raw_date.is_empty():
+			continue
+		var day_prefix: String = raw_date.substr(0, mini(10, raw_date.length()))
+		if not by_date.has(day_prefix):
+			by_date[day_prefix] = []
+		(by_date[day_prefix] as Array).append(task)
+
+	var dates: Array = by_date.keys()
+	dates.sort()
+	if dates.is_empty():
+		var empty := Label.new()
+		empty.text = "No upcoming tasks in the agenda."
+		calendar_grid.add_child(empty)
+		return
+
+	var today: String = Time.get_date_string_from_system()
+	for date_any in dates:
+		var date_key: String = String(date_any)
+		if date_key < today:
+			continue
+		var header := Label.new()
+		header.text = date_key
+		header.add_theme_font_size_override("font_size", 14)
+		calendar_grid.add_child(header)
+		for task_any in by_date[date_key]:
+			var task: WorkplanTask = task_any as WorkplanTask
+			if task == null:
+				continue
+			var row := Label.new()
+			row.text = "• %s (%s)" % [task.title, task.status]
+			calendar_grid.add_child(row)
+
+
+func _week_start_for_current_date() -> Dictionary:
+	"""Return Sunday-starting week dict for current_date."""
+	var as_date := {
+		"year": int(current_date.year),
+		"month": int(current_date.month),
+		"day": int(current_date.day),
+		"hour": 0,
+		"minute": 0,
+		"second": 0,
+	}
+	var unix: int = int(Time.get_unix_time_from_datetime_dict(as_date))
+	var weekday: int = int(Time.get_datetime_dict_from_unix_time(unix).weekday)  # 0=Sunday
+	var start_unix: int = unix - (weekday * 86400)
+	return Time.get_datetime_dict_from_unix_time(start_unix)
 
 func _get_days_in_month(month: int, year: int) -> int:
 	"""Get number of days in a specific month"""
