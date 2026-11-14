@@ -3,7 +3,30 @@ class_name MissionControlWorkplanSyntreeBase
 
 func _show_workplan_manager_dialog():
 	"""Create and show the workplan manager dialog"""
+	if has_method("_dismiss_blocking_dialogs"):
+		await _dismiss_blocking_dialogs()
 	var dialog = _create_workplan_manager_dialog()
+	dialog.close_requested.connect(func():
+		if has_method("_release_exclusive_window"):
+			await _release_exclusive_window(dialog)
+		else:
+			dialog.hide()
+			dialog.queue_free()
+	)
+	dialog.canceled.connect(func():
+		if has_method("_release_exclusive_window"):
+			await _release_exclusive_window(dialog)
+		else:
+			dialog.hide()
+			dialog.queue_free()
+	)
+	dialog.confirmed.connect(func():
+		if has_method("_release_exclusive_window"):
+			await _release_exclusive_window(dialog)
+		else:
+			dialog.hide()
+			dialog.queue_free()
+	)
 	add_child(dialog)
 	var ok_btn: Button = dialog.get_ok_button()
 	if ok_btn != null:

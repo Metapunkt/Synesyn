@@ -254,14 +254,15 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 	"""Create a small task indicator for calendar cells"""
 	var indicator = Label.new()
 	indicator.text = task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
+	indicator.tooltip_text = task.title
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
-	# Color based on status and priority
+	# Color based on status and priority — Done never uses OVERDUE red.
 	var bg_color = task.get_status_color()
-	if task.is_overdue():
+	if task.status != "Done" and task.is_overdue():
 		bg_color = Color.RED
-	elif task.is_due_soon():
+	elif task.status != "Done" and task.is_due_soon():
 		bg_color = Color.ORANGE
 	
 	indicator.add_theme_stylebox_override("normal", _create_colored_style(bg_color))

@@ -611,18 +611,10 @@ func _create_task_card(task: WorkplanTask) -> Control:
 		file_info.modulate = Color.GREEN
 		vbox.add_child(file_info)
 	
-	# Deadline info
-	if not task.deadline.is_empty():
+	# Deadline info — Done tasks never use red OVERDUE styling.
+	if not task.deadline.is_empty() or task.status == "Done":
 		var deadline_info = Label.new()
-		if task.is_overdue():
-			deadline_info.text = "⚠️ OVERDUE: " + task.deadline
-			deadline_info.modulate = Color.RED
-		elif task.is_due_soon():
-			deadline_info.text = "⏰ Due Soon: " + task.deadline
-			deadline_info.modulate = Color.ORANGE
-		else:
-			deadline_info.text = "📅 Due: " + task.deadline
-			deadline_info.modulate = Color.YELLOW
+		_apply_deadline_label(deadline_info, task)
 		vbox.add_child(deadline_info)
 	
 	# Action buttons
@@ -741,7 +733,7 @@ func _show_task_template_selector():
 	custom_button.text = "Custom Task"
 	custom_button.pressed.connect(func():
 		await _close_template_selector(dialog)
-		_show_default_task_dialog()
+		await _show_default_task_dialog()
 	)
 	button_container.add_child(custom_button)
 	
@@ -750,12 +742,12 @@ func _show_task_template_selector():
 	create_button.pressed.connect(func():
 		var selected_items = template_list.get_selected_items()
 		if selected_items.is_empty():
-			_show_error_dialog("Please select a template.")
+			await _show_error_dialog("Please select a template.")
 			return
 		
 		var template_id = template_list.get_item_metadata(selected_items[0])
 		await _close_template_selector(dialog)
-		_create_task_from_template(template_id)
+		await _create_task_from_template(template_id)
 	)
 	button_container.add_child(create_button)
 	
@@ -763,9 +755,17 @@ func _show_task_template_selector():
 	template_list.item_activated.connect(func(index: int):
 		var template_id = template_list.get_item_metadata(index)
 		await _close_template_selector(dialog)
-		_create_task_from_template(template_id)
+		await _create_task_from_template(template_id)
 	)
 	
+	# X / Escape must release exclusivity the same way Cancel does.
+	dialog.close_requested.connect(func():
+		await _close_template_selector(dialog)
+	)
+	dialog.canceled.connect(func():
+		await _close_template_selector(dialog)
+	)
+
 	add_child(dialog)
 	var ok_btn: Button = dialog.get_ok_button()
 	if ok_btn != null:
@@ -774,37 +774,85 @@ func _show_task_template_selector():
 	print("MissionControl: Template selector opened with ", templates.size(), " templates")
 
 
-func _close_template_selector(dialog: Window) -> void:
-	"""Hide and free the template dialog before opening another exclusive Window."""
+func _apply_deadline_label(deadline_info: Label, task: WorkplanTask) -> void:
+	"""Neutral due text for Done; OVERDUE only for incomplete past-due tasks."""
+	# Prefer theme font_color over modulate so parent/theme tints cannot turn Done red.
+	if String(task.status).strip_edges() == "Done":
+		deadline_info.text = "✅ Completed"
+		deadline_info.modulate = Color.WHITE
+		deadline_info.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4))
+		return
+	if task.deadline.is_empty():
+		deadline_info.text = ""
+		return
+	if task.is_overdue():
+		deadline_info.text = "⚠️ OVERDUE: " + task.deadline
+		deadline_info.modulate = Color.WHITE
+		deadline_info.add_theme_color_override("font_color", Color.RED)
+	elif task.is_due_soon():
+		deadline_info.text = "⏰ Due Soon: " + task.deadline
+		deadline_info.modulate = Color.WHITE
+		deadline_info.add_theme_color_override("font_color", Color.ORANGE)
+	else:
+		deadline_info.text = "📅 Due: " + task.deadline
+		deadline_info.modulate = Color.WHITE
+		deadline_info.add_theme_color_override("font_color", Color(0.75, 0.65, 0.1))
+
+
+func _release_exclusive_window(dialog: Window) -> void:
+	"""Drop exclusivity and free a popup so a later AcceptDialog can show."""
 	if dialog == null or not is_instance_valid(dialog):
 		return
-	# Hide first so Godot releases exclusive-child ownership before TaskDialog pops.
-	dialog.hide()
+	dialog.exclusive = false
+	if dialog.visible:
+		dialog.hide()
+	if dialog.get_parent() != null:
+		dialog.get_parent().remove_child(dialog)
 	dialog.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
 
+
+func _dismiss_blocking_dialogs() -> void:
+	"""Close any exclusive Window children (except the persistent task_dialog)."""
+	var blockers: Array[Window] = []
+	for child in get_children():
+		if child is Window and child != task_dialog:
+			var win: Window = child
+			if win.visible or win.exclusive:
+				blockers.append(win)
+	for win in blockers:
+		await _release_exclusive_window(win)
+
+
+func _close_template_selector(dialog: Window) -> void:
+	"""Hide and free the template dialog before opening another exclusive Window."""
+	await _release_exclusive_window(dialog)
+
+
 func _show_default_task_dialog():
 	"""Show the default task creation dialog"""
+	await _dismiss_blocking_dialogs()
 	if task_dialog and is_instance_valid(task_dialog) and task_dialog.has_method("show_add_dialog"):
 		task_dialog.show_add_dialog()
 		print("MissionControl: Opening default task creation dialog")
 	else:
 		print("MissionControl: ⚠️ Task dialog not available or missing show_add_dialog method")
 
-func _create_task_from_template(template_id: String):
+func _create_task_from_template(template_id: String) -> void:
 	"""Create a task from a template and show customization dialog"""
 	if not TaskTemplateManager:
 		return
 	
 	var task = TaskTemplateManager.create_task_from_template(template_id)
 	if not task:
-		_show_error_dialog("Failed to create task from template.")
+		await _show_error_dialog("Failed to create task from template.")
 		return
 	
 	print("MissionControl: Created task from template: ", task.title)
 	
 	# Show task dialog with pre-filled template data for customization
+	await _dismiss_blocking_dialogs()
 	if task_dialog and is_instance_valid(task_dialog) and task_dialog.has_method("show_edit_dialog"):
 		task_dialog.show_edit_dialog(task)
 		print("MissionControl: Opening task customization dialog")
@@ -821,30 +869,48 @@ func _add_task_directly(task: WorkplanTask):
 	print("MissionControl: ✅ Task added directly: ", task.title)
 	_refresh_dashboard()
 
-func _show_error_dialog(message: String):
+func _show_error_dialog(message: String) -> void:
 	"""Show a simple error dialog"""
+	await _dismiss_blocking_dialogs()
 	var dialog = AcceptDialog.new()
 	dialog.dialog_text = message
 	dialog.title = "Error"
+	dialog.confirmed.connect(func():
+		await _release_exclusive_window(dialog)
+	)
+	dialog.close_requested.connect(func():
+		await _release_exclusive_window(dialog)
+	)
+	dialog.canceled.connect(func():
+		await _release_exclusive_window(dialog)
+	)
 	add_child(dialog)
 	dialog.popup_centered()
-	dialog.confirmed.connect(func(): dialog.queue_free())
 
-func _show_info_dialog(message: String):
+func _show_info_dialog(message: String) -> void:
 	"""Show a simple info dialog"""
+	await _dismiss_blocking_dialogs()
 	var dialog = AcceptDialog.new()
 	dialog.dialog_text = message
 	dialog.title = "Information"
+	dialog.confirmed.connect(func():
+		await _release_exclusive_window(dialog)
+	)
+	dialog.close_requested.connect(func():
+		await _release_exclusive_window(dialog)
+	)
+	dialog.canceled.connect(func():
+		await _release_exclusive_window(dialog)
+	)
 	add_child(dialog)
 	dialog.popup_centered()
-	dialog.confirmed.connect(func(): dialog.queue_free())
 
 func _on_refresh_pressed():
 	_refresh_dashboard()
 
 func _on_backend_unavailable(message: String) -> void:
 	"""Show actionable guidance when hub / LLM is missing."""
-	_show_error_dialog(message)
+	await _show_error_dialog(message)
 
 
 func _resolve_readymade_orchestrator() -> Node:
@@ -857,6 +923,8 @@ func _resolve_readymade_orchestrator() -> Node:
 
 func _on_start_agent_pressed():
 	print("Draft To Do tasks pressed.")
+	# Template / workplan popups are exclusive — clear them so the no-hub dialog can show.
+	await _dismiss_blocking_dialogs()
 	var orchestrator_singleton: Node = _resolve_readymade_orchestrator()
 	if orchestrator_singleton == null:
 		print("MissionControl: ⚠️ ReadyMadeOrchestrator not found on /root")

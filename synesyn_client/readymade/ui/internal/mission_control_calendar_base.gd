@@ -553,18 +553,10 @@ func _create_popup_task_card(task: WorkplanTask) -> Control:
 		file_info.modulate = Color.GREEN
 		vbox.add_child(file_info)
 	
-	# Deadline info
-	if not task.deadline.is_empty():
+	# Deadline info — Done tasks never use red OVERDUE styling.
+	if not task.deadline.is_empty() or task.status == "Done":
 		var deadline_info = Label.new()
-		if task.is_overdue():
-			deadline_info.text = "⚠️ OVERDUE: " + task.deadline
-			deadline_info.modulate = Color.RED
-		elif task.is_due_soon():
-			deadline_info.text = "⏰ Due Soon: " + task.deadline
-			deadline_info.modulate = Color.ORANGE
-		else:
-			deadline_info.text = "📅 Due: " + task.deadline
-			deadline_info.modulate = Color.YELLOW
+		_apply_deadline_label(deadline_info, task)
 		vbox.add_child(deadline_info)
 	
 	# Action buttons
@@ -828,21 +820,26 @@ func _add_test_calendar_tasks():
 		print("Calendar: Added test task '%s'" % task.title)
 
 # Drag & Drop handlers
-func _on_task_card_mouse_entered(card: Control, _task: WorkplanTask, date_type: String):
+func _on_task_card_mouse_entered(card: Control, task: WorkplanTask, date_type: String):
 	"""Handle mouse entering task card"""
-	card.modulate = card.modulate * 1.2  # Brighten on hover
-	card.tooltip_text = "🎯 Drag to move %s date\n🖱️ Right-click for options\n📝 Double-click to edit" % date_type
+	var base_modulate: Color = card.get_meta("base_modulate", card.modulate)
+	card.modulate = base_modulate * 1.15  # Brighten on hover
+	# Keep full title first so truncated cells remain discoverable.
+	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for options\n📝 Double-click to edit" % [
+		task.title, task.status, task.priority, date_type
+	]
 	
 	# Change cursor to indicate draggable
 	Input.set_default_cursor_shape(Input.CURSOR_MOVE)
 
 func _on_task_card_mouse_exited(card: Control):
 	"""Handle mouse exiting task card"""
-	# Reset modulation to original based on date type
-	if card.name.contains("start"):
-		card.modulate = Color(0.8, 1.0, 0.8)  # Light green for start dates
+	if card.has_meta("base_modulate"):
+		card.modulate = card.get_meta("base_modulate")
+	elif card.name.contains("start"):
+		card.modulate = Color(0.8, 1.0, 0.8)
 	else:
-		card.modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
+		card.modulate = Color(1.0, 0.8, 0.8)
 	
 	# Reset cursor
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
@@ -990,11 +987,20 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	card.name = "TaskCard_%s_%s" % [task.title.replace(" ", "_"), date_type]
 	card.custom_minimum_size = Vector2(0, 20)
 	
-	# Color coding based on date type
-	if date_type == "start":
-		card.modulate = Color(0.8, 1.0, 0.8)  # Light green for start dates
-	else:  # deadline
-		card.modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
+	# Color coding: Done stays neutral-green; otherwise start vs deadline tint.
+	var base_modulate: Color
+	if task.status == "Done":
+		base_modulate = Color(0.85, 0.95, 0.85)
+	elif date_type == "start":
+		base_modulate = Color(0.8, 1.0, 0.8)  # Light green for start dates
+	else:
+		base_modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
+	card.modulate = base_modulate
+	card.set_meta("base_modulate", base_modulate)
+	# Full title on the card — children use MOUSE_FILTER_PASS so hover hits the card.
+	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for options\n📝 Double-click to edit" % [
+		task.title, task.status, task.priority, date_type
+	]
 	
 	var hbox = HBoxContainer.new()
 	hbox.mouse_filter = MOUSE_FILTER_PASS
@@ -1004,15 +1010,13 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	var icon_label = Label.new()
 	if date_type == "start":
 		icon_label.text = "🚀"
-		icon_label.tooltip_text = "Start Date"
 	else:
 		icon_label.text = "🎯"
-		icon_label.tooltip_text = "Deadline"
 	icon_label.add_theme_font_size_override("font_size", 10)
 	icon_label.mouse_filter = MOUSE_FILTER_PASS
 	hbox.add_child(icon_label)
 	
-	# Task title (truncated)
+	# Task title (truncated) — full title lives on card.tooltip_text
 	var title_label = Label.new()
 	var display_title = task.title
 	if display_title.length() > 12:
@@ -1020,7 +1024,6 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	title_label.text = display_title
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.add_theme_font_size_override("font_size", 9)
-	title_label.tooltip_text = "%s\nStatus: %s\nPriority: %d" % [task.title, task.status, task.priority]
 	title_label.mouse_filter = MOUSE_FILTER_PASS
 	hbox.add_child(title_label)
 	

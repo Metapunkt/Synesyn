@@ -18,6 +18,8 @@ func _ready() -> void:
 	await _test_workplan_manager_ready_before_ui()
 	await _test_main_tab_center_mouse_clicks()
 	await _test_readymade_main_fills_viewport()
+	await _test_template_dialog_releases_exclusivity_for_draft()
+	_test_done_task_deadline_is_neutral()
 	_test_first_launch_workplan_choice_api()
 	_test_path_getters_are_pure_and_migrations_explicit()
 	await _test_top_level_readymade_path_and_migration()
@@ -276,6 +278,131 @@ func _test_readymade_main_fills_viewport() -> void:
 
 	root.queue_free()
 	await get_tree().process_frame
+
+
+func _test_template_dialog_releases_exclusivity_for_draft() -> void:
+	print("-- template dialog close releases exclusivity for Draft --")
+	var scene: PackedScene = load("res://readymade/ui/mission_control_dashboard.tscn")
+	_expect(scene != null, "mission control dashboard scene loads for dialog test")
+	if scene == null:
+		return
+	var dash: Node = scene.instantiate()
+	add_child(dash)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	_expect(dash.has_method("_show_task_template_selector"), "template selector API present")
+	_expect(dash.has_method("_close_template_selector"), "template close API present")
+	_expect(dash.has_method("_on_start_agent_pressed"), "Draft To Do API present")
+	if not dash.has_method("_show_task_template_selector"):
+		dash.queue_free()
+		await get_tree().process_frame
+		return
+
+	dash._show_task_template_selector()
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var template_dialog: AcceptDialog = null
+	for child in dash.get_children():
+		if child is AcceptDialog and String(child.title).findn("Template") >= 0:
+			template_dialog = child
+			break
+	_expect(template_dialog != null, "Select Task Template dialog opened")
+	if template_dialog != null:
+		var ok_btn: Button = template_dialog.get_ok_button()
+		_expect(ok_btn == null or ok_btn.visible == false, "template dialog redundant OK is hidden")
+		_expect(template_dialog.visible, "template dialog visible before close")
+		await dash._close_template_selector(template_dialog)
+		await get_tree().process_frame
+		_expect(not is_instance_valid(template_dialog) or not template_dialog.visible, "template dialog closed/freed")
+
+	# Workplan manager OK should also be hidden when shown.
+	if dash.has_method("_show_workplan_manager_dialog") and dash.get("workplan_manager") != null:
+		await dash._show_workplan_manager_dialog()
+		await get_tree().process_frame
+		var wp_dialog: AcceptDialog = null
+		for child2 in dash.get_children():
+			if child2 is AcceptDialog and String(child2.title).findn("Workplan Manager") >= 0:
+				wp_dialog = child2
+				break
+		_expect(wp_dialog != null, "Workplan Manager dialog opened")
+		if wp_dialog != null:
+			var wp_ok: Button = wp_dialog.get_ok_button()
+			_expect(wp_ok == null or wp_ok.visible == false, "workplan manager redundant OK is hidden")
+			if dash.has_method("_release_exclusive_window"):
+				await dash._release_exclusive_window(wp_dialog)
+			else:
+				wp_dialog.hide()
+				wp_dialog.queue_free()
+				await get_tree().process_frame
+
+	var got_notice: Array = []
+	var orch: Node = get_node_or_null("/root/ReadyMadeOrchestrator")
+	var on_unavailable := func(message: String):
+		got_notice.append(message)
+	if orch != null and orch.has_signal("backend_unavailable"):
+		if not orch.backend_unavailable.is_connected(on_unavailable):
+			orch.backend_unavailable.connect(on_unavailable)
+		# Earlier hub-gate tests may have set the dedupe cache; clear so Draft can notify again.
+		if orch.get("_last_backend_notice") != null:
+			orch.set("_last_backend_notice", "")
+
+	# After template close, Draft must be able to surface the no-hub / unavailable dialog.
+	await dash._on_start_agent_pressed()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var notice_dialog: AcceptDialog = null
+	for child3 in dash.get_children():
+		if child3 is AcceptDialog and child3.visible:
+			notice_dialog = child3
+			break
+	var hub_up: bool = orch != null and orch.has_method("probe_hub_available") and bool(orch.probe_hub_available())
+	if hub_up:
+		_expect(true, "hub reachable — Draft may start after template close (exclusivity released)")
+	else:
+		var has_notice: bool = notice_dialog != null or got_notice.size() > 0
+		_expect(has_notice, "Draft after template close shows dialog or emits backend_unavailable")
+		if notice_dialog != null:
+			var notice_text: String = String(notice_dialog.dialog_text) + " " + String(notice_dialog.title)
+			_expect(
+				notice_text.findn("hub") >= 0 or notice_text.findn("backend") >= 0 or notice_text.findn("AI") >= 0 or notice_text.findn("Error") >= 0,
+				"Draft notice mentions hub/backend/AI (got: %s)" % notice_text.substr(0, 80)
+			)
+		elif got_notice.size() > 0:
+			_expect(true, "backend_unavailable emitted after exclusivity release")
+
+	if orch != null and orch.has_signal("backend_unavailable") and orch.backend_unavailable.is_connected(on_unavailable):
+		orch.backend_unavailable.disconnect(on_unavailable)
+	dash.queue_free()
+	await get_tree().process_frame
+
+
+func _test_done_task_deadline_is_neutral() -> void:
+	print("-- Done task deadline styling is neutral --")
+	var task: WorkplanTask = WorkplanTask.new()
+	task.title = "Done past-due sample"
+	task.status = "Done"
+	task.deadline = "2020-01-01"
+	_expect(task.is_overdue() == false, "is_overdue is false for Done tasks")
+
+	var scene: PackedScene = load("res://readymade/ui/mission_control_dashboard.tscn")
+	_expect(scene != null, "dashboard loads for deadline label test")
+	if scene == null:
+		return
+	var dash: Node = scene.instantiate()
+	_expect(dash.has_method("_apply_deadline_label"), "_apply_deadline_label API present")
+	if dash.has_method("_apply_deadline_label"):
+		var label := Label.new()
+		dash._apply_deadline_label(label, task)
+		_expect(label.text.findn("OVERDUE") < 0, "Done deadline label text is not OVERDUE")
+		_expect(label.text.findn("Completed") >= 0, "Done deadline label shows Completed")
+		var font_color: Color = label.get_theme_color("font_color")
+		_expect(font_color.r < 0.7 or font_color.g > 0.3, "Done deadline font_color is not pure red")
+	dash.queue_free()
 
 
 func _test_first_launch_workplan_choice_api() -> void:

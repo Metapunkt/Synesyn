@@ -563,8 +563,12 @@ func _show_import_choice_dialog(path: String, task_list_data: Dictionary, unmatc
 
 func _close_dialog(dialog: AcceptDialog):
 	"""Helper function to properly close dialog after choice is made"""
-	if dialog and is_instance_valid(dialog):
-		dialog.queue_free()
+	if dialog == null or not is_instance_valid(dialog):
+		return
+	dialog.exclusive = false
+	if dialog.visible:
+		dialog.hide()
+	dialog.queue_free()
 
 func _import_tasks_to_workplan(path: String, _task_list_data: Dictionary, unmatched_tasks: Array):
 	"""Import tasks from task list into current workplan"""
