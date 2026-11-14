@@ -45,6 +45,15 @@ layout_mode = 2
 [node name="FilterButton" type="OptionButton" parent="VBox/Header"]
 layout_mode = 2
 
+[node name="FilterValueButton" type="OptionButton" parent="VBox/Header"]
+layout_mode = 2
+
+[node name="SearchEdit" type="LineEdit" parent="VBox/Header"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search title, theme, campaign…"
+
 [node name="HSplitContainer" type="HSplitContainer" parent="VBox"]
 layout_mode = 2
 size_flags_vertical = 3

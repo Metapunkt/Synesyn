@@ -11,14 +11,18 @@ signal date_selected(date: String)
 @onready var today_button: Button = $VBox/Header/TodayButton
 @onready var view_mode_button: OptionButton = $VBox/Header/ViewModeButton
 @onready var filter_button: OptionButton = $VBox/Header/FilterButton
-@onready var calendar_grid: GridContainer = $VBox/CalendarContainer/CalendarGrid
-@onready var task_details: VBoxContainer = $VBox/TaskDetails
+@onready var filter_value_button: OptionButton = $VBox/Header/FilterValueButton
+@onready var search_edit: LineEdit = $VBox/Header/SearchEdit
+@onready var calendar_grid: GridContainer = $VBox/HSplitContainer/CalendarContainer/CalendarGrid
+@onready var task_details: VBoxContainer = $VBox/HSplitContainer/TaskDetails/ScrollContainer/TaskDetails
 
 var current_date: Dictionary
 var tasks: Array[WorkplanTask] = []
 var filtered_tasks: Array[WorkplanTask] = []
 var view_mode: String = "month"  # month, week, agenda
-var filter_mode: String = "all"  # all, channel, status, priority, overdue
+var filter_mode: String = "all"  # all, channel, content_status, campaign, theme, overdue, due_soon
+var filter_value: String = ""
+var search_query: String = ""
 var _empty_state_banner: VBoxContainer = null
 
 func _ready():
@@ -37,9 +41,12 @@ func _setup_ui():
 	# Setup filter options
 	filter_button.add_item("All Tasks")
 	filter_button.add_item("By Channel")
-	filter_button.add_item("By Status")
+	filter_button.add_item("By Content Status")
+	filter_button.add_item("By Campaign")
+	filter_button.add_item("By Theme")
 	filter_button.add_item("Overdue Only")
 	filter_button.add_item("Due Soon")
+	_rebuild_filter_values()
 	
 	# Setup calendar grid (7 columns for days of week)
 	calendar_grid.columns = 7
@@ -51,35 +58,100 @@ func _setup_signals():
 	today_button.pressed.connect(_on_today_pressed)
 	view_mode_button.item_selected.connect(_on_view_mode_changed)
 	filter_button.item_selected.connect(_on_filter_changed)
+	if filter_value_button:
+		filter_value_button.item_selected.connect(_on_filter_value_changed)
+	if search_edit:
+		search_edit.text_changed.connect(_on_search_changed)
 
 func set_tasks(task_list: Array[WorkplanTask]):
 	"""Update the task list and refresh calendar"""
 	tasks = task_list
+	_rebuild_filter_values()
 	_apply_filters()
 	_refresh_calendar()
+
+
+func matches_filters(task: WorkplanTask) -> bool:
+	"""Public helper for acceptance tests and list views."""
+	return _task_matches_filters(task)
+
+
+func _task_matches_filters(task: WorkplanTask) -> bool:
+	if task == null:
+		return false
+	if not search_query.is_empty():
+		var hay: String = (
+			"%s %s %s %s %s"
+			% [task.title, task.channel, task.content_theme, task.campaign_tag, task.get_content_status()]
+		).to_lower()
+		if hay.find(search_query.to_lower()) < 0:
+			return false
+	match filter_mode:
+		"all":
+			return true
+		"overdue":
+			return task.is_overdue()
+		"due_soon":
+			return task.is_due_soon(7)
+		"channel":
+			if filter_value.is_empty() or filter_value == "(any)":
+				return not task.channel.is_empty()
+			return task.channel == filter_value or task.channels.has(filter_value)
+		"content_status":
+			task.migrate_content_status_from_notes()
+			if filter_value.is_empty() or filter_value == "(any)":
+				return true
+			return task.get_content_status() == filter_value
+		"campaign":
+			if filter_value.is_empty() or filter_value == "(any)":
+				return not task.campaign_tag.is_empty()
+			return task.campaign_tag == filter_value
+		"theme":
+			if filter_value.is_empty() or filter_value == "(any)":
+				return not task.content_theme.is_empty()
+			return task.content_theme == filter_value
+		_:
+			return true
+
+
+func _rebuild_filter_values() -> void:
+	if filter_value_button == null:
+		return
+	filter_value_button.clear()
+	filter_value_button.add_item("(any)")
+	var values: Array[String] = []
+	match filter_mode:
+		"channel":
+			for task in tasks:
+				if not task.channel.is_empty() and not values.has(task.channel):
+					values.append(task.channel)
+		"content_status":
+			for status_id in WorkplanTask.CONTENT_STATUSES:
+				values.append(String(status_id))
+		"campaign":
+			for task2 in tasks:
+				if not task2.campaign_tag.is_empty() and not values.has(task2.campaign_tag):
+					values.append(task2.campaign_tag)
+		"theme":
+			for task3 in tasks:
+				if not task3.content_theme.is_empty() and not values.has(task3.content_theme):
+					values.append(task3.content_theme)
+		_:
+			filter_value_button.disabled = true
+			filter_value = ""
+			return
+	filter_value_button.disabled = false
+	for value_label in values:
+		filter_value_button.add_item(value_label)
+	filter_value_button.selected = 0
+	filter_value = "(any)"
+
 
 func _apply_filters():
 	"""Apply current filter to task list"""
 	filtered_tasks.clear()
-	
 	for task in tasks:
-		var include_task = false
-		
-		match filter_mode:
-			"all":
-				include_task = true
-			"overdue":
-				include_task = task.is_overdue()
-			"due_soon":
-				include_task = task.is_due_soon(7)  # Due within a week
-			"channel":
-				# TODO: Add channel filter UI
-				include_task = true
-			"status":
-				# TODO: Add status filter UI  
-				include_task = true
-		
-		if include_task:
+		if _task_matches_filters(task):
 			filtered_tasks.append(task)
 
 func _refresh_calendar():
@@ -463,9 +535,28 @@ func _on_filter_changed(index: int):
 	match index:
 		0: filter_mode = "all"
 		1: filter_mode = "channel"
-		2: filter_mode = "status"
-		3: filter_mode = "overdue"
-		4: filter_mode = "due_soon"
+		2: filter_mode = "content_status"
+		3: filter_mode = "campaign"
+		4: filter_mode = "theme"
+		5: filter_mode = "overdue"
+		6: filter_mode = "due_soon"
+		_: filter_mode = "all"
+	_rebuild_filter_values()
+	_apply_filters()
+	_refresh_calendar()
+
+
+func _on_filter_value_changed(index: int) -> void:
+	if filter_value_button == null or index < 0:
+		filter_value = ""
+	else:
+		filter_value = filter_value_button.get_item_text(index)
+	_apply_filters()
+	_refresh_calendar()
+
+
+func _on_search_changed(new_text: String) -> void:
+	search_query = new_text.strip_edges()
 	_apply_filters()
 	_refresh_calendar()
 

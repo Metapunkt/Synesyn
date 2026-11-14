@@ -29,6 +29,7 @@ func _ready() -> void:
 	await _test_task_bulk_io()
 	_test_content_status_migration()
 	_test_recurring_weekly_expand()
+	_test_calendar_filters()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -1076,6 +1077,43 @@ func _test_recurring_weekly_expand() -> void:
 	_expect(added == 4, "expand_into_workplan adds 4")
 	var added_again: int = RecurrenceScript.expand_into_workplan(workplan, template)
 	_expect(added_again == 0, "second expand skips duplicates")
+
+
+func _test_calendar_filters() -> void:
+	print("-- calendar filters (channel/campaign/theme/status/search) --")
+	var cal := CalendarView.new()
+	var t1 := WorkplanTask.new()
+	t1.title = "Roundup"
+	t1.channel = "#general"
+	t1.campaign_tag = "nov"
+	t1.content_theme = "Weekly"
+	t1.set_content_status("draft")
+	var t2 := WorkplanTask.new()
+	t2.title = "Studio note"
+	t2.channel = "#studio-notes"
+	t2.campaign_tag = "nov"
+	t2.content_theme = "Process"
+	t2.set_content_status("open_slot")
+	cal.filter_mode = "channel"
+	cal.filter_value = "#general"
+	_expect(cal.matches_filters(t1), "channel filter keeps #general")
+	_expect(not cal.matches_filters(t2), "channel filter drops #studio-notes")
+	cal.filter_mode = "content_status"
+	cal.filter_value = "open_slot"
+	_expect(cal.matches_filters(t2), "status filter keeps open_slot")
+	_expect(not cal.matches_filters(t1), "status filter drops draft")
+	cal.filter_mode = "campaign"
+	cal.filter_value = "nov"
+	_expect(cal.matches_filters(t1) and cal.matches_filters(t2), "campaign filter matches both")
+	cal.filter_mode = "theme"
+	cal.filter_value = "Process"
+	_expect(cal.matches_filters(t2), "theme filter keeps Process")
+	cal.filter_mode = "all"
+	cal.filter_value = ""
+	cal.search_query = "studio"
+	_expect(cal.matches_filters(t2), "search finds studio")
+	_expect(not cal.matches_filters(t1), "search excludes roundup")
+	cal.queue_free()
 
 
 func _wipe_dir(path: String) -> void:
