@@ -6,7 +6,7 @@ name: Checks
 #
 # ScenSyn harness specs are not run here (live hub session). ReadyMade has a
 # headless acceptance scene that only needs Godot + LimboAI binaries; that job
-# is wired below.
+# is wired below. Tool pins live in utilities/checks/tool_versions.env.
 
 on:
   push:
@@ -57,24 +57,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Godot 4.7 (headless)
+      - name: Load tool version pins
+        id: pins
         run: |
           set -euo pipefail
-          curl -fsSL -o /tmp/godot.zip \
-            "https://github.com/godotengine/godot-builds/releases/download/4.7-dev1/Godot_v4.7-dev1_linux.x86_64.zip"
+          # shellcheck disable=SC1091
+          source utilities/checks/tool_versions.env
+          {
+            echo "godot_version=${GODOT_VERSION}"
+            echo "godot_url=${GODOT_DOWNLOAD_URL}"
+            echo "godot_sha256=${GODOT_SHA256}"
+            echo "godot_zip=${GODOT_ZIP_NAME}"
+            echo "limboai_version=${LIMBOAI_VERSION}"
+            echo "limboai_url=${LIMBOAI_DOWNLOAD_URL}"
+            echo "limboai_sha256=${LIMBOAI_SHA256}"
+            echo "limboai_zip=${LIMBOAI_ZIP_NAME}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Install Godot (pinned)
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/godot.zip "${{ steps.pins.outputs.godot_url }}"
+          echo "${{ steps.pins.outputs.godot_sha256 }}  /tmp/godot.zip" | sha256sum -c -
           sudo unzip -o /tmp/godot.zip -d /usr/local/bin
-          sudo mv /usr/local/bin/Godot_v4.7-dev1_linux.x86_64 /usr/local/bin/godot
+          # Stable linux zip ships Godot_vX.Y.Z-stable_linux.x86_64 (no .exe).
+          GODOT_BIN_NAME="$(basename "${{ steps.pins.outputs.godot_zip }}" .zip)"
+          sudo mv "/usr/local/bin/${GODOT_BIN_NAME}" /usr/local/bin/godot
           sudo chmod +x /usr/local/bin/godot
           godot --version
+          echo "Pinned Godot: ${{ steps.pins.outputs.godot_version }}"
 
-      - name: Install LimboAI GDExtension binaries
+      - name: Install LimboAI GDExtension binaries (pinned)
         run: |
           set -euo pipefail
-          curl -fsSL -o /tmp/limboai.zip \
-            "https://github.com/limbonaut/limboai/releases/download/v1.8.0/limboai%2Bv1.8.0.gdextension-4.6.zip"
+          curl -fsSL -o /tmp/limboai.zip "${{ steps.pins.outputs.limboai_url }}"
+          echo "${{ steps.pins.outputs.limboai_sha256 }}  /tmp/limboai.zip" | sha256sum -c -
           unzip -o /tmp/limboai.zip -d /tmp/limboai
           mkdir -p synesyn_client/addons/limboai/bin
           cp -a /tmp/limboai/addons/limboai/bin/. synesyn_client/addons/limboai/bin/
+          test -f synesyn_client/addons/limboai/bin/limboai.gdextension
+          echo "Pinned LimboAI: ${{ steps.pins.outputs.limboai_version }} (${{ steps.pins.outputs.limboai_zip }})"
 
       - name: Import project + run ReadyMade acceptance
         run: |

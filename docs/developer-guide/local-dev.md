@@ -2,11 +2,13 @@
 
 ## Prerequisites
 
-- **Godot 4.7.x.** The project declares `4.7`; harness runs are verified against
-  4.7.1-rc2.
+- **Godot 4.7.x.** The project declares `4.7`. CI pins **4.7.2-stable** (see
+  `utilities/checks/tool_versions.env`).
 - **Python 3.11** for the hub. `services/synesyn_hub/environment.yml` pins it.
 - **LimboAI v1.8.0 binaries**, which are not redistributed here. Install them
-  before opening the project — see below.
+  before opening the project — see below. CI downloads the same pin from
+  `utilities/checks/tool_versions.env` (GDExtension artifact labeled for Godot 4.6;
+  LimboAI does not currently ship a `gdextension-4.7` zip).
 
 ### Installing LimboAI (required before the first open)
 
