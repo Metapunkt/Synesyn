@@ -11,6 +11,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	_test_instrument_mapping()
+	_test_edit_metaprompts_typed_modes()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -75,6 +76,24 @@ func _test_instrument_mapping() -> void:
 		CosmicInstruments.display_name("RP") == CosmicInstruments.NAME_RP,
 		"display_name(RP) is canonical long name"
 	)
+
+
+func _test_edit_metaprompts_typed_modes() -> void:
+	print("-- EditMetaprompts typed Array[String] --")
+	var edit_meta = get_node_or_null("/root/EditMetaprompts")
+	_expect(edit_meta != null, "EditMetaprompts autoload present")
+	if edit_meta == null:
+		return
+	var modes: Array[String] = edit_meta.get_available_edit_modes()
+	_expect(modes.size() == 6, "six edit modes returned (got %d)" % modes.size())
+	var expected: Array[String] = [
+		"developmental", "structural", "content", "line", "copy", "proofreading"
+	]
+	for mode_id in expected:
+		_expect(mode_id in modes, "mode present: " + mode_id)
+	# Returning Array[String] must not throw; calling again confirms stability.
+	var again: Array[String] = edit_meta.get_available_edit_modes()
+	_expect(again.size() == modes.size(), "second get_available_edit_modes call stable")
 
 
 func _test_top_level_readymade_path_and_migration() -> void:

@@ -237,8 +237,14 @@ func _ready():
 	print("EditMetaprompts: System ready with %d edit modes" % edit_mode_metaprompts.size())
 
 func get_available_edit_modes() -> Array[String]:
-	"""Get list of available edit modes"""
-	return edit_mode_metaprompts.keys()
+	"""Get list of available edit modes as a typed Array[String].
+	Dictionary.keys() returns an untyped Array; copying into Array[String]
+	avoids the runtime 'Trying to return an array of type Array' error.
+	"""
+	var modes: Array[String] = []
+	for key_any in edit_mode_metaprompts.keys():
+		modes.append(String(key_any))
+	return modes
 
 func get_edit_mode_info(mode: String) -> Dictionary:
 	"""Get information about a specific edit mode"""
