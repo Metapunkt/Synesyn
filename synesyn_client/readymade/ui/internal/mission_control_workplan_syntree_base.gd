@@ -102,6 +102,21 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	export_button.pressed.connect(_on_export_workplan_pressed.bind(dialog, workplan_list))
 	io_container.add_child(export_button)
 
+	var task_io_container = HBoxContainer.new()
+	vbox.add_child(task_io_container)
+
+	var import_tasks_button = Button.new()
+	import_tasks_button.text = "Import Tasks (CSV/JSON)"
+	import_tasks_button.tooltip_text = "Bulk create/update tasks from CSV or JSON with preview"
+	import_tasks_button.pressed.connect(_on_import_tasks_pressed.bind(dialog))
+	task_io_container.add_child(import_tasks_button)
+
+	var export_tasks_button = Button.new()
+	export_tasks_button.text = "Export Tasks (CSV/JSON)"
+	export_tasks_button.tooltip_text = "Export current workplan tasks for spreadsheet review"
+	export_tasks_button.pressed.connect(_on_export_tasks_pressed.bind(dialog))
+	task_io_container.add_child(export_tasks_button)
+
 	# Close is available via window X; hide the redundant AcceptDialog OK in _show_*.
 	dialog.dialog_hide_on_ok = false
 	
@@ -286,6 +301,8 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialog_local.add_filter("*.md", "Markdown (content plan handoff)")
+	file_dialog_local.add_filter("*.csv", "Tasks CSV (bulk edit)")
+	file_dialog_local.add_filter("*.json", "Tasks JSON (bulk edit)")
 	file_dialog_local.add_filter("*.tres", "Godot Resource Files")
 	file_dialog_local.current_file = workplan_name + ".md"
 	add_child(file_dialog_local)
@@ -307,6 +324,92 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 	)
 	
 	file_dialog_local.popup_centered(Vector2(800, 600))
+
+
+func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
+	"""Export current workplan tasks as CSV or JSON."""
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan to export tasks from.")
+		return
+	var plan_name: String = workplan_manager.get_current_workplan_name()
+	var file_dialog_local = FileDialog.new()
+	file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialog_local.add_filter("*.csv", "CSV tasks")
+	file_dialog_local.add_filter("*.json", "JSON tasks")
+	file_dialog_local.current_file = plan_name + "_tasks.csv"
+	add_child(file_dialog_local)
+	file_dialog_local.file_selected.connect(func(selected_path: String):
+		file_dialog_local.queue_free()
+		var ok: bool = false
+		if selected_path.to_lower().ends_with(".json"):
+			ok = workplan_manager.export_current_tasks_json(selected_path)
+		else:
+			ok = workplan_manager.export_current_tasks_csv(selected_path)
+		if ok:
+			print("MissionControl: ✅ Exported tasks to: ", selected_path)
+		else:
+			_show_error_dialog("Failed to export tasks.")
+	)
+	file_dialog_local.canceled.connect(func():
+		file_dialog_local.queue_free()
+	)
+	file_dialog_local.popup_centered(Vector2(800, 600))
+
+
+func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
+	"""Import CSV/JSON tasks into the current workplan with preview."""
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan to import tasks into.")
+		return
+	var file_dialog_local = FileDialog.new()
+	file_dialog_local.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog_local.add_filter("*.csv", "CSV tasks")
+	file_dialog_local.add_filter("*.json", "JSON tasks")
+	add_child(file_dialog_local)
+	file_dialog_local.file_selected.connect(func(selected_path: String):
+		file_dialog_local.queue_free()
+		var preview: Dictionary = workplan_manager.import_tasks_from_path(selected_path, false)
+		_show_task_import_preview(preview, selected_path)
+	)
+	file_dialog_local.canceled.connect(func():
+		file_dialog_local.queue_free()
+	)
+	file_dialog_local.popup_centered(Vector2(800, 600))
+
+
+func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:
+	"""Show created/updated/skipped/errors summary before applying bulk import."""
+	var created_n: int = int(preview.get("created", 0))
+	var updated_n: int = int(preview.get("updated", 0))
+	var skipped_n: int = int(preview.get("skipped", 0))
+	var errors: Array = preview.get("errors", [])
+	var summary := ConfirmationDialog.new()
+	summary.title = "Import Tasks Preview"
+	var error_lines: String = ""
+	if not errors.is_empty():
+		var shown: PackedStringArray = PackedStringArray()
+		for i in range(mini(5, errors.size())):
+			shown.append(String(errors[i]))
+		error_lines = "\nErrors:\n- " + "\n- ".join(shown)
+		if errors.size() > 5:
+			error_lines += "\n- …and %d more" % (errors.size() - 5)
+	summary.dialog_text = (
+		"Source: %s\n\nCreated: %d\nUpdated: %d\nSkipped: %d%s\n\nApply these changes to the current workplan?"
+		% [source_path.get_file(), created_n, updated_n, skipped_n, error_lines]
+	)
+	add_child(summary)
+	summary.confirmed.connect(func():
+		var applied: Dictionary = workplan_manager.apply_import_tasks_preview(preview)
+		print(
+			"MissionControl: Import applied — created %d, updated %d"
+			% [int(applied.get("created", 0)), int(applied.get("updated", 0))]
+		)
+		summary.queue_free()
+	)
+	summary.canceled.connect(func():
+		summary.queue_free()
+	)
+	summary.popup_centered()
 
 # Helper functions for dialogs
 func _create_text_input_dialog(title: String, prompt: String, default_text: String = "") -> AcceptDialog:

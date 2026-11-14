@@ -175,7 +175,7 @@ When loading a task list in a different workplan:
 - **Create New Workplan**: Via workplan manager dialog
 - **Duplicate Workplan**: Copy existing workplan with new name
 - **Rename/Delete**: Manage existing workplans
-- **Import/Export**: Share workplans as `.tres` files
+- **Import/Export**: Share workplans as `.tres` / `.md`, or bulk-edit tasks as CSV/JSON (see Workplan Manager → Import/Export Tasks; schema in `docs/developer-guide/readymade-task-bulk-io.md`)
 
 ### Calendar Features
 

@@ -26,12 +26,23 @@ class_name WorkplanTask
 @export var created_date: String = ""
 @export var deadline: String = ""  # When task should be completed
 @export var scheduled_date: String = ""  # When task is scheduled to be worked on
-@export var publish_date: String = ""  # When content should go live
+@export var publish_date: String = ""  # When content should go live (YYYY-MM-DD)
+@export var publish_time: String = ""  # HH:MM local to publish_timezone
+@export var publish_timezone: String = ""  # IANA zone; empty inherits workplan default
 @export var campaign_tag: String = ""  # Group related content
-@export var recurring_pattern: String = ""  # daily, weekly, monthly, custom
+@export var recurring_pattern: String = ""  # none|daily|weekly|monthly|custom; weekly uses weekday list + end
+@export var recurring_weekdays: Array[int] = []  # 0=Mon .. 6=Sun when weekly
+@export var recurring_end_date: String = ""  # Inclusive end for expansion
 @export var content_theme: String = ""  # For strategic planning
 @export var target_audience: String = ""  # Who this content is for
 @export var performance_notes: String = ""  # Track what works
+
+## Stable id for bulk import/export matching (never empty after ensure_task_id).
+@export var task_id: String = ""
+## Content-plan status distinct from workflow `status` (To Do / Done).
+## Values: draft, placeholder, open_slot, needs_approval, approved, posted
+@export var content_status: String = "draft"
+
 
 # Phase 5.1: Edit Session Integration
 @export var edit_session_id: String = ""  # Reference to originating edit session
@@ -42,9 +53,15 @@ class_name WorkplanTask
 @export var auto_generated: bool = false  # Flag indicating task was auto-created from session
 @export var document_snapshots: Array[Dictionary] = []  # Content snapshots at task creation
 
+const CONTENT_STATUSES: Array[String] = [
+	"draft", "placeholder", "open_slot", "needs_approval", "approved", "posted"
+]
+
+
 func _init():
 	if created_date.is_empty():
 		created_date = Time.get_datetime_string_from_system()
+	ensure_task_id()
 	
 	# Initialize duration_minutes to match estimated_duration
 	duration_minutes = estimated_duration
@@ -56,6 +73,59 @@ func _init():
 		channels = [channel]
 	if cosmic_instruments.is_empty() and not cosmic_instrument.is_empty():
 		cosmic_instruments = [cosmic_instrument]
+	migrate_content_status_from_notes()
+
+
+func ensure_task_id() -> String:
+	"""Assign a stable task id if missing (bulk IO matching key)."""
+	if task_id.strip_edges().is_empty():
+		task_id = _generate_task_id()
+	return task_id
+
+
+func _generate_task_id() -> String:
+	var stamp: int = int(Time.get_unix_time_from_system() * 1000.0)
+	var noise: int = randi() % 1000000
+	return "task_%d_%06d" % [stamp, noise]
+
+
+func migrate_content_status_from_notes() -> bool:
+	"""Lift legacy STATUS: lines from notes into content_status once."""
+	if content_status.strip_edges().is_empty():
+		content_status = "draft"
+	var notes_l: String = notes.to_lower()
+	var found: String = ""
+	for candidate in CONTENT_STATUSES:
+		if notes_l.find("status: %s" % candidate) >= 0:
+			found = candidate
+			break
+	if found.is_empty():
+		return false
+	# Only migrate when still at default draft, or notes disagree with empty.
+	if content_status == "draft" or content_status.strip_edges().is_empty():
+		content_status = found
+	# Strip STATUS: lines from notes.
+	var kept: PackedStringArray = PackedStringArray()
+	for line in notes.split("\n"):
+		var stripped: String = line.strip_edges()
+		if stripped.to_lower().begins_with("status:"):
+			continue
+		kept.append(line)
+	notes = "\n".join(kept).strip_edges()
+	return true
+
+
+func set_content_status(new_status: String) -> void:
+	var cleaned: String = new_status.strip_edges().to_lower()
+	if not CONTENT_STATUSES.has(cleaned):
+		cleaned = "draft"
+	content_status = cleaned
+
+
+func get_content_status() -> String:
+	if content_status.strip_edges().is_empty():
+		return "draft"
+	return content_status
 
 func start_task():
 	"""Mark task as started and record start time"""

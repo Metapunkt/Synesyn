@@ -2,6 +2,7 @@
 extends Node
 
 const WorkplanMarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
+const WorkplanTaskBulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
 
 signal workplan_changed(workplan: Workplan)
 signal workplan_list_updated(workplan_list: Array)
@@ -335,6 +336,17 @@ func export_workplan(workplan_name: String, export_path: String) -> bool:
 	var lower_path := export_path.to_lower()
 	if lower_path.ends_with(".md") or lower_path.ends_with(".markdown"):
 		return export_workplan_as_markdown(workplan_name, export_path)
+	if lower_path.ends_with(".csv") or lower_path.ends_with(".json"):
+		# Task-level bulk export uses the named workplan (load if not current).
+		var bulk_workplan: Workplan = workplan
+		if current_workplan != null and current_workplan_name == workplan_name:
+			bulk_workplan = current_workplan
+		var body: String = ""
+		if lower_path.ends_with(".csv"):
+			body = WorkplanTaskBulkIOScript.export_csv(bulk_workplan)
+		else:
+			body = WorkplanTaskBulkIOScript.export_json(bulk_workplan)
+		return _write_text_export(export_path, body)
 	
 	var error = ResourceSaver.save(workplan, export_path)
 	if error != OK:
@@ -368,6 +380,64 @@ func export_workplan_as_markdown(workplan_name: String, export_path: String) -> 
 	file.store_string(markdown)
 	file.close()
 	print("📤 Exported workplan markdown: ", workplan_name, " to ", export_path)
+	return true
+
+
+func export_current_tasks_csv(export_path: String) -> bool:
+	"""Export current workplan tasks as CSV (bulk review/edit)."""
+	if current_workplan == null:
+		push_error("WorkplanManager: No current workplan for CSV export")
+		return false
+	return _write_text_export(export_path, WorkplanTaskBulkIOScript.export_csv(current_workplan))
+
+
+func export_current_tasks_json(export_path: String) -> bool:
+	"""Export current workplan tasks as JSON (bulk review/edit)."""
+	if current_workplan == null:
+		push_error("WorkplanManager: No current workplan for JSON export")
+		return false
+	return _write_text_export(export_path, WorkplanTaskBulkIOScript.export_json(current_workplan))
+
+
+func preview_import_tasks(text: String, format_hint: String = "") -> Dictionary:
+	"""Preview create/update/skip counts before applying a CSV/JSON import."""
+	if current_workplan == null:
+		return {"created": 0, "updated": 0, "skipped": 0, "errors": ["No current workplan"], "actions": []}
+	return WorkplanTaskBulkIOScript.preview_import(current_workplan, text, format_hint)
+
+
+func apply_import_tasks_preview(preview: Dictionary) -> Dictionary:
+	"""Apply a preview from preview_import_tasks to the current workplan."""
+	if current_workplan == null:
+		return {"created": 0, "updated": 0, "errors": ["No current workplan"]}
+	var applied: Dictionary = WorkplanTaskBulkIOScript.apply_import(current_workplan, preview)
+	save_current_workplan()
+	return applied
+
+
+func import_tasks_from_path(import_path: String, apply_now: bool = false) -> Dictionary:
+	"""Load CSV/JSON from disk; return preview (and optionally apply)."""
+	if not FileAccess.file_exists(import_path):
+		return {"created": 0, "updated": 0, "skipped": 0, "errors": ["File not found: " + import_path], "actions": []}
+	var text: String = FileAccess.get_file_as_string(import_path)
+	var preview: Dictionary = preview_import_tasks(text, import_path)
+	if apply_now:
+		var applied: Dictionary = apply_import_tasks_preview(preview)
+		preview["applied"] = applied
+	return preview
+
+
+func _write_text_export(export_path: String, contents: String) -> bool:
+	var out_dir := export_path.get_base_dir()
+	if not out_dir.is_empty() and not DirAccess.dir_exists_absolute(out_dir):
+		DirAccess.make_dir_recursive_absolute(out_dir)
+	var file := FileAccess.open(export_path, FileAccess.WRITE)
+	if file == null:
+		push_error("WorkplanManager: Failed to open export path: " + export_path)
+		return false
+	file.store_string(contents)
+	file.close()
+	print("📤 Exported tasks to ", export_path)
 	return true
 
 func import_workplan(import_path: String, new_name: String = "") -> bool:

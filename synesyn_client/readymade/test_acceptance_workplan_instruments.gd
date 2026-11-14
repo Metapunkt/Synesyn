@@ -26,6 +26,7 @@ func _ready() -> void:
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 	await _test_workplan_markdown_export()
+	await _test_task_bulk_io()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -907,6 +908,125 @@ func _test_workplan_markdown_export() -> void:
 
 	# Leave the probe plan in the temp tree; wipe_dir removes it. Avoid
 	# delete_workplan when it would be the only remaining plan (manager guard).
+	_restore_storage_root(previous_root)
+	_wipe_dir(temp_root)
+
+
+func _test_task_bulk_io() -> void:
+	print("-- task bulk CSV/JSON import-export --")
+	const BulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
+	var temp_root: String = OS.get_user_data_dir().path_join("_bulk_io_tmp")
+	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+
+	var workplans_dir: String = RuntimeConfig.get_workplans_dir()
+	DirAccess.make_dir_recursive_absolute(workplans_dir)
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	_expect(manager != null, "WorkplanManager for bulk IO")
+	if manager == null:
+		_restore_storage_root(previous_root)
+		_wipe_dir(temp_root)
+		return
+
+	manager.workplans_directory = workplans_dir
+	manager._ensure_workplans_directory()
+	manager._load_workplan_registry()
+
+	var plan_name := "Bulk IO Probe"
+	if manager.available_workplans.has(plan_name):
+		manager.delete_workplan(plan_name)
+	_expect(manager.create_new_workplan(plan_name, "Bulk IO"), "create bulk IO workplan")
+	var workplan: Workplan = manager.get_current_workplan() as Workplan
+	_expect(workplan != null, "bulk IO workplan current")
+	if workplan == null:
+		_restore_storage_root(previous_root)
+		_wipe_dir(temp_root)
+		return
+
+	var task_a := WorkplanTask.new()
+	task_a.title = "Morning note"
+	task_a.channel = "#general"
+	task_a.publish_date = "2026-11-10"
+	task_a.publish_time = "11:00"
+	task_a.content_theme = "Cadence"
+	task_a.campaign_tag = "bulk-probe"
+	task_a.generated_content = "Original draft A"
+	task_a.set_content_status("draft")
+	task_a.ensure_task_id()
+	workplan.add_task_to_month("2026-11", task_a)
+
+	var task_b := WorkplanTask.new()
+	task_b.title = "Open slot Friday"
+	task_b.channel = "#studio-notes"
+	task_b.publish_date = "2026-11-14"
+	task_b.set_content_status("open_slot")
+	task_b.ensure_task_id()
+	workplan.add_task_to_month("2026-11", task_b)
+	manager.save_current_workplan()
+
+	var csv_text: String = BulkIOScript.export_csv(workplan)
+	_expect(csv_text.find("task_id") >= 0, "CSV header includes task_id")
+	_expect(csv_text.find("Morning note") >= 0, "CSV includes task title")
+	_expect(csv_text.find("open_slot") >= 0, "CSV includes content status")
+
+	var csv_path: String = temp_root.path_join("tasks.csv")
+	_expect(manager.export_current_tasks_csv(csv_path), "export_current_tasks_csv")
+	_expect(FileAccess.file_exists(csv_path), "CSV file written")
+
+	var json_path: String = temp_root.path_join("tasks.json")
+	_expect(manager.export_current_tasks_json(json_path), "export_current_tasks_json")
+	_expect(FileAccess.file_exists(json_path), "JSON file written")
+
+	# Edit CSV: update A by task_id, create C, update B by fallback key.
+	var edited_rows: Array = BulkIOScript.parse_csv(csv_text)
+	_expect(edited_rows.size() == 2, "parsed two CSV rows")
+	for row_any in edited_rows:
+		var row: Dictionary = row_any
+		if String(row.get("title", "")) == "Morning note":
+			row["draft"] = "Rewritten draft A"
+			row["status"] = "needs_approval"
+		elif String(row.get("title", "")) == "Open slot Friday":
+			row["task_id"] = ""  # force fallback match
+			row["draft"] = "Filled open slot"
+			row["status"] = "draft"
+	edited_rows.append({
+		"task_id": "",
+		"publish_date": "2026-11-17",
+		"publish_time": "11:00",
+		"channel": "#general",
+		"content_theme": "New",
+		"campaign_tag": "bulk-probe",
+		"title": "Brand new post",
+		"draft": "Created via import",
+		"status": "placeholder",
+		"notes": "",
+	})
+	var rebuild_lines: PackedStringArray = PackedStringArray()
+	rebuild_lines.append(",".join(BulkIOScript.COLUMNS))
+	for row2_any in edited_rows:
+		var row2: Dictionary = row2_any
+		var cells: PackedStringArray = PackedStringArray()
+		for col in BulkIOScript.COLUMNS:
+			cells.append(BulkIOScript._csv_escape(String(row2.get(col, ""))))
+		rebuild_lines.append(",".join(cells))
+	var edited_csv: String = "\n".join(rebuild_lines) + "\n"
+
+	var preview: Dictionary = manager.preview_import_tasks(edited_csv, "csv")
+	_expect(int(preview.get("created", 0)) == 1, "preview created == 1")
+	_expect(int(preview.get("updated", 0)) == 2, "preview updated == 2")
+	_expect(workplan.get_total_tasks() == 2, "preview does not mutate workplan")
+
+	var applied: Dictionary = manager.apply_import_tasks_preview(preview)
+	_expect(int(applied.get("created", 0)) == 1, "applied created == 1")
+	_expect(int(applied.get("updated", 0)) == 2, "applied updated == 2")
+	_expect(workplan.get_total_tasks() == 3, "workplan has 3 tasks after import")
+	_expect(task_a.generated_content == "Rewritten draft A", "task A draft updated by id")
+	_expect(task_a.get_content_status() == "needs_approval", "task A status updated")
+	_expect(task_b.generated_content == "Filled open slot", "task B updated by fallback")
+
+	var empty_preview: Dictionary = BulkIOScript.preview_import(workplan, "title\n\n", "csv")
+	_expect(int(empty_preview.get("skipped", 0)) >= 0, "empty title handling returns preview")
+
 	_restore_storage_root(previous_root)
 	_wipe_dir(temp_root)
 
