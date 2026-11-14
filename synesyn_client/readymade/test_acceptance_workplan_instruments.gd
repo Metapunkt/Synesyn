@@ -18,6 +18,7 @@ func _ready() -> void:
 	await _test_workplan_manager_ready_before_ui()
 	await _test_main_tab_center_mouse_clicks()
 	_test_first_launch_workplan_choice_api()
+	_test_path_getters_are_pure_and_migrations_explicit()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -267,6 +268,43 @@ func _test_edit_metaprompts_typed_modes() -> void:
 	_expect(again.size() == modes.size(), "second get_available_edit_modes call stable")
 
 
+func _test_path_getters_are_pure_and_migrations_explicit() -> void:
+	print("-- path getters are pure; migrations are explicit --")
+	var temp_root: String = OS.get_user_data_dir().path_join("_readymade_pure_getter_tmp")
+	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+	RuntimeConfig.reset_readymade_migration_guard_for_tests()
+
+	var nested_root: String = RuntimeConfig.get_legacy_readymade_data_dir()
+	var nested_output: String = nested_root.path_join("output")
+	DirAccess.make_dir_recursive_absolute(nested_output)
+	var nested_marker: String = nested_output.path_join("pure_getter_marker.md")
+	var marker_file: FileAccess = FileAccess.open(nested_marker, FileAccess.WRITE)
+	_expect(marker_file != null, "seed legacy marker for pure-getter test")
+	if marker_file:
+		marker_file.store_string("# must stay until run_storage_migrations\n")
+		marker_file.close()
+
+	var dest_marker: String = RuntimeConfig.get_readymade_output_dir().path_join("pure_getter_marker.md")
+	# Calling getters must not copy legacy files.
+	var _data: String = RuntimeConfig.get_readymade_data_dir()
+	var _out: String = RuntimeConfig.get_readymade_output_dir()
+	var _wp: String = RuntimeConfig.get_workplans_dir()
+	_expect(not FileAccess.file_exists(dest_marker), "getters do not migrate legacy files")
+	_expect(FileAccess.file_exists(nested_marker), "legacy marker remains until explicit migration")
+
+	# RuntimeConfig is a class_name / static helper — call the API directly
+	# (has_method is instance-only and cannot be used on the class).
+	RuntimeConfig.run_storage_migrations()
+	_expect(FileAccess.file_exists(dest_marker), "run_storage_migrations copies legacy output")
+	# Idempotent: second call is a no-op (guarded).
+	RuntimeConfig.run_storage_migrations()
+	_expect(FileAccess.file_exists(dest_marker), "run_storage_migrations remains idempotent")
+
+	_restore_storage_root(previous_root)
+	_wipe_dir(temp_root)
+
+
 func _test_top_level_readymade_path_and_migration() -> void:
 	print("-- top-level Documents/Synesyn/readymade/ path + nested migration --")
 	var temp_root: String = OS.get_user_data_dir().path_join("_readymade_path_migration_tmp")
@@ -312,7 +350,7 @@ func _test_top_level_readymade_path_and_migration() -> void:
 		protected_file.close()
 
 	RuntimeConfig.reset_readymade_migration_guard_for_tests()
-	RuntimeConfig.migrate_readymade_storage_if_needed()
+	RuntimeConfig.run_storage_migrations()
 
 	var migrated_marker: String = new_output.path_join("legacy_marker.md")
 	_expect(FileAccess.file_exists(migrated_marker), "nested output marker present after migration")

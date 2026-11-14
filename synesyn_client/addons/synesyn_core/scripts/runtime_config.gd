@@ -215,7 +215,7 @@ static func get_packs_dir() -> String:
 
 static func get_workplans_dir() -> String:
 	## ReadyMade workplans live under the ReadyMade app folder (not synesyn/).
-	migrate_readymade_storage_if_needed()
+	## Pure path helper — does not migrate or write. Call run_storage_migrations() at startup.
 	return get_readymade_data_dir().path_join("workplans") + "/"
 
 
@@ -242,9 +242,10 @@ static func get_syntree_resources_path() -> String:
 ## Documents/Synesyn/readymade/ — ReadyMade app data (mirrors ScenSyn's scensyn/ layout).
 ## Not under synesyn/readymade/; that nested path is legacy and migrated once.
 static var _readymade_storage_migrated: bool = false
+static var _storage_migrations_ran: bool = false
 
 static func get_readymade_data_dir() -> String:
-	migrate_readymade_storage_if_needed()
+	## Pure path helper — does not migrate or write. Call run_storage_migrations() at startup.
 	var base: String = get_storage_root_dir()
 	if base.strip_edges().is_empty():
 		return ProjectSettings.globalize_path("user://readymade/")
@@ -272,6 +273,16 @@ static func get_legacy_workplans_dir() -> String:
 ## Test/harness helper: allow migration to run again after isolating storage.
 static func reset_readymade_migration_guard_for_tests() -> void:
 	_readymade_storage_migrated = false
+	_storage_migrations_ran = false
+
+
+## Explicit, idempotent startup entry for all Documents/Synesyn storage migrations.
+## Call once from WorkplanManager (or equivalent) — never from pure path getters.
+static func run_storage_migrations() -> void:
+	if _storage_migrations_ran:
+		return
+	_storage_migrations_ran = true
+	migrate_readymade_storage_if_needed()
 
 
 ## One-time copy of nested synesyn/readymade/ (and synesyn/workplans/) into the

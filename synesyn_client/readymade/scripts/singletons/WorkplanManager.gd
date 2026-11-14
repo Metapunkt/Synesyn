@@ -15,6 +15,8 @@ var workplans_directory: String = ""
 
 func _ready():
 	print("🗂️ WorkplanManager initializing...")
+	# Path getters are pure; run Documents/Synesyn layout migrations once here.
+	RuntimeConfig.run_storage_migrations()
 	workplans_directory = RuntimeConfig.get_workplans_dir()
 	_ensure_workplans_directory()
 	_migrate_legacy_workplans()
