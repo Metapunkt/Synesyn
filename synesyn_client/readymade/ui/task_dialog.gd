@@ -45,7 +45,18 @@ class_name TaskDialog
 @onready var publish_date_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow/PublishEdit"
 @onready var content_status_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer/ContentStatusOption"
 @onready var recurring_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer/RecurringOption"
+@onready var weekday_mon: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayMon"
+@onready var weekday_tue: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayTue"
+@onready var weekday_wed: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayWed"
+@onready var weekday_thu: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayThu"
+@onready var weekday_fri: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayFri"
+@onready var weekday_sat: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdaySat"
+@onready var weekday_sun: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdaySun"
+@onready var recurring_end_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer/RecurringEndEdit"
+@onready var expand_recurrence_button: Button = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer/ExpandRecurrenceButton"
 @onready var duration_spin: SpinBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DurationContainer/DurationSpin"
+
+signal recurrence_expand_requested(task: WorkplanTask, instance_count: int)
 
 # Strategy tab  
 @onready var campaign_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/CampaignContainer/CampaignEdit"
@@ -91,6 +102,8 @@ func _ready():
 	# Connect filter toggle signals
 	format_filter_toggle.toggled.connect(_on_format_filter_toggled)
 	channel_filter_toggle.toggled.connect(_on_channel_filter_toggled)
+	if expand_recurrence_button:
+		expand_recurrence_button.pressed.connect(_on_expand_recurrence_pressed)
 
 
 func _setup_content_status_options() -> void:
@@ -526,6 +539,9 @@ func _populate_fields(task: WorkplanTask):
 	duration_spin.value = task.duration_minutes
 	task.migrate_content_status_from_notes()
 	_set_content_status_selection(task.get_content_status())
+	_set_weekday_selection(task.recurring_weekdays)
+	if recurring_end_edit:
+		recurring_end_edit.text = task.recurring_end_date
 	
 	# Strategy fields
 	campaign_edit.text = task.campaign_tag
@@ -717,6 +733,62 @@ func _get_selected_content_status() -> String:
 		return "draft"
 	return content_status_option.get_item_text(content_status_option.selected)
 
+
+func _set_weekday_selection(weekdays: Array) -> void:
+	var boxes: Array = [
+		weekday_mon, weekday_tue, weekday_wed, weekday_thu, weekday_fri, weekday_sat, weekday_sun
+	]
+	for i in range(boxes.size()):
+		var box: CheckBox = boxes[i] as CheckBox
+		if box:
+			box.button_pressed = weekdays.has(i)
+
+
+func _get_selected_weekdays() -> Array[int]:
+	var selected: Array[int] = []
+	var boxes: Array = [
+		weekday_mon, weekday_tue, weekday_wed, weekday_thu, weekday_fri, weekday_sat, weekday_sun
+	]
+	for i in range(boxes.size()):
+		var box: CheckBox = boxes[i] as CheckBox
+		if box and box.button_pressed:
+			selected.append(i)
+	return selected
+
+
+func _on_expand_recurrence_pressed() -> void:
+	"""Stamp weekly recurrence on the editing/new task and expand into the workplan."""
+	const RecurrenceScript = preload("res://readymade/scripts/workplan_recurrence.gd")
+	var task: WorkplanTask = editing_task if (is_edit_mode and editing_task) else WorkplanTask.new()
+	if title_edit.text.strip_edges().is_empty():
+		_show_error_dialog("Enter a title before expanding recurrence.")
+		return
+	task.title = title_edit.text.strip_edges()
+	task.core_idea = core_idea_edit.text.strip_edges()
+	task.publish_date = publish_date_edit.text.strip_edges()
+	task.channel = ""
+	var channels_sel: Array[String] = _get_selected_channels()
+	if not channels_sel.is_empty():
+		task.channel = channels_sel[0]
+		task.channels = channels_sel
+	task.campaign_tag = campaign_edit.text
+	task.content_theme = theme_edit.text
+	task.set_content_status(_get_selected_content_status())
+	RecurrenceScript.apply_weekly_to_task(task, _get_selected_weekdays(), recurring_end_edit.text if recurring_end_edit else "")
+	task.recurring_pattern = "weekly"
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	var workplan: Workplan = null
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan() as Workplan
+	if workplan == null:
+		_show_error_dialog("No current workplan to expand into.")
+		return
+	var added: int = RecurrenceScript.expand_into_workplan(workplan, task)
+	if manager.has_method("save_current_workplan"):
+		manager.save_current_workplan()
+	recurrence_expand_requested.emit(task, added)
+	print("TaskDialog: expanded recurrence into %d dated tasks" % added)
+
 func _on_confirmed():
 	"""Handle dialog confirmation"""
 	# Validate required fields
@@ -747,6 +819,9 @@ func _on_confirmed():
 	task.scheduled_date = scheduled_edit.text
 	task.publish_date = publish_date_edit.text
 	task.recurring_pattern = _get_recurring_pattern()
+	task.recurring_weekdays = _get_selected_weekdays()
+	if recurring_end_edit:
+		task.recurring_end_date = recurring_end_edit.text.strip_edges()
 	task.duration_minutes = int(duration_spin.value)
 	task.estimated_duration = int(duration_spin.value)  # Sync both duration fields
 	task.campaign_tag = campaign_edit.text

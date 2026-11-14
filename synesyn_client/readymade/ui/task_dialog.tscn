@@ -387,6 +387,53 @@ text = "🔄 Recurring:"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="RecurringWeekdaysContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="WeekdayMon" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Mon"
+
+[node name="WeekdayTue" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Tue"
+
+[node name="WeekdayWed" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Wed"
+
+[node name="WeekdayThu" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Thu"
+
+[node name="WeekdayFri" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Fri"
+
+[node name="WeekdaySat" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Sat"
+
+[node name="WeekdaySun" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Sun"
+
+[node name="RecurringEndContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="RecurringEndLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+text = "Ends on:"
+
+[node name="RecurringEndEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="ExpandRecurrenceButton" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+text = "Expand into dates"
+
 [node name="DurationContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2
 

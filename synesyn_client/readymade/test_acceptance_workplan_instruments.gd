@@ -28,6 +28,7 @@ func _ready() -> void:
 	await _test_workplan_markdown_export()
 	await _test_task_bulk_io()
 	_test_content_status_migration()
+	_test_recurring_weekly_expand()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -1050,6 +1051,31 @@ func _test_content_status_migration() -> void:
 	_expect(task.get_content_status() == "open_slot", "set_content_status open_slot")
 	task.set_content_status("not_a_real_status")
 	_expect(task.get_content_status() == "draft", "invalid status falls back to draft")
+
+
+func _test_recurring_weekly_expand() -> void:
+	print("-- recurring weekly expand --")
+	const RecurrenceScript = preload("res://readymade/scripts/workplan_recurrence.gd")
+	var template := WorkplanTask.new()
+	template.title = "Friday roundup"
+	template.channel = "#general"
+	template.publish_date = "2026-11-06"  # Friday
+	template.content_theme = "Weekly postcard"
+	RecurrenceScript.apply_weekly_to_task(template, [4], "2026-11-27")  # Fri only
+	_expect(template.recurring_pattern == "weekly", "pattern set to weekly")
+	_expect(template.recurring_weekdays.has(4), "Friday weekday stamped")
+	var instances: Array = RecurrenceScript.expand_weekly_instances(template)
+	_expect(instances.size() == 4, "four Fridays in Nov 6–27 (%d)" % instances.size())
+	if instances.size() >= 1:
+		var first: WorkplanTask = instances[0] as WorkplanTask
+		_expect(first.publish_date == "2026-11-06", "first Friday is 2026-11-06")
+		_expect(first.recurring_pattern == "none", "instances clear recurrence")
+	var workplan := Workplan.new()
+	workplan.name = "Recurrence Probe"
+	var added: int = RecurrenceScript.expand_into_workplan(workplan, template)
+	_expect(added == 4, "expand_into_workplan adds 4")
+	var added_again: int = RecurrenceScript.expand_into_workplan(workplan, template)
+	_expect(added_again == 0, "second expand skips duplicates")
 
 
 func _wipe_dir(path: String) -> void:
