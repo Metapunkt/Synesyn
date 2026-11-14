@@ -117,6 +117,32 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	export_tasks_button.pressed.connect(_on_export_tasks_pressed.bind(dialog))
 	task_io_container.add_child(export_tasks_button)
 
+	var tools_container = HBoxContainer.new()
+	vbox.add_child(tools_container)
+
+	var channels_button = Button.new()
+	channels_button.text = "Manage Channels"
+	channels_button.tooltip_text = "Add, rename, remove, or reorder custom destinations"
+	channels_button.pressed.connect(_on_manage_channels_pressed.bind(dialog))
+	tools_container.add_child(channels_button)
+
+	var cadence_button = Button.new()
+	cadence_button.text = "Cadence Caps"
+	cadence_button.tooltip_text = "Set per-channel weekly caps and view non-blocking warnings"
+	cadence_button.pressed.connect(_on_cadence_caps_pressed.bind(dialog))
+	tools_container.add_child(cadence_button)
+
+	var cadence_warn_label = Label.new()
+	cadence_warn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	cadence_warn_label.modulate = Color(0.95, 0.75, 0.35)
+	if workplan_manager != null and workplan_manager.has_method("get_cadence_warnings"):
+		var warns: Array = workplan_manager.get_cadence_warnings()
+		if warns.is_empty():
+			cadence_warn_label.text = ""
+		else:
+			cadence_warn_label.text = "⚠ %d cadence warning(s) — open Cadence Caps for details" % warns.size()
+	vbox.add_child(cadence_warn_label)
+
 	# Close is available via window X; hide the redundant AcceptDialog OK in _show_*.
 	dialog.dialog_hide_on_ok = false
 	
@@ -375,6 +401,143 @@ func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
 		file_dialog_local.queue_free()
 	)
 	file_dialog_local.popup_centered(Vector2(800, 600))
+
+
+func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
+	"""UI for add/rename/remove/reorder of workplan custom channels."""
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan.")
+		return
+	var dialog = AcceptDialog.new()
+	dialog.title = "Custom Channels"
+	dialog.set_flag(Window.FLAG_RESIZE_DISABLED, false)
+	var vbox = VBoxContainer.new()
+	dialog.add_child(vbox)
+	var list = ItemList.new()
+	list.custom_minimum_size = Vector2(360, 200)
+	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(list)
+	var refresh := func():
+		list.clear()
+		for channel_label in workplan_manager.get_custom_channels():
+			list.add_item(String(channel_label))
+	refresh.call()
+	var add_row = HBoxContainer.new()
+	vbox.add_child(add_row)
+	var add_edit = LineEdit.new()
+	add_edit.placeholder_text = "#new-channel"
+	add_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_row.add_child(add_edit)
+	var add_btn = Button.new()
+	add_btn.text = "Add"
+	add_btn.pressed.connect(func():
+		if workplan_manager.add_custom_channel(add_edit.text):
+			add_edit.text = ""
+			refresh.call()
+	)
+	add_row.add_child(add_btn)
+	var actions = HBoxContainer.new()
+	vbox.add_child(actions)
+	var rename_btn = Button.new()
+	rename_btn.text = "Rename"
+	rename_btn.pressed.connect(func():
+		var selected = list.get_selected_items()
+		if selected.is_empty():
+			return
+		var old_label: String = list.get_item_text(selected[0])
+		var name_dialog = _create_text_input_dialog("Rename Channel", "New name:", old_label)
+		add_child(name_dialog)
+		name_dialog.confirmed.connect(func():
+			var new_label: String = name_dialog.get_meta("line_edit").text
+			name_dialog.queue_free()
+			workplan_manager.rename_custom_channel(old_label, new_label)
+			refresh.call()
+		)
+		name_dialog.canceled.connect(func(): name_dialog.queue_free())
+		name_dialog.popup_centered()
+	)
+	actions.add_child(rename_btn)
+	var remove_btn = Button.new()
+	remove_btn.text = "Remove"
+	remove_btn.pressed.connect(func():
+		var selected2 = list.get_selected_items()
+		if selected2.is_empty():
+			return
+		workplan_manager.remove_custom_channel(list.get_item_text(selected2[0]))
+		refresh.call()
+	)
+	actions.add_child(remove_btn)
+	var up_btn = Button.new()
+	up_btn.text = "↑"
+	up_btn.pressed.connect(func():
+		var selected3 = list.get_selected_items()
+		if selected3.is_empty() or selected3[0] <= 0:
+			return
+		var channels: Array = workplan_manager.get_custom_channels()
+		var idx: int = selected3[0]
+		var tmp = channels[idx - 1]
+		channels[idx - 1] = channels[idx]
+		channels[idx] = tmp
+		workplan_manager.set_custom_channels(channels)
+		refresh.call()
+		list.select(idx - 1)
+	)
+	actions.add_child(up_btn)
+	var down_btn = Button.new()
+	down_btn.text = "↓"
+	down_btn.pressed.connect(func():
+		var selected4 = list.get_selected_items()
+		var channels2: Array = workplan_manager.get_custom_channels()
+		if selected4.is_empty() or selected4[0] >= channels2.size() - 1:
+			return
+		var idx2: int = selected4[0]
+		var tmp2 = channels2[idx2 + 1]
+		channels2[idx2 + 1] = channels2[idx2]
+		channels2[idx2] = tmp2
+		workplan_manager.set_custom_channels(channels2)
+		refresh.call()
+		list.select(idx2 + 1)
+	)
+	actions.add_child(down_btn)
+	add_child(dialog)
+	dialog.confirmed.connect(func(): dialog.queue_free())
+	dialog.canceled.connect(func(): dialog.queue_free())
+	dialog.popup_centered(Vector2(420, 360))
+
+
+func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:
+	"""Set per-channel weekly caps and show non-blocking validation report."""
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan.")
+		return
+	var dialog = AcceptDialog.new()
+	dialog.title = "Channel Cadence Caps"
+	var vbox = VBoxContainer.new()
+	dialog.add_child(vbox)
+	var channel_edit = LineEdit.new()
+	channel_edit.placeholder_text = "Channel (e.g. #general)"
+	vbox.add_child(channel_edit)
+	var cap_spin = SpinBox.new()
+	cap_spin.min_value = 0
+	cap_spin.max_value = 50
+	cap_spin.value = 2
+	cap_spin.prefix = "Max / week: "
+	vbox.add_child(cap_spin)
+	var report_label = Label.new()
+	report_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	report_label.text = workplan_manager.get_cadence_validation_report()
+	var set_btn = Button.new()
+	set_btn.text = "Set Cap"
+	set_btn.pressed.connect(func():
+		workplan_manager.set_channel_cadence_cap(channel_edit.text, int(cap_spin.value))
+		report_label.text = workplan_manager.get_cadence_validation_report()
+	)
+	vbox.add_child(set_btn)
+	vbox.add_child(report_label)
+	add_child(dialog)
+	dialog.confirmed.connect(func(): dialog.queue_free())
+	dialog.canceled.connect(func(): dialog.queue_free())
+	dialog.popup_centered(Vector2(480, 320))
 
 
 func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:

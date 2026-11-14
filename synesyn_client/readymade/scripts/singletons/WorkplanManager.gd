@@ -3,6 +3,7 @@ extends Node
 
 const WorkplanMarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
 const WorkplanTaskBulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
+const WorkplanCadenceScript = preload("res://readymade/scripts/workplan_cadence.gd")
 
 signal workplan_changed(workplan: Workplan)
 signal workplan_list_updated(workplan_list: Array)
@@ -606,6 +607,32 @@ func set_default_timezone(timezone: String) -> bool:
 	current_workplan.default_timezone = timezone.strip_edges()
 	save_current_workplan()
 	return true
+
+
+func set_channel_cadence_cap(channel: String, max_per_week: int) -> bool:
+	if current_workplan == null:
+		return false
+	WorkplanCadenceScript.set_cap(current_workplan, channel, max_per_week)
+	save_current_workplan()
+	return true
+
+
+func get_channel_cadence_cap(channel: String) -> int:
+	if current_workplan == null:
+		return 0
+	return WorkplanCadenceScript.get_cap(current_workplan, channel)
+
+
+func get_cadence_warnings() -> Array:
+	if current_workplan == null:
+		return []
+	return WorkplanCadenceScript.validate(current_workplan)
+
+
+func get_cadence_validation_report() -> String:
+	if current_workplan == null:
+		return "No current workplan."
+	return WorkplanCadenceScript.validation_report(current_workplan)
 
 func _load_workplan_from_path(path: String) -> Workplan:
 	"""Load a workplan from a specific path.

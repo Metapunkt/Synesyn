@@ -31,6 +31,7 @@ func _ready() -> void:
 	_test_recurring_weekly_expand()
 	_test_calendar_filters()
 	_test_publish_timezone()
+	_test_cadence_caps()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -1142,6 +1143,36 @@ func _test_publish_timezone() -> void:
 	workplan.add_task_to_month("2026-11", task)
 	var md: String = MarkdownExportScript.render(workplan)
 	_expect(md.find("America/New_York") >= 0 or md.find("11:00") >= 0, "markdown export shows publish time")
+
+
+func _test_cadence_caps() -> void:
+	print("-- channel cadence caps --")
+	const CadenceScript = preload("res://readymade/scripts/workplan_cadence.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Cadence Probe"
+	CadenceScript.set_cap(workplan, "#general", 2)
+	_expect(CadenceScript.get_cap(workplan, "#general") == 2, "cap stored for #general")
+	# Three posts same ISO week → warning.
+	for i in range(3):
+		var task := WorkplanTask.new()
+		task.title = "Post %d" % i
+		task.channel = "#general"
+		task.publish_date = "2026-11-10"  # Tue in same week as Mon 9
+		workplan.months["2026-11"] = workplan.months.get("2026-11", [])
+		(workplan.months["2026-11"] as Array).append(task)
+	var warnings: Array = CadenceScript.validate(workplan)
+	_expect(warnings.size() >= 1, "cap exceeded yields warning")
+	var report: String = CadenceScript.validation_report(workplan)
+	_expect(report.find("#general") >= 0, "validation report mentions channel")
+	# Under cap → clean.
+	var light := Workplan.new()
+	CadenceScript.set_cap(light, "#studio-notes", 2)
+	var t := WorkplanTask.new()
+	t.channel = "#studio-notes"
+	t.publish_date = "2026-11-11"
+	t.title = "One"
+	light.months["2026-11"] = [t]
+	_expect(CadenceScript.validate(light).is_empty(), "under cap has no warnings")
 
 
 func _wipe_dir(path: String) -> void:
