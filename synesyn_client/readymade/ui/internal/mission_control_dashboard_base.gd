@@ -63,6 +63,7 @@ var dragging_task: WorkplanTask = null
 var drag_source_date_type: String = ""  # "start" or "deadline"
 var calendar_view_mode: String = "month"  # month | week | agenda
 var calendar_view_mode_button: OptionButton = null
+var calendar_drag_hint_banner: Control = null
 
 var workplan: Dictionary
 var task_card_scene = preload("res://readymade/components/workplan_task_card.tscn")

@@ -33,6 +33,7 @@ func _setup_calendar():
 	# Setup month and year selectors
 	_setup_month_year_selectors()
 	_setup_calendar_view_mode_selector()
+	_maybe_show_calendar_drag_hint()
 	
 	# Build the calendar grid
 	_build_calendar_grid()
@@ -66,6 +67,58 @@ func _on_calendar_view_mode_selected(index: int) -> void:
 			calendar_view_mode = "month"
 	calendar_last_task_count = -1
 	_build_calendar_grid()
+
+
+func _maybe_show_calendar_drag_hint() -> void:
+	"""One-time dismissible tip that calendar cards can be dragged between days."""
+	if _is_calendar_drag_hint_dismissed():
+		return
+	if calendar_drag_hint_banner != null and is_instance_valid(calendar_drag_hint_banner):
+		return
+	var header: Node = null
+	if today_btn:
+		header = today_btn.get_parent()
+		if header:
+			header = header.get_parent()
+	if header == null:
+		return
+	calendar_drag_hint_banner = HBoxContainer.new()
+	calendar_drag_hint_banner.name = "CalendarDragHintBanner"
+	var tip := Label.new()
+	tip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tip.text = "Tip: drag a task card onto another day to reschedule it."
+	calendar_drag_hint_banner.add_child(tip)
+	var dismiss := Button.new()
+	dismiss.text = "Got it"
+	dismiss.pressed.connect(_on_calendar_drag_hint_dismissed)
+	calendar_drag_hint_banner.add_child(dismiss)
+	header.add_child(calendar_drag_hint_banner)
+
+
+func _is_calendar_drag_hint_dismissed() -> bool:
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	var apps_any: Variant = cfg.get("apps", {})
+	if typeof(apps_any) != TYPE_DICTIONARY:
+		return false
+	var readymade_any: Variant = (apps_any as Dictionary).get("readymade", {})
+	if typeof(readymade_any) != TYPE_DICTIONARY:
+		return false
+	return bool((readymade_any as Dictionary).get("calendar_drag_hint_dismissed", false))
+
+
+func _on_calendar_drag_hint_dismissed() -> void:
+	var cfg: Dictionary = RuntimeConfig.load_config()
+	if not cfg.has("apps") or typeof(cfg["apps"]) != TYPE_DICTIONARY:
+		cfg["apps"] = {}
+	var apps: Dictionary = cfg["apps"]
+	if not apps.has("readymade") or typeof(apps["readymade"]) != TYPE_DICTIONARY:
+		apps["readymade"] = {}
+	(apps["readymade"] as Dictionary)["calendar_drag_hint_dismissed"] = true
+	RuntimeConfig.save_config(cfg)
+	if calendar_drag_hint_banner and is_instance_valid(calendar_drag_hint_banner):
+		calendar_drag_hint_banner.queue_free()
+		calendar_drag_hint_banner = null
 
 func _setup_month_year_selectors():
 	"""Setup month and year dropdown options"""
