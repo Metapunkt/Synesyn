@@ -1,6 +1,8 @@
 extends "res://readymade/ui/internal/mission_control_dashboard_base.gd"
 class_name MissionControlTaskDashboardBase
 
+var _main_external_tab_bar: TabBar = null
+
 func _ready() -> void:
 	# Add to group for easy debugging
 	add_to_group("mission_control")
@@ -92,36 +94,103 @@ func _connect_to_orchestrator():
 		_connect_to_orchestrator()
 
 func _ensure_main_tab_hit_targets() -> void:
-	"""Enlarge MainTabContainer tab hit areas so clicks work reliably at 1152x648."""
+	"""Back-compat alias — structural tab setup (no z_index overlap hacks)."""
+	_setup_main_tabs_structural()
+
+
+func _setup_main_tabs_structural() -> void:
+	"""Place a dedicated TabBar above the TabContainer so page panels cannot cover tabs.
+
+	Hides the TabContainer's internal tab strip (tabs_visible=false) and syncs an
+	external TabBar in a VBox sibling column. Avoids brittle z_index / mouse_filter
+	layering that broke under layout changes.
+	"""
 	if main_tab_container == null:
 		return
-	main_tab_container.clip_tabs = false
-	# Godot 4 TabContainer.tab_alignment uses TabBar alignment ints (0=left).
-	main_tab_container.tab_alignment = 0
-	main_tab_container.add_theme_font_size_override("font_size", 15)
-	var tab_bar: TabBar = main_tab_container.get_tab_bar()
-	if tab_bar == null:
+	if _main_external_tab_bar != null and is_instance_valid(_main_external_tab_bar):
+		_sync_external_tab_bar_titles()
 		return
-	# Root cause of missed clicks: page content can stack above the TabBar for
-	# hit-testing. Keep the bar on top, STOP mouse filter, and enlarge tab rects.
-	tab_bar.mouse_filter = Control.MOUSE_FILTER_STOP
-	# TabBar is an internal child of TabContainer — do not move_child it.
-	tab_bar.z_as_relative = false
-	tab_bar.z_index = 100
-	tab_bar.custom_minimum_size = Vector2(0, 44)
-	tab_bar.add_theme_constant_override("h_separation", 12)
-	tab_bar.add_theme_constant_override("tab_minimum_width", 88)
-	# Page panels must not steal clicks in the tab strip region.
-	for child_any in main_tab_container.get_children():
-		if child_any is Control:
-			var page: Control = child_any
-			# Ensure pages stay below the tab strip for input.
-			page.z_index = mini(page.z_index, 0)
+	if bool(main_tab_container.get_meta("structural_tabs_ready", false)):
+		var existing: Variant = main_tab_container.get_meta("external_tab_bar", null)
+		if existing is TabBar:
+			_main_external_tab_bar = existing
+			_sync_external_tab_bar_titles()
+			return
+
+	var parent_node: Node = main_tab_container.get_parent()
+	if parent_node == null:
+		return
+
+	var wrapper := VBoxContainer.new()
+	wrapper.name = "MainTabsColumn"
+	wrapper.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wrapper.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	wrapper.add_theme_constant_override("separation", 0)
+
+	var insert_index: int = main_tab_container.get_index()
+	parent_node.add_child(wrapper)
+	parent_node.move_child(wrapper, insert_index)
+
+	var external_bar := TabBar.new()
+	external_bar.name = "MainTabBar"
+	external_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	external_bar.clip_tabs = false
+	external_bar.tab_alignment = 0
+	external_bar.custom_minimum_size = Vector2(0, 44)
+	external_bar.add_theme_font_size_override("font_size", 15)
+	external_bar.add_theme_constant_override("h_separation", 12)
+	external_bar.add_theme_constant_override("tab_minimum_width", 88)
+	external_bar.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	parent_node.remove_child(main_tab_container)
+	wrapper.add_child(external_bar)
+	wrapper.add_child(main_tab_container)
+
+	main_tab_container.tabs_visible = false
+	main_tab_container.clip_tabs = false
+	main_tab_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_tab_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+	_main_external_tab_bar = external_bar
+	main_tab_container.set_meta("structural_tabs_ready", true)
+	main_tab_container.set_meta("external_tab_bar", external_bar)
+	_sync_external_tab_bar_titles()
+	external_bar.current_tab = main_tab_container.current_tab
+
+	if not external_bar.tab_changed.is_connected(_on_external_main_tab_changed):
+		external_bar.tab_changed.connect(_on_external_main_tab_changed)
+	if not main_tab_container.tab_changed.is_connected(_on_internal_main_tab_changed):
+		main_tab_container.tab_changed.connect(_on_internal_main_tab_changed)
+
+
+func _sync_external_tab_bar_titles() -> void:
+	if _main_external_tab_bar == null or main_tab_container == null:
+		return
+	while _main_external_tab_bar.get_tab_count() > 0:
+		_main_external_tab_bar.remove_tab(0)
 	for tab_index in main_tab_container.get_tab_count():
-		# Keep titles short enough to remain fully clickable without overlapping neighbors.
-		var title: String = main_tab_container.get_tab_title(tab_index)
-		if title.length() > 0:
-			main_tab_container.set_tab_title(tab_index, title)
+		_main_external_tab_bar.add_tab(main_tab_container.get_tab_title(tab_index))
+
+
+func _on_external_main_tab_changed(tab_index: int) -> void:
+	if main_tab_container and main_tab_container.current_tab != tab_index:
+		main_tab_container.current_tab = tab_index
+
+
+func _on_internal_main_tab_changed(tab_index: int) -> void:
+	if _main_external_tab_bar and _main_external_tab_bar.current_tab != tab_index:
+		_main_external_tab_bar.current_tab = tab_index
+
+
+func _get_main_tab_bar_for_input() -> TabBar:
+	if _main_external_tab_bar != null and is_instance_valid(_main_external_tab_bar):
+		return _main_external_tab_bar
+	if main_tab_container:
+		var meta_bar: Variant = main_tab_container.get_meta("external_tab_bar", null)
+		if meta_bar is TabBar:
+			return meta_bar
+		return main_tab_container.get_tab_bar()
+	return null
 
 
 func simulate_main_tab_center_click(tab_index: int) -> bool:
@@ -130,8 +199,8 @@ func simulate_main_tab_center_click(tab_index: int) -> bool:
 		return false
 	if tab_index < 0 or tab_index >= main_tab_container.get_tab_count():
 		return false
-	_ensure_main_tab_hit_targets()
-	var tab_bar: TabBar = main_tab_container.get_tab_bar()
+	_setup_main_tabs_structural()
+	var tab_bar: TabBar = _get_main_tab_bar_for_input()
 	if tab_bar == null:
 		return false
 	# Force layout so get_tab_rect reflects the on-screen chrome.
@@ -143,18 +212,21 @@ func simulate_main_tab_center_click(tab_index: int) -> bool:
 		main_tab_container.current_tab = tab_index
 		return main_tab_container.current_tab == tab_index
 	var local_center: Vector2 = tab_rect.position + (tab_rect.size * 0.5)
-	var global_center: Vector2 = tab_bar.global_position + local_center
+	# Project uses window/stretch/mode=canvas_items — map canvas → window coords
+	# so clicks still hit after resize (e.g. 1152x648 → 1920x1080).
+	var canvas_point: Vector2 = tab_bar.global_position + local_center
+	var click_pos: Vector2 = get_viewport().get_final_transform() * canvas_point
 	var press := InputEventMouseButton.new()
 	press.button_index = MOUSE_BUTTON_LEFT
 	press.pressed = true
-	press.position = global_center
-	press.global_position = global_center
+	press.position = click_pos
+	press.global_position = click_pos
 	get_viewport().push_input(press)
 	var release := InputEventMouseButton.new()
 	release.button_index = MOUSE_BUTTON_LEFT
 	release.pressed = false
-	release.position = global_center
-	release.global_position = global_center
+	release.position = click_pos
+	release.global_position = click_pos
 	get_viewport().push_input(release)
 	await get_tree().process_frame
 	return main_tab_container.current_tab == tab_index
@@ -259,7 +331,7 @@ func _update_draft_action_buttons() -> void:
 
 
 func _setup_ui():
-	_ensure_main_tab_hit_targets()
+	_setup_main_tabs_structural()
 	_update_draft_action_buttons()
 	# Create task dialog
 	task_dialog = preload("res://readymade/ui/task_dialog.tscn").instantiate()

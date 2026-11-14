@@ -182,14 +182,14 @@ func _test_main_tab_center_mouse_clicks() -> void:
 	if dash == null:
 		return
 	add_child(dash)
-	# Drive a few frames so TabBar lays out at a known window size.
-	get_window().size = Vector2i(1152, 648)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
 	_expect(dash.has_method("simulate_main_tab_center_click"), "simulate_main_tab_center_click API present")
-	_expect(dash.has_method("_ensure_main_tab_hit_targets"), "tab hit-target helper present")
-	if dash.has_method("_ensure_main_tab_hit_targets"):
+	_expect(
+		dash.has_method("_setup_main_tabs_structural") or dash.has_method("_ensure_main_tab_hit_targets"),
+		"structural tab setup API present"
+	)
+	if dash.has_method("_setup_main_tabs_structural"):
+		dash._setup_main_tabs_structural()
+	elif dash.has_method("_ensure_main_tab_hit_targets"):
 		dash._ensure_main_tab_hit_targets()
 	var tab_container: TabContainer = dash.get("main_tab_container")
 	_expect(tab_container != null, "main_tab_container present")
@@ -197,16 +197,29 @@ func _test_main_tab_center_mouse_clicks() -> void:
 		dash.queue_free()
 		await get_tree().process_frame
 		return
+	# Structural setup hides the internal strip; pages must not cover the external bar.
+	_expect(tab_container.tabs_visible == false, "TabContainer internal tabs hidden (external TabBar owns chrome)")
 	var tab_count: int = tab_container.get_tab_count()
 	_expect(tab_count >= 3, "at least Tasks/Content/Calendar tabs present (got %d)" % tab_count)
-	for tab_index in range(tab_count):
-		var switched: bool = await dash.simulate_main_tab_center_click(tab_index)
-		_expect(
-			switched and tab_container.current_tab == tab_index,
-			"mouse click at center switches to tab %d (%s)" % [
-				tab_index, tab_container.get_tab_title(tab_index)
-			]
-		)
+
+	var sizes: Array[Vector2i] = [Vector2i(1152, 648), Vector2i(1920, 1080)]
+	for size_any in sizes:
+		var win_size: Vector2i = size_any
+		get_window().size = win_size
+		await get_tree().process_frame
+		await get_tree().process_frame
+		await get_tree().process_frame
+		for tab_index in range(tab_count):
+			var switched: bool = await dash.simulate_main_tab_center_click(tab_index)
+			_expect(
+				switched and tab_container.current_tab == tab_index,
+				"mouse click at center switches to tab %d (%s) at %dx%d" % [
+					tab_index,
+					tab_container.get_tab_title(tab_index),
+					win_size.x,
+					win_size.y,
+				]
+			)
 	dash.queue_free()
 	await get_tree().process_frame
 
