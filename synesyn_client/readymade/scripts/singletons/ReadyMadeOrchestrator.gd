@@ -4,6 +4,7 @@ extends Node
 const WorkplanTaskScript = preload("res://readymade/data/workplan_task.gd")
 
 signal workplan_loaded
+signal workplan_manager_ready
 signal backend_unavailable(message: String)
 
 # Use WorkplanManager instead of direct workplan management
@@ -11,6 +12,7 @@ var workplan_manager: Node
 var workplan: Workplan  # Current active workplan (for compatibility)
 var a1_agent: Node
 var _last_backend_notice: String = ""
+var _workplan_manager_ready: bool = false
 
 func _ready():
 	print("🚀 ReadyMadeOrchestrator is ready")
@@ -18,54 +20,60 @@ func _ready():
 	# Ensure the core SynTree PluginManager exists at runtime.
 	_ensure_plugin_manager()
 	
-	# Setup WorkplanManager
-	call_deferred("_setup_workplan_manager")
-
-func _setup_workplan_manager():
-	"""Setup the WorkplanManager singleton"""
-	# Check if WorkplanManager already exists
-	workplan_manager = get_node_or_null("/root/WorkplanManager")
-	if not workplan_manager:
-		print("⚠️ WorkplanManager not found - creating instance...")
-		await _create_workplan_manager_instance()
-	
-	# Connect to WorkplanManager signals
-	if workplan_manager:
-		workplan_manager.workplan_changed.connect(_on_workplan_changed)
-		# Get the current workplan
-		workplan = workplan_manager.get_current_workplan()
-		print("🗂️ Connected to WorkplanManager, current workplan: ", workplan_manager.get_current_workplan_name())
-		
-		# If no workplan is active, initialize with default content
-		if workplan and workplan.get_total_tasks() == 0:
-			print("ReadyMade Orchestrator: Creating default workplan tasks.")
-			_create_default_tasks()
-			workplan_manager.save_current_workplan()
-		
-		# Emit the workplan loaded signal for compatibility
-		workplan_loaded.emit()
-	
-	# Find the A1 Synthesis Agent in the scene
+	# WorkplanManager is an autoload declared before this node, so it is already
+	# initialized. Bind immediately — no call_deferred race for first UI paint.
+	_setup_workplan_manager()
 	call_deferred("_setup_a1_agent")
 
-func _create_workplan_manager_instance():
-	"""Create and instantiate the WorkplanManager if it's not found"""
+func is_workplan_manager_ready() -> bool:
+	return _workplan_manager_ready and workplan_manager != null and workplan != null
+
+
+func await_workplan_manager_ready() -> void:
+	"""UI consumers can await this before reading workplan state."""
+	if is_workplan_manager_ready():
+		return
+	await workplan_manager_ready
+
+
+func _setup_workplan_manager():
+	"""Bind the WorkplanManager autoload (create only if missing in odd test setups)."""
+	workplan_manager = get_node_or_null("/root/WorkplanManager")
+	if not workplan_manager:
+		print("⚠️ WorkplanManager autoload missing - creating fallback instance...")
+		call_deferred("_create_workplan_manager_instance_and_bind")
+		return
+	_bind_workplan_manager()
+
+
+func _bind_workplan_manager() -> void:
+	if workplan_manager == null:
+		return
+	if not workplan_manager.workplan_changed.is_connected(_on_workplan_changed):
+		workplan_manager.workplan_changed.connect(_on_workplan_changed)
+	workplan = workplan_manager.get_current_workplan()
+	print("🗂️ Connected to WorkplanManager, current workplan: ", workplan_manager.get_current_workplan_name())
+	if workplan and workplan.get_total_tasks() == 0:
+		print("ReadyMade Orchestrator: Creating default workplan tasks.")
+		_create_default_tasks()
+		workplan_manager.save_current_workplan()
+	_workplan_manager_ready = true
+	workplan_manager_ready.emit()
+	workplan_loaded.emit()
+
+
+func _create_workplan_manager_instance_and_bind() -> void:
+	"""Fallback for environments that did not register the WorkplanManager autoload."""
 	var manager_script = load("res://readymade/scripts/singletons/WorkplanManager.gd")
-	if manager_script:
-		workplan_manager = manager_script.new()
-		workplan_manager.name = "WorkplanManager"
-		get_tree().get_root().add_child(workplan_manager)
-		print("ReadyMadeOrchestrator: ✅ WorkplanManager created and added to scene tree")
-		
-		# Wait a frame to ensure the node is fully ready
-		await get_tree().process_frame
-		
-		if workplan_manager.is_inside_tree():
-			print("ReadyMadeOrchestrator: ✅ WorkplanManager confirmed in scene tree")
-		else:
-			print("ReadyMadeOrchestrator: ⚠️ WorkplanManager not properly added to scene tree")
-	else:
+	if manager_script == null:
 		push_error("ReadyMadeOrchestrator: Failed to load WorkplanManager script!")
+		return
+	workplan_manager = manager_script.new()
+	workplan_manager.name = "WorkplanManager"
+	get_tree().get_root().add_child(workplan_manager)
+	print("ReadyMadeOrchestrator: ✅ WorkplanManager fallback created")
+	await get_tree().process_frame
+	_bind_workplan_manager()
 
 func _on_workplan_changed(new_workplan: Workplan):
 	"""Handle workplan changes from WorkplanManager"""

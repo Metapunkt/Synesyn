@@ -132,7 +132,10 @@ func _connect_to_orchestrator():
 	# The ReadyMadeOrchestrator singleton is responsible for ensuring the
 	# PluginManager exists. We must wait for it to finish its setup.
 	if ReadyMadeOrchestrator:
-		ReadyMadeOrchestrator.workplan_loaded.connect(_on_orchestrator_ready)
+		if ReadyMadeOrchestrator.has_method("await_workplan_manager_ready"):
+			await ReadyMadeOrchestrator.await_workplan_manager_ready()
+		if not ReadyMadeOrchestrator.workplan_loaded.is_connected(_on_orchestrator_ready):
+			ReadyMadeOrchestrator.workplan_loaded.connect(_on_orchestrator_ready)
 		print("Brainstorming Tab: ✅ Connected to ReadyMadeOrchestrator")
 		print("Brainstorming Tab: Workplan exists: ", ReadyMadeOrchestrator.workplan != null)
 		# If orchestrator is already ready, trigger the event

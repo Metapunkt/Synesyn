@@ -14,6 +14,7 @@ func _ready() -> void:
 	_test_edit_metaprompts_typed_modes()
 	_test_backend_unavailable_message_and_fail_task()
 	await _test_start_agent_batch_hub_gate()
+	await _test_workplan_manager_ready_before_ui()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
 
@@ -133,6 +134,20 @@ func _test_start_agent_batch_hub_gate() -> void:
 			_expect(not ("ReadyMadeOrchestrator is missing" in notice), "does not show false orchestrator-missing message")
 	if orch.backend_unavailable.is_connected(on_unavailable):
 		orch.backend_unavailable.disconnect(on_unavailable)
+
+
+func _test_workplan_manager_ready_before_ui() -> void:
+	print("-- WorkplanManager ready before UI queries --")
+	var orch: Node = get_node_or_null("/root/ReadyMadeOrchestrator")
+	_expect(orch != null, "orchestrator present for workplan ready check")
+	if orch == null:
+		return
+	_expect(orch.has_method("is_workplan_manager_ready"), "is_workplan_manager_ready API present")
+	_expect(orch.has_method("await_workplan_manager_ready"), "await_workplan_manager_ready API present")
+	await orch.await_workplan_manager_ready()
+	_expect(orch.is_workplan_manager_ready(), "workplan manager ready without deferred race")
+	_expect(get_node_or_null("/root/WorkplanManager") != null, "WorkplanManager node on /root")
+	_expect(orch.workplan != null, "current workplan available immediately after ready")
 
 
 func _test_edit_metaprompts_typed_modes() -> void:

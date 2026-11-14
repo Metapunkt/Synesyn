@@ -17,21 +17,25 @@ func _connect_to_orchestrator():
 	# Try to access the orchestrator directly
 	if ReadyMadeOrchestrator:
 		orchestrator = ReadyMadeOrchestrator
-		ReadyMadeOrchestrator.workplan_loaded.connect(_on_workplan_loaded)
+		if not ReadyMadeOrchestrator.workplan_loaded.is_connected(_on_workplan_loaded):
+			ReadyMadeOrchestrator.workplan_loaded.connect(_on_workplan_loaded)
 		print("MissionControl: ✅ Connected to ReadyMadeOrchestrator")
+		
+		# Wait for synchronous WorkplanManager bootstrap if needed.
+		if ReadyMadeOrchestrator.has_method("await_workplan_manager_ready"):
+			await ReadyMadeOrchestrator.await_workplan_manager_ready()
 		
 		# Connect to WorkplanManager
 		workplan_manager = ReadyMadeOrchestrator.get_workplan_manager()
 		if workplan_manager:
-			workplan_manager.workplan_changed.connect(_on_workplan_changed)
-			workplan_manager.workplan_list_updated.connect(_on_workplan_list_updated)
+			if not workplan_manager.workplan_changed.is_connected(_on_workplan_changed):
+				workplan_manager.workplan_changed.connect(_on_workplan_changed)
+			if not workplan_manager.workplan_list_updated.is_connected(_on_workplan_list_updated):
+				workplan_manager.workplan_list_updated.connect(_on_workplan_list_updated)
 			print("MissionControl: ✅ Connected to WorkplanManager")
 			_setup_workplan_ui()
 		else:
-			print("MissionControl: ⚠️ WorkplanManager not yet available")
-			# Retry after a short delay
-			await get_tree().create_timer(0.1).timeout
-			_connect_to_orchestrator()
+			print("MissionControl: ⚠️ WorkplanManager still unavailable after ready wait")
 			return
 		
 		# Connect to ModeManager
