@@ -46,11 +46,19 @@ layout_mode = 2
 tooltip_text = "Paste clipboard text into the chat history"
 text = "📋 Paste"
 
+[node name="ToggleChatButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = false
+tooltip_text = "Show or hide the brainstorm chat log (collapsed by default to keep Mission Control usable at 1152×648)"
+text = "💬 Chat"
+
 [node name="ChatHistory" type="TextEdit" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 220)
+visible = false
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 0
 focus_mode = 2
 mouse_filter = 0
 editable = true

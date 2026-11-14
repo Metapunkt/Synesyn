@@ -260,6 +260,10 @@ static func force_visibility_fix(owner) -> void:
 	if not mission_control:
 		print("❌ Could not find mission control")
 		return
+	# Honor collapsed-chat default so left panel stays usable at 1152×648.
+	var chat_expanded: bool = false
+	if owner.get("toggle_chat_button") != null and owner.toggle_chat_button:
+		chat_expanded = bool(owner.toggle_chat_button.button_pressed)
 	var hsplit = mission_control.get_node_or_null("HSplitContainer")
 	if hsplit:
 		print("Adjusting HSplitContainer split...")
@@ -267,58 +271,36 @@ static func force_visibility_fix(owner) -> void:
 	var left_panel = mission_control.get_node_or_null("HSplitContainer/LeftPanelContainer")
 	if left_panel:
 		left_panel.visible = true
-		left_panel.custom_minimum_size = Vector2(350, 600)
+		left_panel.custom_minimum_size = Vector2(260, 0)
 	var brainstorm_container = mission_control.get_node_or_null("HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/BrainstormingContainer")
 	if brainstorm_container:
 		brainstorm_container.visible = true
-		brainstorm_container.custom_minimum_size = Vector2(350, 400)
+		brainstorm_container.custom_minimum_size = Vector2(0, 0) if not chat_expanded else Vector2(260, 200)
 	var scroll_container = mission_control.get_node_or_null("HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer")
 	if scroll_container:
-		scroll_container.custom_minimum_size = Vector2(350, 500)
+		scroll_container.custom_minimum_size = Vector2(0, 0)
 	owner.visible = true
-	owner.custom_minimum_size = Vector2(300, 400)
+	owner.custom_minimum_size = Vector2(0, 0)
 	if owner.chat_history:
-		owner.chat_history.visible = true
-		owner.chat_history.custom_minimum_size = Vector2(280, 300)
-		var max_height := 300
-		if owner.chat_history.size.y > max_height:
-			print("ChatHistory is too tall (", owner.chat_history.size.y, "px)! Forcing to ", max_height, "px")
-			owner.chat_history.size = Vector2(owner.chat_history.size.x, max_height)
-		owner.chat_history.clip_contents = true
-		var scroll_parent = owner.chat_history.get_parent()
-		if scroll_parent:
-			scroll_parent.visible = true
-			scroll_parent.custom_minimum_size = Vector2(280, 300)
-			if scroll_parent is HSplitContainer:
-				scroll_parent.split_offset = -300
-				scroll_parent.queue_redraw()
-		owner.chat_history.queue_redraw()
-		var chat_scroll_parent = owner.chat_history.get_parent()
-		if chat_scroll_parent is ScrollContainer:
-			chat_scroll_parent.scroll_vertical = chat_scroll_parent.get_v_scroll_bar().max_value
+		if chat_expanded:
+			owner.chat_history.visible = true
+			owner.chat_history.custom_minimum_size = Vector2(0, 160)
+			owner.chat_history.clip_contents = true
+		else:
+			owner.chat_history.visible = false
+			owner.chat_history.custom_minimum_size = Vector2(0, 0)
+		if owner.has_method("_apply_chat_expanded"):
+			owner._apply_chat_expanded(chat_expanded)
 	else:
 		print("Emergency: ChatHistory not found!")
-	var root = owner.get_tree().current_scene
-	if root:
-		root.queue_redraw()
-	if mission_control:
-		mission_control.queue_redraw()
-		mission_control.notification(Control.NOTIFICATION_RESIZED)
-	if hsplit:
-		hsplit.queue_redraw()
-	owner.queue_redraw()
-	owner.notification(Control.NOTIFICATION_RESIZED)
 	await owner.get_tree().process_frame
 	await owner.get_tree().process_frame
 	print("Results after force fix:")
 	if owner.chat_history:
 		print("  - ChatHistory size: ", owner.chat_history.size)
-		print("  - ChatHistory global position: ", owner.chat_history.global_position)
 		print("  - ChatHistory visible: ", owner.chat_history.visible)
 	if brainstorm_container:
 		print("  - BrainstormingContainer size after fix: ", brainstorm_container.size)
-	if scroll_container:
-		print("  - ScrollContainer size after fix: ", scroll_container.size)
 	print("  - Self size after fix: ", owner.size)
 	print("=== FORCE FIX COMPLETE ===\n")
 
