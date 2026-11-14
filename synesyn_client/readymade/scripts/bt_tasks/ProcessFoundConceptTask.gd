@@ -605,20 +605,21 @@ Approach this task with serious commitment to creative transformation while main
 	]
 
 func _apply_cosmic_instrument_navigation(prompt: String, instrument: String, core_idea: String, formats: Array[String], channels: Array[String]) -> String:
-	"""Apply cosmic instruments as sophisticated navigation tools within Inference Architecture"""
-	
-	var instrument_lower = instrument.to_lower()
-	
-	if "role play" in instrument_lower or "dimensional shifter" in instrument_lower:
-		return _apply_dimensional_shifter_navigation(prompt, core_idea, formats, channels)
-	elif "hypothetical" in instrument_lower or "reality benders" in instrument_lower:
-		return _apply_reality_bender_navigation(prompt, core_idea)
-	elif "iterative" in instrument_lower or "gravitational drift" in instrument_lower:
-		return _apply_gravitational_drift_navigation(prompt, core_idea)
-	elif "abductive" in instrument_lower or "quantum reasoning" in instrument_lower:
-		return _apply_quantum_reasoning_navigation(prompt, core_idea, formats, channels)
-	
-	return prompt
+	"""Apply cosmic instruments as sophisticated navigation tools within Inference Architecture.
+	Matching uses ADR 0024 vocabulary (codes, short/long names, hyphen/space variants).
+	"""
+	var code: String = CosmicInstruments.canonicalize(instrument)
+	match code:
+		CosmicInstruments.CODE_RP:
+			return _apply_dimensional_shifter_navigation(prompt, core_idea, formats, channels)
+		CosmicInstruments.CODE_HF:
+			return _apply_reality_bender_navigation(prompt, core_idea)
+		CosmicInstruments.CODE_IR:
+			return _apply_gravitational_drift_navigation(prompt, core_idea)
+		CosmicInstruments.CODE_AH:
+			return _apply_quantum_reasoning_navigation(prompt, core_idea, formats, channels)
+		_:
+			return prompt
 
 func _apply_dimensional_shifter_navigation(prompt: String, core_idea: String, _formats: Array[String], _channels: Array[String]) -> String:
 	"""Apply Role Play - but simply"""

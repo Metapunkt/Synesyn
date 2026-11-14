@@ -547,16 +547,22 @@ func _set_static_channel_checkbox_by_text(channel: String, pressed: bool):
 			if discord_check: discord_check.button_pressed = pressed
 
 func _set_cosmic_checkbox_by_text(instrument: String, pressed: bool):
-	"""Set cosmic instrument checkbox state"""
-	match instrument.to_lower():
-		"role play (dimensional shifter)":
+	"""Set cosmic instrument checkbox state using ADR 0024 vocabulary."""
+	var code: String = CosmicInstruments.canonicalize(instrument)
+	match code:
+		CosmicInstruments.CODE_RP:
 			roleplay_check.button_pressed = pressed
-		"hypothetical framings (reality benders)":
+		CosmicInstruments.CODE_HF:
 			hypothetical_check.button_pressed = pressed
-		"iterative refinement (gravitational drift)":
+		CosmicInstruments.CODE_IR:
 			iterative_check.button_pressed = pressed
-		"abductive hypothesis generation (quantum reasoning)":
+		CosmicInstruments.CODE_AH:
 			abductive_check.button_pressed = pressed
+		_:
+			if not instrument.strip_edges().is_empty() and cosmic_other_edit:
+				cosmic_other_edit.text = instrument
+				if cosmic_other_check:
+					cosmic_other_check.button_pressed = pressed
 
 func _get_recurring_index(pattern: String) -> int:
 	"""Get index for recurring pattern"""
