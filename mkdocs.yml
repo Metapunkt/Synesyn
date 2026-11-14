@@ -111,10 +111,13 @@ nav:
       - "SynAxes — default path": user-guide/synaxes.md
       - "SynPunkt": user-guide/synpunkt.md
       - "Glossary": concepts/glossary.md
+  - "Community":
+      - "Discord content plan (Nov–Dec 2026)": community/discord_content_plan_2026-11.md
   - "Developing":
       - "Overview": developer-guide/README.md
       - "Local development": developer-guide/local-dev.md
       - "ReadyMade manual QA": developer-guide/READYMADE_MANUAL_QA.md
+      - "ReadyMade dogfood report": developer-guide/READYMADE_DOGFOOD_REPORT.md
       - "Architecture (high-level)": developer-guide/architecture.md
       - "Building on Synesyn": developer-guide/building-on-synesyn.md
       - "Story Stage functional specification": developer-guide/story-stage-functional-specification.md

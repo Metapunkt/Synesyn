@@ -120,6 +120,34 @@ func _setup_default_modes():
 		]
 	)
 
+	# Metapunkt Discord — Latent Space category (Anya community ops).
+	# Do not include #start-here (static), #anya_workspace (private), or #ask-anya (reactive).
+	mode_configs["metapunkt_discord"] = ModeConfig.new(
+		"Metapunkt Discord (Latent Space)",
+		"🌀",
+		["discord_weekday_post", "friday_roundup", "weekend_light", "open_thread"],
+		"You are drafting elegant, precise, speculative Discord posts for Metapunkt's Latent Space community. Researcher tone, never hype. 80–200 words, under 2000 characters. Bold title line, markdown, at most one emoji. Credit Moyo Okediji's Artrithmetic in every STFX explanation. Never use @everyone or role pings.",
+		["character_count", "channel_fit", "source_citation", "placeholder_honesty"],
+		[
+			"Discord post",
+			"Friday roundup",
+			"Weekend light",
+			"Open thread",
+			"Image + question",
+			"Teaser (reveal TBD)"
+		],
+		[
+			"#general",
+			"#forward_remembrance",
+			"#metapunkt",
+			"#synesyn",
+			"#stochastic_dreams",
+			"#latent_reality",
+			"#kernel_inference",
+			"#mapping_latent_reality"
+		]
+	)
+
 func get_available_modes() -> Array[String]:
 	"""Get list of available mode keys"""
 	var modes: Array[String] = []

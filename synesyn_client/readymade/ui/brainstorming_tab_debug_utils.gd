@@ -497,7 +497,7 @@ static func test_mode_integration(owner) -> void:
 		owner._append_to_chat("system", "- Prompt length: %d chars" % prompt.length())
 	owner._append_to_chat("system", "[color=yellow]Testing Mode Switching...[/color]")
 	var different_prompts: Array = []
-	for work_mode_id in ["social_media", "creative_writing", "academic_writing"]:
+	for work_mode_id in ["social_media", "creative_writing", "academic_writing", "metapunkt_discord"]:
 		ModeManager.set_mode(work_mode_id)
 		await owner.get_tree().process_frame
 		var context := {

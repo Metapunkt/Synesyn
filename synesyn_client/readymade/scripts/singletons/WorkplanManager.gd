@@ -1,6 +1,8 @@
 # WorkplanManager.gd
 extends Node
 
+const WorkplanMarkdownExportScript = preload("res://readymade/scripts/workplan_markdown_export.gd")
+
 signal workplan_changed(workplan: Workplan)
 signal workplan_list_updated(workplan_list: Array)
 
@@ -318,7 +320,7 @@ func rename_workplan(old_name: String, new_name: String) -> bool:
 	return true
 
 func export_workplan(workplan_name: String, export_path: String) -> bool:
-	"""Export a workplan to a specified path"""
+	"""Export a workplan to a specified path (.tres resource or .md markdown)."""
 	if not available_workplans.has(workplan_name):
 		push_error("WorkplanManager: Workplan not found: " + workplan_name)
 		return false
@@ -329,6 +331,10 @@ func export_workplan(workplan_name: String, export_path: String) -> bool:
 	if not workplan:
 		push_error("WorkplanManager: Failed to load workplan for export")
 		return false
+
+	var lower_path := export_path.to_lower()
+	if lower_path.ends_with(".md") or lower_path.ends_with(".markdown"):
+		return export_workplan_as_markdown(workplan_name, export_path)
 	
 	var error = ResourceSaver.save(workplan, export_path)
 	if error != OK:
@@ -336,6 +342,32 @@ func export_workplan(workplan_name: String, export_path: String) -> bool:
 		return false
 	
 	print("📤 Exported workplan: ", workplan_name, " to ", export_path)
+	return true
+
+
+func export_workplan_as_markdown(workplan_name: String, export_path: String) -> bool:
+	"""Export a workplan as day-by-day markdown for handoff (e.g. Discord plans)."""
+	if not available_workplans.has(workplan_name):
+		push_error("WorkplanManager: Workplan not found: " + workplan_name)
+		return false
+
+	var workplan_path = available_workplans[workplan_name]
+	var workplan = _load_workplan_from_path(workplan_path)
+	if not workplan:
+		push_error("WorkplanManager: Failed to load workplan for markdown export")
+		return false
+
+	var markdown: String = WorkplanMarkdownExportScript.render(workplan)
+	var out_dir := export_path.get_base_dir()
+	if not out_dir.is_empty() and not DirAccess.dir_exists_absolute(out_dir):
+		DirAccess.make_dir_recursive_absolute(out_dir)
+	var file := FileAccess.open(export_path, FileAccess.WRITE)
+	if file == null:
+		push_error("WorkplanManager: Failed to open markdown export path: " + export_path)
+		return false
+	file.store_string(markdown)
+	file.close()
+	print("📤 Exported workplan markdown: ", workplan_name, " to ", export_path)
 	return true
 
 func import_workplan(import_path: String, new_name: String = "") -> bool:

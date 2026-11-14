@@ -285,8 +285,9 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 	var workplan_name = workplan_list.get_item_text(selected_items[0])
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialog_local.add_filter("*.md", "Markdown (content plan handoff)")
 	file_dialog_local.add_filter("*.tres", "Godot Resource Files")
-	file_dialog_local.current_file = workplan_name + ".tres"
+	file_dialog_local.current_file = workplan_name + ".md"
 	add_child(file_dialog_local)
 	
 	# Connect signals with direct handling

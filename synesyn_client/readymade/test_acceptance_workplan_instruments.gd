@@ -12,6 +12,7 @@ func _ready() -> void:
 
 	_test_instrument_mapping()
 	_test_edit_metaprompts_typed_modes()
+	_test_metapunkt_discord_mode_channels()
 	_test_backend_unavailable_message_and_fail_task()
 	_test_config_path_honors_storage_root_dir()
 	await _test_start_agent_batch_hub_gate()
@@ -24,6 +25,7 @@ func _ready() -> void:
 	_test_path_getters_are_pure_and_migrations_explicit()
 	await _test_top_level_readymade_path_and_migration()
 	await _test_workplan_save_load_and_legacy_migration()
+	await _test_workplan_markdown_export()
 
 	print("=== Results: %d checks, %d failures ===" % [_checks, _failures])
 	if _failures > 0:
@@ -94,6 +96,36 @@ func _test_instrument_mapping() -> void:
 		CosmicInstruments.labeled_display("HF").begins_with("HF — "),
 		"labeled_display(HF) begins with HF —"
 	)
+
+
+func _test_metapunkt_discord_mode_channels() -> void:
+	print("-- Metapunkt Discord Latent Space mode --")
+	_expect(ModeManager != null, "ModeManager available")
+	if ModeManager == null:
+		return
+	_expect(
+		ModeManager.get_available_modes().has("metapunkt_discord"),
+		"metapunkt_discord mode registered"
+	)
+	var cfg = ModeManager.get_mode_config("metapunkt_discord")
+	_expect(cfg != null, "metapunkt_discord config loads")
+	if cfg == null:
+		return
+	var channels: Array[String] = cfg.channels
+	for required_channel in [
+		"#general",
+		"#forward_remembrance",
+		"#metapunkt",
+		"#synesyn",
+		"#stochastic_dreams",
+		"#latent_reality",
+		"#kernel_inference",
+		"#mapping_latent_reality",
+	]:
+		_expect(channels.has(required_channel), "mode includes %s" % required_channel)
+	_expect(not channels.has("#anya_workspace"), "mode excludes private #anya_workspace")
+	_expect(not channels.has("#ask-anya"), "mode excludes reactive #ask-anya")
+	_expect(not channels.has("#start-here"), "mode excludes static #start-here")
 
 
 func _test_backend_unavailable_message_and_fail_task() -> void:
@@ -695,6 +727,67 @@ func _test_workplan_save_load_and_legacy_migration() -> void:
 	if created_manager and is_instance_valid(manager):
 		manager.queue_free()
 		await get_tree().process_frame
+	_restore_storage_root(previous_root)
+	_wipe_dir(temp_root)
+
+
+func _test_workplan_markdown_export() -> void:
+	print("-- workplan markdown export --")
+	var temp_root: String = OS.get_user_data_dir().path_join("_md_export_tmp")
+	DirAccess.make_dir_recursive_absolute(temp_root)
+	var previous_root: String = _push_temp_storage_root(temp_root)
+
+	var workplans_dir: String = RuntimeConfig.get_workplans_dir()
+	DirAccess.make_dir_recursive_absolute(workplans_dir)
+
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	_expect(manager != null, "WorkplanManager for markdown export")
+	if manager == null:
+		_restore_storage_root(previous_root)
+		_wipe_dir(temp_root)
+		return
+
+	manager.workplans_directory = workplans_dir
+	manager._ensure_workplans_directory()
+	manager._load_workplan_registry()
+
+	var plan_name := "Markdown Export Probe"
+	if manager.available_workplans.has(plan_name):
+		manager.delete_workplan(plan_name)
+	var created: bool = manager.create_new_workplan(plan_name, "Export probe")
+	_expect(created, "create probe workplan")
+	var workplan: Workplan = manager.get_current_workplan() as Workplan
+	_expect(workplan != null, "probe workplan current")
+	if workplan:
+		var task := WorkplanTask.new()
+		task.title = "PLACEHOLDER — sample"
+		task.channel = "#kernel_inference"
+		task.content_theme = "Open Closure"
+		task.publish_date = "2026-12-01"
+		task.campaign_tag = "probe"
+		task.generated_content = "**Sample**\n\nPLACEHOLDER body for export."
+		task.notes = "STATUS: placeholder\nSOURCE: test"
+		workplan.add_task_to_month("2026-12", task)
+		manager.save_current_workplan()
+
+		var export_path: String = temp_root.path_join("probe_export.md")
+		var ok: bool = manager.export_workplan_as_markdown(plan_name, export_path)
+		_expect(ok, "export_workplan_as_markdown returns true")
+		_expect(FileAccess.file_exists(export_path), "markdown file written")
+		if FileAccess.file_exists(export_path):
+			var md: String = FileAccess.get_file_as_string(export_path)
+			_expect(md.find("#kernel_inference") >= 0, "markdown includes channel")
+			_expect(md.find("placeholder") >= 0, "markdown includes plan status placeholder")
+			_expect(md.find("Sample") >= 0 or md.find("PLACEHOLDER") >= 0, "markdown includes draft body")
+
+		var export_path2: String = temp_root.path_join("probe_export2.md")
+		_expect(
+			manager.export_workplan(plan_name, export_path2),
+			"export_workplan routes .md to markdown exporter"
+		)
+
+	# Leave the probe plan in the temp tree; wipe_dir removes it. Avoid
+	# delete_workplan when it would be the only remaining plan (manager guard).
 	_restore_storage_root(previous_root)
 	_wipe_dir(temp_root)
 
