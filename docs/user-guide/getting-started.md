@@ -38,9 +38,12 @@ access. When running from source:
    respond.
 4. Press play.
 
-The hub starts on its own if it is present and not already running, and adopts
-one that is already running rather than starting a second (ADR 0021). You only
-start it by hand when diagnosing a problem.
+The hub starts on its own if a Hub binary is present and not already running, and
+adopts one that is already running rather than starting a second (ADR 0021). A
+source checkout has no shipped binary under `dist/` — start the Hub yourself (or
+set `hub.exec_path` / `hub.autostart_from_source`) when you want voice. For voice
+plus Story Stage portraits from source, see
+[Running ScenSyn from source with voice and avatars](../developer-guide/local-dev.md#running-scensyn-from-source-with-voice-and-avatars).
 
 ## Model access
 

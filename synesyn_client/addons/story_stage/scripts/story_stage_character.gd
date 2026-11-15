@@ -4,10 +4,16 @@ extends Node
 ## Per-stage character registry and sprite discovery. Not process-wide.
 
 const NARRATOR_ID := 0
+const ART_PACK_WARNING := (
+	"Story Stage art pack not installed — speakers use the spectrum visualiser. "
+	+ "Install packs with: python utilities/assets/story_stage_sprites.py "
+	+ "(see docs/user-guide/story-stage-sprites.md)."
+)
 
 static var _live: Array[StoryStageCharacter] = []
 static var _pending: Dictionary = {}
 static var _pending_next := 1
+static var _art_pack_warning_emitted: bool = false
 
 var stage: Node
 var _by_name: Dictionary = {}
@@ -36,11 +42,33 @@ static func _get_sprite_roots_for_current_scenario() -> Array[String]:
 	return StoryStageHost.resolve_default().get_sprite_roots()
 
 
+static func warn_art_pack_missing_once() -> void:
+	if _art_pack_warning_emitted:
+		return
+	_art_pack_warning_emitted = true
+	push_warning(ART_PACK_WARNING)
+
+
+static func reset_art_pack_warning_for_tests() -> void:
+	_art_pack_warning_emitted = false
+
+
+static func _res_path_exists_on_disk(res_path: String) -> bool:
+	var absolute: String = ProjectSettings.globalize_path(res_path).replace("\\", "/")
+	return absolute != "" and FileAccess.file_exists(absolute)
+
+
 static func _load_texture_any(texture_path: String) -> Texture2D:
 	var path := texture_path.strip_edges()
 	if path == "":
 		return null
 	if path.begins_with("res://"):
+		# Check the real file first. ResourceLoader.exists can be true from a
+		# stale UID/.import entry while the PNG (gitignored pack art) is absent;
+		# calling load() then spams per-file errors.
+		if not _res_path_exists_on_disk(path):
+			warn_art_pack_missing_once()
+			return null
 		if ResourceLoader.exists(path):
 			var loaded: Variant = load(path)
 			if loaded is Texture2D:
@@ -48,9 +76,11 @@ static func _load_texture_any(texture_path: String) -> Texture2D:
 		return null
 	var absolute := path.replace("\\", "/")
 	if not FileAccess.file_exists(absolute):
+		warn_art_pack_missing_once()
 		return null
 	var image := Image.new()
 	if image.load(absolute) != OK:
+		warn_art_pack_missing_once()
 		return null
 	return ImageTexture.create_from_image(image)
 
@@ -246,6 +276,11 @@ func _load_art(id: int, cname: String) -> void:
 	if folder == "" and slug != "_fallback":
 		folder = _first_folder("_fallback")
 	if folder == "":
+		# No pack or workspace art for this speaker — spectrum fallback.
+		# Narrator often has no portrait by design; still surface the pack
+		# guidance once when any non-narrator looks for art and finds none.
+		if id != NARRATOR_ID:
+			warn_art_pack_missing_once()
 		return
 	var built := _build_frames(folder)
 	stored["sprite_frames"] = built.get("frames")

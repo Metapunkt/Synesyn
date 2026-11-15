@@ -44,6 +44,7 @@ var _hub_pid_started_here: int = -1
 var _hub_autostart_http: HTTPRequest = null
 var _last_hub_autostart_attempt_ms: int = -999999
 const _HUB_AUTOSTART_MIN_INTERVAL_MS := 15000
+var _voice_unavailable_notice_shown: bool = false
 
 func _ready():
 	# Set up project setting if it doesn't exist
@@ -145,7 +146,27 @@ func _autostart_local_hub_if_configured() -> void:
 
 	var exec_path := HubLocator.find_hub_exe(cfg)
 	if exec_path.is_empty():
-		print("VoiceService: Hub autostart skipped (hub not found). Expected %s" % HubLocator.describe_expected_location())
+		# Optional source-run fallback: python -m app.main in services/synesyn_hub.
+		if HubLocator.is_autostart_from_source_enabled(cfg) and HubLocator.is_source_run():
+			_hub_pid_started_here = HubLocator.start_hub_from_source()
+			if _hub_pid_started_here > 0:
+				print(
+					"VoiceService: Autostarted hub from source (pid=%s): python -m app.main in %s"
+					% [str(_hub_pid_started_here), HubLocator.get_source_hub_dir()]
+				)
+				var bootstrapper_src := SynesynAutoloadAccessScript.workspace_bootstrapper()
+				if is_instance_valid(bootstrapper_src) and bootstrapper_src.has_method("register_hub_process"):
+					bootstrapper_src.register_hub_process(_hub_pid_started_here, HubLocator.get_source_hub_dir())
+				return
+			push_warning(
+				"VoiceService: hub.autostart_from_source is on, but could not start python -m app.main in %s"
+				% HubLocator.get_source_hub_dir()
+			)
+		push_warning(
+			"VoiceService: Hub autostart skipped (hub not found). Expected %s"
+			% HubLocator.describe_expected_location()
+		)
+		_notify_voice_unavailable_once(base_url)
 		return
 
 	_hub_pid_started_here = OS.create_process(exec_path, [], false)
@@ -156,8 +177,12 @@ func _autostart_local_hub_if_configured() -> void:
 		if is_instance_valid(bootstrapper) and bootstrapper.has_method("register_hub_process"):
 			bootstrapper.register_hub_process(_hub_pid_started_here, exec_path)
 	else:
-		print("VoiceService: Hub autostart failed (create_process returned %s): %s" % [str(_hub_pid_started_here), exec_path])
+		push_warning(
+			"VoiceService: Hub autostart failed (create_process returned %s): %s"
+			% [str(_hub_pid_started_here), exec_path]
+		)
 		_hub_pid_started_here = -1
+		_notify_voice_unavailable_once(base_url)
 
 func _ping_hub_health_ok_async(base_url: String) -> bool:
 	if not is_inside_tree():
@@ -514,6 +539,7 @@ func _on_service_status_changed(is_available: bool):
 	is_service_running = is_available
 	if is_available:
 		print("VoiceService: External voice service is available (was_running=%s)" % str(was_running))
+		_voice_unavailable_notice_shown = false
 		voice_service_ready.emit()
 		# When recovering from a down state (or first-time availability after
 		# launch), schedule a full config re-apply.  This replicates exactly
@@ -529,9 +555,24 @@ func _on_service_status_changed(is_available: bool):
 	else:
 		print("VoiceService: External voice service is unavailable")
 		voice_service_error.emit("Voice service unavailable")
+		if provider_mode == "hub":
+			_notify_voice_unavailable_once(hub_voice_url)
 		# If we're in hub mode and the hub is local/autostart-enabled, try to bring it back.
 		# This makes hub restarts/crashes self-heal without requiring "Save & Apply".
 		call_deferred("_autostart_local_hub_if_configured")
+
+
+func _notify_voice_unavailable_once(base_url: String) -> void:
+	if _voice_unavailable_notice_shown:
+		return
+	_voice_unavailable_notice_shown = true
+	var message: String = HubLocator.voice_unavailable_message(base_url)
+	push_warning("VoiceService: %s" % message)
+	# One-time user-visible notice. Skip headless / automated runs so tests and
+	# CI do not hang on a modal.
+	if DisplayServer.get_name() == "headless":
+		return
+	OS.alert(message, "Voice unavailable")
 
 func _schedule_recovery_reapply() -> void:
 	"""Schedule apply_runtime_config 0.5 s after service recovery."""
