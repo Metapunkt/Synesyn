@@ -172,7 +172,9 @@ func _on_assignee_option_selected(index: int) -> void:
 		# Keep free-text edit for custom/agent values.
 		return
 	var meta: Variant = assignee_option.get_item_metadata(index)
-	assignee_edit.text = String(meta)
+	if meta == null:
+		return
+	assignee_edit.text = str(meta)
 
 
 func _refresh_blocked_hint() -> void:
@@ -224,7 +226,10 @@ func _get_selected_assignee() -> String:
 		return ""
 	if assignee_option.selected == 1:
 		return ""
-	return String(assignee_option.get_item_metadata(assignee_option.selected))
+	var meta: Variant = assignee_option.get_item_metadata(assignee_option.selected)
+	if meta == null:
+		return ""
+	return str(meta)
 
 func _collect_static_checkboxes():
 	"""Collect static checkboxes for easy management"""
@@ -674,13 +679,32 @@ func _set_default_values():
 	deadline_edit.text = _get_formatted_date(7)   # 1 week
 	publish_date_edit.text = _get_formatted_date(30)  # 1 month
 
+func _core_idea_for_display(task: WorkplanTask) -> String:
+	"""Prefer core_idea; fall back so imported tasks without that column still edit/save."""
+	if task == null:
+		return ""
+	var idea: String = task.core_idea.strip_edges()
+	if not idea.is_empty():
+		return idea
+	var draft: String = task.generated_content.strip_edges()
+	if not draft.is_empty():
+		return draft
+	var notes_text: String = task.notes.strip_edges()
+	if not notes_text.is_empty():
+		# First line of notes is enough for a required core-idea field.
+		var first_line: String = notes_text.split("\n")[0].strip_edges()
+		if not first_line.is_empty():
+			return first_line
+	return task.title.strip_edges()
+
+
 func _populate_fields(task: WorkplanTask):
 	"""Populate dialog fields with existing task data"""
 	# Ensure task properties are synced before populating
 	task.sync_array_properties()
 	
 	title_edit.text = task.title
-	core_idea_edit.text = task.core_idea
+	core_idea_edit.text = _core_idea_for_display(task)
 	notes_edit.text = task.notes
 	priority_option.selected = task.priority
 	_setup_assignee_options()
@@ -691,7 +715,11 @@ func _populate_fields(task: WorkplanTask):
 	if assignee_option:
 		var matched := false
 		for i in range(assignee_option.item_count):
-			if String(assignee_option.get_item_metadata(i)) == task.assignee and not task.assignee.is_empty():
+			var meta: Variant = assignee_option.get_item_metadata(i)
+			# Items 0/1 ("(none)" / custom) have null metadata — String(null) errors on Godot 4.7+.
+			if meta == null:
+				continue
+			if str(meta) == task.assignee and not task.assignee.is_empty():
 				assignee_option.selected = i
 				matched = true
 				break
@@ -978,7 +1006,13 @@ func _on_confirmed():
 		_show_error_dialog("Please enter a task title.")
 		return
 	
-	if core_idea_edit.text.strip_edges() == "":
+	var idea_text: String = core_idea_edit.text.strip_edges()
+	if idea_text.is_empty() and is_edit_mode and editing_task != null:
+		# Imported tasks may lack core_idea; keep a stable fallback so unedited OK works.
+		idea_text = _core_idea_for_display(editing_task)
+		if core_idea_edit and idea_text:
+			core_idea_edit.text = idea_text
+	if idea_text.is_empty():
 		_show_error_dialog("Please enter a core idea for the task.")
 		return
 	
@@ -991,7 +1025,7 @@ func _on_confirmed():
 	
 	# Populate task data
 	task.title = title_edit.text.strip_edges()
-	task.core_idea = core_idea_edit.text.strip_edges()
+	task.core_idea = idea_text
 	task.notes = notes_edit.text
 	task.priority = priority_option.selected
 	task.formats = _get_selected_formats()

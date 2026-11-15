@@ -262,6 +262,16 @@ static func _apply_row_to_task(task: WorkplanTask, row: Dictionary, is_new: bool
 	task.campaign_tag = String(row.get("campaign_tag", ""))
 	task.generated_content = String(row.get("draft", ""))
 	task.notes = String(row.get("notes", ""))
+	# CSV plans often omit core_idea; seed it so the editor can save without edits.
+	var core_raw: String = String(row.get("core_idea", "")).strip_edges()
+	if core_raw.is_empty():
+		core_raw = task.generated_content.strip_edges()
+	if core_raw.is_empty() and not task.notes.strip_edges().is_empty():
+		core_raw = task.notes.strip_edges().split("\n")[0].strip_edges()
+	if core_raw.is_empty():
+		core_raw = task.title.strip_edges()
+	if task.core_idea.strip_edges().is_empty() and not core_raw.is_empty():
+		task.core_idea = core_raw
 	var status_raw: String = String(row.get("status", "draft")).strip_edges().to_lower()
 	if status_raw.is_empty():
 		status_raw = "draft"

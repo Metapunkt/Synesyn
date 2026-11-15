@@ -115,6 +115,8 @@ static func create_month_card(
 	var card := PanelContainer.new()
 	card.name = "TaskCard_%s_%s" % [task.title.replace(" ", "_"), kind_label_text]
 	card.custom_minimum_size = Vector2(0, 20)
+	# STOP on the card; IGNORE on children so picking hits the card (not labels).
+	card.mouse_filter = Control.MOUSE_FILTER_STOP
 	card.set_meta("primary_type", primary_type)
 	card.set_meta("tooltip_text_full", tip)
 
@@ -134,7 +136,7 @@ static func create_month_card(
 	card.tooltip_text = tip
 
 	var hbox := HBoxContainer.new()
-	# IGNORE so the card (not child Labels) owns hover tooltips.
+	# IGNORE so the card owns right-click / double-click / hover (not child Labels).
 	hbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(hbox)
 

@@ -866,6 +866,26 @@ func _close_import_preview_dialog(summary: Window) -> void:
 	summary.queue_free()
 
 
+func _show_import_complete_result(created_n: int, updated_n: int, manager_dialog: AcceptDialog = null) -> void:
+	"""Show Import complete only after the preview Window is gone from the tree."""
+	var result := AcceptDialog.new()
+	result.title = "Import complete"
+	result.dialog_text = "Created: %d\nUpdated: %d" % [created_n, updated_n]
+	result.ok_button_text = "Close"
+	result.exclusive = true
+	add_child(result)
+	var finish := func(_arg = null):
+		if is_instance_valid(result):
+			result.hide()
+			result.queue_free()
+		if manager_dialog != null and is_instance_valid(manager_dialog):
+			manager_dialog.show()
+	result.confirmed.connect(finish, CONNECT_ONE_SHOT)
+	result.canceled.connect(finish, CONNECT_ONE_SHOT)
+	result.close_requested.connect(finish, CONNECT_ONE_SHOT)
+	result.popup_centered()
+
+
 func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:
 	"""Show created/updated/skipped/errors summary before applying bulk import."""
 	var created_n: int = int(preview.get("created", 0))
@@ -899,6 +919,7 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 		if manager_dialog != null and is_instance_valid(manager_dialog):
 			manager_dialog.show()
 	summary.confirmed.connect(func():
+		# Hide/free preview BEFORE showing the result so it cannot linger underneath.
 		_close_import_preview_dialog(summary)
 		var applied: Dictionary = workplan_manager.apply_import_tasks_preview(preview)
 		var applied_created: int = int(applied.get("created", 0))
@@ -907,21 +928,13 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 			"MissionControl: Import applied — created %d, updated %d"
 			% [applied_created, applied_updated]
 		)
-		var result := AcceptDialog.new()
-		result.title = "Import complete"
-		result.dialog_text = "Created: %d\nUpdated: %d" % [applied_created, applied_updated]
-		result.ok_button_text = "Close"
-		result.exclusive = true
-		add_child(result)
-		var finish := func(_arg = null):
-			if is_instance_valid(result):
-				result.hide()
-				result.queue_free()
-			restore_manager.call()
-		result.confirmed.connect(finish, CONNECT_ONE_SHOT)
-		result.canceled.connect(finish, CONNECT_ONE_SHOT)
-		result.close_requested.connect(finish, CONNECT_ONE_SHOT)
-		result.popup_centered()
+		# Defer result one frame so the preview Window is gone from the tree first.
+		call_deferred(
+			"_show_import_complete_result",
+			applied_created,
+			applied_updated,
+			manager_dialog
+		)
 	, CONNECT_ONE_SHOT)
 	var on_cancel := func(_arg = null):
 		_close_import_preview_dialog(summary)

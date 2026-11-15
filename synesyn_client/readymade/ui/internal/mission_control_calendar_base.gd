@@ -41,7 +41,6 @@ func _setup_calendar():
 	# Build the calendar grid
 	_build_calendar_grid()
 
-
 func _setup_calendar_view_mode_selector() -> void:
 	"""Add Month/Week/Agenda switcher beside calendar navigation."""
 	if calendar_view_mode_button != null and is_instance_valid(calendar_view_mode_button):
@@ -59,7 +58,6 @@ func _setup_calendar_view_mode_selector() -> void:
 	today_btn.get_parent().add_child(calendar_view_mode_button)
 	today_btn.get_parent().move_child(calendar_view_mode_button, today_btn.get_index() + 1)
 
-
 func _on_calendar_view_mode_selected(index: int) -> void:
 	match index:
 		1:
@@ -70,7 +68,6 @@ func _on_calendar_view_mode_selected(index: int) -> void:
 			calendar_view_mode = "month"
 	calendar_last_task_count = -1
 	_build_calendar_grid()
-
 
 func _maybe_show_calendar_drag_hint() -> void:
 	"""One-time dismissible tip that calendar cards can be dragged between days."""
@@ -98,7 +95,6 @@ func _maybe_show_calendar_drag_hint() -> void:
 	calendar_drag_hint_banner.add_child(dismiss)
 	header.add_child(calendar_drag_hint_banner)
 
-
 func _is_calendar_drag_hint_dismissed() -> bool:
 	var cfg: Dictionary = RuntimeConfig.load_config()
 	var apps_any: Variant = cfg.get("apps", {})
@@ -108,7 +104,6 @@ func _is_calendar_drag_hint_dismissed() -> bool:
 	if typeof(readymade_any) != TYPE_DICTIONARY:
 		return false
 	return bool((readymade_any as Dictionary).get("calendar_drag_hint_dismissed", false))
-
 
 func _on_calendar_drag_hint_dismissed() -> void:
 	var cfg: Dictionary = RuntimeConfig.load_config()
@@ -198,7 +193,6 @@ func _build_calendar_grid():
 	# Populate with tasks after a short delay to ensure nodes are in scene tree
 	call_deferred("_populate_calendar_with_tasks")
 
-
 func _build_week_calendar_grid() -> void:
 	"""Seven day columns for the week containing the currently selected month/day context."""
 	calendar_grid.columns = 7
@@ -248,7 +242,6 @@ func _build_week_calendar_grid() -> void:
 			calendar_grid.add_child(filler)
 	call_deferred("_populate_calendar_with_tasks")
 
-
 func _build_agenda_calendar_grid() -> void:
 	"""Chronological upcoming-task list grouped by date."""
 	calendar_grid.columns = 1
@@ -290,7 +283,6 @@ func _build_agenda_calendar_grid() -> void:
 		var empty := Label.new()
 		empty.text = "No upcoming tasks in the agenda."
 		calendar_grid.add_child(empty)
-
 
 func _create_day_cell(day: int) -> Control:
 	"""Create a day cell for the calendar"""
@@ -430,7 +422,6 @@ func _populate_calendar_with_tasks():
 
 	_update_calendar_empty_state(tasks_by_day.size(), all_tasks.size())
 
-
 func _update_calendar_empty_state(days_with_tasks: int, total_tasks: int) -> void:
 	"""Visible empty-state when the open month has no cards."""
 	if _calendar_empty_banner != null and is_instance_valid(_calendar_empty_banner):
@@ -467,7 +458,6 @@ func _update_calendar_empty_state(days_with_tasks: int, total_tasks: int) -> voi
 		host.add_child(banner)
 		host.move_child(banner, 0)
 	_calendar_empty_banner = banner
-
 
 func _jump_calendar_to_next_task() -> void:
 	var workplan_obj = ReadyMadeOrchestrator.workplan if ReadyMadeOrchestrator else null
@@ -663,53 +653,67 @@ func _on_today_pressed():
 	_setup_month_year_selectors()
 	_build_calendar_grid()
 
-func _on_task_card_input(card: Control, task: WorkplanTask, date_type: String, event: InputEvent):
-	"""Handle initial input on a task card to start a drag or handle clicks."""
-	# --- The cell inspector has done its job. This can be removed. ---
-	# var date_dict = _parse_date_string(task.start_date if date_type == "start" else task.deadline)
-	# if date_dict.has("day"):
-	# 	_debug_print_cell_structure(date_dict.day)
-	# --------------------------------------------------------------------
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if event.double_click:
-			_on_edit_task_pressed(task)
-		else:
-			# Single click: Start the drag operation
-			_start_drag(task, date_type, card)
-		get_viewport().set_input_as_handled()
-	
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		_show_task_context_menu(task, date_type)
-		get_viewport().set_input_as_handled()
+func _clear_pending_calendar_drag() -> void:
+	_pending_drag_task = null
+	_pending_drag_card = null
+	_pending_drag_date_type = ""
+	_pending_drag_pos = Vector2.ZERO
 
-func _on_task_card_clicked(_task: WorkplanTask, _date_type: String, _event: InputEvent):
-	"""Legacy function - kept for compatibility"""
-	# This function is no longer used but kept to avoid breaking existing connections
-	pass
+func _on_task_card_input(card: Control, task: WorkplanTask, date_type: String, event: InputEvent):
+	"""Right-click menu, double-click edit; drag only after move threshold."""
+	if event is InputEventMouseButton:
+		var mouse_btn: InputEventMouseButton = event
+		if mouse_btn.button_index == MOUSE_BUTTON_RIGHT and mouse_btn.pressed:
+			_clear_pending_calendar_drag()
+			_show_task_context_menu(task, date_type)
+			get_viewport().set_input_as_handled()
+			return
+		if mouse_btn.button_index == MOUSE_BUTTON_LEFT and mouse_btn.pressed:
+			if mouse_btn.double_click:
+				_clear_pending_calendar_drag()
+				if dragging_task != null:
+					_stop_drag()
+				_on_edit_task_pressed(task)
+			else:
+				_pending_drag_task = task
+				_pending_drag_card = card
+				_pending_drag_date_type = date_type
+				_pending_drag_pos = mouse_btn.position
+			get_viewport().set_input_as_handled()
+			return
+		if mouse_btn.button_index == MOUSE_BUTTON_LEFT and not mouse_btn.pressed:
+			_clear_pending_calendar_drag()
+			return
+	elif event is InputEventMouseMotion and _pending_drag_task != null:
+		var motion: InputEventMouseMotion = event
+		if (motion.button_mask & MOUSE_BUTTON_MASK_LEFT) and motion.position.distance_to(_pending_drag_pos) >= _CALENDAR_DRAG_THRESHOLD_PX:
+			var drag_task: WorkplanTask = _pending_drag_task
+			var drag_card: Control = _pending_drag_card
+			var drag_type: String = _pending_drag_date_type
+			_clear_pending_calendar_drag()
+			_start_drag(drag_task, drag_type, drag_card)
+			get_viewport().set_input_as_handled()
 
 func _on_day_cell_mouse_entered(day: int):
-	"""Handle mouse entering day cell (for drop feedback)"""
-	if dragging_task:
-		# Highlight this cell as a drop target
-		var cell_index = day - 1
-		if cell_index >= 0 and cell_index < calendar_day_cells.size():
-			var cell = calendar_day_cells[cell_index]
-			if cell and is_instance_valid(cell):
-				cell.modulate = Color(1.3, 1.3, 1.0)  # Bright yellow highlight
+	if dragging_task == null:
+		return
+	var cell_index = day - 1
+	if cell_index >= 0 and cell_index < calendar_day_cells.size():
+		var cell = calendar_day_cells[cell_index]
+		if cell and is_instance_valid(cell):
+			cell.modulate = Color(1.3, 1.3, 1.0)
 
 func _on_day_cell_mouse_exited(day: int):
-	"""Handle mouse exiting day cell"""
-	if dragging_task:
-		# Reset cell highlight to normal drop zone color
-		var cell_index = day - 1
-		if cell_index >= 0 and cell_index < calendar_day_cells.size():
-			var cell = calendar_day_cells[cell_index]
-			if cell and is_instance_valid(cell):
-				cell.modulate = Color(1.1, 1.1, 1.0)  # Back to normal drop zone highlight
+	if dragging_task == null:
+		return
+	var cell_index = day - 1
+	if cell_index >= 0 and cell_index < calendar_day_cells.size():
+		var cell = calendar_day_cells[cell_index]
+		if cell and is_instance_valid(cell):
+			cell.modulate = Color(1.1, 1.1, 1.0)
 
 func _dismiss_calendar_context_menu() -> void:
-	"""Force-hide/free the calendar PopupMenu so Undo cannot leave it stuck open."""
+	"""Hide/free calendar PopupMenu so Undo cannot leave it stuck open."""
 	if calendar_context_menu == null or not is_instance_valid(calendar_context_menu):
 		calendar_context_menu = null
 		return
@@ -720,19 +724,16 @@ func _dismiss_calendar_context_menu() -> void:
 		(status_submenu as PopupMenu).visible = false
 	menu.hide()
 	menu.visible = false
-	# Freeing guarantees the popup cannot linger after calendar rebuild.
 	if menu.get_parent() != null:
 		menu.get_parent().remove_child(menu)
 	menu.queue_free()
 	calendar_context_menu = null
 
-
 func _ensure_calendar_context_menu() -> PopupMenu:
-	"""Create a fresh top-level PopupMenu each time it is shown."""
 	_dismiss_calendar_context_menu()
 	var menu := PopupMenu.new()
 	menu.name = "CalendarContextMenu"
-	menu.top_level = true
+	# PopupMenu is a Window in Godot 4 — never assign Control.top_level (4.7+ errors).
 	menu.hide_on_item_selection = true
 	menu.hide_on_checkable_item_selection = true
 	menu.hide_on_state_item_selection = true
@@ -742,24 +743,19 @@ func _ensure_calendar_context_menu() -> PopupMenu:
 	calendar_context_menu = menu
 	return menu
 
-
 func _show_task_context_menu(task: WorkplanTask, _date_type: String):
-	"""Clears, populates, and shows the context menu for a calendar task."""
-	context_menu_task = task # Store the task for the handler
+	context_menu_task = task
 	var menu: PopupMenu = _ensure_calendar_context_menu()
-	# HACK: For some reason, submenus added at index 0 don't work reliably.
-	# So we add a dummy item first and will handle the submenu logic via ID.
+	if menu == null:
+		return
 	menu.add_item("Edit Task", 0)
-
 	var status_submenu := PopupMenu.new()
 	status_submenu.name = "StatusSubmenu"
 	menu.add_child(status_submenu)
 	status_submenu.id_pressed.connect(func(id): _on_calendar_context_menu_id_pressed(100 + id))
-
 	var statuses = ["To Do", "In Progress", "Review", "Done"]
 	for i in statuses.size():
 		status_submenu.add_item(statuses[i], i)
-		
 	menu.add_submenu_item("Change Status", "StatusSubmenu")
 	menu.add_separator()
 	menu.add_item("Move to date…", 3)
@@ -771,9 +767,8 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	menu.add_item("Copy as Markdown", 6)
 	menu.add_separator()
 	menu.add_item("Delete Task", 2)
-	
-	menu.position = get_viewport().get_mouse_position()
-	menu.popup()
+	menu.position = Vector2i(get_viewport().get_mouse_position())
+	menu.popup()  # bare popup auto-sizes (zero-size rect collapses Window)
 
 func _on_calendar_context_menu_id_pressed(id: int):
 	"""Handle context menu actions"""
@@ -785,7 +780,6 @@ func _on_calendar_context_menu_id_pressed(id: int):
 		return
 	# Defer the action one frame so PopupMenu hide is committed first.
 	call_deferred("_run_calendar_context_action", id, task)
-
 
 func _run_calendar_context_action(id: int, task: WorkplanTask) -> void:
 	_dismiss_calendar_context_menu()
@@ -928,7 +922,6 @@ func _ensure_calendar_rescheduler():
 	calendar_rescheduler = RescheduleScript.new()
 	calendar_rescheduler.cadence_changed.connect(_on_calendar_cadence_changed)
 
-
 func _on_calendar_cadence_changed(warnings: Array) -> void:
 	_ensure_calendar_cadence_banner()
 	if calendar_cadence_banner == null:
@@ -939,7 +932,6 @@ func _on_calendar_cadence_changed(warnings: Array) -> void:
 	else:
 		calendar_cadence_banner.text = "Cadence: %d warning(s) after reschedule" % warnings.size()
 		calendar_cadence_banner.modulate = Color(0.95, 0.75, 0.35)
-
 
 func _ensure_calendar_cadence_banner() -> void:
 	if calendar_cadence_banner != null and is_instance_valid(calendar_cadence_banner):
@@ -955,7 +947,6 @@ func _ensure_calendar_cadence_banner() -> void:
 	host.add_child(calendar_cadence_banner)
 	host.move_child(calendar_cadence_banner, 0)
 
-
 func _handle_drop_on_day(day: int):
 	"""Handle dropping a task on a specific day (preserves publish timezone)."""
 	if not dragging_task:
@@ -966,7 +957,6 @@ func _handle_drop_on_day(day: int):
 	var new_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, day]
 	_reschedule_task(dragging_task, new_date, drag_source_date_type)
 	_stop_drag()
-
 
 func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -> void:
 	_ensure_calendar_rescheduler()
@@ -1006,7 +996,6 @@ func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -
 	calendar_last_task_count = -1
 	_populate_calendar_with_tasks()
 	_offer_move_dependents(task, old_anchor, new_date, cascade_fields, workplan_obj)
-
 
 func _offer_move_dependents(
 	task: WorkplanTask,
@@ -1066,7 +1055,6 @@ func _offer_move_dependents(
 			ok_btn.grab_focus()
 	, CONNECT_ONE_SHOT)
 
-
 func _prompt_move_task_to_date(task: WorkplanTask) -> void:
 	"""Keyboard-accessible alternative to drag-and-drop."""
 	if task == null:
@@ -1091,7 +1079,6 @@ func _prompt_move_task_to_date(task: WorkplanTask) -> void:
 	dialog.canceled.connect(func(): dialog.queue_free())
 	add_child(dialog)
 	dialog.popup_centered()
-
 
 func _undo_calendar_reschedule() -> void:
 	_dismiss_calendar_context_menu()

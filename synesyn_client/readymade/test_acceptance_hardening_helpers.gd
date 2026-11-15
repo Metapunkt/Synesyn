@@ -29,6 +29,9 @@ static func run_all(host: Node) -> void:
 	_test_live_calendar_path_and_tooltip_not_overwritten(host)
 	_test_task_dialog_calendar_dates_prefilled(host)
 	_test_move_dependents_dialog_deferred_single_ok(host)
+	_test_imported_task_assignee_and_unedited_save(host)
+	_test_calendar_card_right_click_and_double_click(host)
+	_test_import_preview_hidden_before_result(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -956,4 +959,152 @@ static func _test_move_dependents_dialog_deferred_single_ok(host: Node) -> void:
 	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
 	host.add_child(dash)
 	_expect(host, dash.has_method("_offer_move_dependents"), "offer move dependents present")
+	dash.queue_free()
+
+
+static func _test_imported_task_assignee_and_unedited_save(host: Node) -> void:
+	print("-- imported task assignee populate + unedited OK save --")
+	const BulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
+	var imported := WorkplanTask.new()
+	BulkIOScript._apply_row_to_task(imported, {
+		"title": "Synthesize reviewer comments",
+		"assignee": "Amara Okonkwo",
+		"publish_date": "2026-12-05",
+		"deadline": "2026-12-04",
+		"start_date": "2026-12-01",
+		"publish_time": "14:00",
+		"publish_timezone": "Africa/Lagos",
+		"notes": "Imported note line",
+		"draft": "",
+		"core_idea": "",
+	}, true)
+	_expect(host, not imported.core_idea.strip_edges().is_empty(), "import seeds core_idea from title/notes")
+	_expect(host, imported.assignee == "Amara Okonkwo", "import keeps assignee")
+	_expect(host, imported.publish_date == "2026-12-05", "import keeps publish_date")
+	_expect(host, imported.start_date == "2026-12-01", "import keeps start_date")
+	var scene: PackedScene = load("res://readymade/ui/task_dialog.tscn")
+	_expect(host, scene != null, "task_dialog.tscn loads for assignee test")
+	if scene == null:
+		return
+	var dlg: Node = scene.instantiate()
+	host.add_child(dlg)
+	# Must not SCRIPT ERROR on null OptionButton metadata (Godot 4.7+ String(null)).
+	dlg.show_edit_dialog(imported)
+	_expect(host, dlg.core_idea_edit != null and not dlg.core_idea_edit.text.is_empty(), "editor core idea populated")
+	_expect(host, dlg.assignee_edit != null and dlg.assignee_edit.text == "Amara Okonkwo", "assignee line filled")
+	_expect(host, dlg.publish_date_edit != null and dlg.publish_date_edit.text == "2026-12-05", "publish prefilled after import edit")
+	_expect(host, dlg.deadline_edit != null and dlg.deadline_edit.text == "2026-12-04", "deadline prefilled after import edit")
+	_expect(host, dlg.scheduled_edit != null and dlg.scheduled_edit.text == "2026-12-01", "start prefilled after import edit")
+	# Unedited OK must save (no 'Please enter a core idea' error).
+	dlg.is_edit_mode = true
+	dlg.editing_task = imported
+	dlg._on_confirmed()
+	_expect(host, not imported.core_idea.strip_edges().is_empty(), "unedited OK keeps/sets core_idea")
+	_expect(host, imported.publish_date == "2026-12-05", "unedited OK keeps publish_date")
+	_expect(host, imported.deadline == "2026-12-04", "unedited OK keeps deadline")
+	_expect(host, imported.start_date == "2026-12-01", "unedited OK keeps start_date")
+	_expect(host, imported.assignee == "Amara Okonkwo", "unedited OK keeps assignee")
+	# Re-open round-trip.
+	dlg.show_edit_dialog(imported)
+	_expect(host, dlg.publish_date_edit.text == "2026-12-05", "reopen keeps publish")
+	_expect(host, dlg.scheduled_edit.text == "2026-12-01", "reopen keeps start")
+	_expect(host, dlg.deadline_edit.text == "2026-12-04", "reopen keeps deadline")
+	dlg.queue_free()
+
+
+static func _test_calendar_card_right_click_and_double_click(host: Node) -> void:
+	print("-- calendar card right-click menu + double-click editor --")
+	var cal_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_calendar_base.gd"
+	)
+	_expect(
+		host,
+		cal_src.find("_CALENDAR_DRAG_THRESHOLD_PX") >= 0 and cal_src.find("_pending_drag_task") >= 0,
+		"drag starts only after motion threshold"
+	)
+	_expect(
+		host,
+		cal_src.find("menu.popup()") >= 0 and cal_src.find("menu.top_level") < 0,
+		"context menu uses bare popup(); no Control.top_level on Window PopupMenu"
+	)
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	var task := WorkplanTask.new()
+	task.title = "Peer review"
+	task.ensure_task_id()
+	task.publish_date = "2026-12-05"
+	task.core_idea = "Review fixtures"
+	const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
+	var card: PanelContainer = DayCardsScript.create_month_card(
+		task, "publish", ["publish"], "2026-12-05", false
+	)
+	dash.add_child(card)
+	_expect(host, card.mouse_filter == Control.MOUSE_FILTER_STOP, "card stops mouse for gui_input")
+	# Simulate right-click on a live calendar card path.
+	var right_ev := InputEventMouseButton.new()
+	right_ev.button_index = MOUSE_BUTTON_RIGHT
+	right_ev.pressed = true
+	right_ev.position = Vector2(8, 8)
+	dash._on_task_card_input(card, task, "publish", right_ev)
+	var menu: PopupMenu = dash.calendar_context_menu
+	_expect(host, menu != null and is_instance_valid(menu), "right-click creates context menu")
+	_expect(host, menu != null and menu.visible, "right-click menu is visible")
+	_expect(host, menu != null and menu.item_count > 0, "right-click menu has items")
+	# Undo path must dismiss on one activation.
+	dash._on_calendar_context_menu_id_pressed(5)
+	_expect(host, dash.calendar_context_menu == null, "Undo id dismisses menu on one click")
+	# Double-click opens editor (task_dialog.show_edit_dialog).
+	if dash.task_dialog == null:
+		dash.task_dialog = preload("res://readymade/ui/task_dialog.tscn").instantiate()
+		dash.add_child(dash.task_dialog)
+	var dbl := InputEventMouseButton.new()
+	dbl.button_index = MOUSE_BUTTON_LEFT
+	dbl.pressed = true
+	dbl.double_click = true
+	dbl.position = Vector2(8, 8)
+	dash._on_task_card_input(card, task, "publish", dbl)
+	_expect(
+		host,
+		dash.task_dialog != null and dash.task_dialog.visible,
+		"double-click opens task editor"
+	)
+	if dash.task_dialog and dash.task_dialog.visible:
+		dash.task_dialog.hide()
+	card.queue_free()
+	dash.queue_free()
+
+
+static func _test_import_preview_hidden_before_result(host: Node) -> void:
+	print("-- import preview hidden/freed before Import complete --")
+	var import_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_workplan_syntree_base.gd"
+	)
+	_expect(
+		host,
+		import_src.find("_show_import_complete_result") >= 0
+		and import_src.find("call_deferred") >= 0
+		and import_src.find("_close_import_preview_dialog(summary)") >= 0,
+		"Apply closes preview then deferred-shows result"
+	)
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_show_import_complete_result"), "import complete helper present")
+	var preview := ConfirmationDialog.new()
+	preview.title = "Import Tasks Preview"
+	preview.exclusive = true
+	dash.add_child(preview)
+	preview.popup_centered()
+	dash._close_import_preview_dialog(preview)
+	dash._show_import_complete_result(3, 1, null)
+	var preview_still := false
+	var result_visible := false
+	for child in dash.get_children():
+		if child is AcceptDialog and is_instance_valid(child):
+			var dlg: AcceptDialog = child as AcceptDialog
+			if dlg.title == "Import Tasks Preview" and dlg.visible:
+				preview_still = true
+			if dlg.title == "Import complete" and dlg.visible:
+				result_visible = true
+	_expect(host, not preview_still, "preview not visible when result shown")
+	_expect(host, result_visible, "Import complete result visible")
 	dash.queue_free()
