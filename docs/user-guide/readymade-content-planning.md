@@ -23,6 +23,27 @@ In the task dialog **Calendar** tab:
 - **Content status**: `draft`, `placeholder`, `open_slot`, `needs_approval`,
   `approved`, or `posted` (separate from workflow To Do / Done)
 
+## Viewer timezones
+
+Each workplan has a default publish zone and an optional **viewer** zone. Lists
+and the calendar show converted local times (including daylight-saving changes).
+You can type a time in the viewer zone; ReadyMade stores it in the task’s publish
+zone so collaborators keep a single source of truth.
+
+## Campaign dashboard
+
+Open the **Campaigns** tab to see posts grouped by campaign tag or content theme:
+counts by content status, upcoming and overdue items, completion progress, and
+how each channel sits against its weekly cadence cap.
+
+## Rescheduling on the calendar
+
+Drag a task card onto another day to move its publish (or start/deadline) date.
+Time and timezone stay the same. Right-click (or use **Move to date…** in the
+side panel) for a keyboard-friendly date entry. Use **Undo last reschedule** to
+roll back. Recurring instances move one at a time unless you choose **series**
+(same title and channel). Cadence warnings update immediately after a move.
+
 ## Bulk CSV / JSON
 
 Use **Export Tasks (CSV/JSON)** to review a month in a spreadsheet, then

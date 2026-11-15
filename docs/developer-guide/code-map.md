@@ -157,6 +157,10 @@ rather than a wasted search.
   `synesyn_client/readymade/scripts/core/document_session_manager.gd`
 - Internal split modules:
   `synesyn_client/readymade/scripts/core/internal/`
+- Campaign dashboard / timezone / calendar reschedule:
+  `synesyn_client/readymade/scripts/workplan_campaign_dashboard.gd`,
+  `workplan_timezone.gd`, `workplan_calendar_reschedule.gd`
+  (see [readymade-campaign-calendar.md](readymade-campaign-calendar.md))
 
 ## Harness and policy tooling
 

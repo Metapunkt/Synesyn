@@ -14,6 +14,9 @@
 | Recurring weekly expand | Friday `#general` roundup expands into dated instances. |
 | Calendar filters / search | Channel, content status, campaign, theme + search box. |
 | Cadence caps | Per-channel max posts/week; non-blocking validation report. |
+| Campaign dashboard | Per-campaign and per-theme status counts, progress, cadence vs caps. |
+| Viewer timezone conversion | DST-aware display/entry between task zone and viewer zone. |
+| Calendar drag-drop reschedule | Day moves with undo, series toggle, live cadence warnings. |
 | Scratchpad + Markdown / Copy as Markdown | Worked headless under `Documents/Synesyn/readymade/`. |
 
 Dogfood scene: `synesyn_client/readymade/test_dogfood_content_plan.tscn`  
@@ -44,6 +47,9 @@ Acceptance asserts custom-channel CRUD/reorder and that product mode defaults do
 | `timezone_schedule` | **low** | Date strings only. | **Fixed** — time + IANA zone + workplan default. |
 | `channel_cap_warnings` | **low** | No weekly channel-cap guard. | **Fixed** — caps + non-blocking warnings. |
 | `templates_for_discord` | **low** | No community post template / copy Markdown. | **Fixed** — Community Post template + Copy as Markdown. |
+| `campaign_dashboard` | **medium** | No per-campaign progress / cadence view. | **Fixed** — Campaigns tab + `WorkplanCampaignDashboard`. |
+| `tz_conversion` | **medium** | Zones stored as labels without viewer conversion. | **Fixed** — DST-aware `WorkplanTimezone.convert_zones`. |
+| `calendar_dnd` | **medium** | Reschedule required edit dialog. | **Fixed** — drag-drop + Move to date + undo + series. |
 
 ## Bugs / UX gaps fixed in this dogfood pass
 
@@ -52,12 +58,15 @@ Acceptance asserts custom-channel CRUD/reorder and that product mode defaults do
 3. **Bulk CSV/JSON task IO** — preview create/update/skip; schema in [readymade-task-bulk-io.md](readymade-task-bulk-io.md).
 4. **First-class `content_status`** — dialog, calendar, markdown; migrates `STATUS:` notes.
 5. **Recurring weekly expand**, calendar filters, timezone publish, cadence caps, Community Post + copy Markdown.
+6. **Campaign dashboard** — status counts, upcoming/overdue, completion, channel distribution vs caps ([API notes](readymade-campaign-calendar.md)).
+7. **Viewer timezone conversion** — enter in one zone, store/display in another with DST.
+8. **Calendar reschedule** — drag or Move to date; undo; instance vs series; live cadence banner.
 
 ## Larger ideas (still out of scope)
 
-- Campaign dashboard: posts/channel/week charts, open-slot debt queue.
-- Multi-timezone conversion math (labels/store IANA; no offset arithmetic yet).
-- Drag-and-drop calendar reschedule.
+- Hourly time-slot calendar (current views are day-granular).
+- Assignee/contributor personal timezones (model is task zone ↔ viewer zone only).
+- Charts beyond the text/list campaign dashboard (sparkline / week heatmap UI).
 
 ## How to re-run
 
