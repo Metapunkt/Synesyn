@@ -9,6 +9,7 @@ static func run_all(host: Node) -> void:
 	_test_publish_timezone(host)
 	_test_cadence_caps(host)
 	_test_community_post_template_and_copy_markdown(host)
+	_test_campaign_dashboard(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -180,3 +181,49 @@ static func _test_community_post_template_and_copy_markdown(host: Node) -> void:
 	_expect(host, md.find("Friday roundup") >= 0, "copy markdown includes title")
 	_expect(host, md.find("#general") >= 0, "copy markdown includes channel")
 	_expect(host, md.find("This week in the studio map") >= 0, "copy markdown includes draft")
+
+
+static func _test_campaign_dashboard(host: Node) -> void:
+	print("-- campaign dashboard aggregation --")
+	const DashboardScript = preload("res://readymade/scripts/workplan_campaign_dashboard.gd")
+	const CadenceScript = preload("res://readymade/scripts/workplan_cadence.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Campaign Dash Probe"
+	CadenceScript.set_cap(workplan, "#general", 1)
+	var today: String = Time.get_date_string_from_system()
+	var t1 := WorkplanTask.new()
+	t1.title = "Welcome"
+	t1.channel = "#general"
+	t1.campaign_tag = "nov-campaign"
+	t1.content_theme = "Onboarding"
+	t1.publish_date = today
+	t1.set_content_status("needs_approval")
+	var t2 := WorkplanTask.new()
+	t2.title = "Open slot"
+	t2.channel = "#general"
+	t2.campaign_tag = "nov-campaign"
+	t2.content_theme = "Reactive"
+	t2.publish_date = today
+	t2.set_content_status("open_slot")
+	var t3 := WorkplanTask.new()
+	t3.title = "Posted piece"
+	t3.channel = "#studio-notes"
+	t3.campaign_tag = "other"
+	t3.content_theme = "Onboarding"
+	t3.publish_date = "2020-01-01"
+	t3.set_content_status("posted")
+	t3.status = "Done"
+	workplan.months["probe"] = [t1, t2, t3]
+	var by_campaign: Dictionary = DashboardScript.build(workplan, "campaign")
+	_expect(host, by_campaign.get("groups", []).size() == 2, "two campaign groups")
+	var totals: Dictionary = by_campaign.get("totals", {})
+	_expect(host, int(totals.get("total", 0)) == 3, "totals count 3")
+	_expect(host, int(totals.get("open_slots", 0)) == 1, "one open slot")
+	_expect(host, int(totals.get("posted", 0)) >= 1, "posted counted")
+	_expect(host, DashboardScript.completion_ratio(totals) > 0.0, "completion ratio > 0")
+	var text: String = DashboardScript.render_text(by_campaign)
+	_expect(host, text.find("nov-campaign") >= 0, "report names campaign")
+	_expect(host, text.find("#general") >= 0, "report mentions channel")
+	var by_theme: Dictionary = DashboardScript.build(workplan, "theme")
+	_expect(host, by_theme.get("groups", []).size() == 2, "two theme groups")
+	_expect(host, by_campaign.get("cadence", []).size() >= 1, "cadence warning when over cap")
