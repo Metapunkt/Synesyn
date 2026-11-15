@@ -132,6 +132,12 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	cadence_button.pressed.connect(_on_cadence_caps_pressed.bind(dialog))
 	tools_container.add_child(cadence_button)
 
+	var default_tz_button = Button.new()
+	default_tz_button.text = "Default Timezone"
+	default_tz_button.tooltip_text = "IANA zone stored on tasks when publish timezone is left empty"
+	default_tz_button.pressed.connect(_on_default_timezone_pressed.bind(dialog))
+	tools_container.add_child(default_tz_button)
+
 	var tz_button = Button.new()
 	tz_button.text = "Viewer Timezone"
 	tz_button.tooltip_text = "IANA zone used when converting publish times in calendar/lists"
@@ -296,10 +302,22 @@ func _on_delete_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 		else:
 			_show_error_dialog("Failed to delete workplan.")
 
+func _configure_filesystem_file_dialog(file_dialog_local: FileDialog) -> void:
+	"""Workplan import/export must browse the real filesystem (Documents), not res://."""
+	file_dialog_local.access = FileDialog.ACCESS_FILESYSTEM
+	var docs_dir: String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+	var preferred: String = RuntimeConfig.get_readymade_data_dir() if RuntimeConfig else ""
+	if not preferred.is_empty() and DirAccess.dir_exists_absolute(preferred):
+		file_dialog_local.current_dir = preferred
+	elif not docs_dir.is_empty():
+		file_dialog_local.current_dir = docs_dir
+
+
 func _on_import_workplan_pressed(_dialog: AcceptDialog):
 	"""Handle workplan import"""
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_configure_filesystem_file_dialog(file_dialog_local)
 	file_dialog_local.add_filter("*.tres", "Godot Resource Files")
 	add_child(file_dialog_local)
 	
@@ -332,6 +350,7 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 	var workplan_name = workplan_list.get_item_text(selected_items[0])
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	_configure_filesystem_file_dialog(file_dialog_local)
 	file_dialog_local.add_filter("*.md", "Markdown (content plan handoff)")
 	file_dialog_local.add_filter("*.csv", "Tasks CSV (bulk edit)")
 	file_dialog_local.add_filter("*.json", "Tasks JSON (bulk edit)")
@@ -366,6 +385,7 @@ func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
 	var plan_name: String = workplan_manager.get_current_workplan_name()
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	_configure_filesystem_file_dialog(file_dialog_local)
 	file_dialog_local.add_filter("*.csv", "CSV tasks")
 	file_dialog_local.add_filter("*.json", "JSON tasks")
 	file_dialog_local.current_file = plan_name + "_tasks.csv"
@@ -395,6 +415,7 @@ func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
 		return
 	var file_dialog_local = FileDialog.new()
 	file_dialog_local.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_configure_filesystem_file_dialog(file_dialog_local)
 	file_dialog_local.add_filter("*.csv", "CSV tasks")
 	file_dialog_local.add_filter("*.json", "JSON tasks")
 	add_child(file_dialog_local)
@@ -502,6 +523,36 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
 	dialog.popup_centered(Vector2(420, 360))
+
+
+func _on_default_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan.")
+		return
+	const TzScript = preload("res://readymade/scripts/workplan_timezone.gd")
+	var dialog = AcceptDialog.new()
+	dialog.title = "Default Timezone"
+	var vbox = VBoxContainer.new()
+	dialog.add_child(vbox)
+	var hint = Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.text = "Used when a task leaves publish timezone empty. Prefer an IANA id (e.g. Europe/Oslo)."
+	vbox.add_child(hint)
+	var zone_edit = LineEdit.new()
+	zone_edit.placeholder_text = "e.g. Europe/Oslo"
+	zone_edit.text = workplan_manager.get_default_timezone()
+	vbox.add_child(zone_edit)
+	var known = Label.new()
+	known.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	known.text = "Known zones include: " + ", ".join(TzScript.known_zones().slice(0, 8)) + ", …"
+	vbox.add_child(known)
+	dialog.confirmed.connect(func():
+		workplan_manager.set_default_timezone(zone_edit.text)
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered(Vector2(480, 220))
 
 
 func _on_viewer_timezone_pressed(_parent_dialog: AcceptDialog) -> void:

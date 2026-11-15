@@ -12,6 +12,7 @@ static func run_all(host: Node) -> void:
 	_test_campaign_dashboard(host)
 	_test_timezone_conversion(host)
 	_test_calendar_reschedule(host)
+	_test_workplan_file_dialog_filesystem(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -326,3 +327,24 @@ static func _test_calendar_reschedule(host: Node) -> void:
 	_expect(host, c.publish_date == "2026-11-06", "other channel untouched")
 	_expect(host, mover.undo_last(workplan), "undo series")
 	_expect(host, a.publish_date == "2026-11-06" and b.publish_date == "2026-11-13", "series undo restores both")
+
+
+static func _test_workplan_file_dialog_filesystem(host: Node) -> void:
+	print("-- workplan FileDialog uses filesystem access --")
+	var file_dialog_local := FileDialog.new()
+	file_dialog_local.access = FileDialog.ACCESS_FILESYSTEM
+	var preferred: String = RuntimeConfig.get_readymade_data_dir()
+	_expect(host, not preferred.is_empty(), "readymade data dir resolves")
+	if DirAccess.dir_exists_absolute(preferred):
+		file_dialog_local.current_dir = preferred
+	_expect(
+		host,
+		file_dialog_local.access == FileDialog.ACCESS_FILESYSTEM,
+		"FileDialog access is ACCESS_FILESYSTEM (not res://-only)"
+	)
+	_expect(
+		host,
+		not String(file_dialog_local.current_dir).begins_with("res://"),
+		"FileDialog current_dir is not res://"
+	)
+	file_dialog_local.free()
