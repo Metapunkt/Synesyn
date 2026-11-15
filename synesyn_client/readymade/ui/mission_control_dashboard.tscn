@@ -490,6 +490,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Calendar" type="VBoxContainer" parent="HSplitContainer/MainTabContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -552,10 +553,11 @@ text = "📅 Today"
 layout_mode = 2
 
 [node name="CalendarScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-horizontal_scroll_mode = 0
+horizontal_scroll_mode = 1
 vertical_scroll_mode = 0
 
 [node name="CalendarGrid" type="GridContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer/CalendarScrollContainer"]

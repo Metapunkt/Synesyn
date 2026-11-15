@@ -32,6 +32,8 @@ static func run_all(host: Node) -> void:
 	_test_imported_task_assignee_and_unedited_save(host)
 	_test_calendar_card_right_click_and_double_click(host)
 	_test_import_preview_hidden_before_result(host)
+	const Round5Helpers = preload("res://readymade/test_acceptance_hardening_round5_helpers.gd")
+	Round5Helpers.run_all(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -1050,9 +1052,15 @@ static func _test_calendar_card_right_click_and_double_click(host: Node) -> void
 	_expect(host, menu != null and is_instance_valid(menu), "right-click creates context menu")
 	_expect(host, menu != null and menu.visible, "right-click menu is visible")
 	_expect(host, menu != null and menu.item_count > 0, "right-click menu has items")
-	# Undo path must dismiss on one activation.
+	# Undo path must dismiss on one activation (same frame, before rebuild).
+	var menu_before_undo: PopupMenu = menu
 	dash._on_calendar_context_menu_id_pressed(5)
 	_expect(host, dash.calendar_context_menu == null, "Undo id dismisses menu on one click")
+	_expect(
+		host,
+		not is_instance_valid(menu_before_undo) or not menu_before_undo.visible,
+		"Undo hides menu synchronously before rebuild"
+	)
 	# Double-click opens editor (task_dialog.show_edit_dialog).
 	if dash.task_dialog == null:
 		dash.task_dialog = preload("res://readymade/ui/task_dialog.tscn").instantiate()
@@ -1086,6 +1094,11 @@ static func _test_import_preview_hidden_before_result(host: Node) -> void:
 		and import_src.find("_close_import_preview_dialog(summary)") >= 0,
 		"Apply closes preview then deferred-shows result"
 	)
+	_expect(
+		host,
+		import_src.find("min_size = Vector2(320") >= 0 or import_src.find("popup_centered(Vector2i(320") >= 0,
+		"Import complete dialog sized to fit title"
+	)
 	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
 	host.add_child(dash)
 	_expect(host, dash.has_method("_show_import_complete_result"), "import complete helper present")
@@ -1098,6 +1111,7 @@ static func _test_import_preview_hidden_before_result(host: Node) -> void:
 	dash._show_import_complete_result(3, 1, null)
 	var preview_still := false
 	var result_visible := false
+	var result_wide_enough := false
 	for child in dash.get_children():
 		if child is AcceptDialog and is_instance_valid(child):
 			var dlg: AcceptDialog = child as AcceptDialog
@@ -1105,6 +1119,8 @@ static func _test_import_preview_hidden_before_result(host: Node) -> void:
 				preview_still = true
 			if dlg.title == "Import complete" and dlg.visible:
 				result_visible = true
+				result_wide_enough = dlg.min_size.x >= 300.0 or dlg.size.x >= 300.0
 	_expect(host, not preview_still, "preview not visible when result shown")
 	_expect(host, result_visible, "Import complete result visible")
+	_expect(host, result_wide_enough, "Import complete min/size fits full title")
 	dash.queue_free()

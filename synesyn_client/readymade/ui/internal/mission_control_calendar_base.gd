@@ -140,9 +140,10 @@ func _setup_month_year_selectors():
 
 func _build_calendar_grid():
 	"""Build the calendar grid with day cells"""
+	if has_method("_ensure_left_sidebar_split"):
+		call("_ensure_left_sidebar_split")
 	if not calendar_grid:
 		return
-	
 	# Clear existing calendar
 	for child in calendar_grid.get_children():
 		child.queue_free()
@@ -178,7 +179,7 @@ func _build_calendar_grid():
 	for i in range(first_weekday):
 		var empty_cell = Control.new()
 		# Keep mins low so 7 weekday columns fit at 1152x648 without horizontal scroll.
-		empty_cell.custom_minimum_size = Vector2(72, 72)
+		empty_cell.custom_minimum_size = Vector2(48, 72)
 		empty_cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		calendar_grid.add_child(empty_cell)
 	
@@ -232,7 +233,7 @@ func _build_week_calendar_grid() -> void:
 			calendar_day_cells.append(day_cell)
 		else:
 			var filler := PanelContainer.new()
-			filler.custom_minimum_size = Vector2(72, 72)
+			filler.custom_minimum_size = Vector2(48, 72)
 			filler.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			var lbl := Label.new()
 			lbl.text = str(day_num)
@@ -288,7 +289,8 @@ func _create_day_cell(day: int) -> Control:
 	"""Create a day cell for the calendar"""
 	var cell = PanelContainer.new()
 	cell.name = "DayCell_%d" % day
-	cell.custom_minimum_size = Vector2(72, 72)
+	# Allow horizontal shrink so a 7-column month grid does not crush the left sidebar.
+	cell.custom_minimum_size = Vector2(48, 72)
 	cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	cell.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
@@ -453,10 +455,15 @@ func _update_calendar_empty_state(days_with_tasks: int, total_tasks: int) -> voi
 	row.add_child(jump_btn)
 	banner.add_child(row)
 
-	var host: Node = calendar_grid.get_parent()
+	var host: Node = _calendar_banner_host()
 	if host:
 		host.add_child(banner)
-		host.move_child(banner, 0)
+		# Own row above the scroll/grid — never a ScrollContainer sibling of CalendarGrid.
+		var scroll: Node = calendar_grid.get_parent() if calendar_grid else null
+		if scroll != null and scroll.get_parent() == host:
+			host.move_child(banner, scroll.get_index())
+		else:
+			host.move_child(banner, 0)
 	_calendar_empty_banner = banner
 
 func _jump_calendar_to_next_task() -> void:
@@ -713,21 +720,23 @@ func _on_day_cell_mouse_exited(day: int):
 			cell.modulate = Color(1.1, 1.1, 1.0)
 
 func _dismiss_calendar_context_menu() -> void:
-	"""Hide/free calendar PopupMenu so Undo cannot leave it stuck open."""
+	"""Hide then free the calendar PopupMenu on this frame (before Undo/rebuild)."""
 	if calendar_context_menu == null or not is_instance_valid(calendar_context_menu):
 		calendar_context_menu = null
 		return
 	var menu: PopupMenu = calendar_context_menu
+	calendar_context_menu = null
 	var status_submenu = menu.get_node_or_null("StatusSubmenu")
 	if status_submenu is PopupMenu:
 		(status_submenu as PopupMenu).hide()
 		(status_submenu as PopupMenu).visible = false
+	# Hide synchronously so the menu is gone before calendar rebuild paints.
 	menu.hide()
 	menu.visible = false
 	if menu.get_parent() != null:
 		menu.get_parent().remove_child(menu)
+	# queue_free after hide/remove; free() is unsafe while id_pressed is still unwinding.
 	menu.queue_free()
-	calendar_context_menu = null
 
 func _ensure_calendar_context_menu() -> PopupMenu:
 	_dismiss_calendar_context_menu()
@@ -739,7 +748,6 @@ func _ensure_calendar_context_menu() -> PopupMenu:
 	menu.hide_on_state_item_selection = true
 	add_child(menu)
 	menu.id_pressed.connect(_on_calendar_context_menu_id_pressed)
-	menu.index_pressed.connect(func(_index: int): _dismiss_calendar_context_menu())
 	calendar_context_menu = menu
 	return menu
 
@@ -771,18 +779,15 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	menu.popup()  # bare popup auto-sizes (zero-size rect collapses Window)
 
 func _on_calendar_context_menu_id_pressed(id: int):
-	"""Handle context menu actions"""
-	# Capture task then destroy the menu before any rebuild (Undo refreshes cards).
+	"""Hide/free menu first (same frame), then run the action including Undo rebuild."""
 	var task: WorkplanTask = context_menu_task
+	context_menu_task = null
 	_dismiss_calendar_context_menu()
-	call_deferred("_dismiss_calendar_context_menu")
 	if task == null and id != 5:
 		return
-	# Defer the action one frame so PopupMenu hide is committed first.
-	call_deferred("_run_calendar_context_action", id, task)
+	_run_calendar_context_action(id, task)
 
 func _run_calendar_context_action(id: int, task: WorkplanTask) -> void:
-	_dismiss_calendar_context_menu()
 	if id == 0: # Edit Task
 		_on_edit_task_pressed(task)
 	elif id == 2: # Delete Task
@@ -933,19 +938,35 @@ func _on_calendar_cadence_changed(warnings: Array) -> void:
 		calendar_cadence_banner.text = "Cadence: %d warning(s) after reschedule" % warnings.size()
 		calendar_cadence_banner.modulate = Color(0.95, 0.75, 0.35)
 
+func _calendar_banner_host() -> Node:
+	"""CalendarVBoxContainer (own row). Never parent banners beside CalendarGrid in ScrollContainer."""
+	if calendar_grid == null:
+		return null
+	var scroll: Node = calendar_grid.get_parent()
+	if scroll != null and scroll.get_parent() != null:
+		return scroll.get_parent()
+	return scroll
+
+
 func _ensure_calendar_cadence_banner() -> void:
 	if calendar_cadence_banner != null and is_instance_valid(calendar_cadence_banner):
 		return
-	if calendar_grid == null:
-		return
-	var host: Node = calendar_grid.get_parent()
+	var host: Node = _calendar_banner_host()
 	if host == null:
 		return
 	calendar_cadence_banner = Label.new()
 	calendar_cadence_banner.name = "CalendarCadenceBanner"
-	calendar_cadence_banner.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# Single-line row with a floor width so it never collapses to ~10px vertical letters.
+	calendar_cadence_banner.autowrap_mode = TextServer.AUTOWRAP_OFF
+	calendar_cadence_banner.clip_text = true
+	calendar_cadence_banner.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	calendar_cadence_banner.custom_minimum_size = Vector2(160, 0)
 	host.add_child(calendar_cadence_banner)
-	host.move_child(calendar_cadence_banner, 0)
+	var scroll: Node = calendar_grid.get_parent() if calendar_grid else null
+	if scroll != null and scroll.get_parent() == host:
+		host.move_child(calendar_cadence_banner, scroll.get_index())
+	else:
+		host.move_child(calendar_cadence_banner, 0)
 
 func _handle_drop_on_day(day: int):
 	"""Handle dropping a task on a specific day (preserves publish timezone)."""
@@ -1081,6 +1102,7 @@ func _prompt_move_task_to_date(task: WorkplanTask) -> void:
 	dialog.popup_centered()
 
 func _undo_calendar_reschedule() -> void:
+	# Menu already hidden in id_pressed; never re-show during rebuild.
 	_dismiss_calendar_context_menu()
 	_ensure_calendar_rescheduler()
 	var workplan_obj = orchestrator.workplan if orchestrator else null
@@ -1090,7 +1112,7 @@ func _undo_calendar_reschedule() -> void:
 		print("Calendar: undid last reschedule")
 	else:
 		print("Calendar: nothing to undo")
-	call_deferred("_dismiss_calendar_context_menu")
+	_dismiss_calendar_context_menu()
 
 func _get_day_under_mouse(mouse_pos: Vector2) -> int:
 	"""Get the calendar day number under the mouse position"""

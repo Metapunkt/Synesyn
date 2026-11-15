@@ -873,6 +873,9 @@ func _show_import_complete_result(created_n: int, updated_n: int, manager_dialog
 	result.dialog_text = "Created: %d\nUpdated: %d" % [created_n, updated_n]
 	result.ok_button_text = "Close"
 	result.exclusive = true
+	result.wrap_controls = true
+	# Floor size so the title is not truncated to "Import c…".
+	result.min_size = Vector2(320, 140)
 	add_child(result)
 	var finish := func(_arg = null):
 		if is_instance_valid(result):
@@ -883,7 +886,7 @@ func _show_import_complete_result(created_n: int, updated_n: int, manager_dialog
 	result.confirmed.connect(finish, CONNECT_ONE_SHOT)
 	result.canceled.connect(finish, CONNECT_ONE_SHOT)
 	result.close_requested.connect(finish, CONNECT_ONE_SHOT)
-	result.popup_centered()
+	result.popup_centered(Vector2i(320, 160))
 
 
 func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:

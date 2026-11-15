@@ -183,6 +183,20 @@ func _on_external_main_tab_changed(tab_index: int) -> void:
 func _on_internal_main_tab_changed(tab_index: int) -> void:
 	if _main_external_tab_bar and _main_external_tab_bar.current_tab != tab_index:
 		_main_external_tab_bar.current_tab = tab_index
+	_ensure_left_sidebar_split()
+
+
+func _ensure_left_sidebar_split() -> void:
+	"""Keep the left sidebar at least 280px so Calendar min-width cannot clip Work Mode."""
+	var split: HSplitContainer = get_node_or_null("HSplitContainer") as HSplitContainer
+	if split == null:
+		return
+	const LEFT_MIN: int = 280
+	if split.split_offset < LEFT_MIN:
+		split.split_offset = LEFT_MIN
+	var left_panel: Control = split.get_child(0) as Control if split.get_child_count() > 0 else null
+	if left_panel != null and left_panel.custom_minimum_size.x < float(LEFT_MIN):
+		left_panel.custom_minimum_size.x = float(LEFT_MIN)
 
 
 func _get_main_tab_bar_for_input() -> TabBar:
@@ -691,41 +705,53 @@ func _create_task_card(task: WorkplanTask) -> Control:
 
 
 func _on_copy_task_markdown_pressed(task: WorkplanTask, feedback_btn: Button = null) -> void:
-	"""Copy task Markdown and show brief Copied feedback on the Tasks row."""
+	"""Copy task Markdown and show Copied feedback even if clipboard write fails."""
 	if task == null:
 		return
 	const MarkdownScript = preload("res://readymade/scripts/workplan_task_markdown.gd")
 	var workplan_obj: Resource = null
 	if workplan_manager != null and workplan_manager.has_method("get_current_workplan"):
 		workplan_obj = workplan_manager.get_current_workplan()
-	var copied: String = MarkdownScript.copy_to_clipboard(task, workplan_obj)
-	_show_copied_feedback(feedback_btn, "Copied (%d chars)" % copied.length())
+	# Feedback first so a clipboard backend error cannot skip the ✓ Copied UI.
+	var markdown_text: String = MarkdownScript.to_clipboard_markdown(task, workplan_obj)
+	_show_copied_feedback(feedback_btn, "Copied (%d chars)" % markdown_text.length())
+	if not markdown_text.is_empty():
+		DisplayServer.clipboard_set(markdown_text)
 
 
 func _show_copied_feedback(anchor: Control, message: String = "Copied") -> void:
-	"""Brief visible Copied toast near an optional anchor control."""
+	"""Brief visible Copied toast; also flips the row button text to ✓ Copied."""
+	if anchor != null and is_instance_valid(anchor) and anchor is Button:
+		var btn: Button = anchor as Button
+		var original: String = btn.text
+		btn.text = "✓ Copied"
+		btn.modulate = Color(0.55, 1.0, 0.65)
+		var tree_local: SceneTree = get_tree()
+		if tree_local != null:
+			tree_local.create_timer(1.2).timeout.connect(func():
+				if is_instance_valid(btn):
+					btn.text = original
+					btn.modulate = Color.WHITE
+			, CONNECT_ONE_SHOT)
 	var toast := Label.new()
+	toast.name = "CopiedMarkdownToast"
 	toast.text = message
 	toast.modulate = Color(0.2, 0.65, 0.35)
 	toast.add_theme_font_size_override("font_size", 13)
 	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	toast.top_level = true
 	add_child(toast)
 	if anchor != null and is_instance_valid(anchor):
 		var rect: Rect2 = anchor.get_global_rect()
 		toast.global_position = Vector2(rect.position.x, rect.position.y - 22.0)
-		if anchor is Button:
-			var original: String = (anchor as Button).text
-			(anchor as Button).text = "✓ Copied"
-			get_tree().create_timer(1.2).timeout.connect(func():
-				if is_instance_valid(anchor):
-					(anchor as Button).text = original
-			)
 	else:
-		toast.position = Vector2(24, 24)
-	get_tree().create_timer(1.4).timeout.connect(func():
-		if is_instance_valid(toast):
-			toast.queue_free()
-	)
+		toast.global_position = Vector2(24, 24)
+	var tree_toast: SceneTree = get_tree()
+	if tree_toast != null:
+		tree_toast.create_timer(1.4).timeout.connect(func():
+			if is_instance_valid(toast):
+				toast.queue_free()
+		, CONNECT_ONE_SHOT)
 
 func _on_add_task_pressed():
 	print("MissionControl: Add new task button pressed")
