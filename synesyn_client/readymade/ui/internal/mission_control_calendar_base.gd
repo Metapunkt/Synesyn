@@ -2,6 +2,7 @@ extends "res://readymade/ui/internal/mission_control_task_list_base.gd"
 class_name MissionControlCalendarBase
 
 const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
 
 var _calendar_empty_banner: Control = null
 
@@ -399,12 +400,19 @@ func _populate_calendar_with_tasks():
 		if not task_container:
 			continue
 		
-		var tasks_for_day = tasks_by_day[day]
+		var tasks_for_day: Array = DayCardsScript.merge_day_task_events(tasks_by_day[day])
+		tasks_by_day[day] = tasks_for_day
 		
-		# Render visible task cards
-		for i in range(min(tasks_for_day.size(), max_cards_per_day)):
-			var task_event = tasks_for_day[i]
-			var card = _create_calendar_task_card(task_event.task, task_event.type)
+		# Render visible task cards (merged same-task / same-day kinds)
+		for i in range(mini(tasks_for_day.size(), max_cards_per_day)):
+			var task_event: Dictionary = tasks_for_day[i]
+			var kinds: Array = task_event.get("types", [task_event.get("type", "deadline")])
+			var card = _create_calendar_task_card(
+				task_event.task,
+				String(task_event.get("type", "deadline")),
+				kinds,
+				day
+			)
 			task_container.add_child(card)
 			
 		# Render overflow indicator if necessary
@@ -729,6 +737,7 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 		4
 	)
 	calendar_context_menu.add_item("Undo last reschedule", 5)
+	calendar_context_menu.add_item("Copy as Markdown", 6)
 	calendar_context_menu.add_separator()
 	calendar_context_menu.add_item("Delete Task", 2)
 	
@@ -737,6 +746,8 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 
 func _on_calendar_context_menu_id_pressed(id: int):
 	"""Handle context menu actions"""
+	if calendar_context_menu != null and calendar_context_menu.visible:
+		calendar_context_menu.hide()
 	if not context_menu_task and id != 5:
 		return
 
@@ -751,6 +762,8 @@ func _on_calendar_context_menu_id_pressed(id: int):
 		print("Calendar: series mode → ", calendar_series_mode)
 	elif id == 5:
 		_undo_calendar_reschedule()
+	elif id == 6:
+		_on_copy_task_markdown_pressed(context_menu_task, null)
 	elif id >= 100: # Change Status
 		var statuses = ["To Do", "In Progress", "Review", "Done"]
 		var status_index = id - 100
@@ -1018,8 +1031,10 @@ func _offer_move_dependents(
 		"Move %d dependent task(s) by the same offset (%+d day(s))?"
 		% [dependents.size(), offset_days]
 	)
-	confirm.exclusive = false
+	# Exclusive so the first OK click focuses and activates in one press.
+	confirm.exclusive = true
 	confirm.confirmed.connect(func():
+		confirm.hide()
 		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
 			task, offset_days, workplan_obj, fields
 		)
@@ -1027,10 +1042,16 @@ func _offer_move_dependents(
 		calendar_last_task_count = -1
 		_populate_calendar_with_tasks()
 		confirm.queue_free()
-	)
-	confirm.canceled.connect(func(): confirm.queue_free())
+	, CONNECT_ONE_SHOT)
+	confirm.canceled.connect(func():
+		confirm.hide()
+		confirm.queue_free()
+	, CONNECT_ONE_SHOT)
 	add_child(confirm)
 	confirm.popup_centered()
+	var ok_btn: Button = confirm.get_ok_button()
+	if ok_btn != null:
+		ok_btn.call_deferred("grab_focus")
 
 
 func _prompt_move_task_to_date(task: WorkplanTask) -> void:
@@ -1131,82 +1152,24 @@ func _get_task_container_from_cell(cell: Control) -> VBoxContainer:
 	
 	return task_container
 
-func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Control:
+func _create_calendar_task_card(
+	task: WorkplanTask,
+	date_type: String,
+	date_types: Array = [],
+	day_number: int = 0
+) -> Control:
 	"""Create a compact task card for calendar display"""
-	var card = PanelContainer.new()
-	card.name = "TaskCard_%s_%s" % [task.title.replace(" ", "_"), date_type]
-	card.custom_minimum_size = Vector2(0, 20)
-	
-	# Color coding: Done stays neutral-green; otherwise start / deadline / publish tint.
-	var base_modulate: Color
-	if task.status == "Done":
-		base_modulate = Color(0.85, 0.95, 0.85)
-	elif date_type == "start":
-		base_modulate = Color(0.8, 1.0, 0.8)  # Light green for start dates
-	elif date_type == "publish":
-		base_modulate = Color(0.8, 0.88, 1.0)  # Light blue for publish
-	else:
-		base_modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
 	var workplan_obj = orchestrator.workplan if orchestrator else null
 	var is_blocked: bool = WorkplanDependenciesScript.is_blocked(task, workplan_obj)
-	if is_blocked:
-		base_modulate = Color(1.0, 0.72, 0.45)
-	card.modulate = base_modulate
-	card.set_meta("base_modulate", base_modulate)
-	# Full title on the card — children use MOUSE_FILTER_PASS so hover hits the card.
-	var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
-	card.tooltip_text = "%s\nStatus: %s\nPriority: %d%s\n🎯 Drag to move %s date\n🖱️ Right-click for Move to date / Undo\n📝 Double-click to edit" % [
-		task.title, task.status, task.priority, block_note, date_type
-	]
-	
-	var hbox = HBoxContainer.new()
-	hbox.mouse_filter = MOUSE_FILTER_PASS
-	card.add_child(hbox)
-	
-	# Date type icon
-	var icon_label = Label.new()
-	if date_type == "start":
-		icon_label.text = "🚀"
-	elif date_type == "publish":
-		icon_label.text = "📢"
-	else:
-		icon_label.text = "🎯"
-	icon_label.add_theme_font_size_override("font_size", 10)
-	icon_label.mouse_filter = MOUSE_FILTER_PASS
-	hbox.add_child(icon_label)
-	
-	# Task title (truncated) — full title lives on card.tooltip_text
-	var title_label = Label.new()
-	var display_title = ("⛔ " if is_blocked else "") + task.title
-	if display_title.length() > 14:
-		display_title = display_title.substr(0, 14) + "..."
-	title_label.text = display_title
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.add_theme_font_size_override("font_size", 9)
-	title_label.mouse_filter = MOUSE_FILTER_PASS
-	hbox.add_child(title_label)
-	
-	# Status indicator
-	var status_icon = Label.new()
-	match task.status:
-		"To Do":
-			status_icon.text = "📝"
-		"In Progress":
-			status_icon.text = "🔄"
-		"Review":
-			status_icon.text = "👀"
-		"Done":
-			status_icon.text = "✅"
-	status_icon.add_theme_font_size_override("font_size", 8)
-	status_icon.mouse_filter = MOUSE_FILTER_PASS
-	hbox.add_child(status_icon)
-	
-	# Add click and drag handlers
-	card.gui_input.connect(func(event): _on_task_card_input(card, task, date_type, event))
-	
-	# Enable drag and drop
-	card.mouse_entered.connect(_on_task_card_mouse_entered.bind(card, task, date_type))
+	var day_date: String = ""
+	if day_number > 0:
+		day_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, day_number]
+	var card: PanelContainer = DayCardsScript.create_month_card(
+		task, date_type, date_types, day_date, is_blocked
+	)
+	var primary_type: String = String(card.get_meta("primary_type", date_type))
+	card.gui_input.connect(func(event): _on_task_card_input(card, task, primary_type, event))
+	card.mouse_entered.connect(_on_task_card_mouse_entered.bind(card, task, primary_type))
 	card.mouse_exited.connect(_on_task_card_mouse_exited.bind(card))
-	
 	return card
 

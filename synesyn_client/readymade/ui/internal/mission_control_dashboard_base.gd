@@ -282,6 +282,10 @@ func _on_complete_task_pressed(task: WorkplanTask):
 	pass
 func _on_rerun_task_pressed(task: WorkplanTask):
 	pass
+func _on_copy_task_markdown_pressed(task: WorkplanTask, feedback_btn: Button = null):
+	pass
+func _show_copied_feedback(anchor: Control, message: String = "Copied"):
+	pass
 func _on_delete_task_pressed(task: WorkplanTask):
 	pass
 func _setup_task_list_management():
@@ -426,7 +430,12 @@ func _is_valid_date_change(task: WorkplanTask, date_type: String, new_day: int) 
 	return false
 func _get_task_container_from_cell(cell: Control) -> VBoxContainer:
 	return null
-func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Control:
+func _create_calendar_task_card(
+	task: WorkplanTask,
+	date_type: String,
+	date_types: Array = [],
+	day_number: int = 0
+) -> Control:
 	return null
 func _setup_workplan_ui():
 	pass

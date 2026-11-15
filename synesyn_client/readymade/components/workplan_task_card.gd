@@ -203,6 +203,13 @@ func _on_copy_markdown_pressed():
 		workplan = manager.get_current_workplan()
 	var copied: String = MarkdownScript.copy_to_clipboard(current_task, workplan)
 	print("WorkplanTaskCard: copied %d chars of Markdown" % copied.length())
+	if copy_markdown_button:
+		var original: String = copy_markdown_button.text
+		copy_markdown_button.text = "✓ Copied"
+		get_tree().create_timer(1.2).timeout.connect(func():
+			if is_instance_valid(copy_markdown_button):
+				copy_markdown_button.text = original
+		)
 	task_action_requested.emit("copy_markdown", current_task)
 
 func _on_delete_pressed():

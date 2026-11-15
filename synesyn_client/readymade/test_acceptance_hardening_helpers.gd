@@ -20,6 +20,10 @@ static func run_all(host: Node) -> void:
 	_test_stage_board_columns_and_move(host)
 	_test_approval_log_append_only(host)
 	_test_workplan_manager_section_labels(host)
+	_test_copy_markdown_ui_reachability(host)
+	_test_calendar_same_day_merge_and_tooltips(host)
+	_test_import_preview_and_dependents_dialog_helpers(host)
+	_test_people_role_field_width(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -603,4 +607,120 @@ static func _test_workplan_manager_section_labels(host: Node) -> void:
 	if dash.has_method("_create_workplan_manager_dialog") and dash.get("workplan_manager") != null:
 		# Soft: only build when manager is ready (acceptance host usually has it).
 		pass
+	dash.queue_free()
+
+
+static func _test_copy_markdown_ui_reachability(host: Node) -> void:
+	print("-- copy markdown UI reachability --")
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_on_copy_task_markdown_pressed"), "Tasks row copy handler present")
+	_expect(host, dash.has_method("_show_copied_feedback"), "Copied toast helper present")
+	_expect(host, dash.has_method("_show_task_context_menu"), "calendar context menu builder present")
+	_expect(host, dash.has_method("_create_task_card"), "Tasks tab row builder present")
+	var tasks_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_task_dashboard_base.gd"
+	)
+	_expect(
+		host,
+		tasks_src.find("Copy as Markdown") >= 0 and tasks_src.find("_on_copy_task_markdown_pressed") >= 0,
+		"Tasks row wires Copy as Markdown button"
+	)
+	var cal_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_calendar_base.gd"
+	)
+	_expect(
+		host,
+		cal_src.find("Copy as Markdown") >= 0 and cal_src.find("calendar_context_menu.hide()") >= 0,
+		"calendar context menu includes Copy and hides after action"
+	)
+	var card_src: String = FileAccess.get_file_as_string(
+		"res://readymade/components/workplan_task_card.gd"
+	)
+	_expect(host, card_src.find("✓ Copied") >= 0, "task card shows Copied feedback")
+	dash.queue_free()
+
+
+static func _test_calendar_same_day_merge_and_tooltips(host: Node) -> void:
+	print("-- calendar same-day merge + kind labels --")
+	const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
+	var task := WorkplanTask.new()
+	task.title = "Peer review"
+	task.ensure_task_id()
+	task.start_date = "2026-12-02"
+	task.deadline = "2026-12-02"
+	task.publish_date = "2026-12-02"
+	var events: Array = [
+		{"task": task, "type": "start"},
+		{"task": task, "type": "deadline"},
+		{"task": task, "type": "publish"},
+	]
+	var merged: Array = DayCardsScript.merge_day_task_events(events)
+	_expect(host, merged.size() == 1, "same-day cards merge to one entry")
+	if merged.size() == 1:
+		var kinds: Array = merged[0].get("types", [])
+		_expect(host, kinds.size() == 3, "merged entry keeps start+deadline+publish")
+		_expect(
+			host,
+			DayCardsScript.preferred_calendar_date_type(kinds) == "publish",
+			"primary drag type prefers publish"
+		)
+		var kind_label: String = DayCardsScript.format_calendar_kind_label(kinds)
+		_expect(host, kind_label.find("publish") >= 0, "kind label includes publish")
+		_expect(host, kind_label.find("deadline") >= 0, "kind label includes deadline")
+		var icons: String = DayCardsScript.calendar_kind_icons(kinds)
+		_expect(host, not icons.is_empty(), "kind icons non-empty")
+		var tip: String = DayCardsScript.build_tooltip(task, kinds, "2026-12-02", "publish", false)
+		_expect(host, tip.find("Peer review") >= 0 and tip.find("Kind:") >= 0, "tooltip has title+kind")
+		var card: PanelContainer = DayCardsScript.create_month_card(
+			task, "publish", kinds, "2026-12-02", false
+		)
+		_expect(host, card != null and not card.tooltip_text.is_empty(), "month card has tooltip")
+		_expect(host, card.tooltip_text.find("Peer review") >= 0, "month card tooltip has full title")
+		card.free()
+	var other := WorkplanTask.new()
+	other.title = "Other task"
+	other.ensure_task_id()
+	var two_tasks: Array = DayCardsScript.merge_day_task_events([
+		{"task": task, "type": "publish"},
+		{"task": other, "type": "deadline"},
+	])
+	_expect(host, two_tasks.size() == 2, "distinct tasks stay separate cards")
+
+
+static func _test_import_preview_and_dependents_dialog_helpers(host: Node) -> void:
+	print("-- import preview close + dependents dialog helpers --")
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_show_task_import_preview"), "import preview dialog present")
+	_expect(host, dash.has_method("_offer_move_dependents"), "move dependents dialog present")
+	_expect(host, dash.has_method("_popup_nested_dialog"), "nested dialog popup helper present")
+	# Probe: non-exclusive nested dialog still grabs OK focus for single-click Apply.
+	var probe := ConfirmationDialog.new()
+	probe.title = "Probe"
+	probe.dialog_text = "ok"
+	dash.add_child(probe)
+	dash._popup_nested_dialog(probe)
+	_expect(host, probe.exclusive == false, "nested preview stays non-exclusive under Manager")
+	_expect(host, probe.visible, "nested preview visible after popup")
+	probe.hide()
+	probe.queue_free()
+	dash.queue_free()
+
+
+static func _test_people_role_field_width(host: Node) -> void:
+	print("-- people role field width --")
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_on_manage_people_pressed"), "Manage People handler present")
+	# Source-level contract: role LineEdit minimum width is at least 200.
+	var people_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_workplan_syntree_base.gd"
+	)
+	_expect(host, people_src.find("Role label") >= 0, "role field present in Manage People UI")
+	_expect(
+		host,
+		people_src.find("Vector2(200, 0)") >= 0 or people_src.find("Vector2(200,0)") >= 0,
+		"role LineEdit min width >= 200"
+	)
 	dash.queue_free()

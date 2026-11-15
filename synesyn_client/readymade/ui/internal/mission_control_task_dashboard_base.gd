@@ -669,6 +669,12 @@ func _create_task_card(task: WorkplanTask) -> Control:
 			rerun_btn.text = "🔄 Rerun"
 			rerun_btn.pressed.connect(_on_rerun_task_pressed.bind(task))
 			buttons.add_child(rerun_btn)
+
+	var copy_btn = Button.new()
+	copy_btn.text = "📋 Copy as Markdown"
+	copy_btn.tooltip_text = "Copy this task as Markdown to the clipboard"
+	copy_btn.pressed.connect(_on_copy_task_markdown_pressed.bind(task, copy_btn))
+	buttons.add_child(copy_btn)
 	
 	# Delete button
 	var delete_btn = Button.new()
@@ -677,10 +683,49 @@ func _create_task_card(task: WorkplanTask) -> Control:
 	delete_btn.pressed.connect(_on_delete_task_pressed.bind(task))
 	buttons.add_child(delete_btn)
 	
-	# Add the card to the tasks container
-	tasks_container.add_child(card)
+	# Add the card to the tasks container when the Tasks tab is mounted.
+	if tasks_container != null:
+		tasks_container.add_child(card)
 	
 	return card
+
+
+func _on_copy_task_markdown_pressed(task: WorkplanTask, feedback_btn: Button = null) -> void:
+	"""Copy task Markdown and show brief Copied feedback on the Tasks row."""
+	if task == null:
+		return
+	const MarkdownScript = preload("res://readymade/scripts/workplan_task_markdown.gd")
+	var workplan_obj: Resource = null
+	if workplan_manager != null and workplan_manager.has_method("get_current_workplan"):
+		workplan_obj = workplan_manager.get_current_workplan()
+	var copied: String = MarkdownScript.copy_to_clipboard(task, workplan_obj)
+	_show_copied_feedback(feedback_btn, "Copied (%d chars)" % copied.length())
+
+
+func _show_copied_feedback(anchor: Control, message: String = "Copied") -> void:
+	"""Brief visible Copied toast near an optional anchor control."""
+	var toast := Label.new()
+	toast.text = message
+	toast.modulate = Color(0.2, 0.65, 0.35)
+	toast.add_theme_font_size_override("font_size", 13)
+	toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(toast)
+	if anchor != null and is_instance_valid(anchor):
+		var rect: Rect2 = anchor.get_global_rect()
+		toast.global_position = Vector2(rect.position.x, rect.position.y - 22.0)
+		if anchor is Button:
+			var original: String = (anchor as Button).text
+			(anchor as Button).text = "✓ Copied"
+			get_tree().create_timer(1.2).timeout.connect(func():
+				if is_instance_valid(anchor):
+					(anchor as Button).text = original
+			)
+	else:
+		toast.position = Vector2(24, 24)
+	get_tree().create_timer(1.4).timeout.connect(func():
+		if is_instance_valid(toast):
+			toast.queue_free()
+	)
 
 func _on_add_task_pressed():
 	print("MissionControl: Add new task button pressed")

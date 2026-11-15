@@ -418,6 +418,13 @@ func _popup_nested_dialog(dialog_window: Window, size: Vector2 = Vector2.ZERO) -
 		dialog_window.popup_centered()
 	else:
 		dialog_window.popup_centered(size)
+	# Non-exclusive windows often need a focus grab so the first OK click applies.
+	if dialog_window is AcceptDialog:
+		var accept_dialog: AcceptDialog = dialog_window as AcceptDialog
+		accept_dialog.call_deferred("grab_focus")
+		var ok_btn: Button = accept_dialog.get_ok_button()
+		if ok_btn != null:
+			ok_btn.call_deferred("grab_focus")
 
 
 func _popup_file_dialog_over_manager(parent_dialog: AcceptDialog, file_dialog_local: FileDialog, size: Vector2 = Vector2(800, 600)) -> void:
@@ -692,11 +699,12 @@ func _on_manage_people_pressed(_parent_dialog: AcceptDialog) -> void:
 	add_row.add_child(name_edit)
 	var role_edit = LineEdit.new()
 	role_edit.placeholder_text = "Role label"
-	role_edit.custom_minimum_size = Vector2(120, 0)
+	role_edit.custom_minimum_size = Vector2(200, 0)
+	role_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_row.add_child(role_edit)
 	var zone_edit = LineEdit.new()
 	zone_edit.placeholder_text = "IANA timezone"
-	zone_edit.custom_minimum_size = Vector2(140, 0)
+	zone_edit.custom_minimum_size = Vector2(160, 0)
 	add_row.add_child(zone_edit)
 	var add_btn = Button.new()
 	add_btn.text = "Add"
@@ -722,7 +730,7 @@ func _on_manage_people_pressed(_parent_dialog: AcceptDialog) -> void:
 	add_child(dialog)
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
-	_popup_nested_dialog(dialog, Vector2(520, 380))
+	_popup_nested_dialog(dialog, Vector2(640, 400))
 
 
 func _build_timezone_dialog(dialog_title: String, hint_text: String, placeholder: String, initial_zone: String) -> Dictionary:
@@ -859,16 +867,29 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 	)
 	add_child(summary)
 	summary.confirmed.connect(func():
+		# Close preview immediately on Apply so it does not linger.
+		summary.hide()
 		var applied: Dictionary = workplan_manager.apply_import_tasks_preview(preview)
+		var applied_created: int = int(applied.get("created", 0))
+		var applied_updated: int = int(applied.get("updated", 0))
 		print(
 			"MissionControl: Import applied — created %d, updated %d"
-			% [int(applied.get("created", 0)), int(applied.get("updated", 0))]
+			% [applied_created, applied_updated]
 		)
 		summary.queue_free()
-	)
+		var result := AcceptDialog.new()
+		result.title = "Import complete"
+		result.dialog_text = "Created: %d\nUpdated: %d" % [applied_created, applied_updated]
+		result.ok_button_text = "Close"
+		add_child(result)
+		result.confirmed.connect(func(): result.queue_free(), CONNECT_ONE_SHOT)
+		result.canceled.connect(func(): result.queue_free(), CONNECT_ONE_SHOT)
+		_popup_nested_dialog(result)
+	, CONNECT_ONE_SHOT)
 	summary.canceled.connect(func():
+		summary.hide()
 		summary.queue_free()
-	)
+	, CONNECT_ONE_SHOT)
 	_popup_nested_dialog(summary)
 
 # Helper functions for dialogs

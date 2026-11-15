@@ -489,16 +489,23 @@ func _offer_move_dependents(
 		"Move %d dependent task(s) by the same offset (%+d day(s))?"
 		% [dependents.size(), offset_days]
 	)
-	confirm.exclusive = false
+	confirm.exclusive = true
 	confirm.confirmed.connect(func():
+		confirm.hide()
 		WorkplanDependenciesScript.move_dependents_by_offset(task, offset_days, _workplan_ref, fields)
 		_apply_filters()
 		_refresh_calendar()
 		confirm.queue_free()
-	)
-	confirm.canceled.connect(func(): confirm.queue_free())
+	, CONNECT_ONE_SHOT)
+	confirm.canceled.connect(func():
+		confirm.hide()
+		confirm.queue_free()
+	, CONNECT_ONE_SHOT)
 	add_child(confirm)
 	confirm.popup_centered()
+	var ok_btn: Button = confirm.get_ok_button()
+	if ok_btn != null:
+		ok_btn.call_deferred("grab_focus")
 
 
 func _prompt_move_to_date(task: WorkplanTask) -> void:
