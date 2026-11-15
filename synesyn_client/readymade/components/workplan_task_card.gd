@@ -1,6 +1,9 @@
 # workplan_task_card.gd
 extends PanelContainer
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+const WorkplanApprovalLogScript = preload("res://readymade/scripts/workplan_approval_log.gd")
+
 @onready var core_idea_label = $MarginContainer/VBoxContainer/CoreIdeaLabel
 @onready var status_label = $MarginContainer/VBoxContainer/HBoxContainer/StatusLabel
 @onready var channel_label = $MarginContainer/VBoxContainer/HBoxContainer/ChannelLabel
@@ -14,6 +17,7 @@ extends PanelContainer
 @onready var review_button = $MarginContainer/VBoxContainer/ActionButtons/ReviewButton
 @onready var complete_button = $MarginContainer/VBoxContainer/ActionButtons/CompleteButton
 @onready var edit_button = $MarginContainer/VBoxContainer/ActionButtons/EditButton
+@onready var copy_markdown_button = $MarginContainer/VBoxContainer/ActionButtons/CopyMarkdownButton
 @onready var delete_button = $MarginContainer/VBoxContainer/ActionButtons/DeleteButton
 
 var current_task: WorkplanTask
@@ -39,6 +43,8 @@ func _ready():
 		complete_button.pressed.connect(_on_complete_pressed)
 	if edit_button:
 		edit_button.pressed.connect(_on_edit_pressed)
+	if copy_markdown_button:
+		copy_markdown_button.pressed.connect(_on_copy_markdown_pressed)
 	if delete_button:
 		delete_button.pressed.connect(_on_delete_pressed)
 	if completion_checkbox:
@@ -57,8 +63,13 @@ func _refresh_display():
 		return
 	
 	# Update basic info - use title for display
-	core_idea_label.text = current_task.title
-	status_label.text = "Status: %s" % current_task.status
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	var is_blocked: bool = WorkplanDependenciesScript.is_blocked(current_task, workplan)
+	core_idea_label.text = ("⛔ " if is_blocked else "") + current_task.title
+	status_label.text = ("Blocked · " if is_blocked else "") + ("Status: %s" % current_task.status)
 	channel_label.text = "Channel: %s" % current_task.channel
 	
 	# Update completion checkbox
@@ -71,6 +82,13 @@ func _refresh_display():
 		priority_label.text = "Priority: %d" % current_task.priority
 	if format_label:
 		format_label.text = "Format: %s" % current_task.format
+	# Deadline in assignee timezone when the person has a zone on the workplan.
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	var deadline_label_text: String = PeopleScript.format_deadline_for_assignee(current_task, workplan)
+	if not deadline_label_text.is_empty():
+		tooltip_text = deadline_label_text
+	if not current_task.assignee.strip_edges().is_empty():
+		channel_label.text = "%s · @%s" % [channel_label.text, current_task.assignee]
 	
 	# Update status color
 	status_label.add_theme_color_override("font_color", current_task.get_status_color())
@@ -135,6 +153,13 @@ func _update_action_buttons():
 		delete_button.visible = true  # Always allow deletion
 
 func _update_panel_style():
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	if WorkplanDependenciesScript.is_blocked(current_task, workplan):
+		modulate = Color(1.0, 0.85, 0.7)
+		return
 	# Add visual indicators based on status
 	match current_task.status:
 		"In Progress":
@@ -148,16 +173,19 @@ func _update_panel_style():
 
 # Action button handlers
 func _on_start_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "In Progress")
 	current_task.start_task()
 	task_action_requested.emit("start", current_task)
 	task_updated.emit(current_task)
 
 func _on_review_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Review")
 	current_task.send_for_review()
 	task_action_requested.emit("review", current_task)
 	task_updated.emit(current_task)
 
 func _on_complete_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Done")
 	current_task.complete_task()
 	task_action_requested.emit("complete", current_task)
 	task_updated.emit(current_task)
@@ -165,15 +193,36 @@ func _on_complete_pressed():
 func _on_edit_pressed():
 	task_action_requested.emit("edit", current_task)
 
+func _on_copy_markdown_pressed():
+	if current_task == null:
+		return
+	const MarkdownScript = preload("res://readymade/scripts/workplan_task_markdown.gd")
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	var copied: String = MarkdownScript.copy_to_clipboard(current_task, workplan)
+	print("WorkplanTaskCard: copied %d chars of Markdown" % copied.length())
+	if copy_markdown_button:
+		var original: String = copy_markdown_button.text
+		copy_markdown_button.text = "✓ Copied"
+		get_tree().create_timer(1.2).timeout.connect(func():
+			if is_instance_valid(copy_markdown_button):
+				copy_markdown_button.text = original
+		)
+	task_action_requested.emit("copy_markdown", current_task)
+
 func _on_delete_pressed():
 	task_action_requested.emit("delete", current_task)
 
 func _on_completion_toggled(button_pressed: bool):
 	if button_pressed:
+		WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Done")
 		current_task.complete_task()
 		task_action_requested.emit("complete", current_task)
 		task_updated.emit(current_task)
 	else:
+		WorkplanApprovalLogScript.record_workflow_status_change(current_task, "To Do")
 		current_task.status = "To Do"
 		current_task.completion_date = ""
 		task_action_requested.emit("uncomplete", current_task)

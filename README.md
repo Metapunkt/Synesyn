@@ -139,7 +139,14 @@ Three of those are worth articulating some more:
 
 ## Getting started
 
-Setup, prerequisites and the one required manual step (installing the LimboAI binaries, which are not redistributed here) are in
+Synesyn does not ship Godot or LimboAI — install them yourself. Recommended /
+tested-with builds (Godot **4.7.2-stable**, LimboAI **v1.8.0** GDExtension for
+4.6, which works under Godot 4.7.x) are listed under
+[Recommended builds](docs/developer-guide/local-dev.md#recommended-builds), with
+`utilities/checks/tool_versions.env` as the single source of truth.
+
+Setup, prerequisites and the one required manual step (installing the LimboAI
+binaries, which are not redistributed here) are in
 [`docs/developer-guide/local-dev.md`](docs/developer-guide/local-dev.md).
 For orientation as a user rather than a contributor, start at
 [`docs/user-guide/getting-started.md`](docs/user-guide/getting-started.md).

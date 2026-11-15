@@ -131,6 +131,22 @@ static var format_templates = {
 			"platform_specs": true,
 			"accessibility": true
 		}
+	},
+
+	"Community Post": {
+		"structure": ["hook", "body", "invite", "optional_thread"],
+		"prompts": {
+			"hook": "Open with one concrete observation or question that fits a chat/community channel (1–2 sentences).",
+			"body": "Share the substance in plain language. Prefer specifics over slogans. Keep it skimmable.",
+			"invite": "Invite a low-friction reply or reaction without demanding labor from the reader.",
+			"optional_thread": "If useful, note one follow-up detail that can live in a thread rather than the main post."
+		},
+		"optimization": {
+			"character_soft_limit": 1200,
+			"markdown_friendly": true,
+			"chat_tone": true,
+			"no_hard_sell": true
+		}
 	}
 }
 
@@ -169,7 +185,10 @@ static func _build_complete_format_prompt(format: String, template: Dictionary) 
 
 static func get_all_formats() -> Array[String]:
 	"""Get list of all available formats"""
-	return format_templates.keys()
+	var formats: Array[String] = []
+	for key in format_templates.keys():
+		formats.append(String(key))
+	return formats
 
 static func apply_format_optimization(content: String, format: String) -> Dictionary:
 	"""Apply format-specific optimization and return analysis"""

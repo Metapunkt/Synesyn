@@ -119,6 +119,8 @@ func _setup_default_modes():
 			"Peer Review Platform"
 		]
 	)
+	# Destination lists are user/workplan-configurable (Workplan.custom_channels).
+	# Modes only supply generic platform/venue defaults — never org-specific presets.
 
 func get_available_modes() -> Array[String]:
 	"""Get list of available mode keys"""

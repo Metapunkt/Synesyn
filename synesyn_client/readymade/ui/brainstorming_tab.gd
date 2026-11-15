@@ -31,6 +31,9 @@ func _on_tree_exited():
 @onready var import_button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/ImportButton
 @onready var export_button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportButton
 @onready var paste_button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/PasteButton
+@onready var toggle_chat_button: Button = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/ToggleChatButton
+@onready var prompt_row: Control = $MarginContainer/VBoxContainer/HBoxContainer
+@onready var status_label: Label = $StatusLabel
 
 # Context awareness UI components - will be created dynamically
 var context_indicator_label: Label
@@ -92,6 +95,10 @@ func _ready():
 	export_button.pressed.connect(self._on_export_button_pressed)
 	if paste_button and not paste_button.pressed.is_connected(_on_paste_button_pressed):
 		paste_button.pressed.connect(_on_paste_button_pressed)
+	if toggle_chat_button and not toggle_chat_button.toggled.is_connected(_on_toggle_chat_toggled):
+		toggle_chat_button.toggled.connect(_on_toggle_chat_toggled)
+	# Collapsed by default so the left Mission Control panel fits 1152×648 without scroll.
+	_apply_chat_expanded(toggle_chat_button.button_pressed if toggle_chat_button else false)
 	generate_button.pressed.connect(self._on_generate_pressed)
 	prompt_input.text_submitted.connect(self._on_generate_pressed)
 
@@ -125,6 +132,32 @@ func _ready():
 	if prompt_input and not prompt_input.text_changed.is_connected(_on_input_text_changed):
 		prompt_input.text_changed.connect(_on_input_text_changed)
 
+func _on_toggle_chat_toggled(is_pressed: bool) -> void:
+	_apply_chat_expanded(is_pressed)
+
+
+func _apply_chat_expanded(is_expanded: bool) -> void:
+	"""Collapse secondary chat chrome by default so left panel fits 1152×648."""
+	if chat_history == null:
+		return
+	chat_history.visible = is_expanded
+	if prompt_row:
+		prompt_row.visible = is_expanded
+	if status_label:
+		status_label.visible = is_expanded
+	if is_expanded:
+		chat_history.custom_minimum_size = Vector2(0, 160)
+		chat_history.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	else:
+		chat_history.custom_minimum_size = Vector2(0, 0)
+		chat_history.size_flags_vertical = 0
+		# Compact the whole brainstorm block when secondary content is collapsed.
+		custom_minimum_size = Vector2(0, 0)
+		size_flags_vertical = 0
+	if toggle_chat_button:
+		toggle_chat_button.text = "💬 Hide Chat" if is_expanded else "💬 Chat"
+
+
 func _connect_to_orchestrator():
 	print("Brainstorming Tab: Attempting to connect to ReadyMadeOrchestrator...")
 	print("Brainstorming Tab: ReadyMadeOrchestrator exists: ", ReadyMadeOrchestrator != null)
@@ -132,7 +165,10 @@ func _connect_to_orchestrator():
 	# The ReadyMadeOrchestrator singleton is responsible for ensuring the
 	# PluginManager exists. We must wait for it to finish its setup.
 	if ReadyMadeOrchestrator:
-		ReadyMadeOrchestrator.workplan_loaded.connect(_on_orchestrator_ready)
+		if ReadyMadeOrchestrator.has_method("await_workplan_manager_ready"):
+			await ReadyMadeOrchestrator.await_workplan_manager_ready()
+		if not ReadyMadeOrchestrator.workplan_loaded.is_connected(_on_orchestrator_ready):
+			ReadyMadeOrchestrator.workplan_loaded.connect(_on_orchestrator_ready)
 		print("Brainstorming Tab: ✅ Connected to ReadyMadeOrchestrator")
 		print("Brainstorming Tab: Workplan exists: ", ReadyMadeOrchestrator.workplan != null)
 		# If orchestrator is already ready, trigger the event

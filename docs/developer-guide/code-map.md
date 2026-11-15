@@ -157,6 +157,16 @@ rather than a wasted search.
   `synesyn_client/readymade/scripts/core/document_session_manager.gd`
 - Internal split modules:
   `synesyn_client/readymade/scripts/core/internal/`
+- Campaign dashboard / timezone / calendar reschedule:
+  `synesyn_client/readymade/scripts/workplan_campaign_dashboard.gd`,
+  `workplan_timezone.gd`, `workplan_calendar_reschedule.gd`
+  (see [readymade-campaign-calendar.md](readymade-campaign-calendar.md))
+- Task dependencies (blocked / cycle / cascade offset):
+  `synesyn_client/readymade/scripts/workplan_dependencies.gd`
+- People / assignees: `workplan_people.gd`
+- Stage board: `workplan_stage_board.gd`,
+  `synesyn_client/readymade/ui/stage_board_view.tscn`
+- Approval log: `workplan_approval_log.gd`
 
 ## Harness and policy tooling
 

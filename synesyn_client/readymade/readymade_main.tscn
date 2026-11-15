@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6g8h6a7rwu6p"]
+[gd_scene load_steps=3 format=3 uid="uid://c6g8h6a7rwu6p"]
 
 [ext_resource type="PackedScene" uid="uid://dixs1d8etv3c4" path="res://readymade/ui/mission_control_dashboard.tscn" id="1_xleia"]
+[ext_resource type="Script" path="res://readymade/scripts/readymade_window_bootstrap.gd" id="2_bootstrap"]
 
 [node name="ReadyMadeMain" type="Control"]
 layout_mode = 3
@@ -10,5 +11,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="WindowBootstrap" type="Node" parent="."]
+script = ExtResource("2_bootstrap")
+
 [node name="MissionControlDashboard" parent="." instance=ExtResource("1_xleia")]
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0

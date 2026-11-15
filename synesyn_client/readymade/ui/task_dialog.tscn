@@ -65,6 +65,49 @@ placeholder_text = "Enter the core concept or idea for this content..."
 [node name="HSeparator" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
+[node name="CosmicContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="CosmicLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+text = "🔭 Cosmic Instrument(s) - Select prompting techniques:"
+
+[node name="CosmicGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="RolePlayCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "RP — Role Play (Dimensional Shifter)"
+
+[node name="HypotheticalCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "HF — Hypothetical Framings (Reality Benders)"
+
+[node name="IterativeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "IR — Iterative Refinement (Gravitational Drift)"
+
+[node name="AbductiveCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
+layout_mode = 2
+text = "AH — Abductive Hypothesis Generation (Quantum Reasoning)"
+
+[node name="CosmicOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
+layout_mode = 2
+
+[node name="CosmicOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+text = "Other:"
+
+[node name="CosmicOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Specify other cosmic instrument..."
+editable = false
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
 [node name="FormatsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
@@ -130,7 +173,7 @@ size_flags_horizontal = 3
 placeholder_text = "Specify other format..."
 editable = false
 
-[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
 [node name="ChannelsContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
@@ -194,49 +237,6 @@ size_flags_horizontal = 3
 placeholder_text = "Specify other channel..."
 editable = false
 
-[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
-layout_mode = 2
-
-[node name="CosmicContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
-layout_mode = 2
-
-[node name="CosmicLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-text = "🔭 Cosmic Instrument(s) - Select prompting techniques:"
-
-[node name="CosmicGrid" type="GridContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="RolePlayCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Role Play (Dimensional Shifter)"
-
-[node name="HypotheticalCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Hypothetical Framings (Reality Benders)"
-
-[node name="IterativeCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Iterative Refinement (Gravitational Drift)"
-
-[node name="AbductiveCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicGrid"]
-layout_mode = 2
-text = "Abductive Hypothesis Generation (Quantum Reasoning)"
-
-[node name="CosmicOtherContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer"]
-layout_mode = 2
-
-[node name="CosmicOtherCheck" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
-layout_mode = 2
-text = "Other:"
-
-[node name="CosmicOtherEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Specify other cosmic instrument..."
-editable = false
-
 [node name="HSeparator4" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
@@ -253,6 +253,54 @@ size_flags_horizontal = 3
 
 [node name="HSeparator5" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
+
+[node name="DependsOnContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="DependsOnLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+text = "Depends on (task ids, comma or semicolon separated):"
+
+[node name="DependsOnEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+placeholder_text = "task_… ; task_…"
+
+[node name="BlockedHintLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+modulate = Color(0.95, 0.55, 0.35, 1)
+autowrap_mode = 3
+
+[node name="AssigneeContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="AssigneeLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+text = "Assignee:"
+
+[node name="AssigneeOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AssigneeEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Person or agent"
+
+[node name="ApprovalLogContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="ApprovalLogLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer"]
+layout_mode = 2
+text = "Approval log:"
+
+[node name="ApprovalLogText" type="TextEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_readonly_color = Color(0.1, 0.1, 0.1, 1)
+editable = false
+wrap_mode = 1
+placeholder_text = "No status changes recorded yet."
 
 [node name="NotesContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
@@ -314,7 +362,7 @@ layout_mode = 2
 
 [node name="ScheduledLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
 layout_mode = 2
-text = "📅 Scheduled:"
+text = "📅 Start date:"
 
 [node name="ScheduledEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
 layout_mode = 2
@@ -362,6 +410,43 @@ text = "1 Week"
 layout_mode = 2
 text = "1 Month"
 
+[node name="PublishTimeRow" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+
+[node name="PublishTimeLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+text = "Publish time:"
+
+[node name="PublishTimeEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "HH:MM"
+
+[node name="PublishTimezoneLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+text = "TZ:"
+
+[node name="PublishTimezoneEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "IANA (empty = workplan default)"
+
+[node name="ViewerZoneHint" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Enter time in the task zone above. Calendar/lists convert into the workplan viewer zone when set."
+
+[node name="ContentStatusContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="ContentStatusLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer"]
+layout_mode = 2
+text = "📋 Content status:"
+
+[node name="ContentStatusOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="HSeparator6" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2
 
@@ -375,6 +460,53 @@ text = "🔄 Recurring:"
 [node name="RecurringOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RecurringWeekdaysContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="WeekdayMon" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Mon"
+
+[node name="WeekdayTue" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Tue"
+
+[node name="WeekdayWed" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Wed"
+
+[node name="WeekdayThu" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Thu"
+
+[node name="WeekdayFri" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Fri"
+
+[node name="WeekdaySat" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Sat"
+
+[node name="WeekdaySun" type="CheckBox" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer"]
+layout_mode = 2
+text = "Sun"
+
+[node name="RecurringEndContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
+layout_mode = 2
+
+[node name="RecurringEndLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+text = "Ends on:"
+
+[node name="RecurringEndEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="ExpandRecurrenceButton" type="Button" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer"]
+layout_mode = 2
+text = "Expand into dates"
 
 [node name="DurationContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2

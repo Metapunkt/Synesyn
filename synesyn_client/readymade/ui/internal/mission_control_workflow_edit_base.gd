@@ -197,6 +197,12 @@ func _apply_workflow_ui_changes(workflow_name: String):
 		_:
 			print("MissionControl: Unknown workflow: ", workflow_name)
 
+func _core_actions_container() -> Control:
+	return get_node_or_null(
+		"HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"
+	) as Control
+
+
 func _show_task_management_ui():
 	"""Show Task Management workflow UI components"""
 	print("MissionControl: Showing Task Management UI")
@@ -207,6 +213,7 @@ func _show_task_management_ui():
 		edit_session_container.visible = false
 	if brainstorming_container:
 		brainstorming_container.visible = false
+	_set_core_actions_visible(true)
 	
 	# Keep other components visible
 	_set_other_components_visible(true)
@@ -221,6 +228,8 @@ func _show_edit_session_ui():
 		edit_session_container.visible = true
 	if brainstorming_container:
 		brainstorming_container.visible = false
+	# Core actions stay pinned so New Task / Start Agent / Workplan remain reachable.
+	_set_core_actions_visible(true)
 	
 	# Keep other components visible
 	_set_other_components_visible(true)
@@ -235,15 +244,23 @@ func _show_brainstorm_ui():
 		edit_session_container.visible = false
 	if brainstorming_container:
 		brainstorming_container.visible = true
+	_set_core_actions_visible(true)
 	
 	# Keep other components visible
 	_set_other_components_visible(true)
+
+func _set_core_actions_visible(should_show: bool) -> void:
+	var core_actions: Control = _core_actions_container()
+	if core_actions:
+		core_actions.visible = should_show
+
 
 func _set_other_components_visible(should_show: bool):
 	"""Helper function to set visibility of non-workflow specific UI components"""
 	# This controls the main tab container and other global UI elements
 	if main_tab_container:
 		main_tab_container.visible = should_show
+	_set_core_actions_visible(true)
 	
 	print("MissionControl: Set other components visible: ", should_show)
 

@@ -43,8 +43,10 @@ var _last_narration_log_index := -1
 # maximum chars for narrator line (also used in narration_filter)
 var MAX_NARRATOR_CHARS: int = ProjectSettings.get_setting("scensyn/narrator/max_chars", 400)
 
-var _bt_player: BTPlayer
+# Typed as Node so this autoload-adjacent script parses without LimboAI ClassDB types.
+var _bt_player: Node = null
 var _intent_lines_res = null
+static var _limboai_missing_warned: bool = false
 
 # Performance optimization: Cache frequently accessed objects
 var _cached_metaprompt_manager = null
@@ -61,18 +63,27 @@ func _ready():
 	add_to_group("Narrator")
 	if not StoryState.state_updated.is_connected(_on_state_updated):
 		StoryState.state_updated.connect(_on_state_updated)
-	# Setup behaviour tree runner (with error handling)
+	# Setup behaviour tree runner (with error handling). LimboAI types are
+	# resolved via ClassDB so a missing GDExtension does not fail script parse.
 	var bt_resource = load("res://ScenSyn/behavior_trees/narrator_bt.tres")
-	if bt_resource:
-		_bt_player = BTPlayer.new()
-		_bt_player.update_mode = BTPlayer.UpdateMode.MANUAL
-		_bt_player.behavior_tree = bt_resource
-		var bb := Blackboard.new()
-		bb.set_var("narrator_node", self)
-		_bt_player.blackboard = bb
+	if bt_resource and ClassDB.class_exists("BTPlayer") and ClassDB.class_exists("Blackboard"):
+		_bt_player = ClassDB.instantiate("BTPlayer") as Node
+		# BTPlayer.UpdateMode: Idle=0, Physics=1, Manual=2 — avoid static LimboAI enum.
+		_bt_player.set("update_mode", 2)
+		_bt_player.set("behavior_tree", bt_resource)
+		var bb: Object = ClassDB.instantiate("Blackboard")
+		if bb != null and bb.has_method("set_var"):
+			bb.call("set_var", "narrator_node", self)
+		_bt_player.set("blackboard", bb)
 		add_child(_bt_player)
 		print("[NarratorAgent] Behavior tree loaded successfully")
 	else:
+		if bt_resource and not ClassDB.class_exists("BTPlayer") and not _limboai_missing_warned:
+			_limboai_missing_warned = true
+			push_warning(
+				"NarratorAgent: LimboAI GDExtension not loaded (BTPlayer missing). "
+				+ "Install recommended LimboAI binaries — see docs/developer-guide/local-dev.md#recommended-builds."
+			)
 		print("[NarratorAgent] ERROR: Failed to load behavior tree, continuing without it")
 		_bt_player = null
 	
@@ -114,7 +125,8 @@ func _process(delta: float):
 	if _time_accum < TICK_MIN_INTERVAL:
 		return
 	_time_accum = 0.0
-	_bt_player.update(delta)
+	if _bt_player.has_method("update"):
+		_bt_player.call("update", delta)
 
 func _on_state_updated(_new_state: Dictionary):
 	# Check if we should generate narration based on story updates
@@ -399,7 +411,8 @@ func _add_phase_transition_task():
 	"""
 	Programmatically add the AdvanceStoryPhaseTask to the existing behavior tree
 	"""
-	if not _bt_player or not _bt_player.behavior_tree:
+	var behavior_tree: Variant = _bt_player.get("behavior_tree") if _bt_player else null
+	if not _bt_player or behavior_tree == null:
 		print("[NarratorAgent] Cannot add phase transition task - no behavior tree")
 		return
 	
@@ -407,7 +420,7 @@ func _add_phase_transition_task():
 	var phase_task = preload("res://ScenSyn/scripts/limbo_tasks/advance_story_phase_task.gd").new()
 	
 	# Add to the behavior tree's root sequence
-	var root_task = _bt_player.behavior_tree.root_task
+	var root_task: Variant = behavior_tree.get("root_task")
 	if root_task and root_task.has_method("add_child"):
 		root_task.add_child(phase_task)
 		print("[NarratorAgent] Added phase transition task to behavior tree")

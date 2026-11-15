@@ -1,6 +1,8 @@
 extends Window
 class_name TaskDialog
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 # UI References
 @onready var title_edit: LineEdit = $ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/TitleContainer/TitleEdit
 @onready var core_idea_edit: TextEdit = $ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CoreIdeaContainer/CoreIdeaEdit
@@ -37,14 +39,33 @@ class_name TaskDialog
 @onready var cosmic_other_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer/CosmicOtherEdit"
 
 @onready var priority_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/PriorityContainer/PriorityOption"
+@onready var depends_on_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer/DependsOnEdit"
+@onready var blocked_hint_label: Label = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer/BlockedHintLabel"
+@onready var assignee_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer/AssigneeOption"
+@onready var assignee_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer/AssigneeEdit"
+@onready var approval_log_text: TextEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer/ApprovalLogText"
 @onready var notes_edit: TextEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/NotesContainer/NotesEdit"
 
 # Calendar tab
 @onready var deadline_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DeadlineContainer/DeadlineRow/DeadlineEdit"
 @onready var scheduled_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow/ScheduledEdit"
 @onready var publish_date_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishRow/PublishEdit"
+@onready var publish_time_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow/PublishTimeEdit"
+@onready var publish_timezone_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer/PublishTimeRow/PublishTimezoneEdit"
+@onready var content_status_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ContentStatusContainer/ContentStatusOption"
 @onready var recurring_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringContainer/RecurringOption"
+@onready var weekday_mon: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayMon"
+@onready var weekday_tue: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayTue"
+@onready var weekday_wed: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayWed"
+@onready var weekday_thu: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayThu"
+@onready var weekday_fri: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdayFri"
+@onready var weekday_sat: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdaySat"
+@onready var weekday_sun: CheckBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringWeekdaysContainer/WeekdaySun"
+@onready var recurring_end_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer/RecurringEndEdit"
+@onready var expand_recurrence_button: Button = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/RecurringEndContainer/ExpandRecurrenceButton"
 @onready var duration_spin: SpinBox = $"ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/DurationContainer/DurationSpin"
+
+signal recurrence_expand_requested(task: WorkplanTask, instance_count: int)
 
 # Strategy tab  
 @onready var campaign_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/Strategy/StrategyVBox/CampaignContainer/CampaignEdit"
@@ -79,8 +100,13 @@ var is_edit_mode: bool = false
 func _ready():
 	_setup_ui()
 	_setup_recurring_options()
+	_setup_content_status_options()
+	_setup_assignee_options()
 	_collect_static_checkboxes()
 	_setup_mode_aware_options()
+	const ReadableTextScript = preload("res://readymade/scripts/readymade_readable_text.gd")
+	if approval_log_text != null:
+		ReadableTextScript.apply_report_text_edit(approval_log_text)
 	
 	# Connect to mode changes
 	if ModeManager:
@@ -89,6 +115,124 @@ func _ready():
 	# Connect filter toggle signals
 	format_filter_toggle.toggled.connect(_on_format_filter_toggled)
 	channel_filter_toggle.toggled.connect(_on_channel_filter_toggled)
+	if expand_recurrence_button:
+		expand_recurrence_button.pressed.connect(_on_expand_recurrence_pressed)
+	if depends_on_edit:
+		depends_on_edit.text_changed.connect(func(_t: String): _refresh_blocked_hint())
+	if assignee_option:
+		assignee_option.item_selected.connect(_on_assignee_option_selected)
+	# Re-apply calendar dates when the Calendar tab is shown (hidden tabs can miss first paint).
+	var tabs: TabContainer = $ScrollContainer/VBoxContainer/TabContainer as TabContainer
+	if tabs != null:
+		tabs.tab_changed.connect(_on_task_dialog_tab_changed)
+	about_to_popup.connect(_on_about_to_popup_refresh_dates)
+
+
+func _setup_content_status_options() -> void:
+	if content_status_option == null:
+		return
+	content_status_option.clear()
+	for status_id in WorkplanTask.CONTENT_STATUSES:
+		content_status_option.add_item(String(status_id))
+
+
+func _setup_assignee_options() -> void:
+	if assignee_option == null:
+		return
+	assignee_option.clear()
+	assignee_option.add_item("(none)")
+	assignee_option.add_item("(custom / agent…)")
+	var workplan: Workplan = _current_workplan()
+	if workplan == null:
+		return
+	for person_any in workplan.people:
+		if typeof(person_any) != TYPE_DICTIONARY:
+			continue
+		var person: Dictionary = person_any
+		var person_name: String = String(person.get("name", "")).strip_edges()
+		if person_name.is_empty():
+			continue
+		var role_label: String = String(person.get("role", "")).strip_edges()
+		var label_text: String = person_name if role_label.is_empty() else "%s (%s)" % [person_name, role_label]
+		assignee_option.add_item(label_text)
+		assignee_option.set_item_metadata(assignee_option.item_count - 1, person_name)
+
+
+func _current_workplan() -> Workplan:
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		return manager.get_current_workplan() as Workplan
+	return null
+
+
+func _on_assignee_option_selected(index: int) -> void:
+	if assignee_edit == null or assignee_option == null:
+		return
+	if index <= 0:
+		assignee_edit.text = ""
+		return
+	if index == 1:
+		# Keep free-text edit for custom/agent values.
+		return
+	var meta: Variant = assignee_option.get_item_metadata(index)
+	if meta == null:
+		return
+	assignee_edit.text = str(meta)
+
+
+func _refresh_blocked_hint() -> void:
+	if blocked_hint_label == null:
+		return
+	var workplan: Workplan = _current_workplan()
+	var probe := WorkplanTask.new()
+	if editing_task != null:
+		probe.task_id = editing_task.task_id
+	probe.depends_on = WorkplanDependenciesScript.normalize_ids(
+		depends_on_edit.text if depends_on_edit else ""
+	)
+	if workplan != null and WorkplanDependenciesScript.would_create_cycle(probe.task_id, probe.depends_on, workplan):
+		blocked_hint_label.text = "⚠ That dependency set would create a cycle."
+		return
+	if WorkplanDependenciesScript.is_blocked(probe, workplan):
+		blocked_hint_label.text = "Blocked — predecessor(s) not Done (or missing)."
+	else:
+		blocked_hint_label.text = ""
+
+
+func _format_approval_log(entries: Array) -> String:
+	if entries.is_empty():
+		return ""
+	var lines: PackedStringArray = PackedStringArray()
+	for entry_any in entries:
+		if typeof(entry_any) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_any
+		var line: String = "%s → %s @ %s" % [
+			String(entry.get("from", "")),
+			String(entry.get("to", "")),
+			String(entry.get("at", "")),
+		]
+		var person: String = String(entry.get("person", "")).strip_edges()
+		var note: String = String(entry.get("note", "")).strip_edges()
+		if not person.is_empty():
+			line += " (%s)" % person
+		if not note.is_empty():
+			line += " — %s" % note
+		lines.append(line)
+	return "\n".join(lines)
+
+
+func _get_selected_assignee() -> String:
+	if assignee_edit != null and not assignee_edit.text.strip_edges().is_empty():
+		return assignee_edit.text.strip_edges()
+	if assignee_option == null or assignee_option.selected <= 0:
+		return ""
+	if assignee_option.selected == 1:
+		return ""
+	var meta: Variant = assignee_option.get_item_metadata(assignee_option.selected)
+	if meta == null:
+		return ""
+	return str(meta)
 
 func _collect_static_checkboxes():
 	"""Collect static checkboxes for easy management"""
@@ -195,6 +339,16 @@ func _setup_ui():
 		priority_option.add_item("Medium (1)")
 		priority_option.add_item("High (2)")
 		priority_option.add_item("Critical (3)")
+
+	# Keep cosmic picker labels in sync with CosmicInstruments.labeled_display.
+	if roleplay_check:
+		roleplay_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_RP)
+	if hypothetical_check:
+		hypothetical_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_HF)
+	if iterative_check:
+		iterative_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_IR)
+	if abductive_check:
+		abductive_check.text = CosmicInstruments.labeled_display(CosmicInstruments.CODE_AH)
 	
 	# Initially disable "Other" text fields
 	if format_other_edit:
@@ -248,21 +402,19 @@ func _create_format_checkboxes():
 		format_checkboxes.append(checkbox)
 
 func _create_channel_checkboxes():
-	"""Create channel checkboxes based on current mode"""
+	"""Create channel checkboxes: mode platforms + workplan custom destinations"""
 	# Clear existing channel checkboxes
 	for checkbox in channel_checkboxes:
 		if checkbox and is_instance_valid(checkbox):
 			checkbox.queue_free()
 	channel_checkboxes.clear()
-	
-	# Get current mode channels
-	var channels = ModeManager.get_current_channels()
-	
-	# Create new channel checkboxes
+
+	var channels: Array[String] = _collect_effective_channels(false)
+
 	for channel_name in channels:
 		var checkbox = CheckBox.new()
 		checkbox.text = channel_name
-		checkbox.name = channel_name.replace(" ", "").replace("/", "") + "Check"
+		checkbox.name = channel_name.replace(" ", "").replace("/", "").replace("#", "") + "Check"
 		channels_grid.add_child(checkbox)
 		channel_checkboxes.append(checkbox)
 
@@ -294,31 +446,43 @@ func _create_all_format_checkboxes():
 		format_checkboxes.append(checkbox)
 
 func _create_all_channel_checkboxes():
-	"""Create channel checkboxes from ALL modes"""
+	"""Create channel checkboxes from ALL modes plus workplan custom destinations"""
 	# Clear existing channel checkboxes
 	for checkbox in channel_checkboxes:
 		if checkbox and is_instance_valid(checkbox):
 			checkbox.queue_free()
 	channel_checkboxes.clear()
-	
-	# Get channels from all modes
-	var all_channels: Array[String] = []
-	var all_modes = ModeManager.get_available_modes()
-	
-	for mode_id in all_modes:
-		var mode_config = ModeManager.get_mode_config(mode_id)
-		var mode_channels = mode_config.channels
-		for channel in mode_channels:
-			if not all_channels.has(channel):
-				all_channels.append(channel)
-	
-	# Create channel checkboxes for all options
+
+	var all_channels: Array[String] = _collect_effective_channels(true)
+
 	for channel_name in all_channels:
 		var checkbox = CheckBox.new()
 		checkbox.text = channel_name
-		checkbox.name = channel_name.replace(" ", "").replace("/", "") + "Check"
+		checkbox.name = channel_name.replace(" ", "").replace("/", "").replace("#", "") + "Check"
 		channels_grid.add_child(checkbox)
 		channel_checkboxes.append(checkbox)
+
+
+func _collect_effective_channels(from_all_modes: bool) -> Array[String]:
+	"""Merge mode platform venues with the current workplan's custom destinations."""
+	var combined: Array[String] = []
+	if ModeManager != null:
+		if from_all_modes:
+			for mode_id in ModeManager.get_available_modes():
+				var mode_config = ModeManager.get_mode_config(mode_id)
+				for channel_label in mode_config.channels:
+					if not combined.has(channel_label):
+						combined.append(channel_label)
+		else:
+			for channel_label in ModeManager.get_current_channels():
+				if not combined.has(channel_label):
+					combined.append(channel_label)
+	var workplan_manager: Node = get_node_or_null("/root/WorkplanManager")
+	if workplan_manager != null and workplan_manager.has_method("get_custom_channels"):
+		for channel_label in workplan_manager.get_custom_channels():
+			if not combined.has(channel_label):
+				combined.append(channel_label)
+	return combined
 
 func _on_mode_changed(_new_mode: String):
 	"""Handle mode change by recreating options"""
@@ -383,6 +547,56 @@ func show_edit_dialog(task: WorkplanTask):
 	title = "Edit Task"
 	_populate_fields(task)
 	popup_centered()
+	# Deferred second pass: ensures Calendar LineEdits keep saved YYYY-MM-DD values.
+	call_deferred("_populate_calendar_date_fields", task)
+
+
+func _ymd_only(raw: String) -> String:
+	"""Normalize stored date/datetime strings to YYYY-MM-DD for LineEdit fields."""
+	var cleaned: String = raw.strip_edges()
+	if cleaned.is_empty():
+		return ""
+	if cleaned.contains("T"):
+		cleaned = cleaned.split("T")[0]
+	if cleaned.contains(" "):
+		cleaned = cleaned.split(" ")[0]
+	if cleaned.length() >= 10:
+		return cleaned.substr(0, 10)
+	return cleaned
+
+
+func _populate_calendar_date_fields(task: WorkplanTask) -> void:
+	"""Prefill publish / start / deadline so placeholders are never left over saved values."""
+	if task == null:
+		return
+	if deadline_edit:
+		deadline_edit.text = _ymd_only(task.deadline)
+	if publish_date_edit:
+		publish_date_edit.text = _ymd_only(task.publish_date)
+	if publish_time_edit:
+		publish_time_edit.text = task.publish_time.strip_edges()
+	if publish_timezone_edit:
+		publish_timezone_edit.text = task.publish_timezone.strip_edges()
+	if scheduled_edit:
+		# UI label is "Start date"; prefer start_date, fall back to scheduled_date.
+		var start_raw: String = task.start_date if not task.start_date.strip_edges().is_empty() else task.scheduled_date
+		scheduled_edit.text = _ymd_only(start_raw)
+
+
+func _on_task_dialog_tab_changed(tab_index: int) -> void:
+	if editing_task == null:
+		return
+	var tabs: TabContainer = $ScrollContainer/VBoxContainer/TabContainer as TabContainer
+	if tabs == null:
+		return
+	var tab_control: Control = tabs.get_tab_control(tab_index)
+	if tab_control != null and String(tab_control.name) == "Calendar":
+		_populate_calendar_date_fields(editing_task)
+
+
+func _on_about_to_popup_refresh_dates() -> void:
+	if is_edit_mode and editing_task != null:
+		_populate_calendar_date_fields(editing_task)
 
 func _clear_fields():
 	"""Clear all form fields"""
@@ -448,6 +662,10 @@ func _clear_fields():
 	deadline_edit.text = ""
 	scheduled_edit.text = ""
 	publish_date_edit.text = ""
+	if publish_time_edit:
+		publish_time_edit.text = ""
+	if publish_timezone_edit:
+		publish_timezone_edit.text = ""
 	recurring_option.selected = 0
 	duration_spin.value = 60
 	
@@ -464,15 +682,55 @@ func _set_default_values():
 	deadline_edit.text = _get_formatted_date(7)   # 1 week
 	publish_date_edit.text = _get_formatted_date(30)  # 1 month
 
+func _core_idea_for_display(task: WorkplanTask) -> String:
+	"""Prefer core_idea; fall back so imported tasks without that column still edit/save."""
+	if task == null:
+		return ""
+	var idea: String = task.core_idea.strip_edges()
+	if not idea.is_empty():
+		return idea
+	var draft: String = task.generated_content.strip_edges()
+	if not draft.is_empty():
+		return draft
+	var notes_text: String = task.notes.strip_edges()
+	if not notes_text.is_empty():
+		# First line of notes is enough for a required core-idea field.
+		var first_line: String = notes_text.split("\n")[0].strip_edges()
+		if not first_line.is_empty():
+			return first_line
+	return task.title.strip_edges()
+
+
 func _populate_fields(task: WorkplanTask):
 	"""Populate dialog fields with existing task data"""
 	# Ensure task properties are synced before populating
 	task.sync_array_properties()
 	
 	title_edit.text = task.title
-	core_idea_edit.text = task.core_idea
+	core_idea_edit.text = _core_idea_for_display(task)
 	notes_edit.text = task.notes
 	priority_option.selected = task.priority
+	_setup_assignee_options()
+	if depends_on_edit:
+		depends_on_edit.text = "; ".join(WorkplanDependenciesScript.normalize_ids(task.depends_on))
+	if assignee_edit:
+		assignee_edit.text = task.assignee
+	if assignee_option:
+		var matched := false
+		for i in range(assignee_option.item_count):
+			var meta: Variant = assignee_option.get_item_metadata(i)
+			# Items 0/1 ("(none)" / custom) have null metadata — String(null) errors on Godot 4.7+.
+			if meta == null:
+				continue
+			if str(meta) == task.assignee and not task.assignee.is_empty():
+				assignee_option.selected = i
+				matched = true
+				break
+		if not matched:
+			assignee_option.selected = 1 if not task.assignee.is_empty() else 0
+	if approval_log_text:
+		approval_log_text.text = _format_approval_log(task.approval_log)
+	_refresh_blocked_hint()
 	
 	# Handle formats
 	for format in task.formats:
@@ -488,12 +746,15 @@ func _populate_fields(task: WorkplanTask):
 	for instrument in task.cosmic_instruments:
 		_set_cosmic_checkbox_by_text(instrument, true)
 	
-	# Calendar fields
-	deadline_edit.text = task.deadline
-	scheduled_edit.text = task.scheduled_date
-	publish_date_edit.text = task.publish_date
+	# Calendar fields (normalized YYYY-MM-DD; start_date preferred for Start date field)
+	_populate_calendar_date_fields(task)
 	recurring_option.selected = _get_recurring_index(task.recurring_pattern)
 	duration_spin.value = task.duration_minutes
+	task.migrate_content_status_from_notes()
+	_set_content_status_selection(task.get_content_status())
+	_set_weekday_selection(task.recurring_weekdays)
+	if recurring_end_edit:
+		recurring_end_edit.text = task.recurring_end_date
 	
 	# Strategy fields
 	campaign_edit.text = task.campaign_tag
@@ -547,16 +808,22 @@ func _set_static_channel_checkbox_by_text(channel: String, pressed: bool):
 			if discord_check: discord_check.button_pressed = pressed
 
 func _set_cosmic_checkbox_by_text(instrument: String, pressed: bool):
-	"""Set cosmic instrument checkbox state"""
-	match instrument.to_lower():
-		"role play (dimensional shifter)":
+	"""Set cosmic instrument checkbox state using ADR 0024 vocabulary."""
+	var code: String = CosmicInstruments.canonicalize(instrument)
+	match code:
+		CosmicInstruments.CODE_RP:
 			roleplay_check.button_pressed = pressed
-		"hypothetical framings (reality benders)":
+		CosmicInstruments.CODE_HF:
 			hypothetical_check.button_pressed = pressed
-		"iterative refinement (gravitational drift)":
+		CosmicInstruments.CODE_IR:
 			iterative_check.button_pressed = pressed
-		"abductive hypothesis generation (quantum reasoning)":
+		CosmicInstruments.CODE_AH:
 			abductive_check.button_pressed = pressed
+		_:
+			if not instrument.strip_edges().is_empty() and cosmic_other_edit:
+				cosmic_other_edit.text = instrument
+				if cosmic_other_check:
+					cosmic_other_check.button_pressed = pressed
 
 func _get_recurring_index(pattern: String) -> int:
 	"""Get index for recurring pattern"""
@@ -663,6 +930,78 @@ func _get_recurring_pattern() -> String:
 		4: return "Custom"
 		_: return "None"
 
+
+func _set_content_status_selection(status_id: String) -> void:
+	if content_status_option == null:
+		return
+	var cleaned: String = status_id.strip_edges().to_lower()
+	var idx: int = WorkplanTask.CONTENT_STATUSES.find(cleaned)
+	if idx < 0:
+		idx = 0
+	content_status_option.selected = idx
+
+
+func _get_selected_content_status() -> String:
+	if content_status_option == null or content_status_option.selected < 0:
+		return "draft"
+	return content_status_option.get_item_text(content_status_option.selected)
+
+
+func _set_weekday_selection(weekdays: Array) -> void:
+	var boxes: Array = [
+		weekday_mon, weekday_tue, weekday_wed, weekday_thu, weekday_fri, weekday_sat, weekday_sun
+	]
+	for i in range(boxes.size()):
+		var box: CheckBox = boxes[i] as CheckBox
+		if box:
+			box.button_pressed = weekdays.has(i)
+
+
+func _get_selected_weekdays() -> Array[int]:
+	var selected: Array[int] = []
+	var boxes: Array = [
+		weekday_mon, weekday_tue, weekday_wed, weekday_thu, weekday_fri, weekday_sat, weekday_sun
+	]
+	for i in range(boxes.size()):
+		var box: CheckBox = boxes[i] as CheckBox
+		if box and box.button_pressed:
+			selected.append(i)
+	return selected
+
+
+func _on_expand_recurrence_pressed() -> void:
+	"""Stamp weekly recurrence on the editing/new task and expand into the workplan."""
+	const RecurrenceScript = preload("res://readymade/scripts/workplan_recurrence.gd")
+	var task: WorkplanTask = editing_task if (is_edit_mode and editing_task) else WorkplanTask.new()
+	if title_edit.text.strip_edges().is_empty():
+		_show_error_dialog("Enter a title before expanding recurrence.")
+		return
+	task.title = title_edit.text.strip_edges()
+	task.core_idea = core_idea_edit.text.strip_edges()
+	task.publish_date = publish_date_edit.text.strip_edges()
+	task.channel = ""
+	var channels_sel: Array[String] = _get_selected_channels()
+	if not channels_sel.is_empty():
+		task.channel = channels_sel[0]
+		task.channels = channels_sel
+	task.campaign_tag = campaign_edit.text
+	task.content_theme = theme_edit.text
+	task.set_content_status(_get_selected_content_status())
+	RecurrenceScript.apply_weekly_to_task(task, _get_selected_weekdays(), recurring_end_edit.text if recurring_end_edit else "")
+	task.recurring_pattern = "weekly"
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	var workplan: Workplan = null
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan() as Workplan
+	if workplan == null:
+		_show_error_dialog("No current workplan to expand into.")
+		return
+	var added: int = RecurrenceScript.expand_into_workplan(workplan, task)
+	if manager.has_method("save_current_workplan"):
+		manager.save_current_workplan()
+	recurrence_expand_requested.emit(task, added)
+	print("TaskDialog: expanded recurrence into %d dated tasks" % added)
+
 func _on_confirmed():
 	"""Handle dialog confirmation"""
 	# Validate required fields
@@ -670,7 +1009,13 @@ func _on_confirmed():
 		_show_error_dialog("Please enter a task title.")
 		return
 	
-	if core_idea_edit.text.strip_edges() == "":
+	var idea_text: String = core_idea_edit.text.strip_edges()
+	if idea_text.is_empty() and is_edit_mode and editing_task != null:
+		# Imported tasks may lack core_idea; keep a stable fallback so unedited OK works.
+		idea_text = _core_idea_for_display(editing_task)
+		if core_idea_edit and idea_text:
+			core_idea_edit.text = idea_text
+	if idea_text.is_empty():
 		_show_error_dialog("Please enter a core idea for the task.")
 		return
 	
@@ -683,22 +1028,50 @@ func _on_confirmed():
 	
 	# Populate task data
 	task.title = title_edit.text.strip_edges()
-	task.core_idea = core_idea_edit.text.strip_edges()
+	task.core_idea = idea_text
 	task.notes = notes_edit.text
 	task.priority = priority_option.selected
 	task.formats = _get_selected_formats()
 	task.channels = _get_selected_channels()
 	task.cosmic_instruments = _get_selected_cosmic_instruments()
-	task.deadline = deadline_edit.text
-	task.scheduled_date = scheduled_edit.text
-	task.publish_date = publish_date_edit.text
+	# Prefer LineEdit values; never wipe a saved date with an empty field (placeholder-only).
+	var deadline_text: String = _ymd_only(deadline_edit.text) if deadline_edit else ""
+	var start_text: String = _ymd_only(scheduled_edit.text) if scheduled_edit else ""
+	var publish_text: String = _ymd_only(publish_date_edit.text) if publish_date_edit else ""
+	if not deadline_text.is_empty() or not is_edit_mode:
+		task.deadline = deadline_text
+	if not start_text.is_empty() or not is_edit_mode:
+		task.start_date = start_text
+		task.scheduled_date = start_text
+	if not publish_text.is_empty() or not is_edit_mode:
+		task.publish_date = publish_text
+	if publish_time_edit:
+		var time_text: String = publish_time_edit.text.strip_edges()
+		if not time_text.is_empty() or not is_edit_mode:
+			task.publish_time = time_text
+	if publish_timezone_edit:
+		var zone_text: String = publish_timezone_edit.text.strip_edges()
+		if not zone_text.is_empty() or not is_edit_mode:
+			task.publish_timezone = zone_text
 	task.recurring_pattern = _get_recurring_pattern()
+	task.recurring_weekdays = _get_selected_weekdays()
+	if recurring_end_edit:
+		task.recurring_end_date = recurring_end_edit.text.strip_edges()
 	task.duration_minutes = int(duration_spin.value)
 	task.estimated_duration = int(duration_spin.value)  # Sync both duration fields
 	task.campaign_tag = campaign_edit.text
 	task.content_theme = theme_edit.text
 	task.target_audience = audience_edit.text
 	task.performance_notes = performance_edit.text
+	task.set_content_status(_get_selected_content_status())
+	var dep_raw: String = depends_on_edit.text if depends_on_edit else ""
+	var workplan: Workplan = _current_workplan()
+	task.ensure_task_id()
+	if workplan != null and WorkplanDependenciesScript.would_create_cycle(task.task_id, dep_raw, workplan):
+		_show_error_dialog("That depends_on list would create a cycle. Clear or change predecessors.")
+		return
+	WorkplanDependenciesScript.set_depends_on(task, dep_raw)
+	task.assignee = _get_selected_assignee()
 	
 	# Sync legacy properties for backward compatibility
 	task.sync_legacy_properties()

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://readymade_acceptance_wp"]
+
+[ext_resource type="Script" path="res://readymade/test_acceptance_workplan_instruments.gd" id="1_acceptance"]
+
+[node name="TestAcceptanceWorkplanInstruments" type="Node"]
+script = ExtResource("1_acceptance")
