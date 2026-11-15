@@ -29,6 +29,10 @@ Workplan fields: `default_timezone`, `viewer_timezone`. Task fields:
 `publish_date`, `publish_time`, `publish_timezone`. Assignee/contributor zones are
 not modeled; conversion is task zone ↔ viewer zone.
 
+Workplan Manager exposes **Default Timezone** and **Viewer Timezone**. Task/workplan
+Import and Export file dialogs use `FileDialog.ACCESS_FILESYSTEM` and open under
+the ReadyMade Documents data directory (not `res://`).
+
 ## Calendar reschedule
 
 - `WorkplanCalendarReschedule` (`workplan_calendar_reschedule.gd`)
