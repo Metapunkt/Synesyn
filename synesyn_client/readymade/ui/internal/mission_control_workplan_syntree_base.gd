@@ -536,64 +536,81 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 	_popup_nested_dialog(dialog, Vector2(420, 360))
 
 
+func _build_timezone_dialog(dialog_title: String, hint_text: String, placeholder: String, initial_zone: String) -> Dictionary:
+	"""Compact timezone editor: avoids oversized AcceptDialogs from long autowrap labels."""
+	var dialog = AcceptDialog.new()
+	dialog.title = dialog_title
+	dialog.wrap_controls = true
+	dialog.unresizable = true
+	var vbox = VBoxContainer.new()
+	vbox.custom_minimum_size = Vector2(420, 0)
+	dialog.add_child(vbox)
+	var hint = Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.custom_minimum_size = Vector2(400, 0)
+	hint.text = hint_text
+	vbox.add_child(hint)
+	var zone_edit = LineEdit.new()
+	zone_edit.placeholder_text = placeholder
+	zone_edit.text = initial_zone
+	vbox.add_child(zone_edit)
+	var known = Label.new()
+	known.autowrap_mode = TextServer.AUTOWRAP_OFF
+	known.clip_text = true
+	known.text = "Examples: Africa/Lagos, America/New_York, Europe/Oslo"
+	vbox.add_child(known)
+	zone_edit.text_submitted.connect(func(_text: String):
+		dialog.confirmed.emit()
+		dialog.hide()
+	)
+	dialog.about_to_popup.connect(func():
+		await get_tree().process_frame
+		zone_edit.grab_focus()
+		zone_edit.select_all()
+	)
+	return {"dialog": dialog, "zone_edit": zone_edit}
+
+
 func _on_default_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
 	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
 		_show_error_dialog("No current workplan.")
 		return
-	const TzScript = preload("res://readymade/scripts/workplan_timezone.gd")
-	var dialog = AcceptDialog.new()
-	dialog.title = "Default Timezone"
-	var vbox = VBoxContainer.new()
-	dialog.add_child(vbox)
-	var hint = Label.new()
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint.text = "Used when a task leaves publish timezone empty. Prefer an IANA id (e.g. Europe/Oslo)."
-	vbox.add_child(hint)
-	var zone_edit = LineEdit.new()
-	zone_edit.placeholder_text = "e.g. Europe/Oslo"
-	zone_edit.text = workplan_manager.get_default_timezone()
-	vbox.add_child(zone_edit)
-	var known = Label.new()
-	known.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	known.text = "Known zones include: " + ", ".join(TzScript.known_zones().slice(0, 8)) + ", …"
-	vbox.add_child(known)
+	var built: Dictionary = _build_timezone_dialog(
+		"Default Timezone",
+		"Used when a task leaves publish timezone empty. Prefer an IANA id.",
+		"e.g. Europe/Oslo or Africa/Lagos",
+		workplan_manager.get_default_timezone()
+	)
+	var dialog: AcceptDialog = built["dialog"]
+	var zone_edit: LineEdit = built["zone_edit"]
 	dialog.confirmed.connect(func():
 		workplan_manager.set_default_timezone(zone_edit.text)
 		dialog.queue_free()
 	)
 	dialog.canceled.connect(func(): dialog.queue_free())
 	add_child(dialog)
-	_popup_nested_dialog(dialog, Vector2(480, 220))
+	_popup_nested_dialog(dialog, Vector2(480, 240))
 
 
 func _on_viewer_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
 	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
 		_show_error_dialog("No current workplan.")
 		return
-	const TzScript = preload("res://readymade/scripts/workplan_timezone.gd")
-	var dialog = AcceptDialog.new()
-	dialog.title = "Viewer Timezone"
-	var vbox = VBoxContainer.new()
-	dialog.add_child(vbox)
-	var hint = Label.new()
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint.text = "Calendar and lists convert task publish times into this zone (DST-aware for known IANA ids)."
-	vbox.add_child(hint)
-	var zone_edit = LineEdit.new()
-	zone_edit.placeholder_text = "e.g. Europe/Oslo or America/New_York"
-	zone_edit.text = workplan_manager.get_viewer_timezone()
-	vbox.add_child(zone_edit)
-	var known = Label.new()
-	known.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	known.text = "Known zones include: " + ", ".join(TzScript.known_zones().slice(0, 8)) + ", …"
-	vbox.add_child(known)
+	var built: Dictionary = _build_timezone_dialog(
+		"Viewer Timezone",
+		"Calendar and lists convert task publish times into this zone (DST-aware for known IANA ids).",
+		"e.g. Europe/Oslo or America/New_York",
+		workplan_manager.get_viewer_timezone()
+	)
+	var dialog: AcceptDialog = built["dialog"]
+	var zone_edit: LineEdit = built["zone_edit"]
 	dialog.confirmed.connect(func():
 		workplan_manager.set_viewer_timezone(zone_edit.text)
 		dialog.queue_free()
 	)
 	dialog.canceled.connect(func(): dialog.queue_free())
 	add_child(dialog)
-	_popup_nested_dialog(dialog, Vector2(480, 220))
+	_popup_nested_dialog(dialog, Vector2(480, 240))
 
 
 func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:
