@@ -14,6 +14,7 @@ static func run_all(host: Node) -> void:
 	_test_calendar_reschedule(host)
 	_test_workplan_file_dialog_filesystem(host)
 	_test_nested_workplan_dialogs_non_exclusive(host)
+	_test_file_dialog_line_enables_ok(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -365,3 +366,51 @@ static func _test_nested_workplan_dialogs_non_exclusive(host: Node) -> void:
 	_expect(host, manager.exclusive == false, "Workplan Manager can yield exclusivity for FileDialog")
 	nested.free()
 	manager.free()
+
+
+static func _test_file_dialog_line_enables_ok(host: Node) -> void:
+	print("-- FileDialog File: line enables Open when file exists --")
+	var scene: PackedScene = load("res://readymade/ui/mission_control_dashboard.tscn")
+	_expect(host, scene != null, "dashboard loads for FileDialog line test")
+	if scene == null:
+		return
+	var dash: Node = scene.instantiate()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_sync_file_dialog_ok_from_line"), "sync FileDialog OK helper present")
+	_expect(host, dash.has_method("_wire_file_dialog_line_confirm"), "wire FileDialog line helper present")
+	if not dash.has_method("_sync_file_dialog_ok_from_line"):
+		dash.queue_free()
+		return
+	var tmp_dir: String = OS.get_user_data_dir().path_join("_fd_line_ok_probe")
+	DirAccess.make_dir_recursive_absolute(tmp_dir)
+	var existing: String = tmp_dir.path_join("existing_tasks.csv")
+	var writer: FileAccess = FileAccess.open(existing, FileAccess.WRITE)
+	writer.store_string("title\nOne\n")
+	writer = null
+	var file_dialog_local := FileDialog.new()
+	file_dialog_local.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog_local.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog_local.current_dir = tmp_dir
+	dash.add_child(file_dialog_local)
+	file_dialog_local.popup_centered(Vector2(400, 300))
+	dash._wire_file_dialog_line_confirm(file_dialog_local)
+	var line: LineEdit = file_dialog_local.get_line_edit()
+	var ok_btn: Button = file_dialog_local.get_ok_button()
+	_expect(host, line != null and ok_btn != null, "FileDialog exposes LineEdit and OK button")
+	if line != null and ok_btn != null:
+		line.text = "missing.csv"
+		dash._sync_file_dialog_ok_from_line(file_dialog_local)
+		_expect(host, ok_btn.disabled == true, "Open disabled for missing File: name")
+		line.text = "existing_tasks.csv"
+		dash._sync_file_dialog_ok_from_line(file_dialog_local)
+		_expect(host, ok_btn.disabled == false, "Open enabled when File: names existing file")
+		# SAVE mode: non-empty name under existing dir enables Save
+		file_dialog_local.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		line.text = "new_export.csv"
+		dash._sync_file_dialog_ok_from_line(file_dialog_local)
+		_expect(host, ok_btn.disabled == false, "Save enabled for valid path under existing dir")
+	file_dialog_local.hide()
+	file_dialog_local.queue_free()
+	dash.queue_free()
+	DirAccess.remove_absolute(existing)
+	DirAccess.remove_absolute(tmp_dir)

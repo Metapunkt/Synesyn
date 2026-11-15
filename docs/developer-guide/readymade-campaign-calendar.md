@@ -32,8 +32,10 @@ not modeled; conversion is task zone ↔ viewer zone.
 Workplan Manager exposes **Default Timezone** and **Viewer Timezone** (compact
 dialogs; Enter confirms). Task/workplan Import and Export file dialogs use
 `FileDialog.ACCESS_FILESYSTEM` and open under the ReadyMade Documents data
-directory (not `res://`). Nested manager dialogs set `exclusive = false` so Godot
-does not reject a second exclusive child window.
+directory (not `res://`). Typing a name in the File: field enables Open when that
+file exists (or Save when the path is valid); Enter confirms. Nested manager
+dialogs set `exclusive = false` so Godot does not reject a second exclusive child
+window.
 
 ## Calendar reschedule
 

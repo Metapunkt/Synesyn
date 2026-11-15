@@ -311,6 +311,75 @@ func _configure_filesystem_file_dialog(file_dialog_local: FileDialog) -> void:
 		file_dialog_local.current_dir = preferred
 	elif not docs_dir.is_empty():
 		file_dialog_local.current_dir = docs_dir
+	_wire_file_dialog_line_confirm(file_dialog_local)
+
+
+func _wire_file_dialog_line_confirm(file_dialog_local: FileDialog) -> void:
+	"""Enable Open/Save when File: names an existing file (open) or valid save path; Enter confirms."""
+	if file_dialog_local == null:
+		return
+	if file_dialog_local.get_meta("_line_confirm_wired", false):
+		_sync_file_dialog_ok_from_line(file_dialog_local)
+		return
+	var line: LineEdit = file_dialog_local.get_line_edit()
+	if line == null:
+		return
+	file_dialog_local.set_meta("_line_confirm_wired", true)
+	line.text_changed.connect(func(_text: String) -> void:
+		_sync_file_dialog_ok_from_line(file_dialog_local)
+	)
+	line.text_submitted.connect(func(submitted: String) -> void:
+		_sync_file_dialog_ok_from_line(file_dialog_local)
+		var ok_btn: Button = file_dialog_local.get_ok_button()
+		if ok_btn == null or ok_btn.disabled:
+			return
+		var path: String = _resolve_file_dialog_line_path(file_dialog_local, submitted)
+		if path.is_empty():
+			return
+		file_dialog_local.file_selected.emit(path)
+		file_dialog_local.hide()
+	)
+
+
+func _resolve_file_dialog_line_path(file_dialog_local: FileDialog, raw_text: String = "") -> String:
+	var name_text: String = raw_text.strip_edges()
+	if name_text.is_empty():
+		var line: LineEdit = file_dialog_local.get_line_edit()
+		name_text = line.text.strip_edges() if line else ""
+	if name_text.is_empty():
+		return ""
+	var is_absolute: bool = name_text.begins_with("/") or (name_text.length() > 2 and name_text[1] == ":")
+	if is_absolute:
+		return name_text
+	return String(file_dialog_local.current_dir).path_join(name_text)
+
+
+func _sync_file_dialog_ok_from_line(file_dialog_local: FileDialog) -> void:
+	var ok_btn: Button = file_dialog_local.get_ok_button()
+	if ok_btn == null:
+		return
+	var path: String = _resolve_file_dialog_line_path(file_dialog_local)
+	if path.is_empty():
+		ok_btn.disabled = true
+		return
+	var file_part: String = path.get_file()
+	var dir_part: String = path.get_base_dir()
+	var is_open: bool = (
+		file_dialog_local.file_mode == FileDialog.FILE_MODE_OPEN_FILE
+		or file_dialog_local.file_mode == FileDialog.FILE_MODE_OPEN_FILES
+	)
+	if is_open:
+		var exists: bool = FileAccess.file_exists(path)
+		if exists:
+			file_dialog_local.current_dir = dir_part
+			file_dialog_local.current_file = file_part
+		ok_btn.disabled = not exists
+	else:
+		var dir_ok: bool = DirAccess.dir_exists_absolute(dir_part) and not file_part.is_empty()
+		if dir_ok:
+			file_dialog_local.current_dir = dir_part
+			file_dialog_local.current_file = file_part
+		ok_btn.disabled = not dir_ok
 
 
 func _popup_nested_dialog(dialog_window: Window, size: Vector2 = Vector2.ZERO) -> void:
@@ -336,6 +405,9 @@ func _popup_file_dialog_over_manager(parent_dialog: AcceptDialog, file_dialog_lo
 	file_dialog_local.canceled.connect(restore, CONNECT_ONE_SHOT)
 	file_dialog_local.exclusive = true
 	file_dialog_local.popup_centered(size)
+	# LineEdit exists after popup; re-sync OK state for any prefilled current_file.
+	_wire_file_dialog_line_confirm(file_dialog_local)
+	_sync_file_dialog_ok_from_line(file_dialog_local)
 
 
 func _on_import_workplan_pressed(_dialog: AcceptDialog):
