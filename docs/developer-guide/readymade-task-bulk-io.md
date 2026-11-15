@@ -21,12 +21,15 @@ In **Workplan Manager**:
 | `publish_date` | for dating | `YYYY-MM-DD` |
 | `publish_time` | no | `HH:MM` local to the task/workplan timezone |
 | `publish_timezone` | no | IANA zone (e.g. `Europe/Oslo`); empty inherits workplan default |
+| `deadline` | no | `YYYY-MM-DD` production/due date (distinct from publish when needed) |
+| `start_date` | no | `YYYY-MM-DD` work start |
 | `channel` | no | Destination label (e.g. `#general`, `YouTube`) |
 | `content_theme` | no | Theme / pillar |
 | `campaign_tag` | no | Campaign grouping |
 | `title` | **yes** | Empty title rows are skipped |
 | `draft` | no | Body text (`generated_content`) |
 | `status` | no | Content-plan status: `draft`, `placeholder`, `open_slot`, `needs_approval`, `approved`, `posted` |
+| `workflow_status` | no | Workflow lane: `To Do`, `In Progress`, `Review`, `Done` |
 | `notes` | no | Free-form notes (do not encode status here) |
 
 JSON shape:

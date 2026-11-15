@@ -957,6 +957,9 @@ func _test_task_bulk_io() -> void:
 	task_a.campaign_tag = "bulk-probe"
 	task_a.generated_content = "Original draft A"
 	task_a.set_content_status("draft")
+	task_a.deadline = "2026-11-12"
+	task_a.start_date = "2026-11-09"
+	task_a.status = "In Progress"
 	task_a.ensure_task_id()
 	workplan.add_task_to_month("2026-11", task_a)
 
@@ -971,8 +974,12 @@ func _test_task_bulk_io() -> void:
 
 	var csv_text: String = BulkIOScript.export_csv(workplan)
 	_expect(csv_text.find("task_id") >= 0, "CSV header includes task_id")
+	_expect(csv_text.find("deadline") >= 0, "CSV header includes deadline")
+	_expect(csv_text.find("workflow_status") >= 0, "CSV header includes workflow_status")
 	_expect(csv_text.find("Morning note") >= 0, "CSV includes task title")
 	_expect(csv_text.find("open_slot") >= 0, "CSV includes content status")
+	_expect(csv_text.find("2026-11-12") >= 0, "CSV includes deadline date")
+	_expect(csv_text.find("In Progress") >= 0, "CSV includes workflow status")
 
 	var csv_path: String = temp_root.path_join("tasks.csv")
 	_expect(manager.export_current_tasks_csv(csv_path), "export_current_tasks_csv")
@@ -990,6 +997,8 @@ func _test_task_bulk_io() -> void:
 		if String(row.get("title", "")) == "Morning note":
 			row["draft"] = "Rewritten draft A"
 			row["status"] = "needs_approval"
+			row["deadline"] = "2026-11-13"
+			row["workflow_status"] = "Review"
 		elif String(row.get("title", "")) == "Open slot Friday":
 			row["task_id"] = ""  # force fallback match
 			row["draft"] = "Filled open slot"
@@ -1027,6 +1036,8 @@ func _test_task_bulk_io() -> void:
 	_expect(workplan.get_total_tasks() == 3, "workplan has 3 tasks after import")
 	_expect(task_a.generated_content == "Rewritten draft A", "task A draft updated by id")
 	_expect(task_a.get_content_status() == "needs_approval", "task A status updated")
+	_expect(task_a.deadline == "2026-11-13", "task A deadline updated via bulk IO")
+	_expect(task_a.status == "Review", "task A workflow_status updated via bulk IO")
 	_expect(task_b.generated_content == "Filled open slot", "task B updated by fallback")
 
 	var empty_preview: Dictionary = BulkIOScript.preview_import(workplan, "title\n\n", "csv")

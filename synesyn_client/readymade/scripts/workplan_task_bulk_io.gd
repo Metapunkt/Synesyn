@@ -8,12 +8,15 @@ const COLUMNS: Array[String] = [
 	"publish_date",
 	"publish_time",
 	"publish_timezone",
+	"deadline",
+	"start_date",
 	"channel",
 	"content_theme",
 	"campaign_tag",
 	"title",
 	"draft",
 	"status",
+	"workflow_status",
 	"notes",
 ]
 
@@ -35,12 +38,15 @@ static func export_rows(workplan: Resource) -> Array:
 			"publish_date": task.publish_date,
 			"publish_time": task.publish_time,
 			"publish_timezone": tz_label,
+			"deadline": task.deadline,
+			"start_date": task.start_date,
 			"channel": task.channel,
 			"content_theme": task.content_theme,
 			"campaign_tag": task.campaign_tag,
 			"title": task.title,
 			"draft": task.generated_content,
 			"status": task.get_content_status(),
+			"workflow_status": task.status,
 			"notes": task.notes,
 		})
 	return rows
@@ -234,6 +240,12 @@ static func _apply_row_to_task(task: WorkplanTask, row: Dictionary, is_new: bool
 	task.publish_date = String(row.get("publish_date", ""))
 	task.publish_time = String(row.get("publish_time", ""))
 	task.publish_timezone = String(row.get("publish_timezone", ""))
+	var deadline_raw: String = String(row.get("deadline", "")).strip_edges()
+	var start_raw: String = String(row.get("start_date", "")).strip_edges()
+	if not deadline_raw.is_empty():
+		task.deadline = deadline_raw
+	if not start_raw.is_empty():
+		task.start_date = start_raw
 	task.channel = String(row.get("channel", ""))
 	if not task.channel.is_empty():
 		task.channels = [task.channel]
@@ -245,6 +257,9 @@ static func _apply_row_to_task(task: WorkplanTask, row: Dictionary, is_new: bool
 	if status_raw.is_empty():
 		status_raw = "draft"
 	task.set_content_status(status_raw)
+	var workflow_raw: String = String(row.get("workflow_status", "")).strip_edges()
+	if not workflow_raw.is_empty():
+		task.status = workflow_raw
 	if not task.publish_date.is_empty():
 		if task.scheduled_date.is_empty():
 			task.scheduled_date = task.publish_date
@@ -261,6 +276,8 @@ static func _normalize_row(item: Dictionary) -> Dictionary:
 		row["draft"] = String(item.get("generated_content", ""))
 	if row["status"].is_empty() and item.has("content_status"):
 		row["status"] = String(item.get("content_status", ""))
+	if row["workflow_status"].is_empty() and item.has("status_workflow"):
+		row["workflow_status"] = String(item.get("status_workflow", ""))
 	return row
 
 
