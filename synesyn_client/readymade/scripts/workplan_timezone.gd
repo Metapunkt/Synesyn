@@ -30,6 +30,12 @@ static var ZONE_TABLE: Dictionary = {
 	"America/Los_Angeles": {"std": -480, "dst": DstRule.US, "dst_delta": 60},
 	"America/Toronto": {"std": -300, "dst": DstRule.US, "dst_delta": 60},
 	"America/Sao_Paulo": {"std": -180, "dst": DstRule.NONE, "dst_delta": 0},
+	# Africa: most zones have no DST. Lagos (WAT) was missing and silently
+	# fell back to UTC, shifting viewer labels by an hour vs Europe/Oslo in winter.
+	"Africa/Lagos": {"std": 60, "dst": DstRule.NONE, "dst_delta": 0},
+	"Africa/Johannesburg": {"std": 120, "dst": DstRule.NONE, "dst_delta": 0},
+	"Africa/Nairobi": {"std": 180, "dst": DstRule.NONE, "dst_delta": 0},
+	"Africa/Cairo": {"std": 120, "dst": DstRule.NONE, "dst_delta": 0},
 	"Asia/Tokyo": {"std": 540, "dst": DstRule.NONE, "dst_delta": 0},
 	"Asia/Shanghai": {"std": 480, "dst": DstRule.NONE, "dst_delta": 0},
 	"Asia/Kolkata": {"std": 330, "dst": DstRule.NONE, "dst_delta": 0},
@@ -152,7 +158,7 @@ static func format_for_viewer(
 		var tz: String = task_zone if not task_zone.is_empty() else viewer_zone
 		return "%s %s %s" % [date_str, time_str, tz] if not tz.is_empty() else "%s %s" % [date_str, time_str]
 	var converted: Dictionary = convert_zones(date_str, time_str, task_zone, viewer_zone)
-	return "%s %s %s (from %s %s %s)" % [
+	var label: String = "%s %s %s (from %s %s %s)" % [
 		String(converted.get("date", "")),
 		String(converted.get("time", "")),
 		viewer_zone,
@@ -160,6 +166,9 @@ static func format_for_viewer(
 		time_str,
 		task_zone,
 	]
+	if not bool(converted.get("known", true)):
+		label += " ⚠ unknown zone treated as UTC"
+	return label
 
 
 static func _is_dst(rule: int, unix_utc: int, std_offset_minutes: int) -> bool:

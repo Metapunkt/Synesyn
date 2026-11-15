@@ -237,6 +237,20 @@ static func _test_timezone_conversion(host: Node) -> void:
 	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
 	_expect(host, TzScript.is_known("Europe/Oslo"), "Europe/Oslo known")
 	_expect(host, TzScript.is_known("America/New_York"), "America/New_York known")
+	_expect(host, TzScript.is_known("Africa/Lagos"), "Africa/Lagos known (WAT, no DST)")
+	# Lagos and Oslo are both UTC+1 in November → wall clock unchanged.
+	var lagos_winter: Dictionary = TzScript.convert_zones(
+		"2026-11-14", "15:00", "Africa/Lagos", "Europe/Oslo"
+	)
+	_expect(
+		host,
+		String(lagos_winter.get("time", "")) == "15:00",
+		"Nov Lagos 15:00 → Oslo 15:00 (got %s)" % String(lagos_winter.get("time", ""))
+	)
+	var unknown_label: String = TzScript.format_for_viewer(
+		"2026-11-14", "15:00", "Not/AZone", "Europe/Oslo"
+	)
+	_expect(host, unknown_label.find("unknown zone") >= 0, "unknown zone warned in viewer label")
 	# Winter: Oslo UTC+1, New York UTC-5 → 6h difference.
 	var winter: Dictionary = TzScript.convert_zones("2026-01-15", "12:00", "Europe/Oslo", "America/New_York")
 	_expect(host, String(winter.get("time", "")) == "06:00", "winter Oslo 12:00 → NY 06:00 (got %s)" % String(winter.get("time", "")))
