@@ -323,14 +323,14 @@ func _popup_nested_dialog(dialog_window: Window, size: Vector2 = Vector2.ZERO) -
 
 
 func _popup_file_dialog_over_manager(parent_dialog: AcceptDialog, file_dialog_local: FileDialog, size: Vector2 = Vector2(800, 600)) -> void:
-	"""FileDialog stays exclusive (needed for Open/Save clicks); yield manager exclusivity briefly."""
-	var parent_was_exclusive: bool = false
+	"""Hide Workplan Manager while FileDialog is exclusive so Open/Save receives input cleanly."""
+	var parent_was_visible: bool = false
 	if parent_dialog != null and is_instance_valid(parent_dialog):
-		parent_was_exclusive = parent_dialog.exclusive
-		parent_dialog.exclusive = false
+		parent_was_visible = parent_dialog.visible
+		parent_dialog.hide()
 	var restore := func(_arg = null):
-		if parent_dialog != null and is_instance_valid(parent_dialog):
-			parent_dialog.exclusive = parent_was_exclusive
+		if parent_dialog != null and is_instance_valid(parent_dialog) and parent_was_visible:
+			parent_dialog.show()
 	# file_selected emits the path; canceled emits nothing — accept optional arg.
 	file_dialog_local.file_selected.connect(restore, CONNECT_ONE_SHOT)
 	file_dialog_local.canceled.connect(restore, CONNECT_ONE_SHOT)
