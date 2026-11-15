@@ -412,6 +412,8 @@ func _setup_connections():
 	search_edit.text_changed.connect(_on_search_text_changed)
 	status_filter.item_selected.connect(_on_status_filter_changed)
 	priority_filter.item_selected.connect(_on_priority_filter_changed)
+	if assignee_filter:
+		assignee_filter.item_selected.connect(_on_assignee_filter_changed)
 	sort_option.item_selected.connect(_on_sort_option_changed)
 	
 	# Calendar connections
@@ -461,6 +463,7 @@ func _on_workplan_loaded():
 		print("MissionControl: Loaded ", tasks_with_content.size(), " tasks with content into content viewer")
 	else:
 		print("MissionControl: ⚠️ Content viewer not found or method missing")
+	_sync_aux_dashboards(workplan_obj)
 
 func _refresh_dashboard():
 	_update_task_list()
@@ -468,6 +471,18 @@ func _refresh_dashboard():
 	_update_draft_action_buttons()
 	# The calendar refresh can be intensive, so maybe call it selectively
 	_update_calendar()
+	var workplan_refresh: Resource = null
+	if ReadyMadeOrchestrator:
+		workplan_refresh = ReadyMadeOrchestrator.workplan
+	_sync_aux_dashboards(workplan_refresh)
+
+func _sync_aux_dashboards(workplan_obj: Resource) -> void:
+	var campaign_node: Node = find_child("CampaignDashboard", true, false)
+	if campaign_node != null and campaign_node.has_method("set_workplan"):
+		campaign_node.set_workplan(workplan_obj)
+	var board_node: Node = find_child("StageBoardView", true, false)
+	if board_node != null and board_node.has_method("set_workplan"):
+		board_node.set_workplan(workplan_obj)
 
 func _update_statistics():
 	"""Update the statistics display"""

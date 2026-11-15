@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dixs1d8etv3c4"]
+[gd_scene load_steps=9 format=3 uid="uid://dixs1d8etv3c4"]
 
 [ext_resource type="Script" uid="uid://ggbgw06ceijw" path="res://readymade/ui/mission_control_dashboard.gd" id="1_x3k9l"]
 [ext_resource type="Texture2D" uid="uid://c31egjr0npbum" path="res://readymade/readymade_icons/readymade_logo_h_128.png" id="2_7idtd"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cwhwtkglc1v7c" path="res://readymade/ui/scratchpad.tscn" id="4_scratchpad"]
 [ext_resource type="PackedScene" uid="uid://df7wmtw5l7m3q" path="res://readymade/ui/brainstorming_tab.tscn" id="5_brainstorming"]
 [ext_resource type="PackedScene" path="res://readymade/ui/campaign_dashboard.tscn" id="6_campaign"]
+[ext_resource type="PackedScene" path="res://readymade/ui/stage_board_view.tscn" id="7_stage_board"]
 
 [node name="MissionControlDashboard" type="Control"]
 layout_mode = 3
@@ -437,6 +438,13 @@ layout_mode = 2
 clip_text = true
 text_overrun_behavior = 3
 
+[node name="AssigneeFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+tooltip_text = "Filter by assignee"
+clip_text = true
+text_overrun_behavior = 3
+
 [node name="SortOption" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
@@ -581,6 +589,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Board" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_name = "Board"
+metadata/_tab_index = 4
+
+[node name="BoardMargin" type="MarginContainer" parent="HSplitContainer/MainTabContainer/Board"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="StageBoardView" parent="HSplitContainer/MainTabContainer/Board/BoardMargin" instance=ExtResource("7_stage_board")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="Scratchpad" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]
 visible = false
 clip_contents = true
@@ -588,7 +619,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_name = "Scratchpad"
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="Scratchpad_tab" parent="HSplitContainer/MainTabContainer/Scratchpad" instance=ExtResource("4_scratchpad")]
 layout_mode = 2
@@ -601,7 +632,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_name = "About"
-metadata/_tab_index = 5
+metadata/_tab_index = 6
 
 [node name="AboutScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainTabContainer/About"]
 layout_mode = 2
