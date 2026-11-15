@@ -328,9 +328,10 @@ func _popup_file_dialog_over_manager(parent_dialog: AcceptDialog, file_dialog_lo
 	if parent_dialog != null and is_instance_valid(parent_dialog):
 		parent_was_exclusive = parent_dialog.exclusive
 		parent_dialog.exclusive = false
-	var restore := func():
+	var restore := func(_arg = null):
 		if parent_dialog != null and is_instance_valid(parent_dialog):
 			parent_dialog.exclusive = parent_was_exclusive
+	# file_selected emits the path; canceled emits nothing — accept optional arg.
 	file_dialog_local.file_selected.connect(restore, CONNECT_ONE_SHOT)
 	file_dialog_local.canceled.connect(restore, CONNECT_ONE_SHOT)
 	file_dialog_local.exclusive = true
