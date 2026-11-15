@@ -6,15 +6,16 @@ const WorkplanTaskCard = preload("res://readymade/components/workplan_task_card.
 const WorkplanTaskScript = preload("res://readymade/data/workplan_task.gd")
 
 @onready var tasks_container: VBoxContainer = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/ScrollContainer/TasksContainer
-@onready var add_task_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/NewTaskButton
+@onready var add_task_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/NewTaskButton
 @onready var refresh_btn: Button = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/RefreshButton
-@onready var start_agent_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StartAgentButton
-@onready var stop_agent_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StopAgentButton
+@onready var start_agent_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/StartAgentButton
+@onready var stop_agent_btn: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/StopAgentButton
 
 # Filter and search controls
 @onready var search_edit: LineEdit = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/SearchEdit
 @onready var status_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/StatusFilter
 @onready var priority_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/PriorityFilter
+@onready var assignee_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/AssigneeFilter
 @onready var sort_option: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/SortOption
 
 # Tab components
@@ -50,6 +51,7 @@ var performance_data: Dictionary = {
 var current_search_text: String = ""
 var current_status_filter: String = "All"
 var current_priority_filter: String = "All"
+var current_assignee_filter: String = "All"
 var current_sort_mode: String = "Priority"
 
 # Calendar state
@@ -60,7 +62,18 @@ var calendar_day_cells: Array[Control] = []
 var calendar_last_task_count: int = -1  # Track task count to avoid unnecessary refreshes
 var max_cards_per_day: int = 4
 var dragging_task: WorkplanTask = null
-var drag_source_date_type: String = ""  # "start" or "deadline"
+var drag_source_date_type: String = ""  # "start" | "deadline" | "publish"
+var _pending_drag_task: WorkplanTask = null
+var _pending_drag_card: Control = null
+var _pending_drag_date_type: String = ""
+var _pending_drag_pos: Vector2 = Vector2.ZERO
+const _CALENDAR_DRAG_THRESHOLD_PX: float = 6.0
+var calendar_view_mode: String = "month"  # month | week | agenda
+var calendar_view_mode_button: OptionButton = null
+var calendar_drag_hint_banner: Control = null
+var calendar_rescheduler = null  # WorkplanCalendarReschedule
+var calendar_cadence_banner: Label = null
+var calendar_series_mode: String = "instance"  # instance | series
 
 var workplan: Dictionary
 var task_card_scene = preload("res://readymade/components/workplan_task_card.tscn")
@@ -81,45 +94,45 @@ var current_task_list_name: String = ""  # Name of currently loaded task list
 @onready var refresh_button: Button = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/RefreshButton
 
 # Statistics labels
-@onready var active_tasks_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/ActiveTasksLabel
-@onready var due_soon_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/DueSoonLabel
-@onready var completed_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/CompletedLabel
+@onready var active_tasks_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/ActiveTasksLabel
+@onready var due_soon_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/DueSoonLabel
+@onready var completed_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer/CompletedLabel
 
 # Team grid
-@onready var team_grid: GridContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/TeamGrid
+@onready var team_grid: GridContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/TeamGrid
 
 # Quick action buttons
-@onready var new_task_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/NewTaskButton
-@onready var start_agent_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StartAgentButton
-@onready var stop_agent_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StopAgentButton
+@onready var new_task_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/NewTaskButton
+@onready var start_agent_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/StartAgentButton
+@onready var stop_agent_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/StopAgentButton
 
 # Task list management buttons
-@onready var new_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/NewTaskListButton
-@onready var open_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/OpenTaskListButton
-@onready var view_all_tasks_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/ViewAllTasksButton
-@onready var save_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/SaveTaskListButton
-@onready var save_as_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/SaveAsTaskListButton
+@onready var new_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/NewTaskListButton
+@onready var open_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/OpenTaskListButton
+@onready var view_all_tasks_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/ViewAllTasksButton
+@onready var save_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/SaveTaskListButton
+@onready var save_as_task_list_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/SaveAsTaskListButton
 @onready var select_all_button: Button = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/SelectAllButton
-@onready var task_list_status_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/TaskListStatusLabel
+@onready var task_list_status_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/TaskListStatusLabel
 
 # Mode management UI
-@onready var mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ModeSelector
+@onready var mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ModeSelector
 
 # Workflow management UI
-@onready var workflow_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/WorkflowSelector
-@onready var task_management_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer
-@onready var edit_session_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer
-@onready var brainstorming_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/BrainstormingContainer
+@onready var workflow_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/WorkflowSelector
+@onready var task_management_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer
+@onready var edit_session_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer
+@onready var brainstorming_container: VBoxContainer = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/BrainstormingContainer
 
 # Edit Session UI components
-@onready var edit_mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/EditModeSelector
-@onready var load_document_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/LoadDocumentButton
-@onready var load_string_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/LoadStringButton
-@onready var active_documents_list: ItemList = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ActiveDocumentsList
-@onready var set_primary_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer/SetPrimaryButton
-@onready var remove_doc_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer/RemoveDocButton
-@onready var session_info_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/SessionInfoLabel
-@onready var clear_session_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ClearSessionButton
+@onready var edit_mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/EditModeSelector
+@onready var load_document_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/LoadDocumentButton
+@onready var load_string_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/LoadStringButton
+@onready var active_documents_list: ItemList = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ActiveDocumentsList
+@onready var set_primary_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer/SetPrimaryButton
+@onready var remove_doc_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer/RemoveDocButton
+@onready var session_info_label: Label = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/SessionInfoLabel
+@onready var clear_session_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ClearSessionButton
 
 # Session management UI (Phase 4.5 additions) - created dynamically
 var save_session_button: Button
@@ -171,8 +184,8 @@ var context_mode_display_names: Dictionary = {
 @onready var load_text_name_edit: LineEdit = $LoadTextDialog/LoadTextContainer/LoadTextNameContainer/LoadTextNameEdit
 
 # Workplan management UI
-@onready var workplan_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/WorkplanSelector
-@onready var workplan_manager_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/WorkplanManagerButton
+@onready var workplan_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/WorkplanSelector
+@onready var workplan_manager_button: Button = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer/WorkplanManagerButton
 
 # Tab container
 @onready var tab_container: TabContainer = $HSplitContainer/MainTabContainer
@@ -181,7 +194,7 @@ var context_mode_display_names: Dictionary = {
 var workplan_manager: Node
 
 # Document context UI
-@onready var context_mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer/ContextModeSelector
+@onready var context_mode_selector: OptionButton = $HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer/ContextModeSelector
 
 # === PHASE 5.2: UI PERFORMANCE OPTIMIZATION ===
 
@@ -274,6 +287,10 @@ func _on_complete_task_pressed(task: WorkplanTask):
 	pass
 func _on_rerun_task_pressed(task: WorkplanTask):
 	pass
+func _on_copy_task_markdown_pressed(task: WorkplanTask, feedback_btn: Button = null):
+	pass
+func _show_copied_feedback(anchor: Control, message: String = "Copied"):
+	pass
 func _on_delete_task_pressed(task: WorkplanTask):
 	pass
 func _setup_task_list_management():
@@ -327,6 +344,8 @@ func _on_search_text_changed(new_text: String):
 func _on_status_filter_changed(index: int):
 	pass
 func _on_priority_filter_changed(index: int):
+	pass
+func _on_assignee_filter_changed(index: int):
 	pass
 func _on_sort_option_changed(index: int):
 	pass
@@ -392,6 +411,12 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	pass
 func _on_calendar_context_menu_id_pressed(id: int):
 	pass
+func _dismiss_calendar_context_menu():
+	pass
+func _ensure_calendar_context_menu() -> PopupMenu:
+	return null
+func _run_calendar_context_action(_id: int, _task: WorkplanTask) -> void:
+	pass
 func _get_days_in_month(year: int, month: int) -> int:
 	return 0
 func _parse_date_string(date_string: String) -> Dictionary:
@@ -416,7 +441,12 @@ func _is_valid_date_change(task: WorkplanTask, date_type: String, new_day: int) 
 	return false
 func _get_task_container_from_cell(cell: Control) -> VBoxContainer:
 	return null
-func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Control:
+func _create_calendar_task_card(
+	task: WorkplanTask,
+	date_type: String,
+	date_types: Array = [],
+	day_number: int = 0
+) -> Control:
 	return null
 func _setup_workplan_ui():
 	pass

@@ -563,8 +563,12 @@ func _show_import_choice_dialog(path: String, task_list_data: Dictionary, unmatc
 
 func _close_dialog(dialog: AcceptDialog):
 	"""Helper function to properly close dialog after choice is made"""
-	if dialog and is_instance_valid(dialog):
-		dialog.queue_free()
+	if dialog == null or not is_instance_valid(dialog):
+		return
+	dialog.exclusive = false
+	if dialog.visible:
+		dialog.hide()
+	dialog.queue_free()
 
 func _import_tasks_to_workplan(path: String, _task_list_data: Dictionary, unmatched_tasks: Array):
 	"""Import tasks from task list into current workplan"""
@@ -687,6 +691,31 @@ func _setup_filter_options():
 	priority_filter.add_item("High (2)")
 	priority_filter.add_item("Medium (1)")
 	priority_filter.add_item("Low (0)")
+
+	if assignee_filter == null:
+		var filter_parent = status_filter.get_parent() if status_filter else null
+		if filter_parent != null:
+			assignee_filter = OptionButton.new()
+			assignee_filter.name = "AssigneeFilter"
+			assignee_filter.tooltip_text = "Filter by assignee"
+			assignee_filter.custom_minimum_size = Vector2(160, 0)
+			var insert_at: int = priority_filter.get_index() + 1 if priority_filter else filter_parent.get_child_count()
+			filter_parent.add_child(assignee_filter)
+			filter_parent.move_child(assignee_filter, insert_at)
+			if not assignee_filter.item_selected.is_connected(_on_assignee_filter_changed):
+				assignee_filter.item_selected.connect(_on_assignee_filter_changed)
+	if assignee_filter:
+		assignee_filter.clear()
+		assignee_filter.add_item("All Assignees")
+		assignee_filter.add_item("(unassigned)")
+		if workplan_manager != null and workplan_manager.has_method("get_people"):
+			for person_any in workplan_manager.get_people():
+				if typeof(person_any) != TYPE_DICTIONARY:
+					continue
+				var person: Dictionary = person_any
+				var person_name: String = String(person.get("name", "")).strip_edges()
+				if not person_name.is_empty():
+					assignee_filter.add_item(person_name)
 	
 	# Sort options
 	sort_option.clear()
@@ -710,6 +739,16 @@ func _on_priority_filter_changed(index: int):
 	"""Handle priority filter changes"""
 	var priorities = ["All", "3", "2", "1", "0"]
 	current_priority_filter = priorities[index] if index < priorities.size() else "All"
+	_update_task_list()
+
+
+func _on_assignee_filter_changed(index: int) -> void:
+	if assignee_filter == null or index < 0:
+		current_assignee_filter = "All"
+	elif index == 0:
+		current_assignee_filter = "All"
+	else:
+		current_assignee_filter = assignee_filter.get_item_text(index)
 	_update_task_list()
 
 func _on_sort_option_changed(index: int):
@@ -736,6 +775,12 @@ func _apply_search_filters(tasks: Array) -> Array:
 		# Priority filter
 		if current_priority_filter != "All" and str(task.priority) != current_priority_filter:
 			continue
+
+		# Assignee filter
+		if current_assignee_filter != "All":
+			const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+			if not PeopleScript.matches_assignee_filter(task, current_assignee_filter):
+				continue
 		
 		filtered_tasks_local.append(task)
 	

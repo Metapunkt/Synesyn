@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dixs1d8etv3c4"]
+[gd_scene load_steps=9 format=3 uid="uid://dixs1d8etv3c4"]
 
 [ext_resource type="Script" uid="uid://ggbgw06ceijw" path="res://readymade/ui/mission_control_dashboard.gd" id="1_x3k9l"]
 [ext_resource type="Texture2D" uid="uid://c31egjr0npbum" path="res://readymade/readymade_icons/readymade_logo_h_128.png" id="2_7idtd"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://c6g7wqdsw5t1m" path="res://readymade/ui/content_viewer.tscn" id="3_content_viewer"]
 [ext_resource type="PackedScene" uid="uid://cwhwtkglc1v7c" path="res://readymade/ui/scratchpad.tscn" id="4_scratchpad"]
 [ext_resource type="PackedScene" uid="uid://df7wmtw5l7m3q" path="res://readymade/ui/brainstorming_tab.tscn" id="5_brainstorming"]
+[ext_resource type="PackedScene" path="res://readymade/ui/campaign_dashboard.tscn" id="6_campaign"]
+[ext_resource type="PackedScene" path="res://readymade/ui/stage_board_view.tscn" id="7_stage_board"]
 
 [node name="MissionControlDashboard" type="Control"]
 layout_mode = 3
@@ -32,303 +34,329 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-split_offset = 60
+split_offset = 280
 dragger_visibility = 1
 
 [node name="LeftPanelContainer" type="PanelContainer" parent="HSplitContainer"]
-custom_minimum_size = Vector2(30, 0)
+clip_contents = true
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.1
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.0
 theme = ExtResource("2_abcde")
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/LeftPanelContainer"]
+clip_contents = true
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer"]
+[node name="LeftColumnVBox" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="LogoTexture" type="TextureRect" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+
+
+[node name="LogoTexture" type="TextureRect" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_7idtd")
-stretch_mode = 4
+expand_mode = 1
+stretch_mode = 5
 
-[node name="ProjectDetails" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="ProjectDetails" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "AI-Powered Content Creation & Workflow Management System"
+text = "Content creation & workflow"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="HSeparator" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 
-[node name="ModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="ModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Work Mode"
 horizontal_alignment = 1
 
-[node name="ModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="ModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select your current work focus"
 clip_text = true
+text_overrun_behavior = 3
 
-[node name="HSeparator_Mode" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator_Mode" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 
-[node name="WorkflowLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="WorkflowLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Work Flow"
 horizontal_alignment = 1
 
-[node name="WorkflowSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="WorkflowSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select your current workflow"
 clip_text = true
+text_overrun_behavior = 3
 
-[node name="HSeparator_Workflow" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="HSeparator_Workflow" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
 
-[node name="TaskManagementContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="CoreActionsContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="HSeparator2" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-
-[node name="StatsContainer" type="GridContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="Label" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "Active Tasks:"
-
-[node name="ActiveTasksLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "-"
-horizontal_alignment = 2
-
-[node name="Label2" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "Due Soon:"
-
-[node name="DueSoonLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "-"
-horizontal_alignment = 2
-
-[node name="Label3" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "Completed:"
-
-[node name="CompletedLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
-layout_mode = 2
-text = "-"
-horizontal_alignment = 2
-
-[node name="HSeparator3" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-
-[node name="TeamHeader" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderMedium"
-text = "Team Members"
-horizontal_alignment = 1
-
-[node name="TeamGrid" type="GridContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="HSeparator5" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-
-[node name="QuickActionsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-theme_type_variation = &"HeaderMedium"
-text = "Quick Actions"
-horizontal_alignment = 1
-
-[node name="NewTaskButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-text = "✨ New Task"
-
-[node name="GenerateReportButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-text = "📄 Generate Report"
-
-[node name="StartAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-text = "▶️ Start Agent Batch"
-
-[node name="StopAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-text = "⏹️ Stop Agent Batch"
-
-[node name="HSeparator6" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
-layout_mode = 2
-
-[node name="WorkplanLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="WorkplanLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Workplan"
 horizontal_alignment = 1
 
-[node name="WorkplanSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="WorkplanSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select active workplan"
 clip_text = true
+text_overrun_behavior = 3
 
-[node name="WorkplanManagerButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="WorkplanManagerButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
 layout_mode = 2
 tooltip_text = "Create, delete, import, and export workplans"
 text = "🗂️ Manage Workplans"
 
-[node name="HSeparator7" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="QuickActionsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Quick Actions"
+horizontal_alignment = 1
+
+[node name="NewTaskButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
+layout_mode = 2
+text = "✨ New Task"
+
+[node name="StartAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
+layout_mode = 2
+tooltip_text = "Draft all To Do tasks with the A1 synthesis agent (requires Synesyn hub)"
+text = "▶️ Draft To Do tasks"
+
+[node name="StopAgentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/CoreActionsContainer"]
+visible = false
+layout_mode = 2
+tooltip_text = "Stop the active drafting run"
+text = "⏹️ Stop drafting"
+
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TaskManagementContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TaskListsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="HSeparator2" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+
+[node name="StatsContainer" type="GridContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "Active Tasks:"
+
+[node name="ActiveTasksLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "-"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "Due Soon:"
+
+[node name="DueSoonLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "-"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "Completed:"
+
+[node name="CompletedLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer/StatsContainer"]
+layout_mode = 2
+text = "-"
+horizontal_alignment = 2
+
+[node name="HSeparator3" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+
+[node name="TeamHeader" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Team Members"
+horizontal_alignment = 1
+
+[node name="TeamGrid" type="GridContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="HSeparator5" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+
+[node name="GenerateReportButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+text = "📄 Generate Report"
+
+[node name="HSeparator6" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+
+[node name="HSeparator7" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+layout_mode = 2
+
+[node name="TaskListsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Task Lists"
 horizontal_alignment = 1
 
-[node name="NewTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="NewTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 text = "📝 New Task List"
 
-[node name="OpenTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="OpenTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 text = "📂 Load Task List"
 
-[node name="ViewAllTasksButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="ViewAllTasksButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 text = "🗂️ View All Tasks"
 
-[node name="SaveTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="SaveTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 text = "💾 Save Task List"
 
-[node name="SaveAsTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="SaveAsTaskListButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 text = "💾 Save As..."
 
-[node name="TaskListStatusLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/TaskManagementContainer"]
+[node name="TaskListStatusLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/TaskManagementContainer"]
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="EditSessionContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="EditSessionContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="EditModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="EditModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Edit Mode"
 horizontal_alignment = 1
 
-[node name="EditModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="EditModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select editing focus"
 clip_text = true
 
-[node name="HSeparator_EditMode" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="HSeparator_EditMode" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 
-[node name="DocumentsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="DocumentsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Documents"
 horizontal_alignment = 1
 
-[node name="LoadDocumentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="LoadDocumentButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 text = "📂 Load Document"
 
-[node name="LoadStringButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="LoadStringButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 text = "📝 Load from Text"
 
-[node name="ActiveDocumentsList" type="ItemList" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="ActiveDocumentsList" type="ItemList" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 
-[node name="DocumentActionsContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="DocumentActionsContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 
-[node name="SetPrimaryButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer"]
+[node name="SetPrimaryButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "🎯 Set Primary"
 
-[node name="RemoveDocButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer"]
+[node name="RemoveDocButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/DocumentActionsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "❌ Remove"
 
-[node name="SessionInfoLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="SessionInfoLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 text = "No documents loaded"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="HSeparator_Session" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="HSeparator_Session" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 
-[node name="SessionActionsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="SessionActionsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Session Actions"
 horizontal_alignment = 1
 
-[node name="ClearSessionButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="ClearSessionButton" type="Button" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 text = "🗑️ Clear Session"
 
-[node name="HSeparator_Context" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="HSeparator_Context" type="HSeparator" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 
-[node name="ContextLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="ContextLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 text = "Document Context"
 horizontal_alignment = 1
 
-[node name="ContextContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer"]
+[node name="ContextContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer"]
 layout_mode = 2
 
-[node name="ContextModeContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
+[node name="ContextModeContainer" type="HBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
 layout_mode = 2
 
-[node name="ContextModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer"]
+[node name="ContextModeLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer"]
 layout_mode = 2
 text = "Context Mode:"
 
-[node name="ContextModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer"]
+[node name="ContextModeSelector" type="OptionButton" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer/ContextModeContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select context scope for AI assistance"
 clip_text = true
 
-[node name="DocumentRelationshipsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
+[node name="DocumentRelationshipsLabel" type="Label" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
 layout_mode = 2
 text = "Document Relationships:"
 
-[node name="RelationshipsDisplay" type="RichTextLabel" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
+[node name="RelationshipsDisplay" type="RichTextLabel" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/EditSessionContainer/ContextContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 bbcode_enabled = true
@@ -336,10 +364,10 @@ text = "No relationships detected"
 fit_content = true
 scroll_active = false
 
-[node name="BrainstormingContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+[node name="BrainstormingContainer" type="VBoxContainer" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Brainstorming_tab" parent="HSplitContainer/LeftPanelContainer/MarginContainer/ScrollContainer/VBoxContainer/BrainstormingContainer" instance=ExtResource("5_brainstorming")]
+[node name="Brainstorming_tab" parent="HSplitContainer/LeftPanelContainer/MarginContainer/LeftColumnVBox/ScrollContainer/VBoxContainer/BrainstormingContainer" instance=ExtResource("5_brainstorming")]
 layout_mode = 2
 
 [node name="MainTabContainer" type="TabContainer" parent="HSplitContainer"]
@@ -347,8 +375,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("2_abcde")
-tab_alignment = 1
-current_tab = 2
+theme_override_font_sizes/font_size = 15
+tab_alignment = 0
+clip_tabs = false
+current_tab = 0
 
 [node name="Tasks" type="VBoxContainer" parent="HSplitContainer/MainTabContainer"]
 visible = false
@@ -379,8 +409,11 @@ theme_type_variation = &"HeaderMedium"
 text = "📋 ACTIVE TASKS"
 horizontal_alignment = 1
 
-[node name="FilterSearchContainer" type="HBoxContainer" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer"]
+[node name="FilterSearchContainer" type="HFlowContainer" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
 
 [node name="SelectAllButton" type="Button" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
 layout_mode = 2
@@ -388,24 +421,35 @@ tooltip_text = "Toggle between selecting all and deselecting all visible tasks"
 text = "☑️ Select All"
 
 [node name="SearchEdit" type="LineEdit" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "🔍 Search tasks..."
 
 [node name="StatusFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="PriorityFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
+
+[node name="AssigneeFilter" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+tooltip_text = "Filter by assignee"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SortOption" type="OptionButton" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="RefreshButton" type="Button" parent="HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer"]
 layout_mode = 2
@@ -446,6 +490,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Calendar" type="VBoxContainer" parent="HSplitContainer/MainTabContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -454,15 +499,18 @@ metadata/_tab_index = 2
 
 [node name="CalendarMarginContainer" type="MarginContainer" parent="HSplitContainer/MainTabContainer/Calendar"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="CalendarVBoxContainer" type="VBoxContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
 
 [node name="CalendarHeaderContainer" type="VBoxContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer"]
 layout_mode = 2
@@ -505,14 +553,66 @@ text = "📅 Today"
 layout_mode = 2
 
 [node name="CalendarScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer"]
+clip_contents = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 0
 
 [node name="CalendarGrid" type="GridContainer" parent="HSplitContainer/MainTabContainer/Calendar/CalendarMarginContainer/CalendarVBoxContainer/CalendarScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
 columns = 7
+
+[node name="Campaigns" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_name = "Campaigns"
+metadata/_tab_index = 3
+
+[node name="CampaignsMargin" type="MarginContainer" parent="HSplitContainer/MainTabContainer/Campaigns"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="CampaignDashboard" parent="HSplitContainer/MainTabContainer/Campaigns/CampaignsMargin" instance=ExtResource("6_campaign")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Board" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]
+visible = false
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_name = "Board"
+metadata/_tab_index = 4
+
+[node name="BoardMargin" type="MarginContainer" parent="HSplitContainer/MainTabContainer/Board"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="StageBoardView" parent="HSplitContainer/MainTabContainer/Board/BoardMargin" instance=ExtResource("7_stage_board")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Scratchpad" type="MarginContainer" parent="HSplitContainer/MainTabContainer"]
 visible = false
@@ -521,7 +621,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_name = "Scratchpad"
-metadata/_tab_index = 3
+metadata/_tab_index = 5
 
 [node name="Scratchpad_tab" parent="HSplitContainer/MainTabContainer/Scratchpad" instance=ExtResource("4_scratchpad")]
 layout_mode = 2
@@ -534,7 +634,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_name = "About"
-metadata/_tab_index = 4
+metadata/_tab_index = 6
 
 [node name="AboutScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainTabContainer/About"]
 layout_mode = 2
@@ -621,7 +721,7 @@ text = "Getting Started:
    Use the Workplan Manager (Ctrl+W) to create, switch between, or organize different content strategies. Each workplan can focus on different projects or time periods.
 
 4. 🤖 Process with AI
-   Click 'Start Agent Batch' to let AI agents handle research, content generation, and optimization. Monitor progress and stop processing anytime with Ctrl+Q.
+   Click 'Draft To Do tasks' to let AI agents draft research and content for queued To Do items. Monitor progress and stop drafting anytime with Ctrl+Q.
 
 5. 📊 Review & Refine
    Use the Content Viewer tab to review AI-generated content, make edits, and see mode-specific analytics like engagement metrics or citation counts.
@@ -645,7 +745,7 @@ text = "• Ctrl+N - New Task
 • Ctrl+O - Open Task List
 • Ctrl+W - Workplan Manager
 • Ctrl+R - Refresh Dashboard
-• Ctrl+Q - Stop Agent Processing
+• Ctrl+Q - Stop drafting
 • Ctrl+A - Select/Deselect All Tasks
 • F5 - Refresh Dashboard"
 autowrap_mode = 3
