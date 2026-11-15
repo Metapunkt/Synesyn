@@ -558,6 +558,8 @@ func compare_with_original():
 	original_text.text = current_document_context.original_content
 	original_text.editable = false
 	original_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	const ReadableTextScript = preload("res://readymade/scripts/readymade_readable_text.gd")
+	ReadableTextScript.apply_report_text_edit(original_text)
 	original_container.add_child(original_label)
 	original_container.add_child(original_text)
 	
@@ -570,6 +572,7 @@ func compare_with_original():
 	current_text.text = current_document_context.content
 	current_text.editable = false
 	current_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	ReadableTextScript.apply_report_text_edit(current_text)
 	current_container.add_child(current_label)
 	current_container.add_child(current_text)
 	

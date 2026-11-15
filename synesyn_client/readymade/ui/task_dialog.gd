@@ -104,6 +104,9 @@ func _ready():
 	_setup_assignee_options()
 	_collect_static_checkboxes()
 	_setup_mode_aware_options()
+	const ReadableTextScript = preload("res://readymade/scripts/readymade_readable_text.gd")
+	if approval_log_text != null:
+		ReadableTextScript.apply_report_text_edit(approval_log_text)
 	
 	# Connect to mode changes
 	if ModeManager:

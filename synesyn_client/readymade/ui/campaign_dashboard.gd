@@ -23,7 +23,15 @@ func _ready() -> void:
 		group_by_option.item_selected.connect(_on_group_by_changed)
 	if refresh_button:
 		refresh_button.pressed.connect(_on_refresh_pressed)
+	_apply_report_contrast()
 	_refresh()
+
+
+func _apply_report_contrast() -> void:
+	"""Read-only TextEdit otherwise uses washed font_readonly_color on a mid-grey panel."""
+	const ReadableTextScript = preload("res://readymade/scripts/readymade_readable_text.gd")
+	if report_text != null:
+		ReadableTextScript.apply_report_text_edit(report_text)
 
 
 func set_workplan(workplan: Resource) -> void:
