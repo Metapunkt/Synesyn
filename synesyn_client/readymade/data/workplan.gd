@@ -14,6 +14,8 @@ class_name Workplan extends Resource
 @export var viewer_timezone: String = ""
 ## Per-channel weekly cadence caps: { "#general": 2 }. Empty = no caps.
 @export var channel_cadence_caps: Dictionary = {}
+## People on this workplan: [{name, role, timezone}, ...]. Empty by default.
+@export var people: Array[Dictionary] = []
 
 ## Legacy dual-write path under the ReadyMade app folder
 ## (Documents/Synesyn/readymade/workplan_data.tres after the top-level move).

@@ -254,6 +254,52 @@ size_flags_horizontal = 3
 [node name="HSeparator5" type="HSeparator" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 
+[node name="DependsOnContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="DependsOnLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+text = "Depends on (task ids, comma or semicolon separated):"
+
+[node name="DependsOnEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+placeholder_text = "task_… ; task_…"
+
+[node name="BlockedHintLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer"]
+layout_mode = 2
+modulate = Color(0.95, 0.55, 0.35, 1)
+autowrap_mode = 3
+
+[node name="AssigneeContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="AssigneeLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+text = "Assignee:"
+
+[node name="AssigneeOption" type="OptionButton" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AssigneeEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Person or agent"
+
+[node name="ApprovalLogContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
+layout_mode = 2
+
+[node name="ApprovalLogLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer"]
+layout_mode = 2
+text = "Approval log:"
+
+[node name="ApprovalLogText" type="TextEdit" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+editable = false
+wrap_mode = 1
+placeholder_text = "No status changes recorded yet."
+
 [node name="NotesContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox"]
 layout_mode = 2
 

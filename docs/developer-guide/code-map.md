@@ -161,6 +161,8 @@ rather than a wasted search.
   `synesyn_client/readymade/scripts/workplan_campaign_dashboard.gd`,
   `workplan_timezone.gd`, `workplan_calendar_reschedule.gd`
   (see [readymade-campaign-calendar.md](readymade-campaign-calendar.md))
+- Task dependencies (blocked / cycle / cascade offset):
+  `synesyn_client/readymade/scripts/workplan_dependencies.gd`
 
 ## Harness and policy tooling
 

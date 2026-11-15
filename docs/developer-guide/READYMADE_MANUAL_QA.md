@@ -18,7 +18,8 @@ drag feel, edit-mode UI). Pair with
 | 5 | **Draft To Do — hub on.** Start hub; click **Draft To Do tasks**. | Draft button hides and **Stop** appears; a To Do task moves to In Progress; agent status updates. |
 | 6 | **Stop.** While drafting, click **Stop**. | Drafting stops; **Draft To Do tasks** returns; no Start/Stop both visible. |
 | 7 | **Failed run → To Do.** Force a failed draft (invalid backend / cancel mid-run if available). | Failed task returns to **To Do** (or Review per product rules) with a visible error; UI is idle again. |
-| 8 | **Calendar views + drag.** Open Calendar tab; switch Month / Week / Agenda; drag a task to a new day/slot. | Views render; drop updates the task date; onboarding drag hint dismisses and stays dismissed after relaunch. |
+| 8 | **Calendar views + drag.** Open Calendar tab; switch Month / Week / Agenda; drag a task to a new day/slot. | Views render; drop updates the task date; onboarding drag hint dismisses and stays dismissed after relaunch. If the moved task has dependents, a **Move dependents?** prompt appears; accepting shifts them by the same offset. |
+| 8b | **Dependencies.** Edit a task: set **Depends on** to another task’s id while that predecessor is still To Do. | Card/calendar show a blocked indicator; clearing the dependency or marking the predecessor Done removes it. Saving a cyclic depends_on list is rejected. |
 | 9 | **All six edit modes.** Open edit/session UI and cycle every ModeManager mode. | Each mode applies without script errors; mode indicator matches selection. |
 | 10 | **Shortcuts.** From Mission Control (focus not only on left panel): Ctrl+S, Ctrl+N, Ctrl+Shift+V. | Ctrl+S saves the task list (does not start drafting); Ctrl+N opens new task; Ctrl+Shift+V shows all tasks / clears filter as designed. |
 | 11 | **Relaunch persistence.** Create/edit a task, note workplan name, quit, relaunch ReadyMade. | Same workplan and tasks reload from Documents storage. |

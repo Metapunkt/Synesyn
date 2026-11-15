@@ -3,6 +3,8 @@ class_name WorkplanTaskBulkIO
 ## CSV / JSON bulk import-export for Workplan tasks (create + update).
 ## Schema is documented in docs/developer-guide/readymade-task-bulk-io.md
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 const COLUMNS: Array[String] = [
 	"task_id",
 	"publish_date",
@@ -18,6 +20,8 @@ const COLUMNS: Array[String] = [
 	"status",
 	"workflow_status",
 	"notes",
+	"depends_on",
+	"assignee",
 ]
 
 
@@ -48,6 +52,8 @@ static func export_rows(workplan: Resource) -> Array:
 			"status": task.get_content_status(),
 			"workflow_status": task.status,
 			"notes": task.notes,
+			"depends_on": ";".join(WorkplanDependenciesScript.normalize_ids(task.depends_on)),
+			"assignee": task.assignee,
 		})
 	return rows
 
@@ -260,6 +266,8 @@ static func _apply_row_to_task(task: WorkplanTask, row: Dictionary, is_new: bool
 	var workflow_raw: String = String(row.get("workflow_status", "")).strip_edges()
 	if not workflow_raw.is_empty():
 		task.status = workflow_raw
+	WorkplanDependenciesScript.set_depends_on(task, row.get("depends_on", ""))
+	task.assignee = String(row.get("assignee", "")).strip_edges()
 	if not task.publish_date.is_empty():
 		if task.scheduled_date.is_empty():
 			task.scheduled_date = task.publish_date

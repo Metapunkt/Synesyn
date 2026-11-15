@@ -1,6 +1,8 @@
 # workplan_task_card.gd
 extends PanelContainer
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 @onready var core_idea_label = $MarginContainer/VBoxContainer/CoreIdeaLabel
 @onready var status_label = $MarginContainer/VBoxContainer/HBoxContainer/StatusLabel
 @onready var channel_label = $MarginContainer/VBoxContainer/HBoxContainer/ChannelLabel
@@ -60,8 +62,13 @@ func _refresh_display():
 		return
 	
 	# Update basic info - use title for display
-	core_idea_label.text = current_task.title
-	status_label.text = "Status: %s" % current_task.status
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	var is_blocked: bool = WorkplanDependenciesScript.is_blocked(current_task, workplan)
+	core_idea_label.text = ("⛔ " if is_blocked else "") + current_task.title
+	status_label.text = ("Blocked · " if is_blocked else "") + ("Status: %s" % current_task.status)
 	channel_label.text = "Channel: %s" % current_task.channel
 	
 	# Update completion checkbox
@@ -138,6 +145,13 @@ func _update_action_buttons():
 		delete_button.visible = true  # Always allow deletion
 
 func _update_panel_style():
+	var workplan: Resource = null
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		workplan = manager.get_current_workplan()
+	if WorkplanDependenciesScript.is_blocked(current_task, workplan):
+		modulate = Color(1.0, 0.85, 0.7)
+		return
 	# Add visual indicators based on status
 	match current_task.status:
 		"In Progress":

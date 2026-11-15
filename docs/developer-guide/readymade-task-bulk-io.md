@@ -31,6 +31,8 @@ In **Workplan Manager**:
 | `status` | no | Content-plan status: `draft`, `placeholder`, `open_slot`, `needs_approval`, `approved`, `posted` |
 | `workflow_status` | no | Workflow lane: `To Do`, `In Progress`, `Review`, `Done` |
 | `notes` | no | Free-form notes (do not encode status here) |
+| `depends_on` | no | Predecessor `task_id` values, separated by `;` or `,` |
+| `assignee` | no | Person name or agent label from the workplan people list (or free text) |
 
 JSON shape:
 

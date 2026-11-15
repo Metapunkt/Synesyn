@@ -2,6 +2,8 @@ extends Control
 class_name CalendarView
 ## Calendar view for content scheduling and deadline management
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 signal task_selected(task: WorkplanTask)
 signal date_selected(date: String)
 
@@ -350,23 +352,28 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 	"""Create a small task indicator for calendar cells (draggable)."""
 	var indicator = Label.new()
 	indicator.mouse_filter = Control.MOUSE_FILTER_STOP
-	indicator.text = task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
+	var is_blocked: bool = WorkplanDependenciesScript.is_blocked(task, _workplan_ref)
+	var title_prefix: String = "⛔ " if is_blocked else ""
+	indicator.text = title_prefix + task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
 	task.migrate_content_status_from_notes()
 	var plan_status: String = task.get_content_status()
 	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
 	var publish_label: String = PublishTimeScript.format_publish_label(
 		task, _workplan_ref, viewer_timezone
 	)
+	var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
 	if publish_label.is_empty():
-		indicator.tooltip_text = "%s [%s]\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status]
+		indicator.tooltip_text = "%s [%s]%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, block_note]
 	else:
-		indicator.tooltip_text = "%s [%s]\n%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, publish_label]
+		indicator.tooltip_text = "%s [%s]\n%s%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, publish_label, block_note]
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
 	# Color based on status and priority — Done never uses OVERDUE red.
 	var bg_color = task.get_status_color()
-	if task.status != "Done" and task.is_overdue():
+	if is_blocked:
+		bg_color = Color(0.85, 0.45, 0.2)
+	elif task.status != "Done" and task.is_overdue():
 		bg_color = Color.RED
 	elif task.status != "Done" and task.is_due_soon():
 		bg_color = Color.ORANGE
@@ -434,16 +441,54 @@ func _on_day_cell_input(event: InputEvent, day_date: String) -> void:
 
 func _reschedule_to_date(task: WorkplanTask, new_date: String) -> void:
 	_ensure_rescheduler()
+	var fields: Array = ["publish_date", "scheduled_date", "deadline"]
+	var old_anchor: String = ""
+	if task != null:
+		old_anchor = task.publish_date if not task.publish_date.is_empty() else task.get_calendar_display_date()
 	_rescheduler.move_task_to_date(
 		task,
 		new_date,
-		["publish_date", "scheduled_date", "deadline"],
+		fields,
 		true,
 		_workplan_ref,
 		_series_mode
 	)
 	_apply_filters()
 	_refresh_calendar()
+	_offer_move_dependents(task, old_anchor, new_date, fields)
+
+
+func _offer_move_dependents(
+	task: WorkplanTask,
+	old_date: String,
+	new_date: String,
+	fields: Array
+) -> void:
+	if task == null or _workplan_ref == null:
+		return
+	task.ensure_task_id()
+	var dependents: Array = WorkplanDependenciesScript.get_dependents(task.task_id, _workplan_ref)
+	if dependents.is_empty():
+		return
+	var offset_days: int = WorkplanDependenciesScript.day_offset(old_date, new_date)
+	if offset_days == 0:
+		return
+	var confirm := ConfirmationDialog.new()
+	confirm.title = "Move dependents?"
+	confirm.dialog_text = (
+		"Move %d dependent task(s) by the same offset (%+d day(s))?"
+		% [dependents.size(), offset_days]
+	)
+	confirm.exclusive = false
+	confirm.confirmed.connect(func():
+		WorkplanDependenciesScript.move_dependents_by_offset(task, offset_days, _workplan_ref, fields)
+		_apply_filters()
+		_refresh_calendar()
+		confirm.queue_free()
+	)
+	confirm.canceled.connect(func(): confirm.queue_free())
+	add_child(confirm)
+	confirm.popup_centered()
 
 
 func _prompt_move_to_date(task: WorkplanTask) -> void:

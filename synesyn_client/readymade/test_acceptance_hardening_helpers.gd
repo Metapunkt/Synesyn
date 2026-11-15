@@ -15,6 +15,7 @@ static func run_all(host: Node) -> void:
 	_test_workplan_file_dialog_filesystem(host)
 	_test_nested_workplan_dialogs_non_exclusive(host)
 	_test_file_dialog_line_enables_ok(host)
+	_test_task_dependencies(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -414,3 +415,75 @@ static func _test_file_dialog_line_enables_ok(host: Node) -> void:
 	dash.queue_free()
 	DirAccess.remove_absolute(existing)
 	DirAccess.remove_absolute(tmp_dir)
+
+
+static func _test_task_dependencies(host: Node) -> void:
+	print("-- task depends_on / blocked / cycle / cascade / bulk IO --")
+	const DepsScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+	const BulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Deps Fixture"
+	var pred := WorkplanTask.new()
+	pred.task_id = "task_pred"
+	pred.title = "Predecessor"
+	pred.status = "To Do"
+	pred.publish_date = "2026-12-01"
+	var child := WorkplanTask.new()
+	child.task_id = "task_child"
+	child.title = "Dependent"
+	child.status = "To Do"
+	child.publish_date = "2026-12-03"
+	child.deadline = "2026-12-03"
+	child.scheduled_date = "2026-12-03"
+	DepsScript.set_depends_on(child, "task_pred")
+	var grandchild := WorkplanTask.new()
+	grandchild.task_id = "task_gc"
+	grandchild.title = "Grandchild"
+	grandchild.publish_date = "2026-12-05"
+	DepsScript.set_depends_on(grandchild, "task_child")
+	# Avoid Workplan.add_task_to_month (saves via manager); append locally.
+	workplan.months["2026-12"] = [pred, child, grandchild]
+	_expect(host, child.depends_on.size() == 1 and child.depends_on[0] == "task_pred", "depends_on set")
+	_expect(host, DepsScript.is_blocked(child, workplan), "child blocked while pred not Done")
+	pred.status = "Done"
+	_expect(host, not DepsScript.is_blocked(child, workplan), "child unblocked when pred Done")
+	_expect(
+		host,
+		DepsScript.would_create_cycle("task_pred", ["task_child"], workplan),
+		"cycle detected pred→child when child depends on pred"
+	)
+	_expect(
+		host,
+		not DepsScript.would_create_cycle("task_child", ["task_pred"], workplan),
+		"existing valid edge is not reported as a new cycle"
+	)
+	_expect(
+		host,
+		DepsScript.would_create_cycle("task_pred", "task_gc", workplan),
+		"transitive cycle via grandchild detected"
+	)
+	var dependents: Array = DepsScript.get_dependents("task_pred", workplan)
+	_expect(host, dependents.size() == 1, "one direct dependent of pred")
+	var offset: int = DepsScript.day_offset("2026-12-01", "2026-12-04")
+	_expect(host, offset == 3, "day_offset 3")
+	var cascaded: Dictionary = DepsScript.move_dependents_by_offset(
+		pred, offset, workplan, ["publish_date", "scheduled_date", "deadline"]
+	)
+	_expect(host, int(cascaded.get("moved", 0)) == 2, "cascade moves child and grandchild")
+	_expect(host, child.publish_date == "2026-12-06", "child publish shifted +3")
+	_expect(host, grandchild.publish_date == "2026-12-08", "grandchild publish shifted +3")
+	# Bulk IO round-trip
+	child.assignee = "Reviewer Bot"
+	var csv_text: String = BulkIOScript.export_csv(workplan)
+	_expect(host, csv_text.find("depends_on") >= 0, "CSV header includes depends_on")
+	_expect(host, csv_text.find("task_pred") >= 0, "CSV exports predecessor id in depends_on")
+	var rows: Array = BulkIOScript.parse_csv(csv_text)
+	var child_row: Dictionary = {}
+	for row_any in rows:
+		var row: Dictionary = row_any
+		if String(row.get("task_id", "")) == "task_child":
+			child_row = row
+			break
+	_expect(host, not child_row.is_empty(), "parsed child row")
+	_expect(host, String(child_row.get("depends_on", "")).find("task_pred") >= 0, "bulk depends_on column")
+	_expect(host, String(child_row.get("assignee", "")) == "Reviewer Bot", "bulk assignee column")

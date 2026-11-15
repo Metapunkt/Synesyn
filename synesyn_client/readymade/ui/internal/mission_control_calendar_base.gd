@@ -1,6 +1,8 @@
 extends "res://readymade/ui/internal/mission_control_task_list_base.gd"
 class_name MissionControlCalendarBase
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 var _calendar_empty_banner: Control = null
 
 func _update_calendar():
@@ -968,6 +970,15 @@ func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -
 		_:
 			fields = ["publish_date", "scheduled_date", "deadline"]
 	var workplan_obj = orchestrator.workplan if orchestrator else null
+	var old_anchor: String = ""
+	if task != null:
+		match date_type:
+			"start":
+				old_anchor = task.start_date
+			"deadline":
+				old_anchor = task.deadline
+			_:
+				old_anchor = task.publish_date if not task.publish_date.is_empty() else task.get_calendar_display_date()
 	var result: Dictionary = calendar_rescheduler.move_task_to_date(
 		task,
 		new_date,
@@ -982,6 +993,44 @@ func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -
 	)
 	calendar_last_task_count = -1
 	_populate_calendar_with_tasks()
+	_offer_move_dependents(task, old_anchor, new_date, fields, workplan_obj)
+
+
+func _offer_move_dependents(
+	task: WorkplanTask,
+	old_date: String,
+	new_date: String,
+	fields: Array,
+	workplan_obj: Resource
+) -> void:
+	if task == null or workplan_obj == null:
+		return
+	task.ensure_task_id()
+	var dependents: Array = WorkplanDependenciesScript.get_dependents(task.task_id, workplan_obj)
+	if dependents.is_empty():
+		return
+	var offset_days: int = WorkplanDependenciesScript.day_offset(old_date, new_date)
+	if offset_days == 0:
+		return
+	var confirm := ConfirmationDialog.new()
+	confirm.title = "Move dependents?"
+	confirm.dialog_text = (
+		"Move %d dependent task(s) by the same offset (%+d day(s))?"
+		% [dependents.size(), offset_days]
+	)
+	confirm.exclusive = false
+	confirm.confirmed.connect(func():
+		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
+			task, offset_days, workplan_obj, fields
+		)
+		print("Calendar: cascaded %d dependent task(s)" % int(moved.get("moved", 0)))
+		calendar_last_task_count = -1
+		_populate_calendar_with_tasks()
+		confirm.queue_free()
+	)
+	confirm.canceled.connect(func(): confirm.queue_free())
+	add_child(confirm)
+	confirm.popup_centered()
 
 
 func _prompt_move_task_to_date(task: WorkplanTask) -> void:
@@ -1098,11 +1147,16 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 		base_modulate = Color(0.8, 0.88, 1.0)  # Light blue for publish
 	else:
 		base_modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
+	var workplan_obj = orchestrator.workplan if orchestrator else null
+	var is_blocked: bool = WorkplanDependenciesScript.is_blocked(task, workplan_obj)
+	if is_blocked:
+		base_modulate = Color(1.0, 0.72, 0.45)
 	card.modulate = base_modulate
 	card.set_meta("base_modulate", base_modulate)
 	# Full title on the card — children use MOUSE_FILTER_PASS so hover hits the card.
-	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for Move to date / Undo\n📝 Double-click to edit" % [
-		task.title, task.status, task.priority, date_type
+	var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
+	card.tooltip_text = "%s\nStatus: %s\nPriority: %d%s\n🎯 Drag to move %s date\n🖱️ Right-click for Move to date / Undo\n📝 Double-click to edit" % [
+		task.title, task.status, task.priority, block_note, date_type
 	]
 	
 	var hbox = HBoxContainer.new()
@@ -1123,9 +1177,9 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	
 	# Task title (truncated) — full title lives on card.tooltip_text
 	var title_label = Label.new()
-	var display_title = task.title
-	if display_title.length() > 12:
-		display_title = display_title.substr(0, 12) + "..."
+	var display_title = ("⛔ " if is_blocked else "") + task.title
+	if display_title.length() > 14:
+		display_title = display_title.substr(0, 14) + "..."
 	title_label.text = display_title
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.add_theme_font_size_override("font_size", 9)

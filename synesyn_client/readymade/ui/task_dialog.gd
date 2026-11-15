@@ -1,6 +1,8 @@
 extends Window
 class_name TaskDialog
 
+const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+
 # UI References
 @onready var title_edit: LineEdit = $ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/TitleContainer/TitleEdit
 @onready var core_idea_edit: TextEdit = $ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CoreIdeaContainer/CoreIdeaEdit
@@ -37,6 +39,11 @@ class_name TaskDialog
 @onready var cosmic_other_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/CosmicContainer/CosmicOtherContainer/CosmicOtherEdit"
 
 @onready var priority_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/PriorityContainer/PriorityOption"
+@onready var depends_on_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer/DependsOnEdit"
+@onready var blocked_hint_label: Label = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/DependsOnContainer/BlockedHintLabel"
+@onready var assignee_option: OptionButton = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer/AssigneeOption"
+@onready var assignee_edit: LineEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/AssigneeContainer/AssigneeEdit"
+@onready var approval_log_text: TextEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/ApprovalLogContainer/ApprovalLogText"
 @onready var notes_edit: TextEdit = $"ScrollContainer/VBoxContainer/TabContainer/BasicInfo/BasicInfoVBox/NotesContainer/NotesEdit"
 
 # Calendar tab
@@ -94,6 +101,7 @@ func _ready():
 	_setup_ui()
 	_setup_recurring_options()
 	_setup_content_status_options()
+	_setup_assignee_options()
 	_collect_static_checkboxes()
 	_setup_mode_aware_options()
 	
@@ -106,6 +114,10 @@ func _ready():
 	channel_filter_toggle.toggled.connect(_on_channel_filter_toggled)
 	if expand_recurrence_button:
 		expand_recurrence_button.pressed.connect(_on_expand_recurrence_pressed)
+	if depends_on_edit:
+		depends_on_edit.text_changed.connect(func(_t: String): _refresh_blocked_hint())
+	if assignee_option:
+		assignee_option.item_selected.connect(_on_assignee_option_selected)
 
 
 func _setup_content_status_options() -> void:
@@ -114,6 +126,100 @@ func _setup_content_status_options() -> void:
 	content_status_option.clear()
 	for status_id in WorkplanTask.CONTENT_STATUSES:
 		content_status_option.add_item(String(status_id))
+
+
+func _setup_assignee_options() -> void:
+	if assignee_option == null:
+		return
+	assignee_option.clear()
+	assignee_option.add_item("(none)")
+	assignee_option.add_item("(custom / agent…)")
+	var workplan: Workplan = _current_workplan()
+	if workplan == null:
+		return
+	for person_any in workplan.people:
+		if typeof(person_any) != TYPE_DICTIONARY:
+			continue
+		var person: Dictionary = person_any
+		var person_name: String = String(person.get("name", "")).strip_edges()
+		if person_name.is_empty():
+			continue
+		var role_label: String = String(person.get("role", "")).strip_edges()
+		var label_text: String = person_name if role_label.is_empty() else "%s (%s)" % [person_name, role_label]
+		assignee_option.add_item(label_text)
+		assignee_option.set_item_metadata(assignee_option.item_count - 1, person_name)
+
+
+func _current_workplan() -> Workplan:
+	var manager: Node = get_node_or_null("/root/WorkplanManager")
+	if manager != null and manager.has_method("get_current_workplan"):
+		return manager.get_current_workplan() as Workplan
+	return null
+
+
+func _on_assignee_option_selected(index: int) -> void:
+	if assignee_edit == null or assignee_option == null:
+		return
+	if index <= 0:
+		assignee_edit.text = ""
+		return
+	if index == 1:
+		# Keep free-text edit for custom/agent values.
+		return
+	var meta: Variant = assignee_option.get_item_metadata(index)
+	assignee_edit.text = String(meta)
+
+
+func _refresh_blocked_hint() -> void:
+	if blocked_hint_label == null:
+		return
+	var workplan: Workplan = _current_workplan()
+	var probe := WorkplanTask.new()
+	if editing_task != null:
+		probe.task_id = editing_task.task_id
+	probe.depends_on = WorkplanDependenciesScript.normalize_ids(
+		depends_on_edit.text if depends_on_edit else ""
+	)
+	if workplan != null and WorkplanDependenciesScript.would_create_cycle(probe.task_id, probe.depends_on, workplan):
+		blocked_hint_label.text = "⚠ That dependency set would create a cycle."
+		return
+	if WorkplanDependenciesScript.is_blocked(probe, workplan):
+		blocked_hint_label.text = "Blocked — predecessor(s) not Done (or missing)."
+	else:
+		blocked_hint_label.text = ""
+
+
+func _format_approval_log(entries: Array) -> String:
+	if entries.is_empty():
+		return ""
+	var lines: PackedStringArray = PackedStringArray()
+	for entry_any in entries:
+		if typeof(entry_any) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = entry_any
+		var line: String = "%s → %s @ %s" % [
+			String(entry.get("from", "")),
+			String(entry.get("to", "")),
+			String(entry.get("at", "")),
+		]
+		var person: String = String(entry.get("person", "")).strip_edges()
+		var note: String = String(entry.get("note", "")).strip_edges()
+		if not person.is_empty():
+			line += " (%s)" % person
+		if not note.is_empty():
+			line += " — %s" % note
+		lines.append(line)
+	return "\n".join(lines)
+
+
+func _get_selected_assignee() -> String:
+	if assignee_edit != null and not assignee_edit.text.strip_edges().is_empty():
+		return assignee_edit.text.strip_edges()
+	if assignee_option == null or assignee_option.selected <= 0:
+		return ""
+	if assignee_option.selected == 1:
+		return ""
+	return String(assignee_option.get_item_metadata(assignee_option.selected))
 
 func _collect_static_checkboxes():
 	"""Collect static checkboxes for easy management"""
@@ -518,6 +624,23 @@ func _populate_fields(task: WorkplanTask):
 	core_idea_edit.text = task.core_idea
 	notes_edit.text = task.notes
 	priority_option.selected = task.priority
+	_setup_assignee_options()
+	if depends_on_edit:
+		depends_on_edit.text = "; ".join(WorkplanDependenciesScript.normalize_ids(task.depends_on))
+	if assignee_edit:
+		assignee_edit.text = task.assignee
+	if assignee_option:
+		var matched := false
+		for i in range(assignee_option.item_count):
+			if String(assignee_option.get_item_metadata(i)) == task.assignee and not task.assignee.is_empty():
+				assignee_option.selected = i
+				matched = true
+				break
+		if not matched:
+			assignee_option.selected = 1 if not task.assignee.is_empty() else 0
+	if approval_log_text:
+		approval_log_text.text = _format_approval_log(task.approval_log)
+	_refresh_blocked_hint()
 	
 	# Handle formats
 	for format in task.formats:
@@ -839,6 +962,14 @@ func _on_confirmed():
 	task.target_audience = audience_edit.text
 	task.performance_notes = performance_edit.text
 	task.set_content_status(_get_selected_content_status())
+	var dep_raw: String = depends_on_edit.text if depends_on_edit else ""
+	var workplan: Workplan = _current_workplan()
+	task.ensure_task_id()
+	if workplan != null and WorkplanDependenciesScript.would_create_cycle(task.task_id, dep_raw, workplan):
+		_show_error_dialog("That depends_on list would create a cycle. Clear or change predecessors.")
+		return
+	WorkplanDependenciesScript.set_depends_on(task, dep_raw)
+	task.assignee = _get_selected_assignee()
 	
 	# Sync legacy properties for backward compatibility
 	task.sync_legacy_properties()

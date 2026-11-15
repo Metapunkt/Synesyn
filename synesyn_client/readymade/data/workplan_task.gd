@@ -42,6 +42,12 @@ class_name WorkplanTask
 ## Content-plan status distinct from workflow `status` (To Do / Done).
 ## Values: draft, placeholder, open_slot, needs_approval, approved, posted
 @export var content_status: String = "draft"
+## Predecessor task_ids that must be Done before this task is unblocked.
+@export var depends_on: Array[String] = []
+## Assignee label: person name or agent id from the workplan people list (or free text).
+@export var assignee: String = ""
+## Append-only status-change ledger: {from, to, at, person, note}.
+@export var approval_log: Array[Dictionary] = []
 
 
 # Phase 5.1: Edit Session Integration
@@ -313,6 +319,9 @@ func clone() -> WorkplanTask:
 	new_task.content_status = get_content_status()
 	new_task.publish_time = publish_time
 	new_task.publish_timezone = publish_timezone
+	new_task.depends_on = depends_on.duplicate()
+	new_task.assignee = assignee
+	# approval_log is not copied — new instances start a fresh ledger
 	# Copy edit session data
 	new_task.edit_session_id = edit_session_id
 	new_task.referenced_documents = referenced_documents.duplicate(true)

@@ -52,6 +52,13 @@ UI affordances: drag a card onto another day; context menu / detail
 **Move to date…**; **Undo last reschedule**; toggle series vs instance. Month and
 week views are day-granular (no hourly slots yet).
 
+After a move, if other tasks list this task in `depends_on`, ReadyMade offers
+**Move dependents by the same offset** (ConfirmationDialog). Cycles are rejected
+when editing dependencies. Blocked tasks (predecessors not `Done`, or missing)
+show an amber/⛔ indicator on calendar cards and task cards.
+
+See `WorkplanDependencies` (`workplan_dependencies.gd`).
+
 ## Acceptance
 
 Covered in `test_acceptance_hardening_helpers.gd` via

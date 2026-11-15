@@ -36,13 +36,22 @@ Open the **Campaigns** tab to see posts grouped by campaign tag or content theme
 counts by content status, upcoming and overdue items, completion progress, and
 how each channel sits against its weekly cadence cap.
 
+## Dependencies
+
+In the task dialog, set **Depends on** to one or more predecessor task ids
+(comma or semicolon separated). A task is **blocked** until every predecessor is
+`Done` (missing ids also block). Blocked tasks show a clear indicator on cards
+and the calendar. Self-links and cycles are rejected when you save.
+
 ## Rescheduling on the calendar
 
 Drag a task card onto another day to move its publish (or start/deadline) date.
 Time and timezone stay the same. Right-click (or use **Move to date…** in the
 side panel) for a keyboard-friendly date entry. Use **Undo last reschedule** to
 roll back. Recurring instances move one at a time unless you choose **series**
-(same title and channel). Cadence warnings update immediately after a move.
+(same title and channel). Cadence warnings update immediately after a move. If
+other tasks depend on the one you moved, ReadyMade asks whether to shift those
+dependents by the same number of days.
 
 ## Bulk CSV / JSON
 
