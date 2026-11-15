@@ -40,6 +40,7 @@ DualWindowManager="*res://ScenSyn/scripts/core/DualWindowManager.gd"
 VoiceService="*uid://dgqwnnjfldlc7"
 WorkspaceBootstrapper="*res://scripts/workspace_bootstrapper.gd"
 MetapunktAppHost="*res://addons/metapunkt/Core/Ports/metapunkt_app_host_router.gd"
+WorkplanManager="*res://readymade/scripts/singletons/WorkplanManager.gd"
 ReadyMadeOrchestrator="*res://readymade/scripts/singletons/ReadyMadeOrchestrator.gd"
 ModeManager="*res://readymade/scripts/core/mode_manager.gd"
 TaskTemplateManager="*res://readymade/scripts/core/task_template_manager.gd"
@@ -66,10 +67,6 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/synesyn_core/plugin.cfg", "res://addons/metapunkt/plugin.cfg", "res://addons/synaxes/plugin.cfg", "res://addons/synpunkt/plugin.cfg", "res://addons/syntree/plugin.cfg", "res://addons/syntree_voice/plugin.cfg", "res://addons/story_stage/plugin.cfg")
-
-[gdextension]
-
-#LimboAIprovidesBTTask/BTPlayer/BehaviorTree/Blackboardtypes#usedbyScenSyn,Metapunkt,andReadyMadebehavior-treescripts.limboai="res://addons/limboai/bin/limboai.gdextension"
 
 [input_devices]
 

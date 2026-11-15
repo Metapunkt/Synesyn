@@ -1,12 +1,30 @@
 # Local development
 
+## Recommended builds
+
+Synesyn does **not** ship or bundle Godot or LimboAI. Both are open-source
+dependencies that each user installs themselves. The versions below are
+**recommended / tested-with** builds: what CI runs and what we recommend for
+local development. The single source of truth (including download URLs and
+SHA256 checksums) is
+[`utilities/checks/tool_versions.env`](https://github.com/Metapunkt/Synesyn/blob/main/utilities/checks/tool_versions.env).
+
+| Dependency | Recommended build | Official download |
+| --- | --- | --- |
+| Godot | **4.7.2-stable** (project declares `4.7`) | [Godot download](https://godotengine.org/download/) · [4.7.2-stable release](https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip) |
+| LimboAI | **v1.8.0**, GDExtension build labeled for Godot **4.6** (`limboai+v1.8.0.gdextension-4.6.zip`) | [LimboAI releases](https://github.com/limbonaut/limboai/releases) |
+
+The LimboAI 4.6 GDExtension build works under Godot 4.7.x. Upstream does not
+publish a `gdextension-4.7` zip yet; we stay on the GDExtension 4.6 artifact
+(not a custom LimboAI module editor).
+
 ## Prerequisites
 
-- **Godot 4.7.x.** The project declares `4.7`; harness runs are verified against
-  4.7.1-rc2.
+- **Godot 4.7.x** — install the recommended build above yourself.
 - **Python 3.11** for the hub. `services/synesyn_hub/environment.yml` pins it.
-- **LimboAI v1.8.0 binaries**, which are not redistributed here. Install them
-  before opening the project — see below.
+- **LimboAI v1.8.0 binaries** — not redistributed in this repository. Install
+  them before opening the project — see below. CI uses the same recommended
+  build from `utilities/checks/tool_versions.env`.
 
 ### Installing LimboAI (required before the first open)
 
@@ -16,16 +34,44 @@ Android, all published upstream under MIT. That directory also holds
 `limboai.gdextension`, the descriptor Godot reads to register the extension, so
 without it the addon does not load and the project will not open cleanly.
 
-1. Download the release matching `synesyn_client/addons/limboai/version.txt`
-   (**v1.8.0**) for Godot 4.x from
+1. Download the recommended release matching
+   `synesyn_client/addons/limboai/version.txt` (**v1.8.0**) — the GDExtension
+   zip for Godot 4.6 — from
    [LimboAI releases](https://github.com/limbonaut/limboai/releases).
 2. Copy the `addons/limboai/bin/` directory from the archive into
    `synesyn_client/addons/limboai/bin/`.
 3. Confirm `synesyn_client/addons/limboai/bin/limboai.gdextension` exists, then
    open `synesyn_client/` in Godot.
 
-The pinned version matters: the GDExtension ABI is tied to the Godot version, so
-a mismatched build fails to load rather than degrading.
+Matching the recommended build matters: the GDExtension ABI is tied to the
+Godot version, so a mismatched build fails to load rather than degrading.
+
+### First launch (fresh clone)
+
+The first time you open `synesyn_client/` in Godot (or run
+`godot --headless --path synesyn_client --import`), Godot imports assets and
+registers GDExtensions. LimboAI is discovered from
+`synesyn_client/addons/limboai/bin/limboai.gdextension` — there is no
+`[gdextension]` section in `project.godot` for that. Godot writes `.godot/`
+(including `extension_list.cfg`); that cache is local — do not commit it.
+
+On that first open you may see transient errors such as
+`Could not find base class "BTPlayer"` / `BTTask` / `BTAction`, or
+`Failed loading resource` for theme / JetBrains Mono fonts under the
+project's `theme/fonts` and `csr/thirdparty/fonts` folders. Those clear
+after the import finishes. Use **Project → Reload Current Project**, or
+run a headless import first, then open the editor again.
+
+Benign init-order warnings that can appear even after a healthy reload (safe
+to ignore): `Logging service not available`,
+`ContentBus: NotificationManager not found`, and
+`ContentListView: ContentStateResource not injected yet`. They come from
+autoload/plugin startup order, not from a broken LimboAI install.
+
+If `Could not find type "BTPlayer"` persists on the ReadyMade A1 agent script
+after reload, LimboAI did not register — confirm
+`synesyn_client/addons/limboai/bin/limboai.gdextension` and the platform binary
+exist (see Recommended builds above).
 
 ### Story Stage character art (optional)
 

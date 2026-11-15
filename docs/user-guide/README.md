@@ -135,11 +135,12 @@ of how the infrastructure may be used, without being prescriptive. On building y
       own story needs no code:
       [authoring guide](./story-catalyst-authoring.md).
 - **ReadyMade** — agentic content planning and document editing over a
-  long-running workplan. Early and rough: see
+  long-running workplan. See [content planning](./readymade-content-planning.md)
+  for workplans, bulk CSV, recurrence, filters, and cadence caps;
   [`readymade/README.md`](https://github.com/Metapunkt/Synesyn/blob/main/synesyn_client/readymade/README.md)
-  for what it does today, and
+  for the in-repo overview; and
   [PRD-READYMADE-EDIT-SESSION](../product-requirements/PRD-READYMADE-EDIT-SESSION.md)
-  for the Edit Session requirements. A dedicated user page is pending.
+  for Edit Session requirements.
 - **Play a Story Log** — replays a saved ScenSyn session on the Story Stage, with
   no model or hub, for showing a performance again or looping it in an exhibition.
   See [replaying a saved session](./scensyn.md#replaying-a-saved-session).

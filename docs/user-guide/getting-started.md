@@ -11,10 +11,14 @@ Synesyn is research software from a funded pilot. Expect rough edges.
   `services/synesyn_hub/synesyn_hub.exe`.
 - **If you are running from source:** budget half an hour for the first setup.
   You will need:
-  - **Godot 4.7.x**, from [godotengine.org](https://godotengine.org/download).
-    The standard build is fine; you do not need the .NET version.
-  - **The LimboAI addon binaries**, which are excluded from this repository for
-    size reasons. One download and one copy — see
+  - **Godot 4.7.x** (recommended **4.7.2-stable**), from
+    [godotengine.org](https://godotengine.org/download). Synesyn does not ship
+    Godot; install it yourself. The standard build is fine; you do not need the
+    .NET version. See
+    [Recommended builds](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#recommended-builds).
+  - **The LimboAI addon binaries** (recommended **v1.8.0**, GDExtension for
+    Godot 4.6), which are excluded from this repository for size reasons —
+    Synesyn does not redistribute them. One download and one copy — see
     [installing LimboAI](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#installing-limboai-required-before-the-first-open).
     The project will not open cleanly without them.
   - **An API key for a language model**, or a local model. Nothing generative
@@ -33,10 +37,18 @@ access. When running from source:
 
 1. Install the LimboAI binaries as linked above.
 2. Open `synesyn_client/` in Godot and let it import. The first import takes a
-   few minutes.
+   few minutes. On a fresh clone, transient `BTPlayer` / `BTTask` / font-load
+   errors during that first import are expected; use
+   **Project → Reload Current Project** (or run
+   `godot --headless --import` first). Details:
+   [First launch (fresh clone)](https://github.com/Metapunkt/Synesyn/blob/main/docs/developer-guide/local-dev.md#first-launch-fresh-clone).
 3. Set up model access (next section), or the session will start and then fail to
    respond.
 4. Press play.
+
+Warnings about `Logging service not available`, `NotificationManager not found`,
+or `ContentStateResource not injected yet` are benign init-order messages and
+can be ignored.
 
 The hub starts on its own if a Hub binary is present and not already running, and
 adopts one that is already running rather than starting a second (ADR 0021). A
