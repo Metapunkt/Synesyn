@@ -32,16 +32,21 @@ func move_task_to_date(
 	series_mode: String = "instance"
 ) -> Dictionary:
 	"""Move a task (or series) to new_date.
-	series_mode: "instance" (default) | "series" (all matching title+channel with recurrence cleared instances)
-	Returns {moved: int, undo_id: int, warnings: Array}.
+	Primary fields are set to new_date. When moving publish/deadline (not start-only),
+	start_date is shifted by the same day offset so work-window duration is preserved.
+	series_mode: "instance" (default) | "series"
+	Returns {moved: int, undo_id: int, warnings: Array, offset_days: int}.
 	"""
-	var result := {"moved": 0, "undo_id": -1, "warnings": []}
+	const DepsScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+	var result := {"moved": 0, "undo_id": -1, "warnings": [], "offset_days": 0}
 	if task == null or new_date.strip_edges().is_empty():
 		return result
 	var targets: Array = [task]
 	if series_mode == "series":
 		targets = _collect_series(task, workplan)
+	var only_start: bool = fields.size() == 1 and String(fields[0]) == "start_date"
 	var snapshot: Array = []
+	var offset_days: int = 0
 	for target_any in targets:
 		var target: WorkplanTask = target_any as WorkplanTask
 		if target == null:
@@ -56,6 +61,10 @@ func move_task_to_date(
 			"publish_timezone": target.publish_timezone,
 		}
 		snapshot.append(before)
+		var old_anchor: String = _anchor_date_for_fields(target, fields)
+		var target_offset: int = DepsScript.day_offset(old_anchor, new_date)
+		if result["moved"] == 0:
+			offset_days = target_offset
 		for field_any in fields:
 			var field_name: String = String(field_any)
 			match field_name:
@@ -67,12 +76,15 @@ func move_task_to_date(
 					target.deadline = new_date
 				"start_date":
 					target.start_date = new_date
+		# Preserve duration: shift start with publish/deadline moves (do not set it to new_date).
+		if not only_start and target_offset != 0 and not target.start_date.is_empty():
+			target.start_date = DepsScript.shift_date(target.start_date, target_offset)
 		if not preserve_time:
-			# keep timezone; time unchanged by default
 			pass
 		result["moved"] = int(result["moved"]) + 1
 	if snapshot.is_empty():
 		return result
+	result["offset_days"] = offset_days
 	_undo_stack.append({"snapshot": snapshot, "new_date": new_date})
 	if _undo_stack.size() > _max_undo:
 		_undo_stack.remove_at(0)
@@ -85,6 +97,19 @@ func move_task_to_date(
 		if workplan.has_method("update_task"):
 			workplan.update_task()
 	return result
+
+
+func extend_last_undo(extra_snapshots: Array) -> void:
+	"""Append pre-move date snapshots (e.g. cascaded dependents) to the latest undo record."""
+	if _undo_stack.is_empty() or extra_snapshots.is_empty():
+		return
+	var record: Dictionary = _undo_stack[_undo_stack.size() - 1]
+	var snapshot: Array = record.get("snapshot", [])
+	for entry_any in extra_snapshots:
+		if typeof(entry_any) != TYPE_DICTIONARY:
+			continue
+		snapshot.append(entry_any)
+	record["snapshot"] = snapshot
 
 
 func undo_last(workplan: Resource = null) -> bool:
@@ -109,6 +134,30 @@ func undo_last(workplan: Resource = null) -> bool:
 		if workplan.has_method("update_task"):
 			workplan.update_task()
 	return true
+
+
+func _anchor_date_for_fields(task: WorkplanTask, fields: Array) -> String:
+	if task == null:
+		return ""
+	for field_any in fields:
+		match String(field_any):
+			"publish_date":
+				if not task.publish_date.is_empty():
+					return task.publish_date
+			"deadline":
+				if not task.deadline.is_empty():
+					return task.deadline
+			"start_date":
+				if not task.start_date.is_empty():
+					return task.start_date
+			"scheduled_date":
+				if not task.scheduled_date.is_empty():
+					return task.scheduled_date
+	if not task.publish_date.is_empty():
+		return task.publish_date
+	if not task.deadline.is_empty():
+		return task.deadline
+	return task.start_date
 
 
 func _collect_series(template: WorkplanTask, workplan: Resource) -> Array:

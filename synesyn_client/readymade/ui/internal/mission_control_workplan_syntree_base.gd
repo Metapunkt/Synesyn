@@ -845,14 +845,43 @@ func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:
 	_popup_nested_dialog(dialog, Vector2(480, 320))
 
 
+func _find_open_workplan_manager_dialog() -> AcceptDialog:
+	"""Locate a visible Workplan Manager AcceptDialog owned by this dashboard."""
+	for child in get_children():
+		if child is AcceptDialog and is_instance_valid(child) and (child as AcceptDialog).visible:
+			var dlg: AcceptDialog = child as AcceptDialog
+			if dlg.title == "Workplan Manager":
+				return dlg
+	return null
+
+
+func _close_import_preview_dialog(summary: Window) -> void:
+	"""Hide and free the import preview so it cannot linger under a result dialog."""
+	if summary == null or not is_instance_valid(summary):
+		return
+	summary.hide()
+	summary.visible = false
+	if summary.get_parent() != null:
+		summary.get_parent().remove_child(summary)
+	summary.queue_free()
+
+
 func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:
 	"""Show created/updated/skipped/errors summary before applying bulk import."""
 	var created_n: int = int(preview.get("created", 0))
 	var updated_n: int = int(preview.get("updated", 0))
 	var skipped_n: int = int(preview.get("skipped", 0))
 	var errors: Array = preview.get("errors", [])
+	var manager_dialog: AcceptDialog = _find_open_workplan_manager_dialog()
+	# Hide Manager while preview is exclusive so Cancel cannot click-through to Export.
+	if manager_dialog != null:
+		manager_dialog.hide()
 	var summary := ConfirmationDialog.new()
 	summary.title = "Import Tasks Preview"
+	summary.ok_button_text = "Apply"
+	summary.cancel_button_text = "Cancel"
+	# Exclusive (not nested non-exclusive) so Apply/Cancel cannot fall through to Manager.
+	summary.exclusive = true
 	var error_lines: String = ""
 	if not errors.is_empty():
 		var shown: PackedStringArray = PackedStringArray()
@@ -866,9 +895,11 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 		% [source_path.get_file(), created_n, updated_n, skipped_n, error_lines]
 	)
 	add_child(summary)
+	var restore_manager := func():
+		if manager_dialog != null and is_instance_valid(manager_dialog):
+			manager_dialog.show()
 	summary.confirmed.connect(func():
-		# Close preview immediately on Apply so it does not linger.
-		summary.hide()
+		_close_import_preview_dialog(summary)
 		var applied: Dictionary = workplan_manager.apply_import_tasks_preview(preview)
 		var applied_created: int = int(applied.get("created", 0))
 		var applied_updated: int = int(applied.get("updated", 0))
@@ -876,21 +907,32 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 			"MissionControl: Import applied — created %d, updated %d"
 			% [applied_created, applied_updated]
 		)
-		summary.queue_free()
 		var result := AcceptDialog.new()
 		result.title = "Import complete"
 		result.dialog_text = "Created: %d\nUpdated: %d" % [applied_created, applied_updated]
 		result.ok_button_text = "Close"
+		result.exclusive = true
 		add_child(result)
-		result.confirmed.connect(func(): result.queue_free(), CONNECT_ONE_SHOT)
-		result.canceled.connect(func(): result.queue_free(), CONNECT_ONE_SHOT)
-		_popup_nested_dialog(result)
+		var finish := func(_arg = null):
+			if is_instance_valid(result):
+				result.hide()
+				result.queue_free()
+			restore_manager.call()
+		result.confirmed.connect(finish, CONNECT_ONE_SHOT)
+		result.canceled.connect(finish, CONNECT_ONE_SHOT)
+		result.close_requested.connect(finish, CONNECT_ONE_SHOT)
+		result.popup_centered()
 	, CONNECT_ONE_SHOT)
-	summary.canceled.connect(func():
-		summary.hide()
-		summary.queue_free()
-	, CONNECT_ONE_SHOT)
-	_popup_nested_dialog(summary)
+	var on_cancel := func(_arg = null):
+		_close_import_preview_dialog(summary)
+		restore_manager.call()
+		# Cancel must never open a save/export FileDialog.
+	summary.canceled.connect(on_cancel, CONNECT_ONE_SHOT)
+	summary.close_requested.connect(on_cancel, CONNECT_ONE_SHOT)
+	summary.popup_centered()
+	var ok_btn: Button = summary.get_ok_button()
+	if ok_btn != null:
+		ok_btn.call_deferred("grab_focus")
 
 # Helper functions for dialogs
 func _create_text_input_dialog(title: String, prompt: String, default_text: String = "") -> AcceptDialog:

@@ -347,6 +347,9 @@ func _setup_ui():
 	
 	# Create and setup the calendar context menu
 	calendar_context_menu = PopupMenu.new()
+	calendar_context_menu.hide_on_item_selection = true
+	calendar_context_menu.hide_on_checkable_item_selection = true
+	calendar_context_menu.hide_on_state_item_selection = true
 	add_child(calendar_context_menu)
 	calendar_context_menu.id_pressed.connect(_on_calendar_context_menu_id_pressed)
 	

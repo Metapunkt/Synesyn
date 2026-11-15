@@ -65,14 +65,32 @@ static func build_tooltip(
 	kinds: Array,
 	day_date: String,
 	primary_type: String,
-	is_blocked: bool
+	is_blocked: bool,
+	workplan: Resource = null
 ) -> String:
 	var kind_label_text: String = format_calendar_kind_label(kinds)
 	var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
 	var tip: String = "%s\nKind: %s" % [task.title, kind_label_text]
-	if not day_date.is_empty():
+	var has_concrete_date := false
+	if kinds.has("start") and not task.start_date.is_empty():
+		tip += "\nStart: %s" % task.start_date.substr(0, 10)
+		has_concrete_date = true
+	if kinds.has("deadline") and not task.deadline.is_empty():
+		tip += "\nDeadline: %s" % task.deadline.substr(0, 10)
+		has_concrete_date = true
+	if kinds.has("publish"):
+		const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+		var publish_label: String = PublishTimeScript.format_publish_label(task, workplan)
+		if publish_label.is_empty() and not task.publish_date.is_empty():
+			publish_label = task.publish_date.substr(0, 10)
+		if publish_label.is_empty() and not day_date.is_empty():
+			publish_label = day_date
+		if not publish_label.is_empty():
+			tip += "\nPublish: %s" % publish_label
+			has_concrete_date = true
+	if not has_concrete_date and not day_date.is_empty():
 		tip += "\nDate: %s" % day_date
-	tip += "\nStatus: %s\nPriority: %d%s\n🎯 Drag moves %s date\n🖱️ Right-click for Move / Undo / Copy\n📝 Double-click to edit" % [
+	tip += "\nStatus: %s\nPriority: %d%s\n🎯 Drag moves %s\n🖱️ Right-click for Move / Undo / Copy\n📝 Double-click to edit" % [
 		task.status, task.priority, block_note, primary_type
 	]
 	return tip
@@ -83,7 +101,8 @@ static func create_month_card(
 	date_type: String,
 	date_types: Array,
 	day_date: String,
-	is_blocked: bool
+	is_blocked: bool,
+	workplan: Resource = null
 ) -> PanelContainer:
 	"""Compact month-cell card with kind icons/label and full-title tooltip."""
 	var kinds: Array = date_types if not date_types.is_empty() else [date_type]
@@ -91,7 +110,7 @@ static func create_month_card(
 	if primary_type.is_empty():
 		primary_type = date_type
 	var kind_label_text: String = format_calendar_kind_label(kinds)
-	var tip: String = build_tooltip(task, kinds, day_date, primary_type, is_blocked)
+	var tip: String = build_tooltip(task, kinds, day_date, primary_type, is_blocked, workplan)
 
 	var card := PanelContainer.new()
 	card.name = "TaskCard_%s_%s" % [task.title.replace(" ", "_"), kind_label_text]

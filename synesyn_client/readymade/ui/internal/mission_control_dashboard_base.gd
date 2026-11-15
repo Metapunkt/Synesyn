@@ -406,6 +406,8 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	pass
 func _on_calendar_context_menu_id_pressed(id: int):
 	pass
+func _dismiss_calendar_context_menu():
+	pass
 func _get_days_in_month(year: int, month: int) -> int:
 	return 0
 func _parse_date_string(date_string: String) -> Dictionary:

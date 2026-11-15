@@ -100,14 +100,53 @@ static func shift_date(date_str: String, offset_days: int) -> String:
 	return "%04d-%02d-%02d" % [int(shifted["year"]), int(shifted["month"]), int(shifted["day"])]
 
 
+static func default_cascade_fields() -> Array:
+	"""Fields shifted on cascade so durations (start→deadline/publish) stay intact."""
+	return ["publish_date", "scheduled_date", "deadline", "start_date"]
+
+
+static func cascade_fields_preserving_duration(primary_fields: Array) -> Array:
+	"""Ensure start_date is included whenever non-start dates move."""
+	var out: Array = []
+	var seen: Dictionary = {}
+	for field_any in primary_fields:
+		var field_name: String = String(field_any)
+		if field_name.is_empty() or seen.has(field_name):
+			continue
+		seen[field_name] = true
+		out.append(field_name)
+	var only_start: bool = out.size() == 1 and String(out[0]) == "start_date"
+	if not only_start and not seen.has("start_date"):
+		out.append("start_date")
+	return out
+
+
+static func snapshot_task_dates(task: WorkplanTask) -> Dictionary:
+	if task == null:
+		return {}
+	return {
+		"task": task,
+		"publish_date": task.publish_date,
+		"scheduled_date": task.scheduled_date,
+		"deadline": task.deadline,
+		"start_date": task.start_date,
+		"publish_time": task.publish_time,
+		"publish_timezone": task.publish_timezone,
+	}
+
+
 static func move_dependents_by_offset(
 	root_task: WorkplanTask,
 	offset_days: int,
 	workplan: Resource,
-	fields: Array = ["publish_date", "scheduled_date", "deadline"]
+	fields: Array = []
 ) -> Dictionary:
-	"""Shift direct + transitive dependents by offset_days. Returns {moved: int, tasks: Array}."""
-	var result := {"moved": 0, "tasks": []}
+	"""Shift direct + transitive dependents by offset_days.
+	Returns {moved: int, tasks: Array, snapshots: Array} — snapshots are pre-move dates for undo.
+	"""
+	var use_fields: Array = fields if not fields.is_empty() else default_cascade_fields()
+	use_fields = cascade_fields_preserving_duration(use_fields)
+	var result := {"moved": 0, "tasks": [], "snapshots": []}
 	if root_task == null or workplan == null or offset_days == 0:
 		return result
 	root_task.ensure_task_id()
@@ -121,7 +160,8 @@ static func move_dependents_by_offset(
 		if visited.has(dep.task_id):
 			continue
 		visited[dep.task_id] = true
-		for field_any in fields:
+		result["snapshots"].append(snapshot_task_dates(dep))
+		for field_any in use_fields:
 			var field_name: String = String(field_any)
 			match field_name:
 				"publish_date":

@@ -708,11 +708,26 @@ func _on_day_cell_mouse_exited(day: int):
 			if cell and is_instance_valid(cell):
 				cell.modulate = Color(1.1, 1.1, 1.0)  # Back to normal drop zone highlight
 
+func _dismiss_calendar_context_menu() -> void:
+	"""Force-hide the calendar PopupMenu (and status submenu) immediately."""
+	if calendar_context_menu == null or not is_instance_valid(calendar_context_menu):
+		return
+	calendar_context_menu.hide()
+	calendar_context_menu.visible = false
+	var status_submenu = calendar_context_menu.get_node_or_null("StatusSubmenu")
+	if status_submenu is PopupMenu:
+		(status_submenu as PopupMenu).hide()
+		(status_submenu as PopupMenu).visible = false
+
+
 func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	"""Clears, populates, and shows the context menu for a calendar task."""
 	context_menu_task = task # Store the task for the handler
 	
 	calendar_context_menu.clear()
+	calendar_context_menu.hide_on_item_selection = true
+	calendar_context_menu.hide_on_checkable_item_selection = true
+	calendar_context_menu.hide_on_state_item_selection = true
 	# HACK: For some reason, submenus added at index 0 don't work reliably.
 	# So we add a dummy item first and will handle the submenu logic via ID.
 	calendar_context_menu.add_item("Edit Task", 0)
@@ -746,8 +761,9 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 
 func _on_calendar_context_menu_id_pressed(id: int):
 	"""Handle context menu actions"""
-	if calendar_context_menu != null and calendar_context_menu.visible:
-		calendar_context_menu.hide()
+	# Hide before any rebuild/refresh so Undo cannot leave the menu stuck open.
+	_dismiss_calendar_context_menu()
+	call_deferred("_dismiss_calendar_context_menu")
 	if not context_menu_task and id != 5:
 		return
 
@@ -762,6 +778,7 @@ func _on_calendar_context_menu_id_pressed(id: int):
 		print("Calendar: series mode → ", calendar_series_mode)
 	elif id == 5:
 		_undo_calendar_reschedule()
+		call_deferred("_dismiss_calendar_context_menu")
 	elif id == 6:
 		_on_copy_task_markdown_pressed(context_menu_task, null)
 	elif id >= 100: # Change Status
@@ -982,6 +999,7 @@ func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -
 			fields = ["publish_date", "scheduled_date", "deadline"]
 		_:
 			fields = ["publish_date", "scheduled_date", "deadline"]
+	var cascade_fields: Array = WorkplanDependenciesScript.cascade_fields_preserving_duration(fields)
 	var workplan_obj = orchestrator.workplan if orchestrator else null
 	var old_anchor: String = ""
 	if task != null:
@@ -1006,7 +1024,7 @@ func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -
 	)
 	calendar_last_task_count = -1
 	_populate_calendar_with_tasks()
-	_offer_move_dependents(task, old_anchor, new_date, fields, workplan_obj)
+	_offer_move_dependents(task, old_anchor, new_date, cascade_fields, workplan_obj)
 
 
 func _offer_move_dependents(
@@ -1025,6 +1043,7 @@ func _offer_move_dependents(
 	var offset_days: int = WorkplanDependenciesScript.day_offset(old_date, new_date)
 	if offset_days == 0:
 		return
+	var cascade_fields: Array = WorkplanDependenciesScript.cascade_fields_preserving_duration(fields)
 	var confirm := ConfirmationDialog.new()
 	confirm.title = "Move dependents?"
 	confirm.dialog_text = (
@@ -1036,8 +1055,11 @@ func _offer_move_dependents(
 	confirm.confirmed.connect(func():
 		confirm.hide()
 		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
-			task, offset_days, workplan_obj, fields
+			task, offset_days, workplan_obj, cascade_fields
 		)
+		# Fold cascade into the same undo record so Undo restores start_date too.
+		_ensure_calendar_rescheduler()
+		calendar_rescheduler.extend_last_undo(moved.get("snapshots", []))
 		print("Calendar: cascaded %d dependent task(s)" % int(moved.get("moved", 0)))
 		calendar_last_task_count = -1
 		_populate_calendar_with_tasks()
@@ -1081,6 +1103,7 @@ func _prompt_move_task_to_date(task: WorkplanTask) -> void:
 
 
 func _undo_calendar_reschedule() -> void:
+	_dismiss_calendar_context_menu()
 	_ensure_calendar_rescheduler()
 	var workplan_obj = orchestrator.workplan if orchestrator else null
 	if calendar_rescheduler.undo_last(workplan_obj):
@@ -1089,6 +1112,7 @@ func _undo_calendar_reschedule() -> void:
 		print("Calendar: undid last reschedule")
 	else:
 		print("Calendar: nothing to undo")
+	call_deferred("_dismiss_calendar_context_menu")
 
 func _get_day_under_mouse(mouse_pos: Vector2) -> int:
 	"""Get the calendar day number under the mouse position"""
@@ -1165,7 +1189,7 @@ func _create_calendar_task_card(
 	if day_number > 0:
 		day_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, day_number]
 	var card: PanelContainer = DayCardsScript.create_month_card(
-		task, date_type, date_types, day_date, is_blocked
+		task, date_type, date_types, day_date, is_blocked, workplan_obj
 	)
 	var primary_type: String = String(card.get_meta("primary_type", date_type))
 	card.gui_input.connect(func(event): _on_task_card_input(card, task, primary_type, event))

@@ -24,6 +24,8 @@ static func run_all(host: Node) -> void:
 	_test_calendar_same_day_merge_and_tooltips(host)
 	_test_import_preview_and_dependents_dialog_helpers(host)
 	_test_people_role_field_width(host)
+	_test_cascade_shifts_start_date_and_undo(host)
+	_test_calendar_menu_dismiss_and_publish_tooltip(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -303,6 +305,7 @@ static func _test_calendar_reschedule(host: Node) -> void:
 	a.publish_timezone = "Europe/Oslo"
 	a.scheduled_date = "2026-11-06"
 	a.deadline = "2026-11-06"
+	a.start_date = "2026-11-03"
 	var b := WorkplanTask.new()
 	b.title = "Friday roundup"
 	b.channel = "#general"
@@ -322,6 +325,7 @@ static func _test_calendar_reschedule(host: Node) -> void:
 	)
 	_expect(host, int(moved.get("moved", 0)) == 1, "instance move touches one task")
 	_expect(host, a.publish_date == "2026-11-07", "instance publish_date updated")
+	_expect(host, a.start_date == "2026-11-04", "publish move also shifts start_date +1")
 	_expect(host, a.publish_time == "10:00", "publish time preserved")
 	_expect(host, a.publish_timezone == "Europe/Oslo", "publish timezone preserved")
 	_expect(host, b.publish_date == "2026-11-13", "sibling instance unchanged")
@@ -329,6 +333,7 @@ static func _test_calendar_reschedule(host: Node) -> void:
 	_expect(host, mover.can_undo(), "undo available after move")
 	_expect(host, mover.undo_last(workplan), "undo succeeds")
 	_expect(host, a.publish_date == "2026-11-06", "undo restores publish_date")
+	_expect(host, a.start_date == "2026-11-03", "undo restores start_date")
 	var series_move: Dictionary = mover.move_task_to_date(
 		a, "2026-11-20", ["publish_date"], true, workplan, "series"
 	)
@@ -448,6 +453,8 @@ static func _test_task_dependencies(host: Node) -> void:
 	grandchild.task_id = "task_gc"
 	grandchild.title = "Grandchild"
 	grandchild.publish_date = "2026-12-05"
+	child.start_date = "2026-11-28"
+	grandchild.start_date = "2026-12-01"
 	DepsScript.set_depends_on(grandchild, "task_child")
 	# Avoid Workplan.add_task_to_month (saves via manager); append locally.
 	workplan.months["2026-12"] = [pred, child, grandchild]
@@ -480,6 +487,9 @@ static func _test_task_dependencies(host: Node) -> void:
 	_expect(host, int(cascaded.get("moved", 0)) == 2, "cascade moves child and grandchild")
 	_expect(host, child.publish_date == "2026-12-06", "child publish shifted +3")
 	_expect(host, grandchild.publish_date == "2026-12-08", "grandchild publish shifted +3")
+	_expect(host, child.start_date == "2026-12-01", "cascade also shifts child start_date +3")
+	_expect(host, grandchild.start_date == "2026-12-04", "cascade also shifts grandchild start_date +3")
+	_expect(host, (cascaded.get("snapshots", []) as Array).size() == 2, "cascade returns undo snapshots")
 	# Bulk IO round-trip
 	child.assignee = "Reviewer Bot"
 	var csv_text: String = BulkIOScript.export_csv(workplan)
@@ -631,8 +641,8 @@ static func _test_copy_markdown_ui_reachability(host: Node) -> void:
 	)
 	_expect(
 		host,
-		cal_src.find("Copy as Markdown") >= 0 and cal_src.find("calendar_context_menu.hide()") >= 0,
-		"calendar context menu includes Copy and hides after action"
+		cal_src.find("Copy as Markdown") >= 0 and cal_src.find("_dismiss_calendar_context_menu") >= 0,
+		"calendar context menu includes Copy and dismiss helper"
 	)
 	var card_src: String = FileAccess.get_file_as_string(
 		"res://readymade/components/workplan_task_card.gd"
@@ -670,13 +680,19 @@ static func _test_calendar_same_day_merge_and_tooltips(host: Node) -> void:
 		_expect(host, kind_label.find("deadline") >= 0, "kind label includes deadline")
 		var icons: String = DayCardsScript.calendar_kind_icons(kinds)
 		_expect(host, not icons.is_empty(), "kind icons non-empty")
+		task.publish_time = "15:00"
+		task.publish_timezone = "Europe/Oslo"
 		var tip: String = DayCardsScript.build_tooltip(task, kinds, "2026-12-02", "publish", false)
 		_expect(host, tip.find("Peer review") >= 0 and tip.find("Kind:") >= 0, "tooltip has title+kind")
+		_expect(host, tip.find("Publish:") >= 0 and tip.find("2026-12-02") >= 0, "tooltip has publish date")
+		_expect(host, tip.find("15:00") >= 0, "tooltip has publish time")
+		_expect(host, tip.find("Europe/Oslo") >= 0, "tooltip has publish timezone")
 		var card: PanelContainer = DayCardsScript.create_month_card(
 			task, "publish", kinds, "2026-12-02", false
 		)
 		_expect(host, card != null and not card.tooltip_text.is_empty(), "month card has tooltip")
 		_expect(host, card.tooltip_text.find("Peer review") >= 0, "month card tooltip has full title")
+		_expect(host, card.tooltip_text.find("2026-12-02") >= 0, "month card tooltip has concrete date")
 		card.free()
 	var other := WorkplanTask.new()
 	other.title = "Other task"
@@ -693,18 +709,42 @@ static func _test_import_preview_and_dependents_dialog_helpers(host: Node) -> vo
 	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
 	host.add_child(dash)
 	_expect(host, dash.has_method("_show_task_import_preview"), "import preview dialog present")
+	_expect(host, dash.has_method("_close_import_preview_dialog"), "import preview close helper present")
 	_expect(host, dash.has_method("_offer_move_dependents"), "move dependents dialog present")
 	_expect(host, dash.has_method("_popup_nested_dialog"), "nested dialog popup helper present")
-	# Probe: non-exclusive nested dialog still grabs OK focus for single-click Apply.
+	# Import preview must be exclusive (not nested non-exclusive) so Cancel cannot
+	# click-through to Export Tasks and open a Save FileDialog.
+	var import_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_workplan_syntree_base.gd"
+	)
+	_expect(
+		host,
+		import_src.find("Import Tasks Preview") >= 0 and import_src.find("summary.exclusive = true") >= 0,
+		"import preview uses exclusive dialog"
+	)
+	_expect(
+		host,
+		import_src.find("_close_import_preview_dialog") >= 0
+		and import_src.find("never open a save/export") >= 0,
+		"import cancel path documents no save/export"
+	)
 	var probe := ConfirmationDialog.new()
-	probe.title = "Probe"
+	probe.title = "Import Tasks Preview"
 	probe.dialog_text = "ok"
+	probe.exclusive = true
 	dash.add_child(probe)
-	dash._popup_nested_dialog(probe)
-	_expect(host, probe.exclusive == false, "nested preview stays non-exclusive under Manager")
-	_expect(host, probe.visible, "nested preview visible after popup")
-	probe.hide()
-	probe.queue_free()
+	probe.popup_centered()
+	_expect(host, probe.visible, "exclusive import preview visible")
+	dash._close_import_preview_dialog(probe)
+	_expect(host, not is_instance_valid(probe) or not probe.visible, "close helper hides preview")
+	# Nested helper remains available for other Manager dialogs.
+	var nested := AcceptDialog.new()
+	nested.title = "Nested"
+	dash.add_child(nested)
+	dash._popup_nested_dialog(nested)
+	_expect(host, nested.exclusive == false, "other nested dialogs stay non-exclusive")
+	nested.hide()
+	nested.queue_free()
 	dash.queue_free()
 
 
@@ -723,4 +763,75 @@ static func _test_people_role_field_width(host: Node) -> void:
 		people_src.find("Vector2(200, 0)") >= 0 or people_src.find("Vector2(200,0)") >= 0,
 		"role LineEdit min width >= 200"
 	)
+	dash.queue_free()
+
+
+static func _test_cascade_shifts_start_date_and_undo(host: Node) -> void:
+	print("-- cascade shifts start_date; undo restores it --")
+	const DepsScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+	const RescheduleScript = preload("res://readymade/scripts/workplan_calendar_reschedule.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Cascade Start Fixture"
+	var root := WorkplanTask.new()
+	root.title = "Peer review"
+	root.task_id = "root_pr"
+	root.publish_date = "2026-12-02"
+	root.deadline = "2026-12-02"
+	root.start_date = "2026-11-28"
+	var dep := WorkplanTask.new()
+	dep.title = "Publish roundup"
+	dep.task_id = "dep_pr"
+	dep.publish_date = "2026-12-05"
+	dep.deadline = "2026-12-05"
+	dep.start_date = "2026-12-01"
+	DepsScript.set_depends_on(dep, "root_pr")
+	workplan.months["2026-12"] = [root, dep]
+	var fields: Array = DepsScript.cascade_fields_preserving_duration(
+		["publish_date", "scheduled_date", "deadline"]
+	)
+	_expect(host, fields.has("start_date"), "cascade fields include start_date")
+	var mover = RescheduleScript.new()
+	mover.move_task_to_date(
+		root, "2026-12-05", ["publish_date", "scheduled_date", "deadline"], true, workplan, "instance"
+	)
+	_expect(host, root.publish_date == "2026-12-05", "root publish moved +3")
+	_expect(host, root.start_date == "2026-12-01", "root start shifted +3 with publish")
+	var cascaded: Dictionary = DepsScript.move_dependents_by_offset(root, 3, workplan, fields)
+	_expect(host, int(cascaded.get("moved", 0)) == 1, "one dependent cascaded")
+	_expect(host, dep.publish_date == "2026-12-08", "dependent publish +3")
+	_expect(host, dep.start_date == "2026-12-04", "dependent start +3 (duration preserved)")
+	mover.extend_last_undo(cascaded.get("snapshots", []))
+	_expect(host, mover.undo_last(workplan), "undo after cascade")
+	_expect(host, root.publish_date == "2026-12-02", "undo restores root publish")
+	_expect(host, root.start_date == "2026-11-28", "undo restores root start")
+	_expect(host, dep.publish_date == "2026-12-05", "undo restores dependent publish")
+	_expect(host, dep.start_date == "2026-12-01", "undo restores dependent start")
+
+
+static func _test_calendar_menu_dismiss_and_publish_tooltip(host: Node) -> void:
+	print("-- calendar menu dismiss + publish tooltip date --")
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_dismiss_calendar_context_menu"), "dismiss helper present")
+	# Simulate a stuck-open menu and ensure dismiss clears it.
+	var menu := PopupMenu.new()
+	dash.calendar_context_menu = menu
+	dash.add_child(menu)
+	menu.add_item("Undo last reschedule", 5)
+	menu.popup()
+	_expect(host, menu.visible, "menu visible before dismiss")
+	dash._dismiss_calendar_context_menu()
+	_expect(host, not menu.visible, "dismiss hides menu immediately")
+	const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
+	var task := WorkplanTask.new()
+	task.title = "Peer review"
+	task.publish_date = "2026-12-02"
+	task.publish_time = "11:30"
+	task.publish_timezone = "Africa/Lagos"
+	var tip: String = DayCardsScript.build_tooltip(
+		task, ["publish"], "2026-12-02", "publish", false
+	)
+	_expect(host, tip.find("Publish:") >= 0, "publish tooltip label present")
+	_expect(host, tip.find("2026-12-02") >= 0, "publish tooltip includes date")
+	_expect(host, tip.find("11:30") >= 0 and tip.find("Africa/Lagos") >= 0, "publish tooltip time+zone")
 	dash.queue_free()

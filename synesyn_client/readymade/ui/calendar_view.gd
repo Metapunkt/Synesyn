@@ -452,6 +452,7 @@ func _on_day_cell_input(event: InputEvent, day_date: String) -> void:
 func _reschedule_to_date(task: WorkplanTask, new_date: String) -> void:
 	_ensure_rescheduler()
 	var fields: Array = ["publish_date", "scheduled_date", "deadline"]
+	var cascade_fields: Array = WorkplanDependenciesScript.cascade_fields_preserving_duration(fields)
 	var old_anchor: String = ""
 	if task != null:
 		old_anchor = task.publish_date if not task.publish_date.is_empty() else task.get_calendar_display_date()
@@ -465,7 +466,7 @@ func _reschedule_to_date(task: WorkplanTask, new_date: String) -> void:
 	)
 	_apply_filters()
 	_refresh_calendar()
-	_offer_move_dependents(task, old_anchor, new_date, fields)
+	_offer_move_dependents(task, old_anchor, new_date, cascade_fields)
 
 
 func _offer_move_dependents(
@@ -483,6 +484,7 @@ func _offer_move_dependents(
 	var offset_days: int = WorkplanDependenciesScript.day_offset(old_date, new_date)
 	if offset_days == 0:
 		return
+	var cascade_fields: Array = WorkplanDependenciesScript.cascade_fields_preserving_duration(fields)
 	var confirm := ConfirmationDialog.new()
 	confirm.title = "Move dependents?"
 	confirm.dialog_text = (
@@ -492,7 +494,11 @@ func _offer_move_dependents(
 	confirm.exclusive = true
 	confirm.confirmed.connect(func():
 		confirm.hide()
-		WorkplanDependenciesScript.move_dependents_by_offset(task, offset_days, _workplan_ref, fields)
+		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
+			task, offset_days, _workplan_ref, cascade_fields
+		)
+		_ensure_rescheduler()
+		_rescheduler.extend_last_undo(moved.get("snapshots", []))
 		_apply_filters()
 		_refresh_calendar()
 		confirm.queue_free()
