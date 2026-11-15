@@ -23,6 +23,8 @@ var view_mode: String = "month"  # month, week, agenda
 var filter_mode: String = "all"  # all, channel, content_status, campaign, theme, overdue, due_soon
 var filter_value: String = ""
 var search_query: String = ""
+var viewer_timezone: String = ""
+var _workplan_ref: Resource = null
 var _empty_state_banner: VBoxContainer = null
 
 func _ready():
@@ -68,6 +70,16 @@ func set_tasks(task_list: Array[WorkplanTask]):
 	tasks = task_list
 	_rebuild_filter_values()
 	_apply_filters()
+	_refresh_calendar()
+
+
+func set_workplan_context(workplan: Resource, viewer_zone: String = "") -> void:
+	_workplan_ref = workplan
+	if not viewer_zone.is_empty():
+		viewer_timezone = viewer_zone
+	elif workplan != null:
+		const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+		viewer_timezone = PublishTimeScript.viewer_timezone(workplan)
 	_refresh_calendar()
 
 
@@ -328,7 +340,14 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 	indicator.text = task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
 	task.migrate_content_status_from_notes()
 	var plan_status: String = task.get_content_status()
-	indicator.tooltip_text = "%s [%s]" % [task.title, plan_status]
+	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+	var publish_label: String = PublishTimeScript.format_publish_label(
+		task, _workplan_ref, viewer_timezone
+	)
+	if publish_label.is_empty():
+		indicator.tooltip_text = "%s [%s]" % [task.title, plan_status]
+	else:
+		indicator.tooltip_text = "%s [%s]\n%s" % [task.title, plan_status, publish_label]
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
@@ -598,6 +617,16 @@ func _create_task_detail_item(task: WorkplanTask) -> Control:
 	details.add_theme_font_size_override("font_size", 10)
 	details.add_theme_color_override("font_color", Color.GRAY)
 	item.add_child(details)
+	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+	var publish_label: String = PublishTimeScript.format_publish_label(
+		task, _workplan_ref, viewer_timezone
+	)
+	if not publish_label.is_empty():
+		var publish_lbl := Label.new()
+		publish_lbl.text = publish_label
+		publish_lbl.add_theme_font_size_override("font_size", 10)
+		publish_lbl.add_theme_color_override("font_color", Color(0.55, 0.55, 0.65))
+		item.add_child(publish_lbl)
 	
 	if task.is_overdue():
 		var overdue = Label.new()

@@ -132,6 +132,12 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	cadence_button.pressed.connect(_on_cadence_caps_pressed.bind(dialog))
 	tools_container.add_child(cadence_button)
 
+	var tz_button = Button.new()
+	tz_button.text = "Viewer Timezone"
+	tz_button.tooltip_text = "IANA zone used when converting publish times in calendar/lists"
+	tz_button.pressed.connect(_on_viewer_timezone_pressed.bind(dialog))
+	tools_container.add_child(tz_button)
+
 	var cadence_warn_label = Label.new()
 	cadence_warn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	cadence_warn_label.modulate = Color(0.95, 0.75, 0.35)
@@ -496,6 +502,36 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
 	dialog.popup_centered(Vector2(420, 360))
+
+
+func _on_viewer_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan.")
+		return
+	const TzScript = preload("res://readymade/scripts/workplan_timezone.gd")
+	var dialog = AcceptDialog.new()
+	dialog.title = "Viewer Timezone"
+	var vbox = VBoxContainer.new()
+	dialog.add_child(vbox)
+	var hint = Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.text = "Calendar and lists convert task publish times into this zone (DST-aware for known IANA ids)."
+	vbox.add_child(hint)
+	var zone_edit = LineEdit.new()
+	zone_edit.placeholder_text = "e.g. Europe/Oslo or America/New_York"
+	zone_edit.text = workplan_manager.get_viewer_timezone()
+	vbox.add_child(zone_edit)
+	var known = Label.new()
+	known.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	known.text = "Known zones include: " + ", ".join(TzScript.known_zones().slice(0, 8)) + ", …"
+	vbox.add_child(known)
+	dialog.confirmed.connect(func():
+		workplan_manager.set_viewer_timezone(zone_edit.text)
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered(Vector2(480, 220))
 
 
 func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:

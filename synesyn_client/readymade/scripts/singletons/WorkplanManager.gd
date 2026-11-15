@@ -628,6 +628,22 @@ func set_default_timezone(timezone: String) -> bool:
 	return true
 
 
+func get_viewer_timezone() -> String:
+	if current_workplan == null:
+		return ""
+	if not String(current_workplan.viewer_timezone).strip_edges().is_empty():
+		return String(current_workplan.viewer_timezone).strip_edges()
+	return String(current_workplan.default_timezone).strip_edges()
+
+
+func set_viewer_timezone(timezone: String) -> bool:
+	if current_workplan == null:
+		return false
+	current_workplan.viewer_timezone = timezone.strip_edges()
+	save_current_workplan()
+	return true
+
+
 func set_channel_cadence_cap(channel: String, max_per_week: int) -> bool:
 	if current_workplan == null:
 		return false

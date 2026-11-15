@@ -383,6 +383,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "IANA (empty = workplan default)"
 
+[node name="ViewerZoneHint" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/PublishContainer"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Enter time in the task zone above. Calendar/lists convert into the workplan viewer zone when set."
+
 [node name="ContentStatusContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox"]
 layout_mode = 2
 

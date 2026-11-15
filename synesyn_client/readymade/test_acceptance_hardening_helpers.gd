@@ -10,6 +10,7 @@ static func run_all(host: Node) -> void:
 	_test_cadence_caps(host)
 	_test_community_post_template_and_copy_markdown(host)
 	_test_campaign_dashboard(host)
+	_test_timezone_conversion(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -227,3 +228,34 @@ static func _test_campaign_dashboard(host: Node) -> void:
 	var by_theme: Dictionary = DashboardScript.build(workplan, "theme")
 	_expect(host, by_theme.get("groups", []).size() == 2, "two theme groups")
 	_expect(host, by_campaign.get("cadence", []).size() >= 1, "cadence warning when over cap")
+
+
+static func _test_timezone_conversion(host: Node) -> void:
+	print("-- timezone conversion (DST-aware) --")
+	const TzScript = preload("res://readymade/scripts/workplan_timezone.gd")
+	const PublishTimeScript = preload("res://readymade/scripts/workplan_publish_time.gd")
+	_expect(host, TzScript.is_known("Europe/Oslo"), "Europe/Oslo known")
+	_expect(host, TzScript.is_known("America/New_York"), "America/New_York known")
+	# Winter: Oslo UTC+1, New York UTC-5 → 6h difference.
+	var winter: Dictionary = TzScript.convert_zones("2026-01-15", "12:00", "Europe/Oslo", "America/New_York")
+	_expect(host, String(winter.get("time", "")) == "06:00", "winter Oslo 12:00 → NY 06:00 (got %s)" % String(winter.get("time", "")))
+	_expect(host, String(winter.get("date", "")) == "2026-01-15", "winter same calendar day")
+	# Summer EU DST (CEST +2) vs US EDT (-4) still 6h.
+	var summer: Dictionary = TzScript.convert_zones("2026-07-15", "12:00", "Europe/Oslo", "America/New_York")
+	_expect(host, String(summer.get("time", "")) == "06:00", "summer Oslo 12:00 → NY 06:00 (got %s)" % String(summer.get("time", "")))
+	# US spring forward boundary: 2026-03-08 is 2nd Sunday; 01:30 EST exists, converts cleanly.
+	var us_spring: Dictionary = TzScript.convert_zones("2026-03-08", "01:30", "America/New_York", "UTC")
+	_expect(host, String(us_spring.get("time", "")) == "06:30", "US pre-DST 01:30 → UTC 06:30 (got %s)" % String(us_spring.get("time", "")))
+	var task := WorkplanTask.new()
+	task.publish_date = "2026-01-15"
+	task.publish_time = "12:00"
+	task.publish_timezone = "Europe/Oslo"
+	var workplan := Workplan.new()
+	workplan.default_timezone = "Europe/Oslo"
+	workplan.viewer_timezone = "America/New_York"
+	var label: String = PublishTimeScript.format_publish_label(task, workplan)
+	_expect(host, label.find("06:00") >= 0, "viewer label shows converted time")
+	_expect(host, label.find("America/New_York") >= 0, "viewer label names viewer zone")
+	PublishTimeScript.set_task_publish_from_viewer(task, "2026-01-15", "06:00", "America/New_York", "Europe/Oslo")
+	_expect(host, task.publish_time == "12:00", "enter NY 06:00 stores Oslo 12:00")
+	_expect(host, task.publish_timezone == "Europe/Oslo", "store zone preserved")
