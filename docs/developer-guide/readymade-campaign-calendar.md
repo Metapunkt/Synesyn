@@ -18,7 +18,9 @@ ratio, per-channel distribution, and the current cadence-cap warning list.
 ## Timezone conversion
 
 - `WorkplanTimezone` (`workplan_timezone.gd`) — IANA labels, DST-aware
-  `convert_zones(date, time, from_zone, to_zone)` → `{date, time, utc_offset…}`
+  `convert_zones(date, time, from_zone, to_zone)` → `{date, time, timezone, known}`
+  (includes `Africa/Lagos` and other common Africa zones; unknown zones fall
+  back to UTC and are flagged in viewer labels)
 - `WorkplanPublishTime` — `format_publish_label(task, workplan, viewer_zone)` and
   `set_task_publish_from_viewer(...)` so entry can be in the viewer zone while
   storage keeps the task’s publish zone (or workplan default)

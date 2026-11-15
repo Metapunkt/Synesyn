@@ -65,8 +65,19 @@ Acceptance asserts custom-channel CRUD/reorder and that product mode defaults do
 ## Larger ideas (still out of scope)
 
 - Hourly time-slot calendar (current views are day-granular).
-- Assignee/contributor personal timezones (model is task zone ↔ viewer zone only).
+- First-class assignees / reviewers / editors (and per-person zones); today roles live in notes.
+- Task dependency graph + cascade reschedule after slips.
+- Per-role approval audit records (beyond `needs_approval` / `approved`).
 - Charts beyond the text/list campaign dashboard (sparkline / week heatmap UI).
+
+## Journal production dogfood (2026-11-15)
+
+Separate end-to-end pass: multi-person issue pipeline (stages, peer review, slip +
+DnD, campaign dashboard, announcement drafts only). Plan data stayed in workspace
+artifacts (not committed). Product fixes from that pass: `Africa/Lagos` timezone
+coverage + unknown-zone warnings; bulk IO `deadline` / `start_date` /
+`workflow_status` columns. Full write-up:
+`/opt/cursor/artifacts/kijournal-dogfood/TEST_REPORT.md` (local artifact).
 
 ## How to re-run
 
