@@ -13,6 +13,7 @@ static func run_all(host: Node) -> void:
 	_test_timezone_conversion(host)
 	_test_calendar_reschedule(host)
 	_test_workplan_file_dialog_filesystem(host)
+	_test_nested_workplan_dialogs_non_exclusive(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -347,4 +348,14 @@ static func _test_workplan_file_dialog_filesystem(host: Node) -> void:
 		not String(file_dialog_local.current_dir).begins_with("res://"),
 		"FileDialog current_dir is not res://"
 	)
+	file_dialog_local.exclusive = false
+	_expect(host, file_dialog_local.exclusive == false, "FileDialog nested under manager is non-exclusive")
 	file_dialog_local.free()
+
+
+static func _test_nested_workplan_dialogs_non_exclusive(host: Node) -> void:
+	print("-- nested workplan dialogs are non-exclusive --")
+	var nested := AcceptDialog.new()
+	nested.exclusive = false
+	_expect(host, nested.exclusive == false, "AcceptDialog exclusive can be cleared for nesting")
+	nested.free()

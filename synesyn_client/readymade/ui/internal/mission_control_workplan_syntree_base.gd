@@ -187,7 +187,7 @@ func _on_new_workplan_pressed(dialog: AcceptDialog):
 		name_dialog.queue_free()
 	)
 	
-	name_dialog.popup_centered()
+	_popup_nested_dialog(name_dialog)
 
 func _on_duplicate_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 	"""Handle workplan duplication"""
@@ -221,7 +221,7 @@ func _on_duplicate_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemLis
 		name_dialog.queue_free()
 	)
 	
-	name_dialog.popup_centered()
+	_popup_nested_dialog(name_dialog)
 
 func _on_rename_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 	"""Handle workplan renaming"""
@@ -257,7 +257,7 @@ func _on_rename_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 		name_dialog.queue_free()
 	)
 	
-	name_dialog.popup_centered()
+	_popup_nested_dialog(name_dialog)
 
 func _on_delete_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 	"""Handle workplan deletion"""
@@ -271,7 +271,7 @@ func _on_delete_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 	confirmation.dialog_text = "Are you sure you want to delete workplan '" + workplan_name + "'?\n\nThis action cannot be undone."
 	confirmation.title = "Delete Workplan"
 	add_child(confirmation)
-	confirmation.popup_centered()
+	_popup_nested_dialog(confirmation)
 
 	# Avoid "confusable capture reassignment" by mutating a container, not reassigning a local.
 	var confirmed_box: Array = [false]
@@ -305,12 +305,23 @@ func _on_delete_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 func _configure_filesystem_file_dialog(file_dialog_local: FileDialog) -> void:
 	"""Workplan import/export must browse the real filesystem (Documents), not res://."""
 	file_dialog_local.access = FileDialog.ACCESS_FILESYSTEM
+	# Nested under Workplan Manager (already exclusive) — avoid Godot exclusive-child errors.
+	file_dialog_local.exclusive = false
 	var docs_dir: String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 	var preferred: String = RuntimeConfig.get_readymade_data_dir() if RuntimeConfig else ""
 	if not preferred.is_empty() and DirAccess.dir_exists_absolute(preferred):
 		file_dialog_local.current_dir = preferred
 	elif not docs_dir.is_empty():
 		file_dialog_local.current_dir = docs_dir
+
+
+func _popup_nested_dialog(dialog_window: Window, size: Vector2 = Vector2.ZERO) -> void:
+	"""Pop nested AcceptDialog/FileDialog without stealing exclusive from Workplan Manager."""
+	dialog_window.exclusive = false
+	if size == Vector2.ZERO:
+		dialog_window.popup_centered()
+	else:
+		dialog_window.popup_centered(size)
 
 
 func _on_import_workplan_pressed(_dialog: AcceptDialog):
@@ -338,7 +349,7 @@ func _on_import_workplan_pressed(_dialog: AcceptDialog):
 		file_dialog_local.queue_free()
 	)
 	
-	file_dialog_local.popup_centered(Vector2(800, 600))
+	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
 
 func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList):
 	"""Handle workplan export"""
@@ -374,7 +385,7 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 		file_dialog_local.queue_free()
 	)
 	
-	file_dialog_local.popup_centered(Vector2(800, 600))
+	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
 
 
 func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
@@ -405,7 +416,7 @@ func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
 	file_dialog_local.canceled.connect(func():
 		file_dialog_local.queue_free()
 	)
-	file_dialog_local.popup_centered(Vector2(800, 600))
+	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
 
 
 func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
@@ -427,7 +438,7 @@ func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
 	file_dialog_local.canceled.connect(func():
 		file_dialog_local.queue_free()
 	)
-	file_dialog_local.popup_centered(Vector2(800, 600))
+	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
 
 
 func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
@@ -481,7 +492,7 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 			refresh.call()
 		)
 		name_dialog.canceled.connect(func(): name_dialog.queue_free())
-		name_dialog.popup_centered()
+		_popup_nested_dialog(name_dialog)
 	)
 	actions.add_child(rename_btn)
 	var remove_btn = Button.new()
@@ -522,7 +533,7 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 	add_child(dialog)
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
-	dialog.popup_centered(Vector2(420, 360))
+	_popup_nested_dialog(dialog, Vector2(420, 360))
 
 
 func _on_default_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
@@ -552,7 +563,7 @@ func _on_default_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
 	)
 	dialog.canceled.connect(func(): dialog.queue_free())
 	add_child(dialog)
-	dialog.popup_centered(Vector2(480, 220))
+	_popup_nested_dialog(dialog, Vector2(480, 220))
 
 
 func _on_viewer_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
@@ -582,7 +593,7 @@ func _on_viewer_timezone_pressed(_parent_dialog: AcceptDialog) -> void:
 	)
 	dialog.canceled.connect(func(): dialog.queue_free())
 	add_child(dialog)
-	dialog.popup_centered(Vector2(480, 220))
+	_popup_nested_dialog(dialog, Vector2(480, 220))
 
 
 func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:
@@ -617,7 +628,7 @@ func _on_cadence_caps_pressed(_parent_dialog: AcceptDialog) -> void:
 	add_child(dialog)
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
-	dialog.popup_centered(Vector2(480, 320))
+	_popup_nested_dialog(dialog, Vector2(480, 320))
 
 
 func _show_task_import_preview(preview: Dictionary, source_path: String) -> void:
@@ -652,7 +663,7 @@ func _show_task_import_preview(preview: Dictionary, source_path: String) -> void
 	summary.canceled.connect(func():
 		summary.queue_free()
 	)
-	summary.popup_centered()
+	_popup_nested_dialog(summary)
 
 # Helper functions for dialogs
 func _create_text_input_dialog(title: String, prompt: String, default_text: String = "") -> AcceptDialog:
