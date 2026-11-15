@@ -18,6 +18,8 @@ static func run_all(host: Node) -> void:
 	_test_task_dependencies(host)
 	_test_workplan_people_and_assignee(host)
 	_test_stage_board_columns_and_move(host)
+	_test_approval_log_append_only(host)
+	_test_workplan_manager_section_labels(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:

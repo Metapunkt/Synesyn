@@ -4,6 +4,7 @@ class_name WorkplanTaskBulkIO
 ## Schema is documented in docs/developer-guide/readymade-task-bulk-io.md
 
 const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+const WorkplanApprovalLogScript = preload("res://readymade/scripts/workplan_approval_log.gd")
 
 const COLUMNS: Array[String] = [
 	"task_id",
@@ -22,6 +23,7 @@ const COLUMNS: Array[String] = [
 	"notes",
 	"depends_on",
 	"assignee",
+	"approval_log",
 ]
 
 
@@ -54,6 +56,7 @@ static func export_rows(workplan: Resource) -> Array:
 			"notes": task.notes,
 			"depends_on": ";".join(WorkplanDependenciesScript.normalize_ids(task.depends_on)),
 			"assignee": task.assignee,
+			"approval_log": JSON.stringify(WorkplanApprovalLogScript.export_entries(task)),
 		})
 	return rows
 

@@ -122,10 +122,15 @@ func migrate_content_status_from_notes() -> bool:
 
 
 func set_content_status(new_status: String) -> void:
+	const WorkplanApprovalLogScript = preload("res://readymade/scripts/workplan_approval_log.gd")
+	var from_val: String = get_content_status()
 	var cleaned: String = new_status.strip_edges().to_lower()
 	if not CONTENT_STATUSES.has(cleaned):
 		cleaned = "draft"
+	if from_val == cleaned:
+		return
 	content_status = cleaned
+	WorkplanApprovalLogScript.append_change(self, from_val, cleaned, "", "")
 
 
 func get_content_status() -> String:
