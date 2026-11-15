@@ -33,6 +33,7 @@ In **Workplan Manager**:
 | `notes` | no | Free-form notes (do not encode status here) |
 | `depends_on` | no | Predecessor `task_id` values, separated by `;` or `,` |
 | `assignee` | no | Person name or agent label from the workplan people list (or free text) |
+| `approval_log` | no | JSON array of `{from,to,at,person,note}` status-change entries (append-only) |
 
 JSON shape:
 

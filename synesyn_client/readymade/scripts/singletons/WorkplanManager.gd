@@ -706,6 +706,70 @@ func _load_workplan_from_path(path: String) -> Workplan:
 		push_warning("WorkplanManager: Failed to deserialize workplan: " + path)
 	return workplan
 
+
+## --- People / assignees ------------------------------------------------------
+
+func get_people() -> Array[Dictionary]:
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	if current_workplan == null:
+		var empty: Array[Dictionary] = []
+		return empty
+	return PeopleScript.normalize_list(current_workplan.people)
+
+
+func set_people(people: Array) -> bool:
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	if current_workplan == null:
+		return false
+	current_workplan.people = PeopleScript.normalize_list(people)
+	save_current_workplan()
+	return true
+
+
+func add_person(person_name: String, role_label: String = "", timezone: String = "") -> bool:
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	if current_workplan == null:
+		return false
+	var person: Dictionary = PeopleScript.normalize_person({
+		"name": person_name,
+		"role": role_label,
+		"timezone": timezone,
+	})
+	if String(person.get("name", "")).is_empty():
+		return false
+	var existing: Array[Dictionary] = PeopleScript.normalize_list(current_workplan.people)
+	for entry_any in existing:
+		var entry: Dictionary = entry_any
+		if String(entry.get("name", "")).to_lower() == String(person.get("name", "")).to_lower():
+			return false
+	existing.append(person)
+	current_workplan.people = existing
+	save_current_workplan()
+	return true
+
+
+func remove_person(person_name: String) -> bool:
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	if current_workplan == null:
+		return false
+	var needle: String = person_name.strip_edges().to_lower()
+	if needle.is_empty():
+		return false
+	var kept: Array[Dictionary] = []
+	var removed := false
+	for entry_any in PeopleScript.normalize_list(current_workplan.people):
+		var entry: Dictionary = entry_any
+		if String(entry.get("name", "")).to_lower() == needle:
+			removed = true
+			continue
+		kept.append(entry)
+	if not removed:
+		return false
+	current_workplan.people = kept
+	save_current_workplan()
+	return true
+
+
 func _sanitize_filename(raw_name: String) -> String:
 	"""Convert a workplan name to a safe filename"""
 	var sanitized = raw_name.to_lower()

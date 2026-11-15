@@ -8,7 +8,10 @@ are yours to set on each workplan.
 
 1. Open **Workplan Manager**.
 2. Create or select a workplan.
-3. Use **Manage Channels** to add, rename, remove, or reorder your destinations
+3. Actions are grouped: **Workplan** (new/duplicate/rename/delete/import/export),
+   **Tasks import / export**, **Channels & caps** (channels, cadence, people),
+   and **Time zones**.
+4. Use **Manage Channels** to add, rename, remove, or reorder your destinations
    (for example `#general` or `Newsletter`). New workplans start with an empty
    custom list; platform defaults from the current mode still appear in the task
    dialog.
@@ -36,12 +39,31 @@ Open the **Campaigns** tab to see posts grouped by campaign tag or content theme
 counts by content status, upcoming and overdue items, completion progress, and
 how each channel sits against its weekly cadence cap.
 
+## People and assignees
+
+Use **Manage People** in Workplan Manager to list collaborators as
+`{name, role, timezone}`. On each task, set **Assignee** to a person or free-text
+agent id. Filter the Tasks list and calendar **By Assignee**. When the assignee
+has a timezone, deadline/publish labels prefer that zone.
+
 ## Dependencies
 
 In the task dialog, set **Depends on** to one or more predecessor task ids
 (comma or semicolon separated). A task is **blocked** until every predecessor is
 `Done` (missing ids also block). Blocked tasks show a clear indicator on cards
 and the calendar. Self-links and cycles are rejected when you save.
+
+## Stage board
+
+Open the **Board** tab for a kanban of tasks by workflow lane (To Do → Done) or
+by content status. Drag a card (or use the column arrows) to update status.
+Blocked tasks stay highlighted. Filters for search and assignee apply here too.
+
+## Approval log
+
+Each content-status or workflow-status change appends an immutable entry
+(`from`, `to`, `at`, optional person/note). The task dialog shows the ledger;
+JSON/CSV export includes an `approval_log` column.
 
 ## Rescheduling on the calendar
 

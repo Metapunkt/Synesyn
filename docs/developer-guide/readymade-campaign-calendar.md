@@ -59,6 +59,19 @@ show an amber/⛔ indicator on calendar cards and task cards.
 
 See `WorkplanDependencies` (`workplan_dependencies.gd`).
 
+## People, board, approval log
+
+- `WorkplanPeople` — normalize people `{name, role, timezone}`, assignee filter,
+  deadline labels in the assignee zone.
+- `WorkplanStageBoard` + Mission Control **Board** tab — kanban by workflow or
+  `content_status`, with drag/arrow moves and blocked highlighting.
+- `WorkplanApprovalLog` — append-only `{from,to,at,person,note}` ledger on each
+  task; hooked from `set_content_status`, task-card workflow actions, and board
+  moves; exported via bulk IO `approval_log`.
+
+Workplan Manager groups actions into Workplan / Tasks import-export /
+Channels & caps (includes Manage People) / Time zones.
+
 ## Acceptance
 
 Covered in `test_acceptance_hardening_helpers.gd` via

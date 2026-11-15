@@ -53,6 +53,7 @@ func _setup_ui():
 	filter_button.add_item("By Content Status")
 	filter_button.add_item("By Campaign")
 	filter_button.add_item("By Theme")
+	filter_button.add_item("By Assignee")
 	filter_button.add_item("Overdue Only")
 	filter_button.add_item("Due Soon")
 	_rebuild_filter_values()
@@ -129,6 +130,9 @@ func _task_matches_filters(task: WorkplanTask) -> bool:
 			if filter_value.is_empty() or filter_value == "(any)":
 				return not task.content_theme.is_empty()
 			return task.content_theme == filter_value
+		"assignee":
+			const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+			return PeopleScript.matches_assignee_filter(task, filter_value)
 		_:
 			return true
 
@@ -155,6 +159,12 @@ func _rebuild_filter_values() -> void:
 			for task3 in tasks:
 				if not task3.content_theme.is_empty() and not values.has(task3.content_theme):
 					values.append(task3.content_theme)
+		"assignee":
+			values.append("(unassigned)")
+			for task4 in tasks:
+				var assignee_name: String = String(task4.assignee).strip_edges()
+				if not assignee_name.is_empty() and not values.has(assignee_name):
+					values.append(assignee_name)
 		_:
 			filter_value_button.disabled = true
 			filter_value = ""
@@ -723,8 +733,9 @@ func _on_filter_changed(index: int):
 		2: filter_mode = "content_status"
 		3: filter_mode = "campaign"
 		4: filter_mode = "theme"
-		5: filter_mode = "overdue"
-		6: filter_mode = "due_soon"
+		5: filter_mode = "assignee"
+		6: filter_mode = "overdue"
+		7: filter_mode = "due_soon"
 		_: filter_mode = "all"
 	_rebuild_filter_values()
 	_apply_filters()

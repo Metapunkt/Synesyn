@@ -2,6 +2,7 @@
 extends PanelContainer
 
 const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
+const WorkplanApprovalLogScript = preload("res://readymade/scripts/workplan_approval_log.gd")
 
 @onready var core_idea_label = $MarginContainer/VBoxContainer/CoreIdeaLabel
 @onready var status_label = $MarginContainer/VBoxContainer/HBoxContainer/StatusLabel
@@ -81,6 +82,13 @@ func _refresh_display():
 		priority_label.text = "Priority: %d" % current_task.priority
 	if format_label:
 		format_label.text = "Format: %s" % current_task.format
+	# Deadline in assignee timezone when the person has a zone on the workplan.
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	var deadline_label_text: String = PeopleScript.format_deadline_for_assignee(current_task, workplan)
+	if not deadline_label_text.is_empty():
+		tooltip_text = deadline_label_text
+	if not current_task.assignee.strip_edges().is_empty():
+		channel_label.text = "%s · @%s" % [channel_label.text, current_task.assignee]
 	
 	# Update status color
 	status_label.add_theme_color_override("font_color", current_task.get_status_color())
@@ -165,16 +173,19 @@ func _update_panel_style():
 
 # Action button handlers
 func _on_start_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "In Progress")
 	current_task.start_task()
 	task_action_requested.emit("start", current_task)
 	task_updated.emit(current_task)
 
 func _on_review_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Review")
 	current_task.send_for_review()
 	task_action_requested.emit("review", current_task)
 	task_updated.emit(current_task)
 
 func _on_complete_pressed():
+	WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Done")
 	current_task.complete_task()
 	task_action_requested.emit("complete", current_task)
 	task_updated.emit(current_task)
@@ -199,10 +210,12 @@ func _on_delete_pressed():
 
 func _on_completion_toggled(button_pressed: bool):
 	if button_pressed:
+		WorkplanApprovalLogScript.record_workflow_status_change(current_task, "Done")
 		current_task.complete_task()
 		task_action_requested.emit("complete", current_task)
 		task_updated.emit(current_task)
 	else:
+		WorkplanApprovalLogScript.record_workflow_status_change(current_task, "To Do")
 		current_task.status = "To Do"
 		current_task.completion_date = ""
 		task_action_requested.emit("uncomplete", current_task)

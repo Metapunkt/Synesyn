@@ -15,6 +15,7 @@ const WorkplanTaskScript = preload("res://readymade/data/workplan_task.gd")
 @onready var search_edit: LineEdit = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/SearchEdit
 @onready var status_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/StatusFilter
 @onready var priority_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/PriorityFilter
+@onready var assignee_filter: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/AssigneeFilter
 @onready var sort_option: OptionButton = $HSplitContainer/MainTabContainer/Tasks/TasksMarginContainer/TasksVBoxContainer/TasksHeaderContainer/FilterSearchContainer/SortOption
 
 # Tab components
@@ -50,6 +51,7 @@ var performance_data: Dictionary = {
 var current_search_text: String = ""
 var current_status_filter: String = "All"
 var current_priority_filter: String = "All"
+var current_assignee_filter: String = "All"
 var current_sort_mode: String = "Priority"
 
 # Calendar state
@@ -333,6 +335,8 @@ func _on_search_text_changed(new_text: String):
 func _on_status_filter_changed(index: int):
 	pass
 func _on_priority_filter_changed(index: int):
+	pass
+func _on_assignee_filter_changed(index: int):
 	pass
 func _on_sort_option_changed(index: int):
 	pass

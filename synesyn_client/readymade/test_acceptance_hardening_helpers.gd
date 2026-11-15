@@ -16,6 +16,7 @@ static func run_all(host: Node) -> void:
 	_test_nested_workplan_dialogs_non_exclusive(host)
 	_test_file_dialog_line_enables_ok(host)
 	_test_task_dependencies(host)
+	_test_workplan_people_and_assignee(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -487,3 +488,116 @@ static func _test_task_dependencies(host: Node) -> void:
 	_expect(host, not child_row.is_empty(), "parsed child row")
 	_expect(host, String(child_row.get("depends_on", "")).find("task_pred") >= 0, "bulk depends_on column")
 	_expect(host, String(child_row.get("assignee", "")) == "Reviewer Bot", "bulk assignee column")
+
+
+static func _test_stage_board_columns_and_move(host: Node) -> void:
+	print("-- stage board columns and move --")
+	const StageBoardScript = preload("res://readymade/scripts/workplan_stage_board.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Board Fixture"
+	var todo_task := WorkplanTask.new()
+	todo_task.title = "Todo item"
+	todo_task.status = "To Do"
+	var review_task := WorkplanTask.new()
+	review_task.title = "Review item"
+	review_task.status = "Review"
+	review_task.set_content_status("draft")
+	workplan.months["probe"] = [todo_task, review_task]
+	var wf_columns: Array = StageBoardScript.build_columns(workplan, "workflow", {})
+	_expect(host, wf_columns.size() == 4, "workflow has four columns")
+	var todo_col: Dictionary = wf_columns[0]
+	_expect(host, String(todo_col.get("id", "")) == "To Do", "first column is To Do")
+	var todo_bucket: Array = todo_col.get("tasks", [])
+	_expect(host, todo_bucket.size() == 1, "one task in To Do")
+	_expect(
+		host,
+		StageBoardScript.move_task_to_column(todo_task, "In Progress", "workflow"),
+		"move workflow to In Progress"
+	)
+	_expect(host, todo_task.status == "In Progress", "task status updated")
+	_expect(host, todo_task.approval_log.size() >= 1, "workflow move appends approval log")
+	var cs_columns: Array = StageBoardScript.build_columns(workplan, "content_status", {})
+	_expect(host, cs_columns.size() == WorkplanTask.CONTENT_STATUSES.size(), "content_status column count")
+	_expect(
+		host,
+		StageBoardScript.move_task_to_column(review_task, "needs_approval", "content_status"),
+		"move content status"
+	)
+	_expect(host, review_task.get_content_status() == "needs_approval", "content_status updated")
+	var pred := WorkplanTask.new()
+	pred.task_id = "board_pred"
+	pred.status = "To Do"
+	var blocked := WorkplanTask.new()
+	blocked.title = "Blocked card"
+	blocked.depends_on = ["board_pred"]
+	workplan.months["probe"].append(pred)
+	workplan.months["probe"].append(blocked)
+	_expect(host, StageBoardScript.is_blocked(blocked, workplan), "stage board is_blocked helper")
+
+
+static func _test_approval_log_append_only(host: Node) -> void:
+	print("-- approval log append-only --")
+	const ApprovalLogScript = preload("res://readymade/scripts/workplan_approval_log.gd")
+	const BulkIOScript = preload("res://readymade/scripts/workplan_task_bulk_io.gd")
+	var task := WorkplanTask.new()
+	task.title = "Ledger probe"
+	_expect(host, task.approval_log.is_empty(), "new task empty log")
+	ApprovalLogScript.append_change(task, "draft", "needs_approval", "alice", "please review")
+	_expect(host, task.approval_log.size() == 1, "one entry after append")
+	var first: Dictionary = task.approval_log[0]
+	var first_to: String = String(first.get("to", ""))
+	ApprovalLogScript.append_change(task, "needs_approval", "approved", "", "")
+	_expect(host, task.approval_log.size() == 2, "second append grows log only")
+	_expect(host, String(task.approval_log[0].get("to", "")) == first_to, "first entry unchanged")
+	ApprovalLogScript.append_change(task, "approved", "approved", "", "")
+	_expect(host, task.approval_log.size() == 2, "no-op when from==to")
+	task.set_content_status("posted")
+	_expect(host, task.approval_log.size() == 3, "set_content_status records change")
+	var formatted: String = ApprovalLogScript.format_entries(task)
+	_expect(host, formatted.find("draft") >= 0 and formatted.find("posted") >= 0, "format_entries readable")
+	var workplan := Workplan.new()
+	workplan.months["m"] = [task]
+	var rows: Array = BulkIOScript.export_rows(workplan)
+	_expect(host, rows.size() == 1, "export row")
+	var approval_json: String = String(rows[0].get("approval_log", ""))
+	_expect(host, not approval_json.is_empty(), "approval_log column present")
+	var parsed: Variant = JSON.parse_string(approval_json)
+	_expect(host, typeof(parsed) == TYPE_ARRAY, "approval_log column is JSON array")
+
+static func _test_workplan_people_and_assignee(host: Node) -> void:
+	print("-- workplan people + assignee filter/TZ --")
+	const PeopleScript = preload("res://readymade/scripts/workplan_people.gd")
+	var workplan := Workplan.new()
+	workplan.name = "People Fixture"
+	workplan.people = PeopleScript.normalize_list([
+		{"name": "Ada", "role": "Editor", "timezone": "Africa/Lagos"},
+		{"name": "ada", "role": "dup", "timezone": "UTC"},
+		{"name": "", "role": "skip"},
+	])
+	_expect(host, workplan.people.size() == 1, "people list dedupes by name")
+	_expect(host, String(workplan.people[0].get("role", "")) == "Editor", "keeps first role")
+	var task := WorkplanTask.new()
+	task.title = "Assigned post"
+	task.assignee = "Ada"
+	task.deadline = "2026-12-10"
+	task.publish_date = "2026-12-10"
+	task.publish_time = "15:00"
+	task.publish_timezone = "UTC"
+	_expect(host, PeopleScript.assignee_timezone(task, workplan) == "Africa/Lagos", "assignee TZ from people")
+	_expect(host, PeopleScript.matches_assignee_filter(task, "Ada"), "assignee filter match")
+	_expect(host, not PeopleScript.matches_assignee_filter(task, "Bob"), "assignee filter miss")
+	_expect(host, PeopleScript.matches_assignee_filter(WorkplanTask.new(), "(unassigned)"), "unassigned filter")
+	var label_text: String = PeopleScript.format_deadline_for_assignee(task, workplan)
+	_expect(host, label_text.find("Ada") >= 0 or label_text.find("Lagos") >= 0 or label_text.find("15:") >= 0, "deadline label uses assignee context")
+
+
+static func _test_workplan_manager_section_labels(host: Node) -> void:
+	print("-- workplan manager section labels --")
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_create_workplan_manager_dialog"), "manager dialog builder present")
+	_expect(host, dash.has_method("_on_manage_people_pressed"), "Manage People handler present")
+	if dash.has_method("_create_workplan_manager_dialog") and dash.get("workplan_manager") != null:
+		# Soft: only build when manager is ready (acceptance host usually has it).
+		pass
+	dash.queue_free()

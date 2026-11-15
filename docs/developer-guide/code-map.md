@@ -163,6 +163,9 @@ rather than a wasted search.
   (see [readymade-campaign-calendar.md](readymade-campaign-calendar.md))
 - Task dependencies (blocked / cycle / cascade offset):
   `synesyn_client/readymade/scripts/workplan_dependencies.gd`
+- People / assignees: `workplan_people.gd`
+- Stage board: `workplan_stage_board.gd`, `ui/stage_board_view.tscn`
+- Approval log: `workplan_approval_log.gd`
 
 ## Harness and policy tooling
 
