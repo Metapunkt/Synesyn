@@ -34,7 +34,7 @@ func _show_workplan_manager_dialog():
 	dialog.popup_centered(Vector2(600, 400))
 
 func _create_workplan_manager_dialog() -> AcceptDialog:
-	"""Create the workplan manager dialog"""
+	"""Create the workplan manager dialog with grouped action sections."""
 	var dialog = AcceptDialog.new()
 	dialog.title = "Workplan Manager"
 	dialog.set_flag(Window.FLAG_RESIZE_DISABLED, false)
@@ -56,19 +56,25 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	vbox.add_child(list_label)
 	
 	var workplan_list = ItemList.new()
-	workplan_list.custom_minimum_size = Vector2(0, 200)
+	workplan_list.custom_minimum_size = Vector2(0, 180)
 	workplan_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var available_workplans = workplan_manager.get_available_workplans()
 	for workplan_name in available_workplans:
 		workplan_list.add_item(workplan_name)
 	vbox.add_child(workplan_list)
-	
-	# Action buttons
+
+	# --- Workplan ---
+	var workplan_section = Label.new()
+	workplan_section.text = "Workplan"
+	workplan_section.theme_type_variation = "HeaderSmall"
+	vbox.add_child(workplan_section)
+
 	var button_container = HBoxContainer.new()
 	vbox.add_child(button_container)
 	
 	var new_button = Button.new()
 	new_button.text = "New Workplan"
+	new_button.tooltip_text = "Create a new empty workplan and switch to it"
 	new_button.pressed.connect(_on_new_workplan_pressed.bind(dialog))
 	button_container.add_child(new_button)
 	
@@ -87,62 +93,85 @@ func _create_workplan_manager_dialog() -> AcceptDialog:
 	delete_button.modulate = Color.RED
 	delete_button.pressed.connect(_on_delete_workplan_pressed.bind(dialog, workplan_list))
 	button_container.add_child(delete_button)
-	
-	# Import/Export buttons
-	var io_container = HBoxContainer.new()
-	vbox.add_child(io_container)
-	
+
+	var workplan_io = HBoxContainer.new()
+	vbox.add_child(workplan_io)
 	var import_button = Button.new()
 	import_button.text = "Import Workplan"
 	import_button.pressed.connect(_on_import_workplan_pressed.bind(dialog))
-	io_container.add_child(import_button)
-	
+	workplan_io.add_child(import_button)
 	var export_button = Button.new()
 	export_button.text = "Export Workplan"
 	export_button.pressed.connect(_on_export_workplan_pressed.bind(dialog, workplan_list))
-	io_container.add_child(export_button)
+	workplan_io.add_child(export_button)
+
+	vbox.add_child(HSeparator.new())
+
+	# --- Tasks import-export ---
+	var tasks_section = Label.new()
+	tasks_section.text = "Tasks import / export"
+	tasks_section.theme_type_variation = "HeaderSmall"
+	vbox.add_child(tasks_section)
 
 	var task_io_container = HBoxContainer.new()
 	vbox.add_child(task_io_container)
-
 	var import_tasks_button = Button.new()
 	import_tasks_button.text = "Import Tasks (CSV/JSON)"
 	import_tasks_button.tooltip_text = "Bulk create/update tasks from CSV or JSON with preview"
 	import_tasks_button.pressed.connect(_on_import_tasks_pressed.bind(dialog))
 	task_io_container.add_child(import_tasks_button)
-
 	var export_tasks_button = Button.new()
 	export_tasks_button.text = "Export Tasks (CSV/JSON)"
 	export_tasks_button.tooltip_text = "Export current workplan tasks for spreadsheet review"
 	export_tasks_button.pressed.connect(_on_export_tasks_pressed.bind(dialog))
 	task_io_container.add_child(export_tasks_button)
 
-	var tools_container = HBoxContainer.new()
-	vbox.add_child(tools_container)
+	vbox.add_child(HSeparator.new())
 
+	# --- Channels & caps ---
+	var channels_section = Label.new()
+	channels_section.text = "Channels & caps"
+	channels_section.theme_type_variation = "HeaderSmall"
+	vbox.add_child(channels_section)
+
+	var channels_row = HBoxContainer.new()
+	vbox.add_child(channels_row)
 	var channels_button = Button.new()
 	channels_button.text = "Manage Channels"
 	channels_button.tooltip_text = "Add, rename, remove, or reorder custom destinations"
 	channels_button.pressed.connect(_on_manage_channels_pressed.bind(dialog))
-	tools_container.add_child(channels_button)
-
+	channels_row.add_child(channels_button)
 	var cadence_button = Button.new()
 	cadence_button.text = "Cadence Caps"
 	cadence_button.tooltip_text = "Set per-channel weekly caps and view non-blocking warnings"
 	cadence_button.pressed.connect(_on_cadence_caps_pressed.bind(dialog))
-	tools_container.add_child(cadence_button)
+	channels_row.add_child(cadence_button)
+	var people_button = Button.new()
+	people_button.text = "Manage People"
+	people_button.tooltip_text = "People and agents who can be assigned to tasks"
+	people_button.pressed.connect(_on_manage_people_pressed.bind(dialog))
+	channels_row.add_child(people_button)
 
+	vbox.add_child(HSeparator.new())
+
+	# --- Time zones ---
+	var tz_section = Label.new()
+	tz_section.text = "Time zones"
+	tz_section.theme_type_variation = "HeaderSmall"
+	vbox.add_child(tz_section)
+
+	var tz_row = HBoxContainer.new()
+	vbox.add_child(tz_row)
 	var default_tz_button = Button.new()
 	default_tz_button.text = "Default Timezone"
 	default_tz_button.tooltip_text = "IANA zone stored on tasks when publish timezone is left empty"
 	default_tz_button.pressed.connect(_on_default_timezone_pressed.bind(dialog))
-	tools_container.add_child(default_tz_button)
-
+	tz_row.add_child(default_tz_button)
 	var tz_button = Button.new()
 	tz_button.text = "Viewer Timezone"
 	tz_button.tooltip_text = "IANA zone used when converting publish times in calendar/lists"
 	tz_button.pressed.connect(_on_viewer_timezone_pressed.bind(dialog))
-	tools_container.add_child(tz_button)
+	tz_row.add_child(tz_button)
 
 	var cadence_warn_label = Label.new()
 	cadence_warn_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -620,6 +649,80 @@ func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:
 	dialog.confirmed.connect(func(): dialog.queue_free())
 	dialog.canceled.connect(func(): dialog.queue_free())
 	_popup_nested_dialog(dialog, Vector2(420, 360))
+
+
+func _on_manage_people_pressed(_parent_dialog: AcceptDialog) -> void:
+	"""UI for workplan people list: name, role label, timezone."""
+	if workplan_manager == null or workplan_manager.get_current_workplan() == null:
+		_show_error_dialog("No current workplan.")
+		return
+	var dialog = AcceptDialog.new()
+	dialog.title = "People & Assignees"
+	dialog.set_flag(Window.FLAG_RESIZE_DISABLED, false)
+	var vbox = VBoxContainer.new()
+	dialog.add_child(vbox)
+	var list = ItemList.new()
+	list.custom_minimum_size = Vector2(420, 200)
+	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(list)
+	var refresh := func():
+		list.clear()
+		if not workplan_manager.has_method("get_people"):
+			return
+		for person_any in workplan_manager.get_people():
+			if typeof(person_any) != TYPE_DICTIONARY:
+				continue
+			var person: Dictionary = person_any
+			var person_name: String = String(person.get("name", ""))
+			var role_label: String = String(person.get("role", ""))
+			var zone: String = String(person.get("timezone", ""))
+			var line: String = person_name
+			if not role_label.is_empty():
+				line += " · %s" % role_label
+			if not zone.is_empty():
+				line += " · %s" % zone
+			list.add_item(line)
+			list.set_item_metadata(list.item_count - 1, person_name)
+	refresh.call()
+	var add_row = HBoxContainer.new()
+	vbox.add_child(add_row)
+	var name_edit = LineEdit.new()
+	name_edit.placeholder_text = "Name or agent id"
+	name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	add_row.add_child(name_edit)
+	var role_edit = LineEdit.new()
+	role_edit.placeholder_text = "Role label"
+	role_edit.custom_minimum_size = Vector2(120, 0)
+	add_row.add_child(role_edit)
+	var zone_edit = LineEdit.new()
+	zone_edit.placeholder_text = "IANA timezone"
+	zone_edit.custom_minimum_size = Vector2(140, 0)
+	add_row.add_child(zone_edit)
+	var add_btn = Button.new()
+	add_btn.text = "Add"
+	add_btn.pressed.connect(func():
+		if workplan_manager.add_person(name_edit.text, role_edit.text, zone_edit.text):
+			name_edit.text = ""
+			role_edit.text = ""
+			zone_edit.text = ""
+			refresh.call()
+	)
+	add_row.add_child(add_btn)
+	var remove_btn = Button.new()
+	remove_btn.text = "Remove"
+	remove_btn.pressed.connect(func():
+		var selected = list.get_selected_items()
+		if selected.is_empty():
+			return
+		var person_name: String = String(list.get_item_metadata(selected[0]))
+		workplan_manager.remove_person(person_name)
+		refresh.call()
+	)
+	vbox.add_child(remove_btn)
+	add_child(dialog)
+	dialog.confirmed.connect(func(): dialog.queue_free())
+	dialog.canceled.connect(func(): dialog.queue_free())
+	_popup_nested_dialog(dialog, Vector2(520, 380))
 
 
 func _build_timezone_dialog(dialog_title: String, hint_text: String, placeholder: String, initial_zone: String) -> Dictionary:
