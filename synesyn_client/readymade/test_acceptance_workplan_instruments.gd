@@ -20,6 +20,7 @@ func _ready() -> void:
 	await _test_main_tab_center_mouse_clicks()
 	await _test_readymade_main_fills_viewport()
 	await _test_template_dialog_releases_exclusivity_for_draft()
+	await _test_hub_error_dialog_is_dismissible()
 	_test_done_task_deadline_is_neutral()
 	_test_first_launch_workplan_choice_api()
 	_test_path_getters_are_pure_and_migrations_explicit()
@@ -534,6 +535,62 @@ func _test_template_dialog_releases_exclusivity_for_draft() -> void:
 
 	if orch != null and orch.has_signal("backend_unavailable") and orch.backend_unavailable.is_connected(on_unavailable):
 		orch.backend_unavailable.disconnect(on_unavailable)
+	dash.queue_free()
+	await get_tree().process_frame
+
+
+func _test_hub_error_dialog_is_dismissible() -> void:
+	print("-- hub/backend error dialog dismissible (OK / cancel) --")
+	var scene: PackedScene = load("res://readymade/ui/mission_control_dashboard.tscn")
+	_expect(scene != null, "dashboard loads for notice dismiss test")
+	if scene == null:
+		return
+	var dash: Node = scene.instantiate()
+	add_child(dash)
+	await get_tree().process_frame
+	_expect(dash.has_method("_show_error_dialog"), "_show_error_dialog present")
+	_expect(dash.has_method("_clear_active_notice_dialog"), "_clear_active_notice_dialog present")
+	await dash._show_error_dialog("AI generation failed — task left not Done.\n\nWhat to do:\n1. Start hub\n2. Configure hub.base_url")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var notice: AcceptDialog = dash.get("_active_notice_dialog") as AcceptDialog
+	_expect(notice != null and is_instance_valid(notice) and notice.visible, "notice dialog is visible")
+	if notice != null and is_instance_valid(notice):
+		_expect(notice.unresizable == true, "notice dialog is unresizable (compact)")
+		_expect(notice.exclusive == true, "notice dialog is exclusive while shown")
+		# Dismiss via canceled (Escape path)
+		notice.canceled.emit()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var after: Variant = dash.get("_active_notice_dialog")
+		_expect(after == null or not is_instance_valid(after) or not after.visible, "notice cleared after cancel/Escape")
+	# Second show replaces rather than stacking
+	await dash._show_error_dialog("Hub offline notice A")
+	await get_tree().process_frame
+	await dash._show_error_dialog("Hub offline notice B")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var visible_notices: int = 0
+	for child in dash.get_children():
+		if child is AcceptDialog and child.visible and String(child.title) == "Error":
+			visible_notices += 1
+	_expect(visible_notices <= 1, "at most one Error notice visible (got %d)" % visible_notices)
+	# Dedupe generation failures in orchestrator
+	var orch: Node = get_node_or_null("/root/ReadyMadeOrchestrator")
+	if orch != null and orch.has_method("notify_backend_unavailable"):
+		orch.set("_last_backend_notice", "")
+		var got: Array = []
+		var on_note := func(msg: String) -> void:
+			got.append(msg)
+		if orch.has_signal("backend_unavailable"):
+			orch.backend_unavailable.connect(on_note)
+		orch.notify_backend_unavailable("AI generation failed — task left not Done.\nFailed at: t1")
+		orch.notify_backend_unavailable("AI generation failed — task left not Done.\nFailed at: t2")
+		_expect(got.size() == 1, "generation-failure notices are deduped across timestamps")
+		if orch.backend_unavailable.is_connected(on_note):
+			orch.backend_unavailable.disconnect(on_note)
+	if dash.has_method("_clear_active_notice_dialog"):
+		await dash._clear_active_notice_dialog()
 	dash.queue_free()
 	await get_tree().process_frame
 

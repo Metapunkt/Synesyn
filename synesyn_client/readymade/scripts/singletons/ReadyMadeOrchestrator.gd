@@ -469,10 +469,17 @@ func request_start_agent_batch() -> bool:
 func notify_backend_unavailable(reason: String = "") -> void:
 	"""Surface a visible no-hub / no-AI empty state (UI listens on backend_unavailable)."""
 	var message: String = build_backend_unavailable_message(reason)
-	# Avoid spamming identical dialogs during batch retries.
-	if message == _last_backend_notice:
+	# Collapse retries that only differ by timestamp / task detail.
+	var dedupe_key: String = message
+	var reason_l: String = reason.to_lower()
+	var message_l: String = message.to_lower()
+	if "ai generation failed" in reason_l or "ai generation failed" in message_l:
+		dedupe_key = "ai_generation_failed"
+	elif "not available" in message_l and "hub" in message_l:
+		dedupe_key = "hub_unavailable"
+	if dedupe_key == _last_backend_notice:
 		return
-	_last_backend_notice = message
+	_last_backend_notice = dedupe_key
 	backend_unavailable.emit(message)
 
 func reset_workplan():

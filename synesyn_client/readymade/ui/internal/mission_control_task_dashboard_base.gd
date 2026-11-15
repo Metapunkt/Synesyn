@@ -2,6 +2,8 @@ extends "res://readymade/ui/internal/mission_control_dashboard_base.gd"
 class_name MissionControlTaskDashboardBase
 
 var _main_external_tab_bar: TabBar = null
+## Single hub/backend notice dialog — replaced rather than stacked (dismissible).
+var _active_notice_dialog: AcceptDialog = null
 
 func _ready() -> void:
 	# Add to group for easy debugging
@@ -869,47 +871,79 @@ func _add_task_directly(task: WorkplanTask):
 	print("MissionControl: ✅ Task added directly: ", task.title)
 	_refresh_dashboard()
 
+func _clear_active_notice_dialog() -> void:
+	if _active_notice_dialog != null and is_instance_valid(_active_notice_dialog):
+		await _release_exclusive_window(_active_notice_dialog)
+	_active_notice_dialog = null
+
+
+func _bind_dismissible_notice(dialog: AcceptDialog) -> void:
+	"""OK, window X, Escape (canceled), and close_requested all free the notice."""
+	var dismiss := func() -> void:
+		if _active_notice_dialog == dialog:
+			_active_notice_dialog = null
+		await _release_exclusive_window(dialog)
+	dialog.confirmed.connect(dismiss)
+	dialog.canceled.connect(dismiss)
+	dialog.close_requested.connect(dismiss)
+	dialog.unresizable = true
+	dialog.wrap_controls = true
+	dialog.transient = true
+	dialog.exclusive = true
+	dialog.dialog_hide_on_ok = true
+
+
 func _show_error_dialog(message: String) -> void:
-	"""Show a simple error dialog"""
+	"""Show a dismissible error dialog (Escape / OK / window close). Replaces prior notice."""
 	await _dismiss_blocking_dialogs()
+	await _clear_active_notice_dialog()
 	var dialog = AcceptDialog.new()
-	dialog.dialog_text = message
 	dialog.title = "Error"
-	dialog.confirmed.connect(func():
-		await _release_exclusive_window(dialog)
-	)
-	dialog.close_requested.connect(func():
-		await _release_exclusive_window(dialog)
-	)
-	dialog.canceled.connect(func():
-		await _release_exclusive_window(dialog)
-	)
+	dialog.dialog_text = ""
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(520, 240)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var body := Label.new()
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.custom_minimum_size = Vector2(500, 0)
+	body.text = message
+	scroll.add_child(body)
+	dialog.add_child(scroll)
+	_bind_dismissible_notice(dialog)
+	_active_notice_dialog = dialog
 	add_child(dialog)
-	dialog.popup_centered()
+	dialog.popup_centered(Vector2(560, 360))
+	# Ensure keyboard focus so Escape reaches the dialog.
+	dialog.grab_focus()
 
 func _show_info_dialog(message: String) -> void:
-	"""Show a simple info dialog"""
+	"""Show a dismissible info dialog (Escape / OK / window close)."""
 	await _dismiss_blocking_dialogs()
+	await _clear_active_notice_dialog()
 	var dialog = AcceptDialog.new()
-	dialog.dialog_text = message
 	dialog.title = "Information"
-	dialog.confirmed.connect(func():
-		await _release_exclusive_window(dialog)
-	)
-	dialog.close_requested.connect(func():
-		await _release_exclusive_window(dialog)
-	)
-	dialog.canceled.connect(func():
-		await _release_exclusive_window(dialog)
-	)
+	dialog.dialog_text = ""
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(480, 180)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	var body := Label.new()
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.custom_minimum_size = Vector2(460, 0)
+	body.text = message
+	scroll.add_child(body)
+	dialog.add_child(scroll)
+	_bind_dismissible_notice(dialog)
+	_active_notice_dialog = dialog
 	add_child(dialog)
-	dialog.popup_centered()
+	dialog.popup_centered(Vector2(520, 300))
+	dialog.grab_focus()
 
 func _on_refresh_pressed():
 	_refresh_dashboard()
 
 func _on_backend_unavailable(message: String) -> void:
-	"""Show actionable guidance when hub / LLM is missing."""
+	"""Show actionable guidance when hub / LLM is missing; stop drafting so the modal is not sticky."""
+	_on_stop_agent_pressed()
 	await _show_error_dialog(message)
 
 
