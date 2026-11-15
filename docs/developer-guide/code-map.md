@@ -164,7 +164,8 @@ rather than a wasted search.
 - Task dependencies (blocked / cycle / cascade offset):
   `synesyn_client/readymade/scripts/workplan_dependencies.gd`
 - People / assignees: `workplan_people.gd`
-- Stage board: `workplan_stage_board.gd`, `ui/stage_board_view.tscn`
+- Stage board: `workplan_stage_board.gd`,
+  `synesyn_client/readymade/ui/stage_board_view.tscn`
 - Approval log: `workplan_approval_log.gd`
 
 ## Harness and policy tooling
