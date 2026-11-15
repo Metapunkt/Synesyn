@@ -360,7 +360,7 @@ layout_mode = 2
 
 [node name="ScheduledLabel" type="Label" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
 layout_mode = 2
-text = "📅 Scheduled:"
+text = "📅 Start date:"
 
 [node name="ScheduledEdit" type="LineEdit" parent="ScrollContainer/VBoxContainer/TabContainer/Calendar/CalendarVBox/ScheduledContainer/ScheduledRow"]
 layout_mode = 2

@@ -408,6 +408,10 @@ func _on_calendar_context_menu_id_pressed(id: int):
 	pass
 func _dismiss_calendar_context_menu():
 	pass
+func _ensure_calendar_context_menu() -> PopupMenu:
+	return null
+func _run_calendar_context_action(_id: int, _task: WorkplanTask) -> void:
+	pass
 func _get_days_in_month(year: int, month: int) -> int:
 	return 0
 func _parse_date_string(date_string: String) -> Dictionary:

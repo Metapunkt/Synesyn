@@ -709,87 +709,108 @@ func _on_day_cell_mouse_exited(day: int):
 				cell.modulate = Color(1.1, 1.1, 1.0)  # Back to normal drop zone highlight
 
 func _dismiss_calendar_context_menu() -> void:
-	"""Force-hide the calendar PopupMenu (and status submenu) immediately."""
+	"""Force-hide/free the calendar PopupMenu so Undo cannot leave it stuck open."""
 	if calendar_context_menu == null or not is_instance_valid(calendar_context_menu):
+		calendar_context_menu = null
 		return
-	calendar_context_menu.hide()
-	calendar_context_menu.visible = false
-	var status_submenu = calendar_context_menu.get_node_or_null("StatusSubmenu")
+	var menu: PopupMenu = calendar_context_menu
+	var status_submenu = menu.get_node_or_null("StatusSubmenu")
 	if status_submenu is PopupMenu:
 		(status_submenu as PopupMenu).hide()
 		(status_submenu as PopupMenu).visible = false
+	menu.hide()
+	menu.visible = false
+	# Freeing guarantees the popup cannot linger after calendar rebuild.
+	if menu.get_parent() != null:
+		menu.get_parent().remove_child(menu)
+	menu.queue_free()
+	calendar_context_menu = null
+
+
+func _ensure_calendar_context_menu() -> PopupMenu:
+	"""Create a fresh top-level PopupMenu each time it is shown."""
+	_dismiss_calendar_context_menu()
+	var menu := PopupMenu.new()
+	menu.name = "CalendarContextMenu"
+	menu.top_level = true
+	menu.hide_on_item_selection = true
+	menu.hide_on_checkable_item_selection = true
+	menu.hide_on_state_item_selection = true
+	add_child(menu)
+	menu.id_pressed.connect(_on_calendar_context_menu_id_pressed)
+	menu.index_pressed.connect(func(_index: int): _dismiss_calendar_context_menu())
+	calendar_context_menu = menu
+	return menu
 
 
 func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 	"""Clears, populates, and shows the context menu for a calendar task."""
 	context_menu_task = task # Store the task for the handler
-	
-	calendar_context_menu.clear()
-	calendar_context_menu.hide_on_item_selection = true
-	calendar_context_menu.hide_on_checkable_item_selection = true
-	calendar_context_menu.hide_on_state_item_selection = true
+	var menu: PopupMenu = _ensure_calendar_context_menu()
 	# HACK: For some reason, submenus added at index 0 don't work reliably.
 	# So we add a dummy item first and will handle the submenu logic via ID.
-	calendar_context_menu.add_item("Edit Task", 0)
+	menu.add_item("Edit Task", 0)
 
-	var status_submenu = calendar_context_menu.get_node_or_null("StatusSubmenu")
-	if not status_submenu:
-		status_submenu = PopupMenu.new()
-		status_submenu.name = "StatusSubmenu"
-		calendar_context_menu.add_child(status_submenu)
-		status_submenu.id_pressed.connect(func(id): _on_calendar_context_menu_id_pressed(100 + id))
+	var status_submenu := PopupMenu.new()
+	status_submenu.name = "StatusSubmenu"
+	menu.add_child(status_submenu)
+	status_submenu.id_pressed.connect(func(id): _on_calendar_context_menu_id_pressed(100 + id))
 
-	status_submenu.clear()
 	var statuses = ["To Do", "In Progress", "Review", "Done"]
 	for i in statuses.size():
 		status_submenu.add_item(statuses[i], i)
 		
-	calendar_context_menu.add_submenu_item("Change Status", "StatusSubmenu")
-	calendar_context_menu.add_separator()
-	calendar_context_menu.add_item("Move to date…", 3)
-	calendar_context_menu.add_item(
+	menu.add_submenu_item("Change Status", "StatusSubmenu")
+	menu.add_separator()
+	menu.add_item("Move to date…", 3)
+	menu.add_item(
 		"Reschedule series (title+channel)" if calendar_series_mode != "series" else "Reschedule instance only",
 		4
 	)
-	calendar_context_menu.add_item("Undo last reschedule", 5)
-	calendar_context_menu.add_item("Copy as Markdown", 6)
-	calendar_context_menu.add_separator()
-	calendar_context_menu.add_item("Delete Task", 2)
+	menu.add_item("Undo last reschedule", 5)
+	menu.add_item("Copy as Markdown", 6)
+	menu.add_separator()
+	menu.add_item("Delete Task", 2)
 	
-	calendar_context_menu.position = get_viewport().get_mouse_position()
-	calendar_context_menu.popup()
+	menu.position = get_viewport().get_mouse_position()
+	menu.popup()
 
 func _on_calendar_context_menu_id_pressed(id: int):
 	"""Handle context menu actions"""
-	# Hide before any rebuild/refresh so Undo cannot leave the menu stuck open.
+	# Capture task then destroy the menu before any rebuild (Undo refreshes cards).
+	var task: WorkplanTask = context_menu_task
 	_dismiss_calendar_context_menu()
 	call_deferred("_dismiss_calendar_context_menu")
-	if not context_menu_task and id != 5:
+	if task == null and id != 5:
 		return
+	# Defer the action one frame so PopupMenu hide is committed first.
+	call_deferred("_run_calendar_context_action", id, task)
 
+
+func _run_calendar_context_action(id: int, task: WorkplanTask) -> void:
+	_dismiss_calendar_context_menu()
 	if id == 0: # Edit Task
-		_on_edit_task_pressed(context_menu_task)
+		_on_edit_task_pressed(task)
 	elif id == 2: # Delete Task
-		_on_delete_task_pressed(context_menu_task)
+		_on_delete_task_pressed(task)
 	elif id == 3:
-		_prompt_move_task_to_date(context_menu_task)
+		_prompt_move_task_to_date(task)
 	elif id == 4:
 		calendar_series_mode = "instance" if calendar_series_mode == "series" else "series"
 		print("Calendar: series mode → ", calendar_series_mode)
 	elif id == 5:
 		_undo_calendar_reschedule()
-		call_deferred("_dismiss_calendar_context_menu")
 	elif id == 6:
-		_on_copy_task_markdown_pressed(context_menu_task, null)
+		_on_copy_task_markdown_pressed(task, null)
 	elif id >= 100: # Change Status
 		var statuses = ["To Do", "In Progress", "Review", "Done"]
 		var status_index = id - 100
-		if status_index >= 0 and status_index < statuses.size():
-			context_menu_task.status = statuses[status_index]
+		if task != null and status_index >= 0 and status_index < statuses.size():
+			task.status = statuses[status_index]
 			if orchestrator and orchestrator.workplan:
 				orchestrator.workplan.update_task() # Save the change
 			_refresh_dashboard()
-			print("MissionControl: Changed status of '%s' to '%s'" % [context_menu_task.title, context_menu_task.status])
+			print("MissionControl: Changed status of '%s' to '%s'" % [task.title, task.status])
 
 # Helper functions
 func _get_days_in_month(year: int, month: int) -> int:
@@ -830,60 +851,20 @@ func _parse_date_string(date_string: String) -> Dictionary:
 	
 	return {}
 
-func _add_test_calendar_tasks():
-	"""Add some test tasks with dates in current month for testing"""
-	if not orchestrator or not orchestrator.workplan:
-		return
-	
-	print("Calendar: Adding test tasks for current month %d-%d" % [current_calendar_year, current_calendar_month])
-	
-	# Create a few test tasks with dates in the current month
-	var test_tasks = []
-	
-	# Task 1: Start date today
-	var task1 = WorkplanTask.new()
-	task1.title = "Test Start Task"
-	task1.core_idea = "Testing start date display"
-	task1.format = "Article"
-	task1.channel = "LinkedIn"
-	task1.start_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, 5]
-	test_tasks.append(task1)
-	
-	# Task 2: Deadline in current month
-	var task2 = WorkplanTask.new()
-	task2.title = "Test Deadline Task"
-	task2.core_idea = "Testing deadline display"
-	task2.format = "Video"
-	task2.channel = "YouTube"
-	task2.deadline = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, 15]
-	test_tasks.append(task2)
-	
-	# Task 3: Both start and deadline
-	var task3 = WorkplanTask.new()
-	task3.title = "Test Both Dates"
-	task3.core_idea = "Testing both date types"
-	task3.format = "Carousel"
-	task3.channel = "Instagram"
-	task3.start_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, 10]
-	task3.deadline = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, 20]
-	test_tasks.append(task3)
-	
-	# Add test tasks to the workplan
-	for task in test_tasks:
-		orchestrator.add_task_to_month("Month 1", task)
-		print("Calendar: Added test task '%s'" % task.title)
-
 # Drag & Drop handlers
 func _on_task_card_mouse_entered(card: Control, task: WorkplanTask, date_type: String):
 	"""Handle mouse entering task card"""
 	var base_modulate: Color = card.get_meta("base_modulate", card.modulate)
 	card.modulate = base_modulate * 1.15  # Brighten on hover
-	# Keep full title first so truncated cells remain discoverable.
-	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for options\n📝 Double-click to edit" % [
-		task.title, task.status, task.priority, date_type
-	]
-	
-	# Change cursor to indicate draggable
+	# Never replace the rich tooltip built by DayCardsScript (kind + Publish/Start/Deadline dates).
+	if card.has_meta("tooltip_text_full"):
+		card.tooltip_text = String(card.get_meta("tooltip_text_full"))
+	elif card.tooltip_text.is_empty():
+		var workplan_obj = orchestrator.workplan if orchestrator else null
+		var is_blocked: bool = WorkplanDependenciesScript.is_blocked(task, workplan_obj)
+		card.tooltip_text = DayCardsScript.build_tooltip(
+			task, [date_type], "", date_type, is_blocked, workplan_obj
+		)
 	Input.set_default_cursor_shape(Input.CURSOR_MOVE)
 
 func _on_task_card_mouse_exited(card: Control):
@@ -1050,9 +1031,14 @@ func _offer_move_dependents(
 		"Move %d dependent task(s) by the same offset (%+d day(s))?"
 		% [dependents.size(), offset_days]
 	)
-	# Exclusive so the first OK click focuses and activates in one press.
+	# Exclusive + deferred popup: drag mouse-up must finish before OK can take a single click.
 	confirm.exclusive = true
-	confirm.confirmed.connect(func():
+	confirm.transient = true
+	var applied_box: Array = [false]
+	var apply_cascade := func():
+		if bool(applied_box[0]) or not is_instance_valid(confirm):
+			return
+		applied_box[0] = true
 		confirm.hide()
 		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
 			task, offset_days, workplan_obj, cascade_fields
@@ -1064,16 +1050,21 @@ func _offer_move_dependents(
 		calendar_last_task_count = -1
 		_populate_calendar_with_tasks()
 		confirm.queue_free()
-	, CONNECT_ONE_SHOT)
+	confirm.confirmed.connect(apply_cascade, CONNECT_ONE_SHOT)
 	confirm.canceled.connect(func():
 		confirm.hide()
 		confirm.queue_free()
 	, CONNECT_ONE_SHOT)
 	add_child(confirm)
-	confirm.popup_centered()
-	var ok_btn: Button = confirm.get_ok_button()
-	if ok_btn != null:
-		ok_btn.call_deferred("grab_focus")
+	# Wait for drag release to settle so the first OK click applies (not just focuses).
+	get_tree().create_timer(0.12).timeout.connect(func():
+		if not is_instance_valid(confirm):
+			return
+		confirm.popup_centered()
+		var ok_btn: Button = confirm.get_ok_button()
+		if ok_btn != null:
+			ok_btn.grab_focus()
+	, CONNECT_ONE_SHOT)
 
 
 func _prompt_move_task_to_date(task: WorkplanTask) -> void:

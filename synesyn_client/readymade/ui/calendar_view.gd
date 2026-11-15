@@ -1,5 +1,11 @@
 extends Control
 class_name CalendarView
+## Standalone calendar Control used by dogfood/acceptance helpers.
+## The LIVE product Calendar tab in readymade_main.tscn is Mission Control
+## (mission_control_dashboard.tscn → mission_control_calendar_base.gd), not this scene.
+## Keep tooltip/cascade behavior aligned with DayCardsScript / WorkplanDependencies.
+
+const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
 ## Calendar view for content scheduling and deadline management
 
 const WorkplanDependenciesScript = preload("res://readymade/scripts/workplan_dependencies.gd")
@@ -371,11 +377,19 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 	var publish_label: String = PublishTimeScript.format_publish_label(
 		task, _workplan_ref, viewer_timezone
 	)
-	var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
-	if publish_label.is_empty():
-		indicator.tooltip_text = "%s [%s]%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, block_note]
-	else:
-		indicator.tooltip_text = "%s [%s]\n%s%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, publish_label, block_note]
+	# Share DayCardsScript tooltip format with the live Mission Control calendar.
+	var kinds: Array = ["publish"]
+	if not task.deadline.is_empty() and task.deadline.substr(0, 10) == task.publish_date.substr(0, mini(10, task.publish_date.length())):
+		kinds.append("deadline")
+	indicator.tooltip_text = DayCardsScript.build_tooltip(
+		task, kinds, task.publish_date, "publish", is_blocked, _workplan_ref
+	)
+	if indicator.tooltip_text.is_empty():
+		var block_note: String = "\nBlocked: predecessors not Done" if is_blocked else ""
+		if publish_label.is_empty():
+			indicator.tooltip_text = "%s [%s]%s" % [task.title, plan_status, block_note]
+		else:
+			indicator.tooltip_text = "%s [%s]\n%s%s" % [task.title, plan_status, publish_label, block_note]
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
@@ -492,7 +506,12 @@ func _offer_move_dependents(
 		% [dependents.size(), offset_days]
 	)
 	confirm.exclusive = true
-	confirm.confirmed.connect(func():
+	confirm.transient = true
+	var applied_box: Array = [false]
+	var apply_cascade := func():
+		if bool(applied_box[0]) or not is_instance_valid(confirm):
+			return
+		applied_box[0] = true
 		confirm.hide()
 		var moved: Dictionary = WorkplanDependenciesScript.move_dependents_by_offset(
 			task, offset_days, _workplan_ref, cascade_fields
@@ -502,16 +521,20 @@ func _offer_move_dependents(
 		_apply_filters()
 		_refresh_calendar()
 		confirm.queue_free()
-	, CONNECT_ONE_SHOT)
+	confirm.confirmed.connect(apply_cascade, CONNECT_ONE_SHOT)
 	confirm.canceled.connect(func():
 		confirm.hide()
 		confirm.queue_free()
 	, CONNECT_ONE_SHOT)
 	add_child(confirm)
-	confirm.popup_centered()
-	var ok_btn: Button = confirm.get_ok_button()
-	if ok_btn != null:
-		ok_btn.call_deferred("grab_focus")
+	get_tree().create_timer(0.12).timeout.connect(func():
+		if not is_instance_valid(confirm):
+			return
+		confirm.popup_centered()
+		var ok_btn: Button = confirm.get_ok_button()
+		if ok_btn != null:
+			ok_btn.grab_focus()
+	, CONNECT_ONE_SHOT)
 
 
 func _prompt_move_to_date(task: WorkplanTask) -> void:

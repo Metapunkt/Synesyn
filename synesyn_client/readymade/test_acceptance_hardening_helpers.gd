@@ -26,6 +26,9 @@ static func run_all(host: Node) -> void:
 	_test_people_role_field_width(host)
 	_test_cascade_shifts_start_date_and_undo(host)
 	_test_calendar_menu_dismiss_and_publish_tooltip(host)
+	_test_live_calendar_path_and_tooltip_not_overwritten(host)
+	_test_task_dialog_calendar_dates_prefilled(host)
+	_test_move_dependents_dialog_deferred_single_ok(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -813,7 +816,9 @@ static func _test_calendar_menu_dismiss_and_publish_tooltip(host: Node) -> void:
 	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
 	host.add_child(dash)
 	_expect(host, dash.has_method("_dismiss_calendar_context_menu"), "dismiss helper present")
-	# Simulate a stuck-open menu and ensure dismiss clears it.
+	_expect(host, dash.has_method("_ensure_calendar_context_menu"), "ensure fresh menu helper present")
+	_expect(host, dash.has_method("_run_calendar_context_action"), "deferred context action helper present")
+	# Simulate a stuck-open menu and ensure dismiss clears/frees it.
 	var menu := PopupMenu.new()
 	dash.calendar_context_menu = menu
 	dash.add_child(menu)
@@ -821,7 +826,8 @@ static func _test_calendar_menu_dismiss_and_publish_tooltip(host: Node) -> void:
 	menu.popup()
 	_expect(host, menu.visible, "menu visible before dismiss")
 	dash._dismiss_calendar_context_menu()
-	_expect(host, not menu.visible, "dismiss hides menu immediately")
+	_expect(host, dash.calendar_context_menu == null, "dismiss nulls menu ref")
+	_expect(host, not is_instance_valid(menu) or not menu.visible, "dismiss hides/frees menu immediately")
 	const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
 	var task := WorkplanTask.new()
 	task.title = "Peer review"
@@ -834,4 +840,120 @@ static func _test_calendar_menu_dismiss_and_publish_tooltip(host: Node) -> void:
 	_expect(host, tip.find("Publish:") >= 0, "publish tooltip label present")
 	_expect(host, tip.find("2026-12-02") >= 0, "publish tooltip includes date")
 	_expect(host, tip.find("11:30") >= 0 and tip.find("Africa/Lagos") >= 0, "publish tooltip time+zone")
+	dash.queue_free()
+
+
+static func _test_live_calendar_path_and_tooltip_not_overwritten(host: Node) -> void:
+	print("-- live Mission Control calendar path + tooltip not overwritten on hover --")
+	var main_src: String = FileAccess.get_file_as_string("res://readymade/readymade_main.tscn")
+	_expect(
+		host,
+		main_src.find("mission_control_dashboard.tscn") >= 0,
+		"readymade_main embeds mission_control_dashboard"
+	)
+	var cal_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_calendar_base.gd"
+	)
+	_expect(
+		host,
+		cal_src.find("Right-click for options") < 0,
+		"dead hover tooltip string removed from live calendar"
+	)
+	_expect(
+		host,
+		cal_src.find("tooltip_text_full") >= 0 and cal_src.find("DayCardsScript.build_tooltip") >= 0,
+		"hover preserves DayCardsScript tooltip"
+	)
+	const DayCardsScript = preload("res://readymade/scripts/workplan_calendar_day_cards.gd")
+	var task := WorkplanTask.new()
+	task.title = "Peer review"
+	task.status = "To Do"
+	task.priority = 0
+	task.publish_date = "2026-12-02"
+	task.publish_time = "15:00"
+	task.publish_timezone = "Europe/Oslo"
+	var card: PanelContainer = DayCardsScript.create_month_card(
+		task, "publish", ["publish"], "2026-12-02", false
+	)
+	var before: String = card.tooltip_text
+	_expect(host, before.find("Publish:") >= 0 and before.find("2026-12-02") >= 0, "card tip has publish date")
+	# Simulate what mouse_entered must do: restore meta tip, never the old dead string.
+	if card.has_meta("tooltip_text_full"):
+		card.tooltip_text = String(card.get_meta("tooltip_text_full"))
+	_expect(host, card.tooltip_text == before, "hover restore keeps rich tooltip")
+	_expect(host, card.tooltip_text.find("Right-click for options") < 0, "old dead tip not restored")
+	card.free()
+	var view_src: String = FileAccess.get_file_as_string("res://readymade/ui/calendar_view.gd")
+	_expect(
+		host,
+		view_src.find("LIVE product Calendar tab") >= 0 and view_src.find("DayCardsScript") >= 0,
+		"standalone CalendarView documents live path and shares DayCardsScript"
+	)
+
+
+static func _test_task_dialog_calendar_dates_prefilled(host: Node) -> void:
+	print("-- task dialog Calendar dates prefilled from saved task --")
+	var scene: PackedScene = load("res://readymade/ui/task_dialog.tscn")
+	_expect(host, scene != null, "task_dialog.tscn loads")
+	if scene == null:
+		return
+	var dlg: Node = scene.instantiate()
+	host.add_child(dlg)
+	var task := WorkplanTask.new()
+	task.title = "Synthesize reviewer comments"
+	task.core_idea = "Fixture"
+	task.publish_date = "2026-12-02"
+	task.deadline = "2026-12-01"
+	task.start_date = "2026-11-28"
+	task.scheduled_date = ""
+	task.publish_time = "15:00"
+	task.publish_timezone = "Europe/Oslo"
+	_expect(host, dlg.has_method("show_edit_dialog"), "show_edit_dialog present")
+	dlg.show_edit_dialog(task)
+	_expect(host, dlg.has_method("_populate_calendar_date_fields"), "calendar date populate helper")
+	dlg._populate_calendar_date_fields(task)
+	var pub_edit: LineEdit = dlg.publish_date_edit
+	var dead_edit: LineEdit = dlg.deadline_edit
+	var start_edit: LineEdit = dlg.scheduled_edit
+	var time_edit: LineEdit = dlg.publish_time_edit
+	_expect(host, pub_edit != null and pub_edit.text == "2026-12-02", "publish date prefilled")
+	_expect(host, dead_edit != null and dead_edit.text == "2026-12-01", "deadline prefilled")
+	_expect(host, start_edit != null and start_edit.text == "2026-11-28", "start date prefilled from start_date")
+	_expect(host, time_edit != null and time_edit.text == "15:00", "publish time prefilled")
+	# Saving with fields still filled must not wipe.
+	dlg.is_edit_mode = true
+	dlg.editing_task = task
+	dlg._on_confirmed()
+	_expect(host, task.publish_date == "2026-12-02", "save keeps publish_date")
+	_expect(host, task.start_date == "2026-11-28", "save keeps start_date")
+	_expect(host, task.deadline == "2026-12-01", "save keeps deadline")
+	# Empty LineEdit on edit must not wipe existing saved dates.
+	if pub_edit: pub_edit.text = ""
+	if dead_edit: dead_edit.text = ""
+	if start_edit: start_edit.text = ""
+	dlg._on_confirmed()
+	_expect(host, task.publish_date == "2026-12-02", "empty publish field does not wipe on edit save")
+	_expect(host, task.deadline == "2026-12-01", "empty deadline field does not wipe on edit save")
+	_expect(host, task.start_date == "2026-11-28", "empty start field does not wipe on edit save")
+	dlg.queue_free()
+
+
+static func _test_move_dependents_dialog_deferred_single_ok(host: Node) -> void:
+	print("-- move dependents dialog deferred exclusive single-OK --")
+	var cal_src: String = FileAccess.get_file_as_string(
+		"res://readymade/ui/internal/mission_control_calendar_base.gd"
+	)
+	_expect(
+		host,
+		cal_src.find("Move dependents?") >= 0 and cal_src.find("create_timer(0.12)") >= 0,
+		"move dependents popup is deferred after drag"
+	)
+	_expect(
+		host,
+		cal_src.find("confirm.exclusive = true") >= 0 and cal_src.find("applied_box") >= 0,
+		"move dependents uses exclusive + single-apply guard"
+	)
+	var dash = preload("res://readymade/ui/mission_control_dashboard.gd").new()
+	host.add_child(dash)
+	_expect(host, dash.has_method("_offer_move_dependents"), "offer move dependents present")
 	dash.queue_free()

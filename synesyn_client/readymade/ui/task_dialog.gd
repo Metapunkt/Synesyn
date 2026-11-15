@@ -118,6 +118,11 @@ func _ready():
 		depends_on_edit.text_changed.connect(func(_t: String): _refresh_blocked_hint())
 	if assignee_option:
 		assignee_option.item_selected.connect(_on_assignee_option_selected)
+	# Re-apply calendar dates when the Calendar tab is shown (hidden tabs can miss first paint).
+	var tabs: TabContainer = $ScrollContainer/VBoxContainer/TabContainer as TabContainer
+	if tabs != null:
+		tabs.tab_changed.connect(_on_task_dialog_tab_changed)
+	about_to_popup.connect(_on_about_to_popup_refresh_dates)
 
 
 func _setup_content_status_options() -> void:
@@ -534,6 +539,56 @@ func show_edit_dialog(task: WorkplanTask):
 	title = "Edit Task"
 	_populate_fields(task)
 	popup_centered()
+	# Deferred second pass: ensures Calendar LineEdits keep saved YYYY-MM-DD values.
+	call_deferred("_populate_calendar_date_fields", task)
+
+
+func _ymd_only(raw: String) -> String:
+	"""Normalize stored date/datetime strings to YYYY-MM-DD for LineEdit fields."""
+	var cleaned: String = raw.strip_edges()
+	if cleaned.is_empty():
+		return ""
+	if cleaned.contains("T"):
+		cleaned = cleaned.split("T")[0]
+	if cleaned.contains(" "):
+		cleaned = cleaned.split(" ")[0]
+	if cleaned.length() >= 10:
+		return cleaned.substr(0, 10)
+	return cleaned
+
+
+func _populate_calendar_date_fields(task: WorkplanTask) -> void:
+	"""Prefill publish / start / deadline so placeholders are never left over saved values."""
+	if task == null:
+		return
+	if deadline_edit:
+		deadline_edit.text = _ymd_only(task.deadline)
+	if publish_date_edit:
+		publish_date_edit.text = _ymd_only(task.publish_date)
+	if publish_time_edit:
+		publish_time_edit.text = task.publish_time.strip_edges()
+	if publish_timezone_edit:
+		publish_timezone_edit.text = task.publish_timezone.strip_edges()
+	if scheduled_edit:
+		# UI label is "Start date"; prefer start_date, fall back to scheduled_date.
+		var start_raw: String = task.start_date if not task.start_date.strip_edges().is_empty() else task.scheduled_date
+		scheduled_edit.text = _ymd_only(start_raw)
+
+
+func _on_task_dialog_tab_changed(tab_index: int) -> void:
+	if editing_task == null:
+		return
+	var tabs: TabContainer = $ScrollContainer/VBoxContainer/TabContainer as TabContainer
+	if tabs == null:
+		return
+	var tab_control: Control = tabs.get_tab_control(tab_index)
+	if tab_control != null and String(tab_control.name) == "Calendar":
+		_populate_calendar_date_fields(editing_task)
+
+
+func _on_about_to_popup_refresh_dates() -> void:
+	if is_edit_mode and editing_task != null:
+		_populate_calendar_date_fields(editing_task)
 
 func _clear_fields():
 	"""Clear all form fields"""
@@ -599,6 +654,10 @@ func _clear_fields():
 	deadline_edit.text = ""
 	scheduled_edit.text = ""
 	publish_date_edit.text = ""
+	if publish_time_edit:
+		publish_time_edit.text = ""
+	if publish_timezone_edit:
+		publish_timezone_edit.text = ""
 	recurring_option.selected = 0
 	duration_spin.value = 60
 	
@@ -656,14 +715,8 @@ func _populate_fields(task: WorkplanTask):
 	for instrument in task.cosmic_instruments:
 		_set_cosmic_checkbox_by_text(instrument, true)
 	
-	# Calendar fields
-	deadline_edit.text = task.deadline
-	scheduled_edit.text = task.scheduled_date
-	publish_date_edit.text = task.publish_date
-	if publish_time_edit:
-		publish_time_edit.text = task.publish_time
-	if publish_timezone_edit:
-		publish_timezone_edit.text = task.publish_timezone
+	# Calendar fields (normalized YYYY-MM-DD; start_date preferred for Start date field)
+	_populate_calendar_date_fields(task)
 	recurring_option.selected = _get_recurring_index(task.recurring_pattern)
 	duration_spin.value = task.duration_minutes
 	task.migrate_content_status_from_notes()
@@ -944,13 +997,25 @@ func _on_confirmed():
 	task.formats = _get_selected_formats()
 	task.channels = _get_selected_channels()
 	task.cosmic_instruments = _get_selected_cosmic_instruments()
-	task.deadline = deadline_edit.text
-	task.scheduled_date = scheduled_edit.text
-	task.publish_date = publish_date_edit.text
+	# Prefer LineEdit values; never wipe a saved date with an empty field (placeholder-only).
+	var deadline_text: String = _ymd_only(deadline_edit.text) if deadline_edit else ""
+	var start_text: String = _ymd_only(scheduled_edit.text) if scheduled_edit else ""
+	var publish_text: String = _ymd_only(publish_date_edit.text) if publish_date_edit else ""
+	if not deadline_text.is_empty() or not is_edit_mode:
+		task.deadline = deadline_text
+	if not start_text.is_empty() or not is_edit_mode:
+		task.start_date = start_text
+		task.scheduled_date = start_text
+	if not publish_text.is_empty() or not is_edit_mode:
+		task.publish_date = publish_text
 	if publish_time_edit:
-		task.publish_time = publish_time_edit.text.strip_edges()
+		var time_text: String = publish_time_edit.text.strip_edges()
+		if not time_text.is_empty() or not is_edit_mode:
+			task.publish_time = time_text
 	if publish_timezone_edit:
-		task.publish_timezone = publish_timezone_edit.text.strip_edges()
+		var zone_text: String = publish_timezone_edit.text.strip_edges()
+		if not zone_text.is_empty() or not is_edit_mode:
+			task.publish_timezone = zone_text
 	task.recurring_pattern = _get_recurring_pattern()
 	task.recurring_weekdays = _get_selected_weekdays()
 	if recurring_end_edit:
