@@ -137,6 +137,7 @@ automatically, so they cannot leak into a published pack.
 | `lies outside` on install | The archive is not the pack it was named as |
 | Characters still invisible | Check `status`, and check the scenario is one of the two with art |
 | Art appears for some characters only | Expected where a character has no folder and no `_fallback` exists |
+| One warning: `Story Stage art pack not installed` | No pack or workspace art for the speaker; spectrum visualiser is used. Install a pack or add workspace art — see [Running ScenSyn from source with voice and avatars](../developer-guide/local-dev.md#running-scensyn-from-source-with-voice-and-avatars) |
 
 ## See also
 

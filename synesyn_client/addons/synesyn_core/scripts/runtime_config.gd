@@ -249,6 +249,10 @@ static func default_config() -> Dictionary:
 			# - <app_root>/services/synesyn_hub/synesyn_hub.exe
 			# - <app_root>/../services/synesyn_hub/synesyn_hub.exe
 			"exec_path": "",
+			# Editor/source runs only (never exported builds). When the hub binary is
+			# absent, start `python -m app.main` from services/synesyn_hub. Default off
+			# so a generic checkout does not spawn Python unless the operator opts in.
+			"autostart_from_source": false,
 			# Optional hub auth (shared across apps).
 			# When enabled, clients send: Authorization: Bearer <token>
 			"auth": {

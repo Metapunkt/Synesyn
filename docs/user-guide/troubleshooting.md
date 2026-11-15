@@ -28,6 +28,22 @@ The client runs without the Hub, with reduced capability:
 - **Works without the Hub:** ScenSyn text sessions (using a configured cloud API key or local Ollama), local Story Log saving and replay, and basic SynTree chat.
 - **Requires the Hub:** workspace artifact storage (`ui.closure`, `ui.workshop_summary`, `ui.syndoc`), voice synthesis and microphone transcription, SynAxes Hub imports, and queued ComfyUI renders.
 
+### AI text appears but there is no voice (source checkout)
+
+**Symptoms:**
+- ScenSyn shows assistant/character text as usual.
+- No speech plays, and there is a one-time notice:
+  `Voice unavailable: Synesyn Hub isn't running at 127.0.0.1:17777` (or your configured host:port).
+
+**What to do:**
+- Start the Hub from source (`pip install -r requirements.txt` then
+  `python -m app.main` in `services/synesyn_hub`) and check `GET /health`.
+- Or set `hub.exec_path` to a built Hub binary, or enable
+  `hub.autostart_from_source` for editor/source runs only.
+
+Full steps:
+[Running ScenSyn from source with voice and avatars](../developer-guide/local-dev.md#running-scensyn-from-source-with-voice-and-avatars).
+
 ---
 
 ## ScenSyn and sessions
@@ -42,7 +58,7 @@ Session files are written to your user storage root under `Documents/Synesyn/` (
 
 ### Story Stage shows a spectrum visualiser instead of character portraits
 
-This is normal when no sprite pack or workspace art is installed for the active scenario. Only the two Cultural Narratives scenarios (*Ireti Okan* and *Stochastic Dreams*) have bundled sprite packs, which are an optional download. See [Story Stage sprite packs](story-stage-sprites.md#troubleshooting) for checking pack status or supplying your own character art.
+This is normal when no sprite pack or workspace art is installed for the active scenario. Only the two Cultural Narratives scenarios (*Ireti Okan* and *Stochastic Dreams*) have bundled sprite packs, which are an optional download. The client emits a single warning — `Story Stage art pack not installed` — rather than a load error per missing PNG. See [Story Stage sprite packs](story-stage-sprites.md#troubleshooting) and [Running ScenSyn from source with voice and avatars](../developer-guide/local-dev.md#running-scensyn-from-source-with-voice-and-avatars).
 
 ### Session starts but the AI never responds
 

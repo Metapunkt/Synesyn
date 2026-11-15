@@ -35,6 +35,9 @@ jobs:
       - name: Addons do not reach into application autoloads
         run: python utilities/checks/check_addon_autoloads.py
 
+      - name: Source-run voice/avatar failures stay visible
+        run: python utilities/checks/check_visible_failure_guidance.py
+
       # Advisory, deliberately. The ratchet currently reports eight baselined
       # files that have grown, the largest by ~98 lines, against six that shrank.
       # That debt is known and scheduled rather than fixed in passing, and it

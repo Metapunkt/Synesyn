@@ -479,6 +479,36 @@ func _ensure_hub_running_async(force_start: bool) -> void:
 		var configured := HubLocator.get_configured_path(_runtime_cfg)
 		if not configured.is_empty():
 			push_warning("SynesynLauncher: hub.exec_path does not exist: %s" % configured)
+		if HubLocator.is_autostart_from_source_enabled(_runtime_cfg) and HubLocator.is_source_run():
+			var source_pid: int = HubLocator.start_hub_from_source()
+			if source_pid > 0:
+				_hub_started_here = true
+				_hub_starting_until_ms = int(Time.get_ticks_msec()) + 12000
+				push_warning(
+					"SynesynLauncher: spawned Synesyn Hub from source (pid=%s): python -m app.main in %s"
+					% [str(source_pid), HubLocator.get_source_hub_dir()]
+				)
+				if typeof(WorkspaceBootstrapper) != TYPE_NIL and WorkspaceBootstrapper and WorkspaceBootstrapper.has_method("register_hub_process"):
+					WorkspaceBootstrapper.register_hub_process(source_pid, HubLocator.get_source_hub_dir())
+				var reachable_src := false
+				for _i in range(40):
+					health = await _get_json(base_url.rstrip("/") + "/health", 2.5)
+					if bool(health.get("ok", false)):
+						reachable_src = true
+						break
+					if OS.has_method("is_process_running") and (not OS.is_process_running(source_pid)):
+						break
+					await get_tree().create_timer(0.25).timeout
+				if reachable_src:
+					_hub_starting_until_ms = 0
+					_apply_runtime_config(_runtime_cfg)
+				else:
+					push_warning("SynesynLauncher: hub from source did not become reachable.")
+				return
+			push_warning(
+				"SynesynLauncher: hub.autostart_from_source is on, but could not start python -m app.main in %s"
+				% HubLocator.get_source_hub_dir()
+			)
 		push_warning("SynesynLauncher: hub autostart skipped (hub not found). Expected %s." % HubLocator.describe_expected_location())
 		return
 

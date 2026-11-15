@@ -24,12 +24,14 @@ var save_recordings: bool = false
 var session_app_id: String = "scensyn"
 
 # Request queue to handle multiple synthesis requests
+const MAX_REQUEST_QUEUE := 32
 var request_queue: Array = []
 var is_processing_request: bool = false
 var current_character: String = "" # Track current character being processed
 var current_voice: String = ""      # Track requested voice (optional)
 var _pending_request_type: String = "" # v1: currently only "speak" on http_request channel
 var _active_request: Dictionary = {}
+var _warned_queue_while_unavailable: bool = false
 
 func _disable_proxy_for_local(http: HTTPRequest, url: String) -> void:
 	# On some Windows setups, system proxies can interfere even with localhost calls.
@@ -147,19 +149,47 @@ func synthesize_speech(text: String, character: String = "Narrator", voice: Stri
 	# - We pass character_mapping (if provided) to allow hub provenance to record the mapping decision:
 	#   (character name -> voice id, mapping version/source).
 	# - This remains optional so legacy clients and direct-mode users are not forced into new schemas.
+	var request_payload := {
+		"text": text,
+		"character": character,
+		"voice": voice,
+		"character_mapping": character_mapping,
+		"voice_config": voice_config,
+	}
 	if not is_service_available:
-		print("VoiceClient: Service not available, queuing request")
-		request_queue.push_back({"text": text, "character": character, "voice": voice, "character_mapping": character_mapping, "voice_config": voice_config})
+		if not _warned_queue_while_unavailable:
+			_warned_queue_while_unavailable = true
+			push_warning(
+				"VoiceClient: Service not available — queuing speech request (hub/provider unreachable at %s)"
+				% _base_url()
+			)
+		else:
+			print("VoiceClient: Service not available, queuing request")
+		_enqueue_request(request_payload)
 		# Queued successfully: report accepted so upstream queue/state machines
 		# don't treat this as a hard failure and drop the turn.
 		return true
-	
+
 	if is_processing_request:
 		print("VoiceClient: Busy, queuing request")
-		request_queue.push_back({"text": text, "character": character, "voice": voice, "character_mapping": character_mapping, "voice_config": voice_config})
+		_enqueue_request(request_payload)
 		return true
-	
+
 	return _send_synthesis_request(text, character, voice, character_mapping, voice_config)
+
+
+## Cap the pending synthesis queue. Drops the oldest entry when over capacity.
+func _enqueue_request(request_payload: Dictionary) -> void:
+	while request_queue.size() >= MAX_REQUEST_QUEUE:
+		var dropped: Variant = request_queue.pop_front()
+		var dropped_character: String = ""
+		if typeof(dropped) == TYPE_DICTIONARY:
+			dropped_character = str((dropped as Dictionary).get("character", ""))
+		push_warning(
+			"VoiceClient: Request queue full (max %d) — dropping oldest queued speech%s"
+			% [MAX_REQUEST_QUEUE, (" for '%s'" % dropped_character) if not dropped_character.is_empty() else ""]
+		)
+	request_queue.push_back(request_payload)
 
 func _send_synthesis_request(text: String, character: String, voice: String = "", character_mapping: Dictionary = {}, voice_config: Dictionary = {}, retried_cache: bool = false) -> bool:
 	"""Send the actual synthesis request to the Python service"""
@@ -309,7 +339,17 @@ func _handle_successful_response(body: PackedByteArray):
 					DirAccess.remove_absolute(audio_path)
 				var retry := _active_request.duplicate(true)
 				retry["retried_cache"] = true
+				# Retries go to the front; still respect the cap by dropping from the back.
 				request_queue.push_front(retry)
+				while request_queue.size() > MAX_REQUEST_QUEUE:
+					var dropped_tail: Variant = request_queue.pop_back()
+					var dropped_name: String = ""
+					if typeof(dropped_tail) == TYPE_DICTIONARY:
+						dropped_name = str((dropped_tail as Dictionary).get("character", ""))
+					push_warning(
+						"VoiceClient: Request queue full (max %d) — dropping newest queued speech%s"
+						% [MAX_REQUEST_QUEUE, (" for '%s'" % dropped_name) if not dropped_name.is_empty() else ""]
+					)
 				current_character = ""
 				current_voice = ""
 				return
@@ -444,6 +484,8 @@ func _update_service_status(available: bool):
 		is_service_available = available
 		service_status_changed.emit(available)
 		print("VoiceClient: Service status changed - Available: ", available)
+		if available:
+			_warned_queue_while_unavailable = false
 		# If service just recovered, flush any queued synthesis requests.
 		if available and not is_processing_request and not request_queue.is_empty():
 			_process_next_request()

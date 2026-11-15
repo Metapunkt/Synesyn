@@ -62,6 +62,64 @@ Key current defaults (local-first):
 The client normally starts and adopts the hub for you (ADR 0021); start it by
 hand mainly when diagnosing a failure.
 
+## Running ScenSyn from source with voice and avatars
+
+A packaged Windows release ships a Hub binary beside the client. A source
+checkout does not: `dist/` is gitignored, and `HubLocator` only finds a built
+`services/synesyn_hub/synesyn_hub` (or `hub.exec_path`). Without a reachable Hub,
+ScenSyn still shows AI text, but voice stays silent. Without a Story Stage art
+pack, characters fall back to the spectrum visualiser.
+
+### Voice (Synesyn Hub)
+
+1. Install Hub dependencies and start it from the repo:
+
+```bash
+cd services/synesyn_hub
+python -m venv .venv
+# Windows: .\.venv\Scripts\pip install -r requirements.txt
+# Unix:
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python -m app.main
+```
+
+2. Confirm it answers health (any HTTP 200 JSON with `ok` is enough for
+   reachability; workspace configuration can come later):
+
+```bash
+curl -s http://127.0.0.1:17777/health
+```
+
+3. In Godot, run ScenSyn with voice provider mode `hub` (the default in recent
+   configs). If the Hub is down you should see a one-time notice:
+   `Voice unavailable: Synesyn Hub isn't running at 127.0.0.1:17777`.
+
+**Alternatives when you do not want a manual terminal:**
+
+- Set `hub.exec_path` in `Documents/Synesyn/synesyn/config/synesyn_client.json` to
+  an absolute path of a built Hub binary, with `hub.autostart` left true.
+- For editor/source runs only, set `"autostart_from_source": true` under `hub`.
+  That starts `python -m app.main` in `services/synesyn_hub` when no binary is
+  found. It defaults to **false** so a generic checkout never spawns Python
+  unless you opt in. Packaged builds ignore this setting.
+
+### Avatars (Story Stage art)
+
+1. Install a pack (Cultural Narratives only ship art):
+
+```bash
+python utilities/assets/story_stage_sprites.py status
+python utilities/assets/story_stage_sprites.py install ireti-okan --from <archive>
+```
+
+Details and bring-your-own art paths are in
+[Story Stage sprite packs](../user-guide/story-stage-sprites.md).
+
+2. Open a Cultural Narratives scenario (*Ireti Okan* or *Stochastic Dreams*) and
+   use the **Visual Stage** window. Without a pack you get one warning —
+   `Story Stage art pack not installed` — and the spectrum visualiser instead of
+   portraits.
+
 ## Running the client in Godot
 
 - Open the Godot project in `synesyn_client/`.
