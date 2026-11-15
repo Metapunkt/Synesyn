@@ -305,8 +305,6 @@ func _on_delete_workplan_pressed(dialog: AcceptDialog, workplan_list: ItemList):
 func _configure_filesystem_file_dialog(file_dialog_local: FileDialog) -> void:
 	"""Workplan import/export must browse the real filesystem (Documents), not res://."""
 	file_dialog_local.access = FileDialog.ACCESS_FILESYSTEM
-	# Nested under Workplan Manager (already exclusive) — avoid Godot exclusive-child errors.
-	file_dialog_local.exclusive = false
 	var docs_dir: String = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 	var preferred: String = RuntimeConfig.get_readymade_data_dir() if RuntimeConfig else ""
 	if not preferred.is_empty() and DirAccess.dir_exists_absolute(preferred):
@@ -316,12 +314,27 @@ func _configure_filesystem_file_dialog(file_dialog_local: FileDialog) -> void:
 
 
 func _popup_nested_dialog(dialog_window: Window, size: Vector2 = Vector2.ZERO) -> void:
-	"""Pop nested AcceptDialog/FileDialog without stealing exclusive from Workplan Manager."""
+	"""Pop nested AcceptDialog without stealing exclusive from Workplan Manager."""
 	dialog_window.exclusive = false
 	if size == Vector2.ZERO:
 		dialog_window.popup_centered()
 	else:
 		dialog_window.popup_centered(size)
+
+
+func _popup_file_dialog_over_manager(parent_dialog: AcceptDialog, file_dialog_local: FileDialog, size: Vector2 = Vector2(800, 600)) -> void:
+	"""FileDialog stays exclusive (needed for Open/Save clicks); yield manager exclusivity briefly."""
+	var parent_was_exclusive: bool = false
+	if parent_dialog != null and is_instance_valid(parent_dialog):
+		parent_was_exclusive = parent_dialog.exclusive
+		parent_dialog.exclusive = false
+	var restore := func():
+		if parent_dialog != null and is_instance_valid(parent_dialog):
+			parent_dialog.exclusive = parent_was_exclusive
+	file_dialog_local.file_selected.connect(restore, CONNECT_ONE_SHOT)
+	file_dialog_local.canceled.connect(restore, CONNECT_ONE_SHOT)
+	file_dialog_local.exclusive = true
+	file_dialog_local.popup_centered(size)
 
 
 func _on_import_workplan_pressed(_dialog: AcceptDialog):
@@ -349,7 +362,7 @@ func _on_import_workplan_pressed(_dialog: AcceptDialog):
 		file_dialog_local.queue_free()
 	)
 	
-	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
+	_popup_file_dialog_over_manager(_dialog, file_dialog_local)
 
 func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList):
 	"""Handle workplan export"""
@@ -385,7 +398,7 @@ func _on_export_workplan_pressed(_dialog: AcceptDialog, workplan_list: ItemList)
 		file_dialog_local.queue_free()
 	)
 	
-	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
+	_popup_file_dialog_over_manager(_dialog, file_dialog_local)
 
 
 func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
@@ -416,7 +429,7 @@ func _on_export_tasks_pressed(_dialog: AcceptDialog) -> void:
 	file_dialog_local.canceled.connect(func():
 		file_dialog_local.queue_free()
 	)
-	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
+	_popup_file_dialog_over_manager(_dialog, file_dialog_local)
 
 
 func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
@@ -438,7 +451,7 @@ func _on_import_tasks_pressed(_dialog: AcceptDialog) -> void:
 	file_dialog_local.canceled.connect(func():
 		file_dialog_local.queue_free()
 	)
-	_popup_nested_dialog(file_dialog_local, Vector2(800, 600))
+	_popup_file_dialog_over_manager(_dialog, file_dialog_local)
 
 
 func _on_manage_channels_pressed(_parent_dialog: AcceptDialog) -> void:

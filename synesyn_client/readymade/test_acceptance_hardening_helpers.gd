@@ -348,8 +348,9 @@ static func _test_workplan_file_dialog_filesystem(host: Node) -> void:
 		not String(file_dialog_local.current_dir).begins_with("res://"),
 		"FileDialog current_dir is not res://"
 	)
-	file_dialog_local.exclusive = false
-	_expect(host, file_dialog_local.exclusive == false, "FileDialog nested under manager is non-exclusive")
+	# FileDialogs stay exclusive; Workplan Manager yields exclusivity while they are open.
+	file_dialog_local.exclusive = true
+	_expect(host, file_dialog_local.exclusive == true, "FileDialog remains exclusive for Open/Save clicks")
 	file_dialog_local.free()
 
 
@@ -358,4 +359,9 @@ static func _test_nested_workplan_dialogs_non_exclusive(host: Node) -> void:
 	var nested := AcceptDialog.new()
 	nested.exclusive = false
 	_expect(host, nested.exclusive == false, "AcceptDialog exclusive can be cleared for nesting")
+	var manager := AcceptDialog.new()
+	manager.exclusive = true
+	manager.exclusive = false
+	_expect(host, manager.exclusive == false, "Workplan Manager can yield exclusivity for FileDialog")
 	nested.free()
+	manager.free()
