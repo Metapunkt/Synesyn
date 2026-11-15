@@ -26,6 +26,11 @@ var search_query: String = ""
 var viewer_timezone: String = ""
 var _workplan_ref: Resource = null
 var _empty_state_banner: VBoxContainer = null
+var _dragging_task: WorkplanTask = null
+var _rescheduler = null  # WorkplanCalendarReschedule
+var _series_mode: String = "instance"
+var _cadence_banner: Label = null
+var _drop_day_cells: Dictionary = {}  # date_str -> Control
 
 func _ready():
 	_setup_ui()
@@ -168,6 +173,7 @@ func _apply_filters():
 
 func _refresh_calendar():
 	"""Refresh the entire calendar display"""
+	_drop_day_cells.clear()
 	_clear_calendar()
 	
 	match view_mode:
@@ -299,44 +305,51 @@ func _jump_to_next_task_month() -> void:
 
 func _create_day_cell(day: int) -> Control:
 	"""Create a calendar day cell with tasks"""
-	var cell = VBoxContainer.new()
+	var cell = PanelContainer.new()
 	cell.custom_minimum_size = Vector2(100, 80)
 	cell.add_theme_stylebox_override("panel", _create_day_cell_style())
+	var inner := VBoxContainer.new()
+	cell.add_child(inner)
 	
 	# Day number label
 	var day_label = Label.new()
 	day_label.text = str(day)
 	day_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	cell.add_child(day_label)
+	inner.add_child(day_label)
 	
 	# Find tasks for this day
 	var day_date = "%04d-%02d-%02d" % [current_date.year, current_date.month, day]
+	_drop_day_cells[day_date] = cell
+	cell.set_meta("drop_date", day_date)
+	cell.gui_input.connect(_on_day_cell_input.bind(day_date))
 	var day_tasks = _get_tasks_for_date(day_date)
 	
 	# Add task indicators
 	for task in day_tasks:
-		if cell.get_child_count() > 4:  # Limit display to avoid overcrowding
+		if inner.get_child_count() > 4:  # Limit display to avoid overcrowding
 			var more_label = Label.new()
 			more_label.text = "+%d more" % (day_tasks.size() - 3)
 			more_label.add_theme_font_size_override("font_size", 10)
-			cell.add_child(more_label)
+			inner.add_child(more_label)
 			break
 		
 		var task_indicator = _create_task_indicator(task)
-		cell.add_child(task_indicator)
+		inner.add_child(task_indicator)
 	
-	# Make cell clickable
+	# Make cell clickable (select day details)
 	var button = Button.new()
 	button.flat = true
-	button.custom_minimum_size = Vector2(100, 80)
+	button.text = " "
+	button.custom_minimum_size = Vector2(100, 20)
 	button.pressed.connect(_on_day_selected.bind(day_date, day_tasks))
-	cell.add_child(button)
+	inner.add_child(button)
 	
 	return cell
 
 func _create_task_indicator(task: WorkplanTask) -> Control:
-	"""Create a small task indicator for calendar cells"""
+	"""Create a small task indicator for calendar cells (draggable)."""
 	var indicator = Label.new()
+	indicator.mouse_filter = Control.MOUSE_FILTER_STOP
 	indicator.text = task.title.substr(0, 15) + ("..." if task.title.length() > 15 else "")
 	task.migrate_content_status_from_notes()
 	var plan_status: String = task.get_content_status()
@@ -345,9 +358,9 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 		task, _workplan_ref, viewer_timezone
 	)
 	if publish_label.is_empty():
-		indicator.tooltip_text = "%s [%s]" % [task.title, plan_status]
+		indicator.tooltip_text = "%s [%s]\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status]
 	else:
-		indicator.tooltip_text = "%s [%s]\n%s" % [task.title, plan_status, publish_label]
+		indicator.tooltip_text = "%s [%s]\n%s\nDrag to reschedule · right-click for Move to date" % [task.title, plan_status, publish_label]
 	indicator.add_theme_font_size_override("font_size", 9)
 	indicator.add_theme_color_override("font_color", Color.WHITE)
 	
@@ -365,7 +378,110 @@ func _create_task_indicator(task: WorkplanTask) -> Control:
 		bg_color = Color(0.4, 0.4, 0.4)
 	
 	indicator.add_theme_stylebox_override("normal", _create_colored_style(bg_color))
+	indicator.gui_input.connect(_on_task_indicator_input.bind(task, indicator))
 	return indicator
+
+
+func _ensure_rescheduler() -> void:
+	if _rescheduler != null:
+		return
+	const RescheduleScript = preload("res://readymade/scripts/workplan_calendar_reschedule.gd")
+	_rescheduler = RescheduleScript.new()
+	_rescheduler.cadence_changed.connect(_on_cadence_changed)
+
+
+func _on_cadence_changed(warnings: Array) -> void:
+	if _cadence_banner == null or not is_instance_valid(_cadence_banner):
+		_cadence_banner = Label.new()
+		_cadence_banner.name = "CadenceBanner"
+		_cadence_banner.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		if month_label and month_label.get_parent():
+			month_label.get_parent().add_child(_cadence_banner)
+		else:
+			add_child(_cadence_banner)
+	if warnings.is_empty():
+		_cadence_banner.text = "Cadence: OK"
+		_cadence_banner.modulate = Color(0.7, 0.95, 0.7)
+	else:
+		_cadence_banner.text = "Cadence: %d warning(s) after reschedule" % warnings.size()
+		_cadence_banner.modulate = Color(0.95, 0.75, 0.35)
+
+
+func _on_task_indicator_input(event: InputEvent, task: WorkplanTask, indicator: Control) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_dragging_task = task
+			indicator.modulate = Color(1.2, 1.2, 0.8)
+			accept_event()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_prompt_move_to_date(task)
+			accept_event()
+	elif event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		# Drop handled by day cell; clear drag if released elsewhere.
+		if _dragging_task == task:
+			indicator.modulate = Color.WHITE
+			_dragging_task = null
+
+
+func _on_day_cell_input(event: InputEvent, day_date: String) -> void:
+	if _dragging_task == null:
+		return
+	if event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_reschedule_to_date(_dragging_task, day_date)
+		_dragging_task = null
+		accept_event()
+
+
+func _reschedule_to_date(task: WorkplanTask, new_date: String) -> void:
+	_ensure_rescheduler()
+	_rescheduler.move_task_to_date(
+		task,
+		new_date,
+		["publish_date", "scheduled_date", "deadline"],
+		true,
+		_workplan_ref,
+		_series_mode
+	)
+	_apply_filters()
+	_refresh_calendar()
+
+
+func _prompt_move_to_date(task: WorkplanTask) -> void:
+	if task == null:
+		return
+	var dialog := AcceptDialog.new()
+	dialog.title = "Move to date"
+	var vbox := VBoxContainer.new()
+	dialog.add_child(vbox)
+	var hint := Label.new()
+	hint.text = "YYYY-MM-DD (keeps publish time/timezone)"
+	vbox.add_child(hint)
+	var edit := LineEdit.new()
+	edit.text = task.publish_date if not task.publish_date.is_empty() else task.get_calendar_display_date().substr(0, 10)
+	vbox.add_child(edit)
+	var series_btn := CheckButton.new()
+	series_btn.text = "Move entire series (same title+channel)"
+	series_btn.button_pressed = _series_mode == "series"
+	vbox.add_child(series_btn)
+	dialog.confirmed.connect(func():
+		_series_mode = "series" if series_btn.button_pressed else "instance"
+		var date_str: String = edit.text.strip_edges()
+		dialog.queue_free()
+		if date_str.length() >= 10:
+			_reschedule_to_date(task, date_str)
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered()
+
+
+func undo_last_reschedule() -> bool:
+	_ensure_rescheduler()
+	if _rescheduler.undo_last(_workplan_ref):
+		_apply_filters()
+		_refresh_calendar()
+		return true
+	return false
 
 func _get_tasks_for_date(date: String) -> Array[WorkplanTask]:
 	"""Get all tasks for a specific date"""
@@ -400,22 +516,27 @@ func _draw_week_view():
 		var day_unix: int = int(Time.get_unix_time_from_datetime_dict(week_start)) + (offset * 86400)
 		var day_dict: Dictionary = Time.get_datetime_dict_from_unix_time(day_unix)
 		var day_date: String = "%04d-%02d-%02d" % [int(day_dict.year), int(day_dict.month), int(day_dict.day)]
-		var cell := VBoxContainer.new()
+		var cell := PanelContainer.new()
 		cell.custom_minimum_size = Vector2(100, 120)
 		cell.add_theme_stylebox_override("panel", _create_day_cell_style())
+		var inner := VBoxContainer.new()
+		cell.add_child(inner)
+		_drop_day_cells[day_date] = cell
+		cell.set_meta("drop_date", day_date)
+		cell.gui_input.connect(_on_day_cell_input.bind(day_date))
 		var day_label := Label.new()
 		day_label.text = "%d" % int(day_dict.day)
 		day_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		cell.add_child(day_label)
+		inner.add_child(day_label)
 		var day_tasks: Array[WorkplanTask] = _get_tasks_for_date(day_date)
 		for task in day_tasks:
-			if cell.get_child_count() > 5:
+			if inner.get_child_count() > 5:
 				var more_label := Label.new()
 				more_label.text = "+%d more" % (day_tasks.size() - 4)
 				more_label.add_theme_font_size_override("font_size", 10)
-				cell.add_child(more_label)
+				inner.add_child(more_label)
 				break
-			cell.add_child(_create_task_indicator(task))
+			inner.add_child(_create_task_indicator(task))
 		calendar_grid.add_child(cell)
 
 
@@ -639,10 +760,19 @@ func _create_task_detail_item(task: WorkplanTask) -> Control:
 	button.text = "Edit Task"
 	button.pressed.connect(_on_task_selected.bind(task))
 	item.add_child(button)
+
+	var move_btn := Button.new()
+	move_btn.text = "Move to date…"
+	move_btn.pressed.connect(_prompt_move_to_date.bind(task))
+	item.add_child(move_btn)
+
+	var undo_btn := Button.new()
+	undo_btn.text = "Undo last reschedule"
+	undo_btn.pressed.connect(func(): undo_last_reschedule())
+	item.add_child(undo_btn)
 	
 	return item
 
 func _on_task_selected(task: WorkplanTask):
 	"""Handle task selection"""
-	task_selected.emit(task) 
- 
+	task_selected.emit(task)

@@ -11,6 +11,7 @@ static func run_all(host: Node) -> void:
 	_test_community_post_template_and_copy_markdown(host)
 	_test_campaign_dashboard(host)
 	_test_timezone_conversion(host)
+	_test_calendar_reschedule(host)
 
 
 static func _expect(host: Node, condition: bool, label: String) -> void:
@@ -259,3 +260,55 @@ static func _test_timezone_conversion(host: Node) -> void:
 	PublishTimeScript.set_task_publish_from_viewer(task, "2026-01-15", "06:00", "America/New_York", "Europe/Oslo")
 	_expect(host, task.publish_time == "12:00", "enter NY 06:00 stores Oslo 12:00")
 	_expect(host, task.publish_timezone == "Europe/Oslo", "store zone preserved")
+
+
+static func _test_calendar_reschedule(host: Node) -> void:
+	print("-- calendar reschedule + undo + series --")
+	const RescheduleScript = preload("res://readymade/scripts/workplan_calendar_reschedule.gd")
+	const CadenceScript = preload("res://readymade/scripts/workplan_cadence.gd")
+	var workplan := Workplan.new()
+	workplan.name = "Reschedule Probe"
+	CadenceScript.set_cap(workplan, "#general", 1)
+	var a := WorkplanTask.new()
+	a.title = "Friday roundup"
+	a.channel = "#general"
+	a.publish_date = "2026-11-06"
+	a.publish_time = "10:00"
+	a.publish_timezone = "Europe/Oslo"
+	a.scheduled_date = "2026-11-06"
+	a.deadline = "2026-11-06"
+	var b := WorkplanTask.new()
+	b.title = "Friday roundup"
+	b.channel = "#general"
+	b.publish_date = "2026-11-13"
+	b.publish_time = "10:00"
+	b.publish_timezone = "Europe/Oslo"
+	b.scheduled_date = "2026-11-13"
+	b.deadline = "2026-11-13"
+	var c := WorkplanTask.new()
+	c.title = "Other post"
+	c.channel = "#studio-notes"
+	c.publish_date = "2026-11-06"
+	workplan.months["probe"] = [a, b, c]
+	var mover = RescheduleScript.new()
+	var moved: Dictionary = mover.move_task_to_date(
+		a, "2026-11-07", ["publish_date", "scheduled_date", "deadline"], true, workplan, "instance"
+	)
+	_expect(host, int(moved.get("moved", 0)) == 1, "instance move touches one task")
+	_expect(host, a.publish_date == "2026-11-07", "instance publish_date updated")
+	_expect(host, a.publish_time == "10:00", "publish time preserved")
+	_expect(host, a.publish_timezone == "Europe/Oslo", "publish timezone preserved")
+	_expect(host, b.publish_date == "2026-11-13", "sibling instance unchanged")
+	_expect(host, (moved.get("warnings", []) as Array).size() >= 0, "warnings array present")
+	_expect(host, mover.can_undo(), "undo available after move")
+	_expect(host, mover.undo_last(workplan), "undo succeeds")
+	_expect(host, a.publish_date == "2026-11-06", "undo restores publish_date")
+	var series_move: Dictionary = mover.move_task_to_date(
+		a, "2026-11-20", ["publish_date"], true, workplan, "series"
+	)
+	_expect(host, int(series_move.get("moved", 0)) == 2, "series move touches title+channel matches")
+	_expect(host, a.publish_date == "2026-11-20", "series updated template a")
+	_expect(host, b.publish_date == "2026-11-20", "series updated sibling b")
+	_expect(host, c.publish_date == "2026-11-06", "other channel untouched")
+	_expect(host, mover.undo_last(workplan), "undo series")
+	_expect(host, a.publish_date == "2026-11-06" and b.publish_date == "2026-11-13", "series undo restores both")

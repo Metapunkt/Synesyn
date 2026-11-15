@@ -60,10 +60,13 @@ var calendar_day_cells: Array[Control] = []
 var calendar_last_task_count: int = -1  # Track task count to avoid unnecessary refreshes
 var max_cards_per_day: int = 4
 var dragging_task: WorkplanTask = null
-var drag_source_date_type: String = ""  # "start" or "deadline"
+var drag_source_date_type: String = ""  # "start" | "deadline" | "publish"
 var calendar_view_mode: String = "month"  # month | week | agenda
 var calendar_view_mode_button: OptionButton = null
 var calendar_drag_hint_banner: Control = null
+var calendar_rescheduler = null  # WorkplanCalendarReschedule
+var calendar_cadence_banner: Label = null
+var calendar_series_mode: String = "instance"  # instance | series
 
 var workplan: Dictionary
 var task_card_scene = preload("res://readymade/components/workplan_task_card.tscn")

@@ -367,6 +367,15 @@ func _populate_calendar_with_tasks():
 				if not tasks_by_day.has(day): tasks_by_day[day] = []
 				tasks_by_day[day].append({"task": task, "type": "deadline"})
 
+		# Publish date (content-plan scheduling)
+		if not task.publish_date.is_empty():
+			var publish_date = _parse_date_string(task.publish_date)
+			if publish_date.year == current_calendar_year and publish_date.month == current_calendar_month:
+				var pub_day = publish_date.day
+				if not tasks_by_day.has(pub_day):
+					tasks_by_day[pub_day] = []
+				tasks_by_day[pub_day].append({"task": task, "type": "publish"})
+
 	# Store for later use by popups
 	calendar_tasks_by_day = tasks_by_day
 
@@ -711,7 +720,13 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 		status_submenu.add_item(statuses[i], i)
 		
 	calendar_context_menu.add_submenu_item("Change Status", "StatusSubmenu")
-	
+	calendar_context_menu.add_separator()
+	calendar_context_menu.add_item("Move to date…", 3)
+	calendar_context_menu.add_item(
+		"Reschedule series (title+channel)" if calendar_series_mode != "series" else "Reschedule instance only",
+		4
+	)
+	calendar_context_menu.add_item("Undo last reschedule", 5)
 	calendar_context_menu.add_separator()
 	calendar_context_menu.add_item("Delete Task", 2)
 	
@@ -720,13 +735,20 @@ func _show_task_context_menu(task: WorkplanTask, _date_type: String):
 
 func _on_calendar_context_menu_id_pressed(id: int):
 	"""Handle context menu actions"""
-	if not context_menu_task:
+	if not context_menu_task and id != 5:
 		return
 
 	if id == 0: # Edit Task
 		_on_edit_task_pressed(context_menu_task)
 	elif id == 2: # Delete Task
 		_on_delete_task_pressed(context_menu_task)
+	elif id == 3:
+		_prompt_move_task_to_date(context_menu_task)
+	elif id == 4:
+		calendar_series_mode = "instance" if calendar_series_mode == "series" else "series"
+		print("Calendar: series mode → ", calendar_series_mode)
+	elif id == 5:
+		_undo_calendar_reschedule()
 	elif id >= 100: # Change Status
 		var statuses = ["To Do", "In Progress", "Review", "Done"]
 		var status_index = id - 100
@@ -838,6 +860,8 @@ func _on_task_card_mouse_exited(card: Control):
 		card.modulate = card.get_meta("base_modulate")
 	elif card.name.contains("start"):
 		card.modulate = Color(0.8, 1.0, 0.8)
+	elif card.name.contains("publish"):
+		card.modulate = Color(0.8, 0.88, 1.0)
 	else:
 		card.modulate = Color(1.0, 0.8, 0.8)
 	
@@ -884,40 +908,117 @@ func _highlight_drop_zones(highlight: bool):
 			else:
 				cell.modulate = Color.WHITE
 
+func _ensure_calendar_rescheduler():
+	if calendar_rescheduler != null:
+		return
+	const RescheduleScript = preload("res://readymade/scripts/workplan_calendar_reschedule.gd")
+	calendar_rescheduler = RescheduleScript.new()
+	calendar_rescheduler.cadence_changed.connect(_on_calendar_cadence_changed)
+
+
+func _on_calendar_cadence_changed(warnings: Array) -> void:
+	_ensure_calendar_cadence_banner()
+	if calendar_cadence_banner == null:
+		return
+	if warnings.is_empty():
+		calendar_cadence_banner.text = "Cadence: OK"
+		calendar_cadence_banner.modulate = Color(0.7, 0.95, 0.7)
+	else:
+		calendar_cadence_banner.text = "Cadence: %d warning(s) after reschedule" % warnings.size()
+		calendar_cadence_banner.modulate = Color(0.95, 0.75, 0.35)
+
+
+func _ensure_calendar_cadence_banner() -> void:
+	if calendar_cadence_banner != null and is_instance_valid(calendar_cadence_banner):
+		return
+	if calendar_grid == null:
+		return
+	var host: Node = calendar_grid.get_parent()
+	if host == null:
+		return
+	calendar_cadence_banner = Label.new()
+	calendar_cadence_banner.name = "CalendarCadenceBanner"
+	calendar_cadence_banner.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	host.add_child(calendar_cadence_banner)
+	host.move_child(calendar_cadence_banner, 0)
+
+
 func _handle_drop_on_day(day: int):
-	"""Handle dropping a task on a specific day"""
+	"""Handle dropping a task on a specific day (preserves publish timezone)."""
 	if not dragging_task:
 		return
-	
-	# Validate the date change
-	if not _is_valid_date_change(dragging_task, drag_source_date_type, day):
+	if drag_source_date_type != "publish" and not _is_valid_date_change(dragging_task, drag_source_date_type, day):
 		_stop_drag()
 		return
-		
 	var new_date = "%04d-%02d-%02d" % [current_calendar_year, current_calendar_month, day]
-	var old_date = ""
-	
-	# Update the appropriate date field
-	if drag_source_date_type == "start":
-		old_date = dragging_task.start_date
-		dragging_task.start_date = new_date
-		print("Calendar: ✅ Updated '%s' start date: %s → %s" % [dragging_task.title, old_date, new_date])
-	else:  # deadline
-		old_date = dragging_task.deadline
-		dragging_task.deadline = new_date
-		print("Calendar: ✅ Updated '%s' deadline: %s → %s" % [dragging_task.title, old_date, new_date])
-	
-	# Save the updated task by notifying the workplan
-	if orchestrator and orchestrator.workplan:
-		orchestrator.workplan.update_task()
-		print("Calendar: Saved task changes to workplan")
-	
-	# Force calendar refresh to show the change
-	calendar_last_task_count = -1  # Force refresh
-	_populate_calendar_with_tasks()
-	
-	# Stop dragging
+	_reschedule_task(dragging_task, new_date, drag_source_date_type)
 	_stop_drag()
+
+
+func _reschedule_task(task: WorkplanTask, new_date: String, date_type: String) -> void:
+	_ensure_calendar_rescheduler()
+	var fields: Array = []
+	match date_type:
+		"start":
+			fields = ["start_date"]
+		"deadline":
+			fields = ["deadline"]
+		"publish":
+			fields = ["publish_date", "scheduled_date", "deadline"]
+		_:
+			fields = ["publish_date", "scheduled_date", "deadline"]
+	var workplan_obj = orchestrator.workplan if orchestrator else null
+	var result: Dictionary = calendar_rescheduler.move_task_to_date(
+		task,
+		new_date,
+		fields,
+		true,
+		workplan_obj,
+		calendar_series_mode
+	)
+	print(
+		"Calendar: rescheduled %d task(s) → %s (series=%s, warnings=%d)"
+		% [int(result.get("moved", 0)), new_date, calendar_series_mode, (result.get("warnings", []) as Array).size()]
+	)
+	calendar_last_task_count = -1
+	_populate_calendar_with_tasks()
+
+
+func _prompt_move_task_to_date(task: WorkplanTask) -> void:
+	"""Keyboard-accessible alternative to drag-and-drop."""
+	if task == null:
+		return
+	var dialog := AcceptDialog.new()
+	dialog.title = "Move to date"
+	var vbox := VBoxContainer.new()
+	dialog.add_child(vbox)
+	var hint := Label.new()
+	hint.text = "YYYY-MM-DD (preserves publish time/timezone)"
+	vbox.add_child(hint)
+	var edit := LineEdit.new()
+	edit.placeholder_text = "2026-11-20"
+	edit.text = task.publish_date if not task.publish_date.is_empty() else task.deadline
+	vbox.add_child(edit)
+	dialog.confirmed.connect(func():
+		var date_str: String = edit.text.strip_edges()
+		dialog.queue_free()
+		if date_str.length() >= 10:
+			_reschedule_task(task, date_str, "publish")
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	add_child(dialog)
+	dialog.popup_centered()
+
+
+func _undo_calendar_reschedule() -> void:
+	_ensure_calendar_rescheduler()
+	var workplan_obj = orchestrator.workplan if orchestrator else null
+	if calendar_rescheduler.undo_last(workplan_obj):
+		calendar_last_task_count = -1
+		_populate_calendar_with_tasks()
+		print("Calendar: undid last reschedule")
+	else:
+		print("Calendar: nothing to undo")
 
 func _get_day_under_mouse(mouse_pos: Vector2) -> int:
 	"""Get the calendar day number under the mouse position"""
@@ -987,18 +1088,20 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	card.name = "TaskCard_%s_%s" % [task.title.replace(" ", "_"), date_type]
 	card.custom_minimum_size = Vector2(0, 20)
 	
-	# Color coding: Done stays neutral-green; otherwise start vs deadline tint.
+	# Color coding: Done stays neutral-green; otherwise start / deadline / publish tint.
 	var base_modulate: Color
 	if task.status == "Done":
 		base_modulate = Color(0.85, 0.95, 0.85)
 	elif date_type == "start":
 		base_modulate = Color(0.8, 1.0, 0.8)  # Light green for start dates
+	elif date_type == "publish":
+		base_modulate = Color(0.8, 0.88, 1.0)  # Light blue for publish
 	else:
 		base_modulate = Color(1.0, 0.8, 0.8)  # Light red for deadlines
 	card.modulate = base_modulate
 	card.set_meta("base_modulate", base_modulate)
 	# Full title on the card — children use MOUSE_FILTER_PASS so hover hits the card.
-	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for options\n📝 Double-click to edit" % [
+	card.tooltip_text = "%s\nStatus: %s\nPriority: %d\n🎯 Drag to move %s date\n🖱️ Right-click for Move to date / Undo\n📝 Double-click to edit" % [
 		task.title, task.status, task.priority, date_type
 	]
 	
@@ -1010,6 +1113,8 @@ func _create_calendar_task_card(task: WorkplanTask, date_type: String) -> Contro
 	var icon_label = Label.new()
 	if date_type == "start":
 		icon_label.text = "🚀"
+	elif date_type == "publish":
+		icon_label.text = "📢"
 	else:
 		icon_label.text = "🎯"
 	icon_label.add_theme_font_size_override("font_size", 10)
